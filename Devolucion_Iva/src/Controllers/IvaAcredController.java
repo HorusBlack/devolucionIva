@@ -26,7 +26,7 @@ public class IvaAcredController {
     private Tag raizXml, et_Concepto;
     private Tag p_Conceptos, p_Complemento, c_Concepto, co_TimbreFiscalD;
     private String fechaFactura, folioFiscal, subTotal, total;
-    private List<XmlDatos> datosXml = new ArrayList<>();
+    private final List<XmlDatos> datosXml = new ArrayList<>();
 
     private List<Tag> listEtiquetas;
 

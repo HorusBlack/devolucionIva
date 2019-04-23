@@ -7,7 +7,10 @@ package View;
 
 import Controllers.IvaAcredController;
 import Controllers.XmlDatos;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +22,11 @@ public class jf_Principal extends javax.swing.JFrame {
      * Creates new form jf_Principal
      */
     public jf_Principal() {
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = pantalla.height;
+        int width = pantalla.width;
+        this.setSize(width / 2, height / 2);
+
         initComponents();
     }
 
@@ -40,8 +48,10 @@ public class jf_Principal extends javax.swing.JFrame {
         jm_ValorActosIngr = new javax.swing.JMenu();
         jm_IvaAcred = new javax.swing.JMenu();
 
-        setTitle("P.T Devoción IVA");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("AgroEcologia Devoluciones");
         setAlwaysOnTop(true);
+        setPreferredSize(new java.awt.Dimension(1200, 600));
 
         tb_DevIva.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -59,11 +69,11 @@ public class jf_Principal extends javax.swing.JFrame {
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1200, Short.MAX_VALUE)
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         jm_GlobalBancos.setText("Global Bancos");
@@ -110,7 +120,7 @@ public class jf_Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jm_BanorteMouseClicked
 
     private void jm_IvaAcredMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jm_IvaAcredMouseClicked
-        //F
+        DefaultTableModel tablaDevIva = new DefaultTableModel();
         IvaAcredController ivaAcred = new IvaAcredController();
         String URL = "I:\\Dac\\Enero 01";
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
@@ -151,6 +161,7 @@ public class jf_Principal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new jf_Principal().setVisible(true);
+
             }
         });
     }
