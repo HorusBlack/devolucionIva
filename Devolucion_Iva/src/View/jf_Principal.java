@@ -57,6 +57,11 @@ public class jf_Principal extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1200, 600));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jDesktopPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jScrollPane1.setBorder(new javax.swing.border.MatteBorder(null));
+
+        tablaIvaAcred.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         tablaIvaAcred.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -68,22 +73,12 @@ public class jf_Principal extends javax.swing.JFrame {
         tablaIvaAcred.setEnabled(false);
         jScrollPane1.setViewportView(tablaIvaAcred);
 
-        jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1200, Short.MAX_VALUE)
-        );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        jDesktopPane1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 458));
 
         getContentPane().add(jDesktopPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 155));
+
+        jMenuPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jMenuPrincipal.setEnabled(false);
 
         jm_GlobalBancos.setText("Global Bancos");
         jMenuPrincipal.add(jm_GlobalBancos);
@@ -121,16 +116,6 @@ public class jf_Principal extends javax.swing.JFrame {
         tablaIvaAcred.removeAll();
         if (tablaIvaAcred.getRowCount() == 0) {
             inicializarTablaIva();
-            TableColumn c1 = tablaIvaAcred.getColumn("Fecha Factura");
-            c1.setPreferredWidth(5);
-            TableColumn c2 = tablaIvaAcred.getColumn("subTotal");
-            c1.setPreferredWidth(5);
-            TableColumn c3 = tablaIvaAcred.getColumn("total");
-            c1.setPreferredWidth(5);
-            TableColumn c4 = tablaIvaAcred.getColumn("Conceptos XML");
-            c1.setPreferredWidth(5);
-            TableColumn c5 = tablaIvaAcred.getColumn("Folio Fiscal");
-            c1.setPreferredWidth(5);
         }
 
 
@@ -138,14 +123,19 @@ public class jf_Principal extends javax.swing.JFrame {
 
     private void inicializarTablaIva() {
         DefaultTableModel tablaIva = new DefaultTableModel();
-        String[] titulos = {"Fecha Factura", "subTotal", "total", "Conceptos XML", "Folio Fiscal"};
+        String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
+            "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
+            "Cta. de la que se realiza el pago", "Observaciones"};
+        System.out.println("tamaño: " + titulos.length);
         tablaIva.setColumnIdentifiers(titulos);
         IvaAcredController ivaAcred = new IvaAcredController();
+
         String URL = "I:\\Dac\\Enero 01";
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
         for (int i = 0; i < llenarDatosTabla.size(); i++) {
-            tablaIva.addRow(new Object[]{llenarDatosTabla.get(i).getFechaFactura(), llenarDatosTabla.get(i).getSubTotal(), llenarDatosTabla.get(i).getTotal(),
-                llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getFolioFiscal()});
+            tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+                "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
         }
         tablaIvaAcred.setModel(tablaIva);
 
