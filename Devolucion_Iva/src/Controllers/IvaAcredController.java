@@ -26,7 +26,7 @@ public class IvaAcredController {
     private Tag raizXml, et_Concepto;
     private Tag p_Conceptos, p_Complemento, c_Concepto, co_TimbreFiscalD;
     private String fechaFactura, folioFiscal, subTotal, total;
-    private List<String> datosXml = new ArrayList<>();
+    private List<XmlDatos> datosXml = new ArrayList<>();
 
     private List<Tag> listEtiquetas;
 
@@ -37,7 +37,7 @@ public class IvaAcredController {
      * @param URL
      * @return List<XmlDatos>
      */
-    public List<String> datosDevolucionIva(String URL) {
+    public List<XmlDatos> datosDevolucionIva(String URL) {
         //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
         DecimalFormat formateador = new DecimalFormat("0.00000");
         //url de la carpeta del xml
@@ -69,9 +69,6 @@ public class IvaAcredController {
                             infoXml.setSubTotal(subTotal);
                             total = raizXml.getValorDeAtributo("Total");
                             infoXml.setTotal(total);
-                            datosXml.add(infoXml.getFechaFactura());
-                            datosXml.add(infoXml.getSubTotal());
-                            datosXml.add(infoXml.getTotal());
 
                             //tomando todos las etiquetas de un xml y guardandolas en una lista
                             listEtiquetas = raizXml.getTagsHijos();
@@ -153,21 +150,22 @@ public class IvaAcredController {
                                             }
                                         }
                                         infoXml.setConceptoXml(valoresConcepto.toString());
-                                        datosXml.add(infoXml.getConceptoXml());
+
                                         break;
                                     case "<cfdi:Complemento>":
                                         p_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
                                         co_TimbreFiscalD = p_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
                                         folioFiscal = co_TimbreFiscalD.getValorDeAtributo("UUID").toUpperCase();
                                         infoXml.setFolioFiscal(folioFiscal);
-                                        datosXml.add(infoXml.getFolioFiscal());
+
                                         break;
                                     default:
                                         break;
                                 }
                             }
-
+                            datosXml.add(infoXml);
                         }
+
                     }
 
                 }

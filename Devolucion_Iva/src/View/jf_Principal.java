@@ -6,6 +6,7 @@
 package View;
 
 import Controllers.IvaAcredController;
+import Controllers.XmlDatos;
 import java.util.List;
 
 /**
@@ -112,9 +113,9 @@ public class jf_Principal extends javax.swing.JFrame {
         //F
         IvaAcredController ivaAcred = new IvaAcredController();
         String URL = "I:\\Dac\\Enero 01";
-        List<String> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
-        for (int i = 0; i <llenarDatosTabla.size(); i++) {
-            System.out.println("datos tabla: ");
+        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
+        for (int i = 0; i < llenarDatosTabla.size(); i++) {
+            System.out.println("datos tabla: " + llenarDatosTabla.get(i).getTotal());
         }
 
     }//GEN-LAST:event_jm_IvaAcredMouseClicked
