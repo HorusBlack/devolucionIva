@@ -27,13 +27,15 @@ public class IvaAcredController {
     private Tag p_Conceptos, p_Complemento, c_Concepto, co_TimbreFiscalD;
     private String fechaFactura, folioFiscal, subTotal, total;
     private List<String> datosXml = new ArrayList<>();
+
     private List<Tag> listEtiquetas;
-    
+
     /**
-     * Funcion que recibe una url en forma de String, para obtener datos de archivos xml segun los conceptos
-     * solicitados
+     * Funcion que recibe una url en forma de String, para obtener datos de
+     * archivos xml segun los conceptos solicitados
+     *
      * @param URL
-     * @return List<String>
+     * @return List<XmlDatos>
      */
     public List<String> datosDevolucionIva(String URL) {
         //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
@@ -43,6 +45,7 @@ public class IvaAcredController {
             try {
                 //Tomando la ruta de la carpeta
                 JespXML xmlCarpeta = new JespXML(new File(URL));
+
                 //Array con todos los archivos de la carpeta
                 File[] archivos = xmlCarpeta.listFiles();
                 if (archivos.length > 0) {
@@ -53,6 +56,7 @@ public class IvaAcredController {
                             File oneFile = (File) archivo;
                             //Obteniendo la ruta del archivo
                             JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
+                            XmlDatos infoXml = new XmlDatos();
                             StringBuilder valoresConcepto = new StringBuilder();
                             //raiz de los archivos
                             raizXml = fileXml.leerXML();
@@ -60,12 +64,14 @@ public class IvaAcredController {
                             //Atributos de la raiz
                             String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
                             fechaFactura = raizXml.getValorDeAtributo("Fecha");
+                            infoXml.setFechaFactura(fechaFactura);
                             subTotal = raizXml.getValorDeAtributo("SubTotal");
+                            infoXml.setSubTotal(subTotal);
                             total = raizXml.getValorDeAtributo("Total");
-
-                            datosXml.add(fechaFactura);
-                            datosXml.add(subTotal);
-                            datosXml.add(total);
+                            infoXml.setTotal(total);
+                            datosXml.add(infoXml.getFechaFactura());
+                            datosXml.add(infoXml.getSubTotal());
+                            datosXml.add(infoXml.getTotal());
 
                             //tomando todos las etiquetas de un xml y guardandolas en una lista
                             listEtiquetas = raizXml.getTagsHijos();
@@ -146,13 +152,15 @@ public class IvaAcredController {
                                                 valoresConcepto.append("\"");
                                             }
                                         }
-                                        datosXml.add(valoresConcepto.toString());
+                                        infoXml.setConceptoXml(valoresConcepto.toString());
+                                        datosXml.add(infoXml.getConceptoXml());
                                         break;
                                     case "<cfdi:Complemento>":
                                         p_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
                                         co_TimbreFiscalD = p_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
                                         folioFiscal = co_TimbreFiscalD.getValorDeAtributo("UUID").toUpperCase();
-                                        datosXml.add(folioFiscal);
+                                        infoXml.setFolioFiscal(folioFiscal);
+                                        datosXml.add(infoXml.getFolioFiscal());
                                         break;
                                     default:
                                         break;
@@ -161,6 +169,7 @@ public class IvaAcredController {
 
                         }
                     }
+
                 }
 
             } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
@@ -168,6 +177,7 @@ public class IvaAcredController {
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
                 System.out.println("null: " + ex);
             }
+
         }
         return datosXml;
     }

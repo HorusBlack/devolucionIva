@@ -113,10 +113,9 @@ public class jf_Principal extends javax.swing.JFrame {
         IvaAcredController ivaAcred = new IvaAcredController();
         String URL = "I:\\Dac\\Enero 01";
         List<String> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
-        llenarDatosTabla.forEach((string) -> {
-            System.out.println(string);
-            System.out.println("\n");
-        });
+        for (int i = 0; i <llenarDatosTabla.size(); i++) {
+            System.out.println("datos tabla: ");
+        }
 
     }//GEN-LAST:event_jm_IvaAcredMouseClicked
 
