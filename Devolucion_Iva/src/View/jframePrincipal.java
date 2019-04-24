@@ -9,6 +9,7 @@ import Controllers.IvaAcredController;
 import Controllers.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -46,6 +47,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         lbTitulo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txta_Concepto = new javax.swing.JTextArea();
+        txtXml = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuIva = new javax.swing.JMenu();
 
@@ -95,6 +97,8 @@ public class jframePrincipal extends javax.swing.JFrame {
         txta_Concepto.setEnabled(false);
         jScrollPane1.setViewportView(txta_Concepto);
 
+        txtXml.setText("Concepto XML Completo");
+
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
         panelInfo.setLayout(panelInfoLayout);
         panelInfoLayout.setHorizontalGroup(
@@ -103,10 +107,12 @@ public class jframePrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(lbTitulo)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbTitulo)
+                            .addComponent(txtXml))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelInfoLayout.setVerticalGroup(
@@ -115,8 +121,10 @@ public class jframePrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lbTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SpIva, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                .addComponent(SpIva, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                .addComponent(txtXml)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -166,11 +174,24 @@ public class jframePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuIvaMouseClicked
 
     private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
-        txta_Concepto.setVisible(true);
-        if (tablaIvaAcred.getSelectedRow() != -1) {
-            String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
-            txta_Concepto.setText(codigo);
-            // Lo imprimimos en pantalla
+
+        String numCol = "";
+        //Obtiene el no. de columna y lo comvierte en String
+        numCol = Arrays.toString(tablaIvaAcred.getSelectedColumns());
+        //Si es la columna correcta realiza la accion
+        if (numCol.equals("[5]")) {
+            if (tablaIvaAcred.getSelectedRow() != -1) {
+                txta_Concepto.setVisible(true);
+                txtXml.setVisible(true);
+                //obteniendo el valor de la celda en la coordenada
+                String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
+                txta_Concepto.setText(codigo);
+
+                // Lo imprimimos en pantalla
+            }
+        } else {
+            txta_Concepto.setVisible(false);
+            txtXml.setVisible(false);
         }
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
@@ -253,7 +274,7 @@ public class jframePrincipal extends javax.swing.JFrame {
      */
     private void preConfiguracion() {
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
- 
+
         int height = pantalla.height;
         int width = pantalla.width;
         this.setSize(width / 2, height / 2);
@@ -261,7 +282,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         lbTitulo.setVisible(false);
         txta_Concepto.setVisible(false);
         txta_Concepto.setLineWrap(true);
-        
+        txtXml.setVisible(false);
 
     }
 
@@ -309,6 +330,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelMenus;
     private javax.swing.JTable tablaIvaAcred;
+    private javax.swing.JLabel txtXml;
     private javax.swing.JTextArea txta_Concepto;
     // End of variables declaration//GEN-END:variables
 }
