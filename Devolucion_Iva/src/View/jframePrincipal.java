@@ -19,17 +19,15 @@ import javax.swing.table.TableColumn;
  */
 public class jframePrincipal extends javax.swing.JFrame {
 
+    private DefaultTableModel tablaIva;
+
     /**
      * Creates new form jframePrincipal
      */
     public jframePrincipal() {
         initComponents();
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
-        this.setSize(width / 2, height / 2);
-        this.setLocationRelativeTo(null);
-        lbTitulo.setVisible(false);
+        preConfiguracion();
+
     }
 
     /**
@@ -46,6 +44,8 @@ public class jframePrincipal extends javax.swing.JFrame {
         SpIva = new javax.swing.JScrollPane();
         tablaIvaAcred = new javax.swing.JTable();
         lbTitulo = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txta_Concepto = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuIva = new javax.swing.JMenu();
 
@@ -58,15 +58,18 @@ public class jframePrincipal extends javax.swing.JFrame {
         panelMenus.setLayout(panelMenusLayout);
         panelMenusLayout.setHorizontalGroup(
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 828, Short.MAX_VALUE)
         );
         panelMenusLayout.setVerticalGroup(
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 61, Short.MAX_VALUE)
+            .addGap(0, 40, Short.MAX_VALUE)
         );
 
         panelInfo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        SpIva.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        tablaIvaAcred.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         tablaIvaAcred.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -77,9 +80,20 @@ public class jframePrincipal extends javax.swing.JFrame {
         ));
         tablaIvaAcred.setToolTipText("");
         tablaIvaAcred.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tablaIvaAcred.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tablaIvaAcredMousePressed(evt);
+            }
+        });
         SpIva.setViewportView(tablaIvaAcred);
 
         lbTitulo.setText("100% IVA ACREDITABLE");
+
+        txta_Concepto.setColumns(30);
+        txta_Concepto.setRows(5);
+        txta_Concepto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txta_Concepto.setEnabled(false);
+        jScrollPane1.setViewportView(txta_Concepto);
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
         panelInfo.setLayout(panelInfoLayout);
@@ -91,7 +105,8 @@ public class jframePrincipal extends javax.swing.JFrame {
                     .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(lbTitulo)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         panelInfoLayout.setVerticalGroup(
@@ -100,7 +115,9 @@ public class jframePrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lbTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SpIva)
+                .addComponent(SpIva, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -123,8 +140,8 @@ public class jframePrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelMenus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelMenus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -133,8 +150,7 @@ public class jframePrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(panelMenus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -145,17 +161,28 @@ public class jframePrincipal extends javax.swing.JFrame {
         if (tablaIvaAcred.getRowCount() == 0) {
             inicializarTablaIva();
             lbTitulo.setVisible(true);
+
         }
     }//GEN-LAST:event_menuIvaMouseClicked
 
+    private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
+        txta_Concepto.setVisible(true);
+        if (tablaIvaAcred.getSelectedRow() != -1) {
+            String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
+            txta_Concepto.setText(codigo);
+            // Lo imprimimos en pantalla
+        }
+    }//GEN-LAST:event_tablaIvaAcredMousePressed
+
     private void inicializarTablaIva() {
-        DefaultTableModel tablaIva = new DefaultTableModel();
+        tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
             "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
             "Cta. de la que se realiza el pago", "Observaciones"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
+
         //Clase que obtiene los datos xml
         IvaAcredController ivaAcred = new IvaAcredController();
         //url de los documentos
@@ -218,7 +245,24 @@ public class jframePrincipal extends javax.swing.JFrame {
             }
 
         }
+
+    }
+
+    /**
+     * Metodo que preconfigura el diseño del jframe
+     */
+    private void preConfiguracion() {
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+ 
+        int height = pantalla.height;
+        int width = pantalla.width;
+        this.setSize(width / 2, height / 2);
+        this.setLocationRelativeTo(null);
+        lbTitulo.setVisible(false);
+        txta_Concepto.setVisible(false);
+        txta_Concepto.setLineWrap(true);
         
+
     }
 
     /**
@@ -259,10 +303,12 @@ public class jframePrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane SpIva;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTitulo;
     private javax.swing.JMenu menuIva;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelMenus;
     private javax.swing.JTable tablaIvaAcred;
+    private javax.swing.JTextArea txta_Concepto;
     // End of variables declaration//GEN-END:variables
 }
