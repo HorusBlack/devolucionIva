@@ -42,41 +42,66 @@ public class jframePrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         panelMenus = new javax.swing.JPanel();
+        jMonthChooser1 = new com.toedter.calendar.JMonthChooser();
+        jYearChooser1 = new com.toedter.calendar.JYearChooser();
+        btnCargar = new javax.swing.JButton();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
         tablaIvaAcred = new javax.swing.JTable();
-        lbTitulo = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txta_Concepto = new javax.swing.JTextArea();
-        txtXml = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        ScrollTotalIva = new javax.swing.JScrollPane();
         tablaTotalIva = new javax.swing.JTable();
         btnGuardarIva = new javax.swing.JButton();
         btnExcel = new javax.swing.JButton();
+        panelConcepto = new javax.swing.JPanel();
+        scrollPaneConcepto = new javax.swing.JScrollPane();
+        txta_Concepto = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuIva = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AgroEcologia Iva");
 
-        panelMenus.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelMenus.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
+
+        jMonthChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Mes"));
+
+        jYearChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Año"));
+
+        btnCargar.setBackground(new java.awt.Color(0, 153, 153));
+        btnCargar.setText("Procesar");
 
         javax.swing.GroupLayout panelMenusLayout = new javax.swing.GroupLayout(panelMenus);
         panelMenus.setLayout(panelMenusLayout);
         panelMenusLayout.setHorizontalGroup(
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 828, Short.MAX_VALUE)
+            .addGroup(panelMenusLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jMonthChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCargar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelMenusLayout.setVerticalGroup(
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addGroup(panelMenusLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jMonthChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenusLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCargar)
+                .addGap(19, 19, 19))
         );
 
-        panelInfo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        SpIva.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        SpIva.setBorder(javax.swing.BorderFactory.createTitledBorder("100% IVA ACREDITABLE"));
 
-        tablaIvaAcred.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        tablaIvaAcred.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tablaIvaAcred.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -94,16 +119,9 @@ public class jframePrincipal extends javax.swing.JFrame {
         });
         SpIva.setViewportView(tablaIvaAcred);
 
-        lbTitulo.setText("100% IVA ACREDITABLE");
+        ScrollTotalIva.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
 
-        txta_Concepto.setColumns(30);
-        txta_Concepto.setRows(5);
-        txta_Concepto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txta_Concepto.setEnabled(false);
-        jScrollPane1.setViewportView(txta_Concepto);
-
-        txtXml.setText("Concepto XML Completo");
-
+        tablaTotalIva.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tablaTotalIva.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -112,50 +130,80 @@ public class jframePrincipal extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane2.setViewportView(tablaTotalIva);
+        ScrollTotalIva.setViewportView(tablaTotalIva);
 
+        btnGuardarIva.setBackground(new java.awt.Color(255, 102, 102));
         btnGuardarIva.setText("Guardar");
 
+        btnExcel.setBackground(new java.awt.Color(0, 204, 51));
         btnExcel.setText("Generar Excel");
+
+        panelConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder("Concepto XML Completo"));
+
+        txta_Concepto.setColumns(30);
+        txta_Concepto.setRows(5);
+        txta_Concepto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txta_Concepto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txta_Concepto.setEnabled(false);
+        scrollPaneConcepto.setViewportView(txta_Concepto);
+
+        javax.swing.GroupLayout panelConceptoLayout = new javax.swing.GroupLayout(panelConcepto);
+        panelConcepto.setLayout(panelConceptoLayout);
+        panelConceptoLayout.setHorizontalGroup(
+            panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelConceptoLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        panelConceptoLayout.setVerticalGroup(
+            panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelConceptoLayout.createSequentialGroup()
+                    .addGap(13, 13, 13)
+                    .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                    .addGap(13, 13, 13)))
+        );
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
         panelInfo.setLayout(panelInfoLayout);
         panelInfoLayout.setHorizontalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfoLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
                     .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbTitulo)
-                            .addComponent(txtXml)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGuardarIva, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)))
+                            .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
+                            .addGroup(panelInfoLayout.createSequentialGroup()
+                                .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addGap(277, 277, 277)
+                                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(33, 33, 33))))
+                    .addComponent(panelConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelInfoLayout.setVerticalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
+                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnExcel)
-                        .addComponent(btnGuardarIva)))
-                .addGap(98, 98, 98)
-                .addComponent(txtXml)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(btnExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(65, 65, 65))
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -200,7 +248,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         if (tablaIvaAcred.getRowCount() == 0) {
             inicializarTablaIva();
             inicializarTablaTotalIva();
-            lbTitulo.setVisible(true);
+            
 
         }
     }//GEN-LAST:event_menuIvaMouseClicked
@@ -214,7 +262,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         if (numCol.equals("[5]")) {
             if (tablaIvaAcred.getSelectedRow() != -1) {
                 txta_Concepto.setVisible(true);
-                txtXml.setVisible(true);
+             
                 //obteniendo el valor de la celda en la coordenada
                 String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
                 txta_Concepto.setText(codigo);
@@ -223,7 +271,7 @@ public class jframePrincipal extends javax.swing.JFrame {
             }
         } else {
             txta_Concepto.setVisible(false);
-            txtXml.setVisible(false);
+           
         }
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
@@ -353,10 +401,9 @@ public class jframePrincipal extends javax.swing.JFrame {
         this.setSize(width / 2, height / 2);
         this.setLocationRelativeTo(null);
         //Elementos adicionales
-        lbTitulo.setVisible(false);
+      
         txta_Concepto.setVisible(false);
         txta_Concepto.setLineWrap(true);
-        txtXml.setVisible(false);
 
     }
 
@@ -396,19 +443,21 @@ public class jframePrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane ScrollTotalIva;
     private javax.swing.JScrollPane SpIva;
+    private javax.swing.JButton btnCargar;
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnGuardarIva;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lbTitulo;
+    private com.toedter.calendar.JMonthChooser jMonthChooser1;
+    private com.toedter.calendar.JYearChooser jYearChooser1;
     private javax.swing.JMenu menuIva;
+    private javax.swing.JPanel panelConcepto;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelMenus;
+    private javax.swing.JScrollPane scrollPaneConcepto;
     private javax.swing.JTable tablaIvaAcred;
     private javax.swing.JTable tablaTotalIva;
-    private javax.swing.JLabel txtXml;
     private javax.swing.JTextArea txta_Concepto;
     // End of variables declaration//GEN-END:variables
 }
