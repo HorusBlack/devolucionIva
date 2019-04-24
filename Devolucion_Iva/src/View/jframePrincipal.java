@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -28,6 +29,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         int width = pantalla.width;
         this.setSize(width / 2, height / 2);
         this.setLocationRelativeTo(null);
+        lbTitulo.setVisible(false);
     }
 
     /**
@@ -43,8 +45,9 @@ public class jframePrincipal extends javax.swing.JFrame {
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
         tablaIvaAcred = new javax.swing.JTable();
+        lbTitulo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuIva = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AgroEcologia Iva");
@@ -72,7 +75,11 @@ public class jframePrincipal extends javax.swing.JFrame {
 
             }
         ));
+        tablaIvaAcred.setToolTipText("");
+        tablaIvaAcred.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         SpIva.setViewportView(tablaIvaAcred);
+
+        lbTitulo.setText("100% IVA ACREDITABLE");
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
         panelInfo.setLayout(panelInfoLayout);
@@ -80,26 +87,32 @@ public class jframePrincipal extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(lbTitulo)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelInfoLayout.setVerticalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelInfoLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+                .addComponent(lbTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SpIva)
                 .addContainerGap())
         );
 
-        jMenu1.setBackground(new java.awt.Color(153, 204, 255));
-        jMenu1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jMenu1.setText("100% FACTURAS DE IVA ACRED");
-        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+        menuIva.setBackground(new java.awt.Color(153, 204, 255));
+        menuIva.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        menuIva.setText("FACTURAS  IVA ACRED");
+        menuIva.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu1MouseClicked(evt);
+                menuIvaMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menuIva);
 
         setJMenuBar(jMenuBar1);
 
@@ -127,31 +140,85 @@ public class jframePrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+    private void menuIvaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuIvaMouseClicked
         tablaIvaAcred.removeAll();
         if (tablaIvaAcred.getRowCount() == 0) {
             inicializarTablaIva();
+            lbTitulo.setVisible(true);
         }
-    }//GEN-LAST:event_jMenu1MouseClicked
+    }//GEN-LAST:event_menuIvaMouseClicked
 
     private void inicializarTablaIva() {
         DefaultTableModel tablaIva = new DefaultTableModel();
+        //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
             "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
             "Cta. de la que se realiza el pago", "Observaciones"};
-        System.out.println("tamaño: " + titulos.length);
+        //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
+        //Clase que obtiene los datos xml
         IvaAcredController ivaAcred = new IvaAcredController();
-
+        //url de los documentos
         String URL = "I:\\Dac\\Enero 01";
+        //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
+        //llenando la tabla de la info
         for (int i = 0; i < llenarDatosTabla.size(); i++) {
             tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
                 llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                 "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
         }
         tablaIvaAcred.setModel(tablaIva);
+        //tamaño manual
+        TableColumn columna;
+        for (int i = 0; i < 8; i++) {
+            switch (i) {
+                case 0:
+                    //factura
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(50);
+                    break;
+                case 1:
+                    //Fecha Factura
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(130);
+                    break;
+                case 2:
+                    //#poliza
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(50);
+                    break;
+                case 3:
+                    //Fecha Poliza
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(130);
+                    break;
+                case 4:
+                    //Folio Fiscal
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(270);
+                    break;
+                case 5:
+                    //Conceptos XML
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(300);
+                    break;
+                case 6:
+                    //Sub-total
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(70);
+                    break;
+                case 7:
+                    //Iva
+                    columna = tablaIvaAcred.getColumn(titulos[i]);
+                    columna.setMinWidth(40);
+                    break;
+                default:
+                    break;
+            }
 
+        }
+        
     }
 
     /**
@@ -191,8 +258,9 @@ public class jframePrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane SpIva;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lbTitulo;
+    private javax.swing.JMenu menuIva;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelMenus;
     private javax.swing.JTable tablaIvaAcred;
