@@ -51,7 +51,7 @@ public class IvaAcredController {
                 if (archivos.length > 0) {
                     for (File archivo : archivos) {
                         //verificando que sean archivos xml
-                        if (archivo.isFile() && archivo.getName().endsWith(".xml")) {
+                        if (archivo.isFile() && (archivo.getName().endsWith(".xml") || archivo.getName().endsWith(".XML"))) {
                             //obteniendo el archivo xml
                             File oneFile = (File) archivo;
                             //Obteniendo la ruta del archivo
@@ -171,9 +171,12 @@ public class IvaAcredController {
                 }
 
             } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
-                System.out.println("error: " + e);
+                System.out.println("error IvaAcredController: " + e);
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
-                System.out.println("null: " + ex);
+                //AQUI SE GENERA EL PROBLEMA 
+                System.out.println("null IvaAcredController: " + ex);
+                return datosXml;
+                
             }
 
         }

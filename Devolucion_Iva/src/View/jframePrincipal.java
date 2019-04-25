@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -42,9 +43,9 @@ public class jframePrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         panelMenus = new javax.swing.JPanel();
-        jMonthChooser1 = new com.toedter.calendar.JMonthChooser();
-        jYearChooser1 = new com.toedter.calendar.JYearChooser();
-        btnCargar = new javax.swing.JButton();
+        calendarMes = new com.toedter.calendar.JMonthChooser();
+        calendarAnio = new com.toedter.calendar.JYearChooser();
+        btnProcesarIva = new javax.swing.JButton();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
         tablaIvaAcred = new javax.swing.JTable();
@@ -63,12 +64,17 @@ public class jframePrincipal extends javax.swing.JFrame {
 
         panelMenus.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
 
-        jMonthChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Mes"));
+        calendarMes.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Mes"));
 
-        jYearChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Año"));
+        calendarAnio.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Año"));
 
-        btnCargar.setBackground(new java.awt.Color(0, 153, 153));
-        btnCargar.setText("Procesar");
+        btnProcesarIva.setBackground(new java.awt.Color(0, 153, 153));
+        btnProcesarIva.setText("Procesar");
+        btnProcesarIva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcesarIvaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelMenusLayout = new javax.swing.GroupLayout(panelMenus);
         panelMenus.setLayout(panelMenusLayout);
@@ -76,11 +82,11 @@ public class jframePrincipal extends javax.swing.JFrame {
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMenusLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jMonthChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnCargar)
+                .addComponent(btnProcesarIva)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelMenusLayout.setVerticalGroup(
@@ -88,12 +94,12 @@ public class jframePrincipal extends javax.swing.JFrame {
             .addGroup(panelMenusLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jMonthChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenusLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCargar)
+                .addComponent(btnProcesarIva)
                 .addGap(19, 19, 19))
         );
 
@@ -243,14 +249,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuIvaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuIvaMouseClicked
-        tablaIvaAcred.removeAll();
-        //Igual habilitar para el de totales
-        if (tablaIvaAcred.getRowCount() == 0) {
-            inicializarTablaIva();
-            inicializarTablaTotalIva();
-            
 
-        }
     }//GEN-LAST:event_menuIvaMouseClicked
 
     private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
@@ -262,23 +261,43 @@ public class jframePrincipal extends javax.swing.JFrame {
         if (numCol.equals("[5]")) {
             if (tablaIvaAcred.getSelectedRow() != -1) {
                 txta_Concepto.setVisible(true);
-             
+
                 //obteniendo el valor de la celda en la coordenada
                 String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
                 txta_Concepto.setText(codigo);
-                
+
                 // Lo imprimimos en pantalla
             }
         } else {
             txta_Concepto.setVisible(false);
-           
+
         }
     }//GEN-LAST:event_tablaIvaAcredMousePressed
+
+    private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
+        int mes = calendarMes.getMonth();
+        int year = calendarAnio.getYear();
+        String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
+            "11 Noviembre", "12 Diciembre"};
+        String urlMes = numMes[mes];
+        tablaIvaAcred.removeAll();
+        //Igual habilitar para el de totales
+        if (tablaIvaAcred.getRowCount() == 0) {
+            inicializarTablaIva(urlMes, year);
+            //no choca
+            inicializarTablaTotalIva();
+
+        }
+
+        //Existen carpetas con su año correspondiente
+        //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
+
+    }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
-    private void inicializarTablaIva() {
+    private void inicializarTablaIva(String numMes, int anio) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
@@ -290,64 +309,67 @@ public class jframePrincipal extends javax.swing.JFrame {
         //Clase que obtiene los datos xml
         IvaAcredController ivaAcred = new IvaAcredController();
         //url de los documentos
-        String URL = "I:\\Dac\\Enero 01";
+        final String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
-        //llenando la tabla de la info
-        for (int i = 0; i < llenarDatosTabla.size(); i++) {
-            tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
-                llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
-                "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
-        }
-        tablaIvaAcred.setModel(tablaIva);
-        //tamaño manual
-        TableColumn columna;
-        for (int i = 0; i < 8; i++) {
-            switch (i) {
-                case 0:
-                    //factura
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(50);
-                    break;
-                case 1:
-                    //Fecha Factura
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(130);
-                    break;
-                case 2:
-                    //#poliza
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(50);
-                    break;
-                case 3:
-                    //Fecha Poliza
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(130);
-                    break;
-                case 4:
-                    //Folio Fiscal
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(270);
-                    break;
-                case 5:
-                    //Conceptos XML
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(300);
-                    break;
-                case 6:
-                    //Sub-total
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(70);
-                    break;
-                case 7:
-                    //Iva
-                    columna = tablaIvaAcred.getColumn(titulos[i]);
-                    columna.setMinWidth(40);
-                    break;
-                default:
-                    break;
+        //checar esta validacion
+        if (llenarDatosTabla.size() != 0) {
+            //llenando la tabla de la info
+            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+                tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+                    "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
+            tablaIvaAcred.setModel(tablaIva);
+            //tamaño manual
+            TableColumn columna;
+            for (int i = 0; i < 8; i++) {
+                switch (i) {
+                    case 0:
+                        //factura
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 1:
+                        //Fecha Factura
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 2:
+                        //#poliza
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 3:
+                        //Fecha Poliza
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 4:
+                        //Folio Fiscal
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(270);
+                        break;
+                    case 5:
+                        //Conceptos XML
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(300);
+                        break;
+                    case 6:
+                        //Sub-total
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(70);
+                        break;
+                    case 7:
+                        //Iva
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(40);
+                        break;
+                    default:
+                        break;
+                }
 
+            }
         }
 
     }
@@ -401,7 +423,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         this.setSize(width / 2, height / 2);
         this.setLocationRelativeTo(null);
         //Elementos adicionales
-      
+
         txta_Concepto.setVisible(false);
         txta_Concepto.setLineWrap(true);
 
@@ -423,15 +445,11 @@ public class jframePrincipal extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(jframePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(jframePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(jframePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(jframePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -445,12 +463,12 @@ public class jframePrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane ScrollTotalIva;
     private javax.swing.JScrollPane SpIva;
-    private javax.swing.JButton btnCargar;
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnGuardarIva;
+    private javax.swing.JButton btnProcesarIva;
+    private com.toedter.calendar.JYearChooser calendarAnio;
+    private com.toedter.calendar.JMonthChooser calendarMes;
     private javax.swing.JMenuBar jMenuBar1;
-    private com.toedter.calendar.JMonthChooser jMonthChooser1;
-    private com.toedter.calendar.JYearChooser jYearChooser1;
     private javax.swing.JMenu menuIva;
     private javax.swing.JPanel panelConcepto;
     private javax.swing.JPanel panelInfo;
