@@ -157,21 +157,14 @@ public class jframePrincipal extends javax.swing.JFrame {
         panelConcepto.setLayout(panelConceptoLayout);
         panelConceptoLayout.setHorizontalGroup(
             panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelConceptoLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(panelConceptoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelConceptoLayout.setVerticalGroup(
             panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-            .addGroup(panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelConceptoLayout.createSequentialGroup()
-                    .addGap(13, 13, 13)
-                    .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
-                    .addGap(13, 13, 13)))
+            .addComponent(scrollPaneConcepto)
         );
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
@@ -198,14 +191,14 @@ public class jframePrincipal extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(btnExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(65, 65, 65))
+                        .addGap(76, 76, 76))
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -258,20 +251,22 @@ public class jframePrincipal extends javax.swing.JFrame {
         //Obtiene el no. de columna y lo comvierte en String
         numCol = Arrays.toString(tablaIvaAcred.getSelectedColumns());
         //Si es la columna correcta realiza la accion
+        if (tablaIvaAcred.getSelectedRow() != -1) {
+            txta_Concepto.setVisible(true);
+
+            //obteniendo el valor de la celda en la coordenada
+            String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
+            txta_Concepto.setText(codigo);
+
+            // Lo imprimimos en pantalla
+        }
+        /*
         if (numCol.equals("[5]")) {
-            if (tablaIvaAcred.getSelectedRow() != -1) {
-                txta_Concepto.setVisible(true);
-
-                //obteniendo el valor de la celda en la coordenada
-                String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
-                txta_Concepto.setText(codigo);
-
-                // Lo imprimimos en pantalla
-            }
+          
         } else {
             txta_Concepto.setVisible(false);
 
-        }
+        }*/
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
@@ -281,13 +276,9 @@ public class jframePrincipal extends javax.swing.JFrame {
             "11 Noviembre", "12 Diciembre"};
         String urlMes = numMes[mes];
         tablaIvaAcred.removeAll();
-        //Igual habilitar para el de totales
-        if (tablaIvaAcred.getRowCount() == 0) {
-            inicializarTablaIva(urlMes, year);
-            //no choca
-            inicializarTablaTotalIva();
-
-        }
+        inicializarTablaIva(urlMes, year);
+        inicializarTablaTotalIva();
+        //Anexar label con informacion actual
 
         //Existen carpetas con su año correspondiente
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
@@ -309,11 +300,12 @@ public class jframePrincipal extends javax.swing.JFrame {
         //Clase que obtiene los datos xml
         IvaAcredController ivaAcred = new IvaAcredController();
         //url de los documentos
-        final String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
+       
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
         //checar esta validacion
-        if (llenarDatosTabla.size() != 0) {
+        if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
                 tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
@@ -370,6 +362,8 @@ public class jframePrincipal extends javax.swing.JFrame {
                 }
 
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
         }
 
     }

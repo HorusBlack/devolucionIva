@@ -48,126 +48,127 @@ public class IvaAcredController {
 
                 //Array con todos los archivos de la carpeta
                 File[] archivos = xmlCarpeta.listFiles();
-                if (archivos.length > 0) {
-                    for (File archivo : archivos) {
-                        //verificando que sean archivos xml
-                        if (archivo.isFile() && (archivo.getName().endsWith(".xml") || archivo.getName().endsWith(".XML"))) {
-                            //obteniendo el archivo xml
-                            File oneFile = (File) archivo;
-                            //Obteniendo la ruta del archivo
-                            JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
-                            XmlDatos infoXml = new XmlDatos();
-                            StringBuilder valoresConcepto = new StringBuilder();
-                            //raiz de los archivos
-                            raizXml = fileXml.leerXML();
+                if (archivos != null) {
+                    if (archivos.length > 0) {
+                        for (File archivo : archivos) {
+                            //verificando que sean archivos xml
+                            if (archivo.isFile() && (archivo.getName().endsWith(".xml") || archivo.getName().endsWith(".XML"))) {
+                                //obteniendo el archivo xml
+                                File oneFile = (File) archivo;
+                                //Obteniendo la ruta del archivo
+                                JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
+                                XmlDatos infoXml = new XmlDatos();
+                                StringBuilder valoresConcepto = new StringBuilder();
+                                //raiz de los archivos
+                                raizXml = fileXml.leerXML();
 
-                            //Atributos de la raiz
-                            String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
-                            fechaFactura = raizXml.getValorDeAtributo("Fecha");
-                            infoXml.setFechaFactura(fechaFactura);
-                            subTotal = raizXml.getValorDeAtributo("SubTotal");
-                            infoXml.setSubTotal(subTotal);
-                            total = raizXml.getValorDeAtributo("Total");
-                            infoXml.setTotal(total);
+                                //Atributos de la raiz
+                                String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
+                                fechaFactura = raizXml.getValorDeAtributo("Fecha");
+                                infoXml.setFechaFactura(fechaFactura);
+                                subTotal = raizXml.getValorDeAtributo("SubTotal");
+                                infoXml.setSubTotal(subTotal);
+                                total = raizXml.getValorDeAtributo("Total");
+                                infoXml.setTotal(total);
 
-                            //tomando todos las etiquetas de un xml y guardandolas en una lista
-                            listEtiquetas = raizXml.getTagsHijos();
+                                //tomando todos las etiquetas de un xml y guardandolas en una lista
+                                listEtiquetas = raizXml.getTagsHijos();
 
-                            for (int i = 0; i < listEtiquetas.size(); i++) {
-                                String nombreEtiqueta = listEtiquetas.get(i).toString();
+                                for (int i = 0; i < listEtiquetas.size(); i++) {
+                                    String nombreEtiqueta = listEtiquetas.get(i).toString();
 
-                                switch (nombreEtiqueta) {
-                                    case "<cfdi:Conceptos>":
-                                        List<Tag> multiConceptos;
-                                        multiConceptos = listEtiquetas.get(i).getTagsHijos();
+                                    switch (nombreEtiqueta) {
+                                        case "<cfdi:Conceptos>":
+                                            List<Tag> multiConceptos;
+                                            multiConceptos = listEtiquetas.get(i).getTagsHijos();
 
-                                        for (int j = 0; j < multiConceptos.size(); j++) {
-                                            c_Concepto = multiConceptos.get(j);
+                                            for (int j = 0; j < multiConceptos.size(); j++) {
+                                                c_Concepto = multiConceptos.get(j);
 
-                                            String valUnidad, claveUnidad, claveProvServ;
+                                                String valUnidad, claveUnidad, claveProvServ;
 
-                                            //validando que existan atributos que pueden o no estar en el xml
-                                            try {
-                                                valUnidad = c_Concepto.getValorDeAtributo("Unidad");
-                                            } catch (AtributoNotFoundException ex) {
-                                                valUnidad = "N/A";
-                                            }
-
-                                            try {
-                                                claveUnidad = c_Concepto.getValorDeAtributo("ClaveUnidad");
-                                            } catch (AtributoNotFoundException ex) {
-                                                claveUnidad = "";
-                                            }
-
-                                            try {
-                                                claveProvServ = c_Concepto.getValorDeAtributo("ClaveProdSer");
-                                            } catch (AtributoNotFoundException ex) {
-                                                claveProvServ = "";
-                                            }
-
-                                            //Cadena del concepto
-                                            if (valoresConcepto.toString().isEmpty()) {
-                                                valoresConcepto.append("Importe=\"");
-                                                valoresConcepto.append(c_Concepto.getValorDeAtributo("Importe"));
-                                                valoresConcepto.append("\" ValorUnitario=\"");
-                                                valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("ValorUnitario"))));
-                                                valoresConcepto.append("\" Descripción=\"");
-                                                valoresConcepto.append(c_Concepto.getValorDeAtributo("Descripcion"));
-                                                if (!claveUnidad.equals("")) {
-                                                    valoresConcepto.append("\" ClaveUnidad=\"");
-                                                    valoresConcepto.append(claveUnidad.toUpperCase());
+                                                //validando que existan atributos que pueden o no estar en el xml
+                                                try {
+                                                    valUnidad = c_Concepto.getValorDeAtributo("Unidad");
+                                                } catch (AtributoNotFoundException ex) {
+                                                    valUnidad = "N/A";
                                                 }
-                                                if (!claveProvServ.equals("")) {
-                                                    valoresConcepto.append("\" ClaveProvServ=\"");
-                                                    valoresConcepto.append(claveProvServ.toUpperCase());
-                                                }
-                                                valoresConcepto.append("\" Unidad=\"");
-                                                valoresConcepto.append(valUnidad.toUpperCase());
-                                                valoresConcepto.append("\" Cantidad=\"");
-                                                valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("Cantidad"))));
-                                                valoresConcepto.append("\"");
-                                            }
-                                            if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
-                                                valoresConcepto.append("\nImporte=\"");
-                                                valoresConcepto.append(c_Concepto.getValorDeAtributo("Importe"));
-                                                valoresConcepto.append("\" ValorUnitario=\"");
-                                                valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("ValorUnitario"))));
-                                                valoresConcepto.append("\" Descripción=\"");
-                                                valoresConcepto.append(c_Concepto.getValorDeAtributo("Descripcion"));
-                                                if (!claveUnidad.equals("")) {
-                                                    valoresConcepto.append("\" ClaveUnidad=\"");
-                                                    valoresConcepto.append(claveUnidad.toUpperCase());
-                                                }
-                                                if (!claveProvServ.equals("")) {
-                                                    valoresConcepto.append("\" ClaveProvServ=\"");
-                                                    valoresConcepto.append(claveProvServ.toUpperCase());
-                                                }
-                                                valoresConcepto.append("\" Unidad=\"");
-                                                valoresConcepto.append(valUnidad.toUpperCase());
-                                                valoresConcepto.append("\" Cantidad=\"");
-                                                valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("Cantidad"))));
-                                                valoresConcepto.append("\"");
-                                            }
-                                        }
-                                        infoXml.setConceptoXml(valoresConcepto.toString());
 
-                                        break;
-                                    case "<cfdi:Complemento>":
-                                        p_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
-                                        co_TimbreFiscalD = p_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
-                                        folioFiscal = co_TimbreFiscalD.getValorDeAtributo("UUID").toUpperCase();
-                                        infoXml.setFolioFiscal(folioFiscal);
+                                                try {
+                                                    claveUnidad = c_Concepto.getValorDeAtributo("ClaveUnidad");
+                                                } catch (AtributoNotFoundException ex) {
+                                                    claveUnidad = "";
+                                                }
 
-                                        break;
-                                    default:
-                                        break;
+                                                try {
+                                                    claveProvServ = c_Concepto.getValorDeAtributo("ClaveProdSer");
+                                                } catch (AtributoNotFoundException ex) {
+                                                    claveProvServ = "";
+                                                }
+
+                                                //Cadena del concepto
+                                                if (valoresConcepto.toString().isEmpty()) {
+                                                    valoresConcepto.append("Importe=\"");
+                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Importe"));
+                                                    valoresConcepto.append("\" ValorUnitario=\"");
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("ValorUnitario"))));
+                                                    valoresConcepto.append("\" Descripción=\"");
+                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Descripcion"));
+                                                    if (!claveUnidad.equals("")) {
+                                                        valoresConcepto.append("\" ClaveUnidad=\"");
+                                                        valoresConcepto.append(claveUnidad.toUpperCase());
+                                                    }
+                                                    if (!claveProvServ.equals("")) {
+                                                        valoresConcepto.append("\" ClaveProvServ=\"");
+                                                        valoresConcepto.append(claveProvServ.toUpperCase());
+                                                    }
+                                                    valoresConcepto.append("\" Unidad=\"");
+                                                    valoresConcepto.append(valUnidad.toUpperCase());
+                                                    valoresConcepto.append("\" Cantidad=\"");
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("Cantidad"))));
+                                                    valoresConcepto.append("\"");
+                                                }
+                                                if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
+                                                    valoresConcepto.append("\nImporte=\"");
+                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Importe"));
+                                                    valoresConcepto.append("\" ValorUnitario=\"");
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("ValorUnitario"))));
+                                                    valoresConcepto.append("\" Descripción=\"");
+                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Descripcion"));
+                                                    if (!claveUnidad.equals("")) {
+                                                        valoresConcepto.append("\" ClaveUnidad=\"");
+                                                        valoresConcepto.append(claveUnidad.toUpperCase());
+                                                    }
+                                                    if (!claveProvServ.equals("")) {
+                                                        valoresConcepto.append("\" ClaveProvServ=\"");
+                                                        valoresConcepto.append(claveProvServ.toUpperCase());
+                                                    }
+                                                    valoresConcepto.append("\" Unidad=\"");
+                                                    valoresConcepto.append(valUnidad.toUpperCase());
+                                                    valoresConcepto.append("\" Cantidad=\"");
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("Cantidad"))));
+                                                    valoresConcepto.append("\"");
+                                                }
+                                            }
+                                            infoXml.setConceptoXml(valoresConcepto.toString());
+
+                                            break;
+                                        case "<cfdi:Complemento>":
+                                            p_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
+                                            co_TimbreFiscalD = p_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
+                                            folioFiscal = co_TimbreFiscalD.getValorDeAtributo("UUID").toUpperCase();
+                                            infoXml.setFolioFiscal(folioFiscal);
+
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                 }
+                                datosXml.add(infoXml);
                             }
-                            datosXml.add(infoXml);
+
                         }
-
                     }
-
                 }
 
             } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
@@ -175,8 +176,7 @@ public class IvaAcredController {
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
                 //AQUI SE GENERA EL PROBLEMA 
                 System.out.println("null IvaAcredController: " + ex);
-                return datosXml;
-                
+
             }
 
         }

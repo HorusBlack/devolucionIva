@@ -12,6 +12,7 @@ package Controllers;
 public class XmlDatos {
 
     private String fechaFactura, subTotal, Total, conceptoXml, folioFiscal;
+    
 
     public String getFechaFactura() {
         return fechaFactura;
