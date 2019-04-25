@@ -23,6 +23,8 @@ public class jframePrincipal extends javax.swing.JFrame {
 
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
+    private String periodo, asunto, empresa;
+    private int numRegistros;
 
     /**
      * Creates new form jframePrincipal
@@ -46,6 +48,11 @@ public class jframePrincipal extends javax.swing.JFrame {
         calendarMes = new com.toedter.calendar.JMonthChooser();
         calendarAnio = new com.toedter.calendar.JYearChooser();
         btnProcesarIva = new javax.swing.JButton();
+        panelResumenDatos = new javax.swing.JPanel();
+        lbPeriodo = new javax.swing.JLabel();
+        lbEmpresa = new javax.swing.JLabel();
+        lbAsunto = new javax.swing.JLabel();
+        lbRegistros = new javax.swing.JLabel();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
         tablaIvaAcred = new javax.swing.JTable();
@@ -76,6 +83,41 @@ public class jframePrincipal extends javax.swing.JFrame {
             }
         });
 
+        panelResumenDatos.setBorder(javax.swing.BorderFactory.createTitledBorder("Extracto"));
+
+        lbPeriodo.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+
+        lbEmpresa.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+
+        lbAsunto.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+
+        lbRegistros.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+
+        javax.swing.GroupLayout panelResumenDatosLayout = new javax.swing.GroupLayout(panelResumenDatos);
+        panelResumenDatos.setLayout(panelResumenDatosLayout);
+        panelResumenDatosLayout.setHorizontalGroup(
+            panelResumenDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelResumenDatosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelResumenDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbPeriodo)
+                    .addComponent(lbEmpresa)
+                    .addComponent(lbAsunto)
+                    .addComponent(lbRegistros))
+                .addContainerGap(122, Short.MAX_VALUE))
+        );
+        panelResumenDatosLayout.setVerticalGroup(
+            panelResumenDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelResumenDatosLayout.createSequentialGroup()
+                .addComponent(lbPeriodo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbEmpresa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbAsunto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbRegistros))
+        );
+
         javax.swing.GroupLayout panelMenusLayout = new javax.swing.GroupLayout(panelMenus);
         panelMenus.setLayout(panelMenusLayout);
         panelMenusLayout.setHorizontalGroup(
@@ -85,22 +127,26 @@ public class jframePrincipal extends javax.swing.JFrame {
                 .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnProcesarIva)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnProcesarIva, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelResumenDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelMenusLayout.setVerticalGroup(
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMenusLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelResumenDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenusLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnProcesarIva)
-                .addGap(19, 19, 19))
+                .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelMenusLayout.createSequentialGroup()
+                        .addComponent(btnProcesarIva)
+                        .addGap(8, 8, 8)))
+                .addGap(32, 32, 32))
         );
 
         panelInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -191,7 +237,7 @@ public class jframePrincipal extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfoLayout.createSequentialGroup()
@@ -234,7 +280,7 @@ public class jframePrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMenus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -276,10 +322,10 @@ public class jframePrincipal extends javax.swing.JFrame {
             "11 Noviembre", "12 Diciembre"};
         String urlMes = numMes[mes];
         tablaIvaAcred.removeAll();
-        inicializarTablaIva(urlMes, year);
+        inicializarTablaIva(urlMes, mes, year);
         inicializarTablaTotalIva();
-        //Anexar label con informacion actual
 
+        //Anexar label con informacion actual
         //Existen carpetas con su año correspondiente
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
 
@@ -288,7 +334,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
-    private void inicializarTablaIva(String numMes, int anio) {
+    private void inicializarTablaIva(String numMes, int mes, int anio) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
@@ -301,7 +347,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         IvaAcredController ivaAcred = new IvaAcredController();
         //url de los documentos
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
-       
+
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
         //checar esta validacion
@@ -312,7 +358,14 @@ public class jframePrincipal extends javax.swing.JFrame {
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
+
+            String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                "Noviembre", "Diciembre"};
+
+            datosResumen(meses[mes], llenarDatosTabla.size(), anio);
+
             tablaIvaAcred.setModel(tablaIva);
+
             //tamaño manual
             TableColumn columna;
             for (int i = 0; i < 8; i++) {
@@ -420,7 +473,26 @@ public class jframePrincipal extends javax.swing.JFrame {
 
         txta_Concepto.setVisible(false);
         txta_Concepto.setLineWrap(true);
+        lbAsunto.setVisible(false);
+        lbEmpresa.setVisible(false);
+        lbPeriodo.setVisible(false);
+        lbRegistros.setVisible(false);
 
+    }
+
+    private void datosResumen(String mes, int registros, int anio) {
+        numRegistros = registros;
+        empresa = "Agroecología Intensiva para el Campo S.A de C.V";
+        asunto = "Relación del 100% de Operaciones con Proveedores Tasa 16 %";
+        periodo = mes + " " + anio;
+        lbAsunto.setText(asunto);
+        lbAsunto.setVisible(true);
+        lbEmpresa.setText(empresa);
+        lbEmpresa.setVisible(true);
+        lbPeriodo.setText("Periodo: " + periodo);
+        lbPeriodo.setVisible(true);
+        lbRegistros.setText("Registros: " + String.valueOf(numRegistros));
+        lbRegistros.setVisible(true);
     }
 
     /**
@@ -463,10 +535,15 @@ public class jframePrincipal extends javax.swing.JFrame {
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lbAsunto;
+    private javax.swing.JLabel lbEmpresa;
+    private javax.swing.JLabel lbPeriodo;
+    private javax.swing.JLabel lbRegistros;
     private javax.swing.JMenu menuIva;
     private javax.swing.JPanel panelConcepto;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelMenus;
+    private javax.swing.JPanel panelResumenDatos;
     private javax.swing.JScrollPane scrollPaneConcepto;
     private javax.swing.JTable tablaIvaAcred;
     private javax.swing.JTable tablaTotalIva;
