@@ -19,8 +19,7 @@ import javax.swing.table.TableColumn;
  *
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
-public class jframePrincipal extends javax.swing.JFrame {
-
+public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
@@ -30,7 +29,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     /**
      * Creates new form jframePrincipal
      */
-    public jframePrincipal() {
+    public Jf_FacturasIvaAcred() {
         initComponents();
         preConfiguracion();
         
@@ -67,7 +66,6 @@ public class jframePrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         menuIva = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AgroEcologia Iva");
 
         panelMenus.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
@@ -256,11 +254,6 @@ public class jframePrincipal extends javax.swing.JFrame {
         menuIva.setBackground(new java.awt.Color(153, 204, 255));
         menuIva.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         menuIva.setText("FACTURAS  IVA ACRED");
-        menuIva.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuIvaMouseClicked(evt);
-            }
-        });
         jMenuBar1.add(menuIva);
 
         setJMenuBar(jMenuBar1);
@@ -287,10 +280,6 @@ public class jframePrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void menuIvaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuIvaMouseClicked
-
-    }//GEN-LAST:event_menuIvaMouseClicked
 
     private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
         
@@ -347,11 +336,11 @@ public class jframePrincipal extends javax.swing.JFrame {
 
         //Clase que obtiene los datos xml
         IvaAcredController ivaAcred = new IvaAcredController();
-        //url de los documentos
+        //url de los documentos Mack
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
-
+        String URL_lap="H:\\Dac Simulacion\\" + anio + "\\" + numMes;
         //Lista de objetos xmlDatos
-        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL);
+        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_lap);
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
@@ -497,37 +486,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         lbRegistros.setVisible(true);
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(jframePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new jframePrincipal().setVisible(true);
-                
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane ScrollTotalIva;
