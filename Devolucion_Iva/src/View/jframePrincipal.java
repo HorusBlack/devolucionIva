@@ -21,6 +21,7 @@ import javax.swing.table.TableColumn;
  */
 public class jframePrincipal extends javax.swing.JFrame {
 
+    
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
@@ -32,7 +33,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     public jframePrincipal() {
         initComponents();
         preConfiguracion();
-
+        
     }
 
     /**
@@ -292,7 +293,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuIvaMouseClicked
 
     private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
-
+        
         String numCol = "";
         //Obtiene el no. de columna y lo comvierte en String
         numCol = Arrays.toString(tablaIvaAcred.getSelectedColumns());
@@ -316,6 +317,7 @@ public class jframePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
+        
         int mes = calendarMes.getMonth();
         int year = calendarAnio.getYear();
         String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
@@ -358,12 +360,12 @@ public class jframePrincipal extends javax.swing.JFrame {
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
-
+            
             String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                 "Noviembre", "Diciembre"};
-
+            
             datosResumen(meses[mes], llenarDatosTabla.size(), anio);
-
+            
             tablaIvaAcred.setModel(tablaIva);
 
             //tamaño manual
@@ -413,14 +415,14 @@ public class jframePrincipal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-
+                
             }
         } else {
             JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
         }
-
+        
     }
-
+    
     private void inicializarTablaTotalIva() {
         defaultTableIva = new DefaultTableModel();
         String[] titulos = {"Gastos 16%", "Compras 0%", "IVA", "Total"};
@@ -454,9 +456,9 @@ public class jframePrincipal extends javax.swing.JFrame {
                 default:
                     break;
             }
-
+            
         }
-
+        
     }
 
     /**
@@ -477,9 +479,9 @@ public class jframePrincipal extends javax.swing.JFrame {
         lbEmpresa.setVisible(false);
         lbPeriodo.setVisible(false);
         lbRegistros.setVisible(false);
-
+        
     }
-
+    
     private void datosResumen(String mes, int registros, int anio) {
         numRegistros = registros;
         empresa = "Agroecología Intensiva para el Campo S.A de C.V";
@@ -522,6 +524,7 @@ public class jframePrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new jframePrincipal().setVisible(true);
+                
             }
         });
     }
