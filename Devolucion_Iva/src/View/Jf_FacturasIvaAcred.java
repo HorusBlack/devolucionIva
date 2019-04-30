@@ -11,11 +11,18 @@ import Controllers.PolizaDatosString;
 import Controllers.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -193,6 +200,35 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         btnExcel.setBackground(new java.awt.Color(0, 204, 51));
         btnExcel.setText("Generar Excel");
 
+        javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
+        panelInfo.setLayout(panelInfoLayout);
+        panelInfoLayout.setHorizontalGroup(
+            panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(SpIva, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(panelInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ScrollTotalIva, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardarIva, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcel))
+                .addGap(513, 513, 513))
+        );
+        panelInfoLayout.setVerticalGroup(
+            panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(btnExcel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGuardarIva)))
+                .addContainerGap())
+        );
+
         panelConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder("Concepto XML Completo"));
 
         txta_Concepto.setColumns(30);
@@ -208,51 +244,12 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
             panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelConceptoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
+                .addComponent(scrollPaneConcepto)
                 .addContainerGap())
         );
         panelConceptoLayout.setVerticalGroup(
             panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(scrollPaneConcepto)
-        );
-
-        javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
-        panelInfo.setLayout(panelInfoLayout);
-        panelInfoLayout.setHorizontalGroup(
-            panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelInfoLayout.createSequentialGroup()
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
-                            .addGroup(panelInfoLayout.createSequentialGroup()
-                                .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addGap(277, 277, 277)
-                                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(33, 33, 33))))
-                    .addComponent(panelConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        panelInfoLayout.setVerticalGroup(
-            panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(btnExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(76, 76, 76))
-                    .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
 
         menuIva.setBackground(new java.awt.Color(153, 204, 255));
@@ -270,7 +267,8 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelMenus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -278,8 +276,11 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMenus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
         );
 
         pack();
@@ -346,23 +347,38 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_lap);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
-        if (!listPolizaDatos.isEmpty()) {
-            for (int i = 0; i < listPolizaDatos.size(); i++) {
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
-                System.out.println("\n");
-            }
-        }
+//        if (!listPolizaDatos.isEmpty()) {
+//            for (int i = 0; i < listPolizaDatos.size(); i++) {
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
+//                System.out.println("\n");
+//            }
+//        }
         //Solicitud datos BD
 
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
+
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-                tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+
+                String string = llenarDatosTabla.get(i).getFechaFactura();
+                String[] parts = string.split("T");
+                String part1 = parts[0];
+                String newstring = "";
+
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                    newstring = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(Jf_FacturasIvaAcred.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                tablaIva.addRow(new Object[]{"N/D", newstring, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
@@ -372,7 +388,9 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
 
             datosResumen(meses[mes], llenarDatosTabla.size(), anio);
 
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
             tablaIvaAcred.setModel(tablaIva);
+            tablaIvaAcred.setRowSorter(ordenTabla);
 
             //tamaño manual
             TableColumn columna;
