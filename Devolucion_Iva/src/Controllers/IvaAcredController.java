@@ -5,6 +5,7 @@
  */
 package Controllers;
 
+import Models.Consultas;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -23,11 +24,12 @@ import org.xml.sax.SAXException;
  */
 public class IvaAcredController {
 
+    private Consultas consultas;
     private Tag raizXml, et_Concepto;
     private Tag p_Conceptos, p_Complemento, c_Concepto, co_TimbreFiscalD;
     private String fechaFactura, folioFiscal, subTotal, total;
     private final List<XmlDatos> datosXml = new ArrayList<>();
-
+    private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> listEtiquetas;
 
     /**
@@ -181,6 +183,15 @@ public class IvaAcredController {
 
         }
         return datosXml;
+    }
+
+    public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio) {
+        consultas = new Consultas();
+        polizaDat = new ArrayList<>();
+        if (periodo > 0 && ejercicio >= 2017) {
+            polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio);
+        }
+        return polizaDat;
     }
 
 }

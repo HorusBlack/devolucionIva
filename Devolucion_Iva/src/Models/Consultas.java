@@ -9,16 +9,53 @@ package Models;
  *
  * @author Macktronica
  */
-
 import Conexion.ConexionDB;
+import Controllers.PolizaDatos;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Consultas {
-    ConexionDB conexionDB;
-    
-    /*
-    *Las polizas estan separadas igual por mes y tambien por año
-    *Al seleccionar una poliza cargara todos los movimientos que haya hecho
-    */
-    
-    
+
+    private ConexionDB connection;
+    private Statement stmt;
+    private ResultSet resultSet;
+    private String query;
+    private PolizaDatos polizaDatos;
+
+    public List<PolizaDatos> polizasPeriodoEjercicio(int periodo, int ejercicio) {
+        connection = new ConexionDB();
+        ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
+        try {
+            Connection conexion = connection.Entrar();
+            query = "SELECT TOP(10) TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO,LOGAUDITA,Convert(date,FECHA_POL) FECHA,ORIGEN,NUMPARCUA,"
+                    + "CASE TIENEDOCUMENTOS WHEN  1  THEN 'S' WHEN 0 THEN 'N' END AS TIENEDOCUMENTOS, ESPOLIZAPRIVADA ,CONCEP_PO,CONTABILIZ "
+                    + "FROM POLIZAS19 P LEFT JOIN TIPOSPOL TP ON(P.TIPO_POLI=TP.TIPO) "
+                    + "WHERE (TIPO_POLI = 'Eg' )  AND (PERIODO = " + periodo + " AND EJERCICIO = " + ejercicio + " )  "
+                    + "ORDER BY TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO";
+            //erro sql aqui
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+
+            while (resultSet.next()) {
+                polizaDatos = new PolizaDatos();
+                polizaDatos.setNumeroPoliza(resultSet.getInt("NUM_POLIZ"));
+                polizaDatos.setEjercicio(resultSet.getInt("EJERCICIO"));
+                polizaDatos.setFechaPoliza(resultSet.getDate("FECHA"));
+                polizaDatos.setConceptoPoliza(resultSet.getString("CONCEP_PO"));
+                polizaDatos.setDocumentos(resultSet.getString("TIENEDOCUMENTOS"));
+                polizaDatosList.add(polizaDatos);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return polizaDatosList;
+    }
+
 }

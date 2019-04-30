@@ -6,6 +6,8 @@
 package View;
 
 import Controllers.IvaAcredController;
+import Controllers.PolizaDatos;
+import Controllers.PolizaDatosString;
 import Controllers.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -20,11 +22,13 @@ import javax.swing.table.TableColumn;
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
 public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
-    
+
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
     private int numRegistros;
+    private IvaAcredController ivaAcred;
+    private List<PolizaDatos> listPolizaDatos;
 
     /**
      * Creates new form jframePrincipal
@@ -32,7 +36,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     public Jf_FacturasIvaAcred() {
         initComponents();
         preConfiguracion();
-        
+
     }
 
     /**
@@ -282,7 +286,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
-        
+
         String numCol = "";
         //Obtiene el no. de columna y lo comvierte en String
         numCol = Arrays.toString(tablaIvaAcred.getSelectedColumns());
@@ -306,18 +310,18 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
-        
+
+        //XML DATOS
         int mes = calendarMes.getMonth();
         int year = calendarAnio.getYear();
         String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
             "11 Noviembre", "12 Diciembre"};
         String urlMes = numMes[mes];
         tablaIvaAcred.removeAll();
+        //INICIALIZAR TABLA
         inicializarTablaIva(urlMes, mes, year);
         inicializarTablaTotalIva();
 
-        //Anexar label con informacion actual
-        //Existen carpetas con su año correspondiente
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
 
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
@@ -335,12 +339,25 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         tablaIva.setColumnIdentifiers(titulos);
 
         //Clase que obtiene los datos xml
-        IvaAcredController ivaAcred = new IvaAcredController();
+        ivaAcred = new IvaAcredController();
         //url de los documentos Mack
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
-        String URL_lap="H:\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_lap);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
+        if (!listPolizaDatos.isEmpty()) {
+            for (int i = 0; i < listPolizaDatos.size(); i++) {
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
+                System.out.println("\n");
+            }
+        }
+        //Solicitud datos BD
+
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
@@ -349,12 +366,12 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
-            
+
             String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                 "Noviembre", "Diciembre"};
-            
+
             datosResumen(meses[mes], llenarDatosTabla.size(), anio);
-            
+
             tablaIvaAcred.setModel(tablaIva);
 
             //tamaño manual
@@ -404,14 +421,14 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                     default:
                         break;
                 }
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
         }
-        
+
     }
-    
+
     private void inicializarTablaTotalIva() {
         defaultTableIva = new DefaultTableModel();
         String[] titulos = {"Gastos 16%", "Compras 0%", "IVA", "Total"};
@@ -445,9 +462,9 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 default:
                     break;
             }
-            
+
         }
-        
+
     }
 
     /**
@@ -468,9 +485,9 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         lbEmpresa.setVisible(false);
         lbPeriodo.setVisible(false);
         lbRegistros.setVisible(false);
-        
+
     }
-    
+
     private void datosResumen(String mes, int registros, int anio) {
         numRegistros = registros;
         empresa = "Agroecología Intensiva para el Campo S.A de C.V";
@@ -485,7 +502,6 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         lbRegistros.setText("Registros: " + String.valueOf(numRegistros));
         lbRegistros.setVisible(true);
     }
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

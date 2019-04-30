@@ -20,7 +20,7 @@ public class ConexionDB {
         try {
             //Servidor Agro
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://25.62.86.238\\BASES;";
+            String url = "jdbc:sqlserver://25.62.86.238\\BASES;databaseName=COI80Empre2;";
             String usuarioDB = "Usuario";
             String passwordDB = "0000";
             cn = DriverManager.getConnection(url, usuarioDB, passwordDB);
