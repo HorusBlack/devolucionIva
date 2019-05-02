@@ -186,8 +186,10 @@ public class IvaAcredController {
     }
 
     public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio) {
+        
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
+        periodo+=1;
         if (periodo > 0 && ejercicio >= 2017) {
             polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio);
         }
