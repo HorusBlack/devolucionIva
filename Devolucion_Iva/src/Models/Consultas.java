@@ -30,12 +30,18 @@ public class Consultas {
 
     public List<PolizaDatos> polizasPeriodoEjercicio(int periodo, int ejercicio) {
         connection = new ConexionDB();
+        //String[] parts = string.split("T");
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String tablaPoliza = "POLIZAS" + v1 + v2;
+        System.out.println("tabla de poliza: " + tablaPoliza);
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         try {
             Connection conexion = connection.Entrar();
             query = "SELECT TOP(10) TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO,LOGAUDITA,Convert(date,FECHA_POL) FECHA,ORIGEN,NUMPARCUA,"
                     + "CASE TIENEDOCUMENTOS WHEN  1  THEN 'S' WHEN 0 THEN 'N' END AS TIENEDOCUMENTOS, ESPOLIZAPRIVADA ,CONCEP_PO,CONTABILIZ "
-                    + "FROM POLIZAS19 P LEFT JOIN TIPOSPOL TP ON(P.TIPO_POLI=TP.TIPO) "
+                    + "FROM " + tablaPoliza + " P LEFT JOIN TIPOSPOL TP ON(P.TIPO_POLI=TP.TIPO) "
                     + "WHERE (TIPO_POLI = 'Eg' )  AND (PERIODO = " + periodo + " AND EJERCICIO = " + ejercicio + " )  "
                     + "ORDER BY TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO";
             //erro sql aqui
