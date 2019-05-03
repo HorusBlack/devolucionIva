@@ -11,6 +11,8 @@ import Controllers.PolizaDatosString;
 import Controllers.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -64,6 +67,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         lbEmpresa = new javax.swing.JLabel();
         lbAsunto = new javax.swing.JLabel();
         lbRegistros = new javax.swing.JLabel();
+        btnXmlCargar = new javax.swing.JButton();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
         tablaIvaAcred = new javax.swing.JTable();
@@ -85,7 +89,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
 
         calendarAnio.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Año"));
 
-        btnProcesarIva.setBackground(new java.awt.Color(0, 153, 153));
+        btnProcesarIva.setBackground(new java.awt.Color(153, 204, 255));
         btnProcesarIva.setText("Procesar");
         btnProcesarIva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,6 +132,13 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 .addComponent(lbRegistros))
         );
 
+        btnXmlCargar.setText("Cargar Carpeta XML");
+        btnXmlCargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXmlCargarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelMenusLayout = new javax.swing.GroupLayout(panelMenus);
         panelMenus.setLayout(panelMenusLayout);
         panelMenusLayout.setHorizontalGroup(
@@ -138,25 +149,30 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnProcesarIva, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnXmlCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(panelResumenDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelMenusLayout.setVerticalGroup(
             panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelMenusLayout.createSequentialGroup()
-                .addComponent(panelResumenDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenusLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelMenusLayout.createSequentialGroup()
-                        .addComponent(btnProcesarIva)
-                        .addGap(8, 8, 8)))
-                .addGap(32, 32, 32))
+                        .addContainerGap()
+                        .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelMenusLayout.createSequentialGroup()
+                                .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnXmlCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(11, 11, 11))
+                    .addComponent(panelResumenDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         panelInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -209,9 +225,9 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(ScrollTotalIva, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardarIva, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExcel))
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(513, 513, 513))
         );
         panelInfoLayout.setVerticalGroup(
@@ -280,7 +296,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
         pack();
@@ -327,6 +343,25 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
+    private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
+        JFileChooser selectorCarpetaXml = new JFileChooser();
+        selectorCarpetaXml.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int resultado = selectorCarpetaXml.showOpenDialog(this);
+        if (resultado == 0) {
+            System.out.println("resultado: " + resultado);
+            File carpetaSeleccionada = selectorCarpetaXml.getSelectedFile();
+            String rutaCarpeta = carpetaSeleccionada.getAbsolutePath();
+            ivaAcred = new IvaAcredController();
+            if (ivaAcred.validarArchivosCarpeta(rutaCarpeta)) {
+                //Pendiente metodo que empalme xml nuevos con datos de la tabla(Que vienen desde la BD)
+                JOptionPane.showMessageDialog(this, "Anexando archivos a tabla");
+            } else {
+                JOptionPane.showMessageDialog(this, "No existen documentos XML dentro de la carpeta seleccionada");
+            }
+        }
+       
+    }//GEN-LAST:event_btnXmlCargarActionPerformed
+
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
@@ -344,7 +379,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         //url de los documentos Mack
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
         String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
-        String URL_Lx="/run/media/horusblack/2488199A88196C14/Dac Simulacion/"+anio+"/"+numMes;
+        String URL_Lx = "/run/media/horusblack/2488199A88196C14/Dac Simulacion/" + anio + "/" + numMes;
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
@@ -442,6 +477,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 }
 
             }
+            btnXmlCargar.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
         }
@@ -504,6 +540,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         lbEmpresa.setVisible(false);
         lbPeriodo.setVisible(false);
         lbRegistros.setVisible(false);
+        btnXmlCargar.setEnabled(false);
 
     }
 
@@ -529,6 +566,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnGuardarIva;
     private javax.swing.JButton btnProcesarIva;
+    private javax.swing.JButton btnXmlCargar;
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
     private javax.swing.JMenuBar jMenuBar1;

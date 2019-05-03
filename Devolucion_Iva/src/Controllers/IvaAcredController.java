@@ -186,15 +186,33 @@ public class IvaAcredController {
     }
 
     public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio) {
-        
+
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
-        periodo+=1;
+        periodo += 1;
         if (periodo > 0 && ejercicio >= 2017) {
             polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio);
         }
         return polizaDat;
     }
-    
-    //Prueba de subida linux
+
+    public boolean validarArchivosCarpeta(String url) {
+        boolean vacio = false;
+        int numeroArchivos = 0;
+        JespXML xmlCarpeta = new JespXML(new File(url));
+        File[] archivos = xmlCarpeta.listFiles();
+        if (archivos != null) {
+            if (archivos.length > 0) {
+                for (File xmlArchivo : archivos) {
+                    if (xmlArchivo.isFile() && (xmlArchivo.getName().endsWith(".xml") || xmlArchivo.getName().endsWith(".XML"))) {
+                        numeroArchivos++;
+                    }
+                }
+            }
+            if (numeroArchivos > 0) {
+                vacio = true;
+            }
+        }
+        return vacio;
+    }
 }
