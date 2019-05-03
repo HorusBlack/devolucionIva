@@ -344,8 +344,9 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         //url de los documentos Mack
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
         String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL_Lx="/run/media/horusblack/2488199A88196C14/Dac Simulacion/"+anio+"/"+numMes;
         //Lista de objetos xmlDatos
-        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_lap);
+        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
         if (!listPolizaDatos.isEmpty()) {
             for (int i = 0; i < listPolizaDatos.size(); i++) {
