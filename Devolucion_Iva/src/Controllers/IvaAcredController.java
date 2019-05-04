@@ -184,7 +184,14 @@ public class IvaAcredController {
         }
         return datosXml;
     }
-
+    
+    /**
+     * Funcion que obtiene un Periodo [int] y un ejercicio [int] y solicitar los datos
+     * a la base.
+     * @param periodo
+     * @param ejercicio
+     * @return List PolizaDatos
+     */
     public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio) {
 
         consultas = new Consultas();
@@ -196,6 +203,12 @@ public class IvaAcredController {
         return polizaDat;
     }
 
+    /**
+     * Funcion booleana que verifica que la url de un directorio contenga en su interior
+     * al menos un archivo XML
+     * @param url
+     * @return boolean
+     */
     public boolean validarArchivosCarpeta(String url) {
         boolean vacio = false;
         int numeroArchivos = 0;

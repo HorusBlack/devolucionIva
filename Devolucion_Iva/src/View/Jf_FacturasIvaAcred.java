@@ -7,12 +7,10 @@ package View;
 
 import Controllers.IvaAcredController;
 import Controllers.PolizaDatos;
-import Controllers.PolizaDatosString;
 import Controllers.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
