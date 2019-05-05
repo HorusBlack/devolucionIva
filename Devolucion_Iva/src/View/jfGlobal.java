@@ -7,23 +7,37 @@ package View;
 
 import Controllers.IvaAcredController;
 import Controllers.PolizaDatos;
+import Controllers.XmlDatos;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author horusblack
  */
 public class jfGlobal extends javax.swing.JFrame {
+
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
     private int numRegistros;
     private IvaAcredController ivaAcred;
     private List<PolizaDatos> listPolizaDatos;
-    
+
     /**
      * Creates new form jfGlobal
      */
@@ -49,6 +63,16 @@ public class jfGlobal extends javax.swing.JFrame {
         tp_Secciones = new javax.swing.JTabbedPane();
         panel_Det_Iva_Favor = new javax.swing.JPanel();
         panel_Cien_FIA = new javax.swing.JPanel();
+        panelInfo = new javax.swing.JPanel();
+        SpIva = new javax.swing.JScrollPane();
+        tablaIvaAcred = new javax.swing.JTable();
+        ScrollTotalIva = new javax.swing.JScrollPane();
+        tablaTotalIva = new javax.swing.JTable();
+        btnGuardarIva = new javax.swing.JButton();
+        btnPDF = new javax.swing.JButton();
+        panelConcepto = new javax.swing.JPanel();
+        scrollPaneConcepto = new javax.swing.JScrollPane();
+        txta_Concepto = new javax.swing.JTextArea();
         panel_Aux_IA = new javax.swing.JPanel();
         panel_RIM = new javax.swing.JPanel();
         panel_RIPM = new javax.swing.JPanel();
@@ -73,7 +97,6 @@ public class jfGlobal extends javax.swing.JFrame {
             }
         });
 
-        btnXmlCargar.setBackground(new java.awt.Color(102, 255, 204));
         btnXmlCargar.setText("Cargar Carpeta XML");
         btnXmlCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,28 +109,29 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_FiltroLayout.setHorizontalGroup(
             panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_FiltroLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(calendarMes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(calendarAnio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
-                .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnXmlCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(12, 12, 12))
+                    .addComponent(btnXmlCargar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel_FiltroLayout.setVerticalGroup(
             panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_FiltroLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
                 .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel_FiltroLayout.createSequentialGroup()
-                        .addComponent(btnProcesarIva)
-                        .addGap(12, 12, 12)
-                        .addComponent(btnXmlCargar)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                        .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnXmlCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(72, 72, 72))
         );
 
         panel_contenidoGlobal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -120,20 +144,134 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
+
+        panel_Cien_FIA.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        panelInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        SpIva.setBorder(javax.swing.BorderFactory.createTitledBorder("100% IVA ACREDITABLE"));
+
+        tablaIvaAcred.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tablaIvaAcred.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tablaIvaAcred.setToolTipText("");
+        tablaIvaAcred.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tablaIvaAcred.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tablaIvaAcredMousePressed(evt);
+            }
+        });
+        SpIva.setViewportView(tablaIvaAcred);
+
+        ScrollTotalIva.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
+
+        tablaTotalIva.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tablaTotalIva.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        ScrollTotalIva.setViewportView(tablaTotalIva);
+
+        btnGuardarIva.setBackground(new java.awt.Color(51, 204, 255));
+        btnGuardarIva.setText("Guardar");
+
+        btnPDF.setBackground(new java.awt.Color(204, 0, 51));
+        btnPDF.setForeground(new java.awt.Color(255, 255, 255));
+        btnPDF.setText("Generar PDF");
+        btnPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDFActionPerformed(evt);
+            }
+        });
+
+        panelConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder("Concepto XML Completo"));
+
+        txta_Concepto.setColumns(30);
+        txta_Concepto.setRows(5);
+        txta_Concepto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txta_Concepto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txta_Concepto.setEnabled(false);
+        scrollPaneConcepto.setViewportView(txta_Concepto);
+
+        javax.swing.GroupLayout panelConceptoLayout = new javax.swing.GroupLayout(panelConcepto);
+        panelConcepto.setLayout(panelConceptoLayout);
+        panelConceptoLayout.setHorizontalGroup(
+            panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelConceptoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPaneConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelConceptoLayout.setVerticalGroup(
+            panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollPaneConcepto)
+        );
+
+        javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
+        panelInfo.setLayout(panelInfoLayout);
+        panelInfoLayout.setHorizontalGroup(
+            panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(SpIva, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
+            .addGroup(panelInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnPDF)
+                            .addComponent(btnGuardarIva, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(340, 340, 340))
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(panelConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
+        );
+        panelInfoLayout.setVerticalGroup(
+            panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
+                        .addComponent(btnPDF)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnGuardarIva)
+                        .addGap(10, 10, 10))
+                    .addComponent(ScrollTotalIva, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         javax.swing.GroupLayout panel_Cien_FIALayout = new javax.swing.GroupLayout(panel_Cien_FIA);
         panel_Cien_FIA.setLayout(panel_Cien_FIALayout);
         panel_Cien_FIALayout.setHorizontalGroup(
             panel_Cien_FIALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 733, Short.MAX_VALUE)
+            .addGroup(panel_Cien_FIALayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panel_Cien_FIALayout.setVerticalGroup(
             panel_Cien_FIALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGroup(panel_Cien_FIALayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tp_Secciones.addTab("100% FACTURAS DE IVA ACRED", panel_Cien_FIA);
@@ -146,7 +284,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_Aux_IALayout.setVerticalGroup(
             panel_Aux_IALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("AUXILIAR IVA ACREDITABLE", panel_Aux_IA);
@@ -159,7 +297,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_RIMLayout.setVerticalGroup(
             panel_RIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RENTENCIONES DE IVA DEL MES", panel_RIM);
@@ -172,7 +310,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_RIPMLayout.setVerticalGroup(
             panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RET DE IVA PAGADAS EN EL MES", panel_RIPM);
@@ -185,7 +323,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_16Layout.setVerticalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
@@ -198,7 +336,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_CeroLayout.setVerticalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
@@ -211,7 +349,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_RelacionDepLayout.setVerticalGroup(
             panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RELACION DEPOSITOS", panel_RelacionDep);
@@ -224,7 +362,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AuxDepLayout.setVerticalGroup(
             panel_AuxDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("AUXILIAR  DE DEPOSITOS", panel_AuxDep);
@@ -234,7 +372,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobalLayout.setHorizontalGroup(
             panel_contenidoGlobalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_contenidoGlobalLayout.createSequentialGroup()
-                .addComponent(tp_Secciones, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+                .addComponent(tp_Secciones)
                 .addContainerGap())
         );
         panel_contenidoGlobalLayout.setVerticalGroup(
@@ -267,6 +405,34 @@ public class jfGlobal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
+
+        String numCol = "";
+        //Obtiene el no. de columna y lo comvierte en String
+        numCol = Arrays.toString(tablaIvaAcred.getSelectedColumns());
+        //Si es la columna correcta realiza la accion
+        if (tablaIvaAcred.getSelectedRow() != -1) {
+            txta_Concepto.setVisible(true);
+
+            //obteniendo el valor de la celda en la coordenada
+            String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
+            txta_Concepto.setText(codigo);
+
+            // Lo imprimimos en pantalla
+        }
+        /*
+        if (numCol.equals("[5]")) {
+
+        } else {
+            txta_Concepto.setVisible(false);
+
+        }*/
+    }//GEN-LAST:event_tablaIvaAcredMousePressed
+
+    private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPDFActionPerformed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
 
@@ -303,6 +469,194 @@ public class jfGlobal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnXmlCargarActionPerformed
 
+    /*
+    ################INICIA###################
+    Funciones: 100% iva acred
+     */
+    
+    
+    /**
+     * Metodo que obtiene y maqueta la tabla de devolucion de Iva
+     */
+    private void inicializarTablaIva(String numMes, int mes, int anio) {
+        tablaIva = new DefaultTableModel();
+        //Titulos para la tabla
+        String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
+            "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
+            "Cta. de la que se realiza el pago", "Observaciones"};
+        //Ingresando titulos
+        tablaIva.setColumnIdentifiers(titulos);
+
+        //Clase que obtiene los datos xml
+        ivaAcred = new IvaAcredController();
+        //url de los documentos Mack
+        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
+        //correguir sintaxis de ruta, la conexion sql es estable
+        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
+        //Lista de objetos xmlDatos
+        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
+        if (!listPolizaDatos.isEmpty()) {
+            for (int i = 0; i < listPolizaDatos.size(); i++) {
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
+                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
+                System.out.println("\n");
+            }
+        }
+        //Solicitud datos BD
+
+        //checar esta validacion
+        if (!llenarDatosTabla.isEmpty()) {
+            //llenando la tabla de la info
+
+            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+
+                String string = llenarDatosTabla.get(i).getFechaFactura();
+                String[] parts = string.split("T");
+                String part1 = parts[0];
+                String newstring = "";
+
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                    newstring = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(Jf_FacturasIvaAcred.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                tablaIva.addRow(new Object[]{"N/D", newstring, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+                    "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
+            }
+
+            //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+            tablaIvaAcred.setModel(tablaIva);
+            tablaIvaAcred.setRowSorter(ordenTabla);
+
+            //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
+            TableColumn columna;
+            for (int i = 0; i < 8; i++) {
+                switch (i) {
+                    case 0:
+                        //factura
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 1:
+                        //Fecha Factura
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 2:
+                        //#poliza
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 3:
+                        //Fecha Poliza
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 4:
+                        //Folio Fiscal
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(270);
+                        break;
+                    case 5:
+                        //Conceptos XML
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(300);
+                        break;
+                    case 6:
+                        //Sub-total
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(70);
+                        break;
+                    case 7:
+                        //Iva
+                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(40);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            btnXmlCargar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
+        }
+
+    }
+
+    /**
+     * Funcion que permite dar formato y valores a la tabla de totales
+     */
+    private void inicializarTablaTotalIva() {
+        defaultTableIva = new DefaultTableModel();
+        String[] titulos = {"Gastos 16%", "Compras 0%", "IVA", "Total"};
+        Double[] valores = {0.00, 0.00, 0.00, 0.00};
+        defaultTableIva.setColumnIdentifiers(titulos);
+        defaultTableIva.addRow(valores);
+        TableColumn columna;
+        tablaTotalIva.setModel(defaultTableIva);
+        for (int i = 0; i <= 3; i++) {
+            switch (i) {
+                case 0:
+                    //factura
+                    columna = tablaTotalIva.getColumn(titulos[i]);
+                    columna.setMinWidth(90);
+                    break;
+                case 1:
+                    //Fecha Factura
+                    columna = tablaTotalIva.getColumn(titulos[i]);
+                    columna.setMinWidth(90);
+                    break;
+                case 2:
+                    //#poliza
+                    columna = tablaTotalIva.getColumn(titulos[i]);
+                    columna.setMinWidth(40);
+                    break;
+                case 3:
+                    //Fecha Poliza
+                    columna = tablaTotalIva.getColumn(titulos[i]);
+                    columna.setMinWidth(50);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+    }
+
+    /**
+     * Metodo que preconfigura el diseño del jframe, posicion, tamaño, etc.
+     */
+    private void preConfiguracion() {
+        //Posicion del jframe
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = pantalla.height;
+        int width = pantalla.width;
+        this.setSize(width / 2, height / 2);
+        this.setLocationRelativeTo(null);
+        //Elementos adicionales
+
+        txta_Concepto.setVisible(false);
+        txta_Concepto.setLineWrap(true);
+        btnXmlCargar.setEnabled(false);
+
+    }
+
+    /*
+    ################FINALIZA###################
+    Funciones: 100% iva acred
+     */
     /**
      * @param args the command line arguments
      */
@@ -339,10 +693,16 @@ public class jfGlobal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane ScrollTotalIva;
+    private javax.swing.JScrollPane SpIva;
+    private javax.swing.JButton btnGuardarIva;
+    private javax.swing.JButton btnPDF;
     private javax.swing.JButton btnProcesarIva;
     private javax.swing.JButton btnXmlCargar;
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
+    private javax.swing.JPanel panelConcepto;
+    private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panel_AT_16;
     private javax.swing.JPanel panel_AT_Cero;
     private javax.swing.JPanel panel_AuxDep;
@@ -354,6 +714,10 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_RIPM;
     private javax.swing.JPanel panel_RelacionDep;
     private javax.swing.JPanel panel_contenidoGlobal;
+    private javax.swing.JScrollPane scrollPaneConcepto;
+    private javax.swing.JTable tablaIvaAcred;
+    private javax.swing.JTable tablaTotalIva;
     private javax.swing.JTabbedPane tp_Secciones;
+    private javax.swing.JTextArea txta_Concepto;
     // End of variables declaration//GEN-END:variables
 }

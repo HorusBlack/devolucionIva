@@ -403,17 +403,17 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 String string = llenarDatosTabla.get(i).getFechaFactura();
                 String[] parts = string.split("T");
                 String part1 = parts[0];
-                String newstring = "";
+                String formatoFecha = "";
 
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                    newstring = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                    formatoFecha = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                 } catch (ParseException ex) {
                     Logger.getLogger(Jf_FacturasIvaAcred.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-                tablaIva.addRow(new Object[]{"N/D", newstring, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                //Pasando datos de la lista a array para introducirlos en la tabla
+                tablaIva.addRow(new Object[]{"N/D", formatoFecha, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
