@@ -7,6 +7,7 @@ package View;
 
 import Controllers.IvaAcredController;
 import Controllers.PolizaDatos;
+import Controllers.AuxIvaAcred;
 import Controllers.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -24,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import Models.Consultas;
 
 /**
  *
@@ -37,6 +39,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private int numRegistros;
     private IvaAcredController ivaAcred;
     private List<PolizaDatos> listPolizaDatos;
+    private Consultas consultas;
 
     /**
      * Creates new form jfGlobal
@@ -438,6 +441,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         //XML DATOS
         int mes = calendarMes.getMonth();
+        System.out.println("numero mes: " + mes);
         int year = calendarAnio.getYear();
         String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
             "11 Noviembre", "12 Diciembre"};
@@ -473,8 +477,6 @@ public class jfGlobal extends javax.swing.JFrame {
     ################INICIA###################
     Funciones: 100% iva acred
      */
-    
-    
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
@@ -495,8 +497,11 @@ public class jfGlobal extends javax.swing.JFrame {
         //correguir sintaxis de ruta, la conexion sql es estable
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
         //Lista de objetos xmlDatos
+        
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
+
+    
         if (!listPolizaDatos.isEmpty()) {
             for (int i = 0; i < listPolizaDatos.size(); i++) {
                 System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
@@ -507,8 +512,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 System.out.println("\n");
             }
         }
-        //Solicitud datos BD
 
+        //Solicitud datos BD
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
