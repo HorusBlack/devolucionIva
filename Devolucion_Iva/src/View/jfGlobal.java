@@ -5,12 +5,25 @@
  */
 package View;
 
+import Controllers.IvaAcredController;
+import Controllers.PolizaDatos;
+import java.io.File;
+import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author horusblack
  */
 public class jfGlobal extends javax.swing.JFrame {
-
+    private DefaultTableModel tablaIva;
+    private DefaultTableModel defaultTableIva;
+    private String periodo, asunto, empresa;
+    private int numRegistros;
+    private IvaAcredController ivaAcred;
+    private List<PolizaDatos> listPolizaDatos;
+    
     /**
      * Creates new form jfGlobal
      */
@@ -27,50 +40,207 @@ public class jfGlobal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        tbPane = new javax.swing.JTabbedPane();
-        option_IvaFavor = new javax.swing.JTabbedPane();
-        option_cienAcred = new javax.swing.JTabbedPane();
-        option_ret_ivaMes = new javax.swing.JTabbedPane();
-        option_ret_IvaPagMes = new javax.swing.JTabbedPane();
-        option_actos16 = new javax.swing.JTabbedPane();
-        option_actosCero = new javax.swing.JTabbedPane();
-        option_RelacionDepositos = new javax.swing.JTabbedPane();
-        option_aux_depositos = new javax.swing.JTabbedPane();
-        option_aux_ivaAcred = new javax.swing.JTabbedPane();
+        panel_Filtro = new javax.swing.JPanel();
+        calendarMes = new com.toedter.calendar.JMonthChooser();
+        calendarAnio = new com.toedter.calendar.JYearChooser();
+        btnProcesarIva = new javax.swing.JButton();
+        btnXmlCargar = new javax.swing.JButton();
+        panel_contenidoGlobal = new javax.swing.JPanel();
+        tp_Secciones = new javax.swing.JTabbedPane();
+        panel_Det_Iva_Favor = new javax.swing.JPanel();
+        panel_Cien_FIA = new javax.swing.JPanel();
+        panel_Aux_IA = new javax.swing.JPanel();
+        panel_RIM = new javax.swing.JPanel();
+        panel_RIPM = new javax.swing.JPanel();
+        panel_AT_16 = new javax.swing.JPanel();
+        panel_AT_Cero = new javax.swing.JPanel();
+        panel_RelacionDep = new javax.swing.JPanel();
+        panel_AuxDep = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones"));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panel_Filtro.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        calendarMes.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Mes"));
 
-        tbPane.addTab("DETERMINACION DE  IVA A FAVOR", option_IvaFavor);
-        tbPane.addTab("100% FACTURAS DE IVA ACRED", option_cienAcred);
-        tbPane.addTab("RENTENCIONES DE IVA DEL MES", option_ret_ivaMes);
-        tbPane.addTab("RET DE IVA PAGADAS EN EL MES", option_ret_IvaPagMes);
-        tbPane.addTab("ACTOS TASA 16%", option_actos16);
-        tbPane.addTab("ACTOS TASA 0%", option_actosCero);
-        tbPane.addTab("RELACION DEPOSITOS", option_RelacionDepositos);
-        tbPane.addTab("AUXILIAR  DE DEPOSITOS", option_aux_depositos);
-        tbPane.addTab("AUXILIAR IVA ACRED", option_aux_ivaAcred);
+        calendarAnio.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Año"));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tbPane, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
+        btnProcesarIva.setBackground(new java.awt.Color(153, 204, 255));
+        btnProcesarIva.setText("Procesar");
+        btnProcesarIva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcesarIvaActionPerformed(evt);
+            }
+        });
+
+        btnXmlCargar.setBackground(new java.awt.Color(102, 255, 204));
+        btnXmlCargar.setText("Cargar Carpeta XML");
+        btnXmlCargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXmlCargarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_FiltroLayout = new javax.swing.GroupLayout(panel_Filtro);
+        panel_Filtro.setLayout(panel_FiltroLayout);
+        panel_FiltroLayout.setHorizontalGroup(
+            panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_FiltroLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(calendarMes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(calendarAnio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
+                .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnXmlCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
+        );
+        panel_FiltroLayout.setVerticalGroup(
+            panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_FiltroLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel_FiltroLayout.createSequentialGroup()
+                        .addComponent(btnProcesarIva)
+                        .addGap(12, 12, 12)
+                        .addComponent(btnXmlCargar)))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        panel_contenidoGlobal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout panel_Det_Iva_FavorLayout = new javax.swing.GroupLayout(panel_Det_Iva_Favor);
+        panel_Det_Iva_Favor.setLayout(panel_Det_Iva_FavorLayout);
+        panel_Det_Iva_FavorLayout.setHorizontalGroup(
+            panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_Det_Iva_FavorLayout.setVerticalGroup(
+            panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
+
+        javax.swing.GroupLayout panel_Cien_FIALayout = new javax.swing.GroupLayout(panel_Cien_FIA);
+        panel_Cien_FIA.setLayout(panel_Cien_FIALayout);
+        panel_Cien_FIALayout.setHorizontalGroup(
+            panel_Cien_FIALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_Cien_FIALayout.setVerticalGroup(
+            panel_Cien_FIALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("100% FACTURAS DE IVA ACRED", panel_Cien_FIA);
+
+        javax.swing.GroupLayout panel_Aux_IALayout = new javax.swing.GroupLayout(panel_Aux_IA);
+        panel_Aux_IA.setLayout(panel_Aux_IALayout);
+        panel_Aux_IALayout.setHorizontalGroup(
+            panel_Aux_IALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_Aux_IALayout.setVerticalGroup(
+            panel_Aux_IALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("AUXILIAR IVA ACREDITABLE", panel_Aux_IA);
+
+        javax.swing.GroupLayout panel_RIMLayout = new javax.swing.GroupLayout(panel_RIM);
+        panel_RIM.setLayout(panel_RIMLayout);
+        panel_RIMLayout.setHorizontalGroup(
+            panel_RIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_RIMLayout.setVerticalGroup(
+            panel_RIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("RENTENCIONES DE IVA DEL MES", panel_RIM);
+
+        javax.swing.GroupLayout panel_RIPMLayout = new javax.swing.GroupLayout(panel_RIPM);
+        panel_RIPM.setLayout(panel_RIPMLayout);
+        panel_RIPMLayout.setHorizontalGroup(
+            panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_RIPMLayout.setVerticalGroup(
+            panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("RET DE IVA PAGADAS EN EL MES", panel_RIPM);
+
+        javax.swing.GroupLayout panel_AT_16Layout = new javax.swing.GroupLayout(panel_AT_16);
+        panel_AT_16.setLayout(panel_AT_16Layout);
+        panel_AT_16Layout.setHorizontalGroup(
+            panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_AT_16Layout.setVerticalGroup(
+            panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
+
+        javax.swing.GroupLayout panel_AT_CeroLayout = new javax.swing.GroupLayout(panel_AT_Cero);
+        panel_AT_Cero.setLayout(panel_AT_CeroLayout);
+        panel_AT_CeroLayout.setHorizontalGroup(
+            panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_AT_CeroLayout.setVerticalGroup(
+            panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
+
+        javax.swing.GroupLayout panel_RelacionDepLayout = new javax.swing.GroupLayout(panel_RelacionDep);
+        panel_RelacionDep.setLayout(panel_RelacionDepLayout);
+        panel_RelacionDepLayout.setHorizontalGroup(
+            panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_RelacionDepLayout.setVerticalGroup(
+            panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("RELACION DEPOSITOS", panel_RelacionDep);
+
+        javax.swing.GroupLayout panel_AuxDepLayout = new javax.swing.GroupLayout(panel_AuxDep);
+        panel_AuxDep.setLayout(panel_AuxDepLayout);
+        panel_AuxDepLayout.setHorizontalGroup(
+            panel_AuxDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 733, Short.MAX_VALUE)
+        );
+        panel_AuxDepLayout.setVerticalGroup(
+            panel_AuxDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 377, Short.MAX_VALUE)
+        );
+
+        tp_Secciones.addTab("AUXILIAR  DE DEPOSITOS", panel_AuxDep);
+
+        javax.swing.GroupLayout panel_contenidoGlobalLayout = new javax.swing.GroupLayout(panel_contenidoGlobal);
+        panel_contenidoGlobal.setLayout(panel_contenidoGlobalLayout);
+        panel_contenidoGlobalLayout.setHorizontalGroup(
+            panel_contenidoGlobalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_contenidoGlobalLayout.createSequentialGroup()
+                .addComponent(tp_Secciones, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tbPane, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+        panel_contenidoGlobalLayout.setVerticalGroup(
+            panel_contenidoGlobalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_contenidoGlobalLayout.createSequentialGroup()
+                .addComponent(tp_Secciones)
                 .addContainerGap())
         );
 
@@ -81,22 +251,57 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panel_contenidoGlobal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel_Filtro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(panel_Filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panel_contenidoGlobal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(6, 6, 6))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
+
+        //XML DATOS
+        int mes = calendarMes.getMonth();
+        int year = calendarAnio.getYear();
+        String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
+            "11 Noviembre", "12 Diciembre"};
+        String urlMes = numMes[mes];
+        tablaIvaAcred.removeAll();
+        //INICIALIZAR TABLA
+        inicializarTablaIva(urlMes, mes, year);
+        inicializarTablaTotalIva();
+
+        //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
+    }//GEN-LAST:event_btnProcesarIvaActionPerformed
+
+    private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
+        JFileChooser selectorCarpetaXml = new JFileChooser();
+        selectorCarpetaXml.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int resultado = selectorCarpetaXml.showOpenDialog(this);
+        if (resultado == 0) {
+            System.out.println("resultado: " + resultado);
+            File carpetaSeleccionada = selectorCarpetaXml.getSelectedFile();
+            String rutaCarpeta = carpetaSeleccionada.getAbsolutePath();
+            ivaAcred = new IvaAcredController();
+            if (ivaAcred.validarArchivosCarpeta(rutaCarpeta)) {
+                //Pendiente metodo que empalme xml nuevos con datos de la tabla(Que vienen desde la BD)
+                JOptionPane.showMessageDialog(this, "Anexando archivos a tabla");
+            } else {
+                JOptionPane.showMessageDialog(this, "No existen documentos XML dentro de la carpeta seleccionada");
+            }
+        }
+
+    }//GEN-LAST:event_btnXmlCargarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -134,17 +339,21 @@ public class jfGlobal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JTabbedPane option_IvaFavor;
-    private javax.swing.JTabbedPane option_RelacionDepositos;
-    private javax.swing.JTabbedPane option_actos16;
-    private javax.swing.JTabbedPane option_actosCero;
-    private javax.swing.JTabbedPane option_aux_depositos;
-    private javax.swing.JTabbedPane option_aux_ivaAcred;
-    private javax.swing.JTabbedPane option_cienAcred;
-    private javax.swing.JTabbedPane option_ret_IvaPagMes;
-    private javax.swing.JTabbedPane option_ret_ivaMes;
-    private javax.swing.JTabbedPane tbPane;
+    private javax.swing.JButton btnProcesarIva;
+    private javax.swing.JButton btnXmlCargar;
+    private com.toedter.calendar.JYearChooser calendarAnio;
+    private com.toedter.calendar.JMonthChooser calendarMes;
+    private javax.swing.JPanel panel_AT_16;
+    private javax.swing.JPanel panel_AT_Cero;
+    private javax.swing.JPanel panel_AuxDep;
+    private javax.swing.JPanel panel_Aux_IA;
+    private javax.swing.JPanel panel_Cien_FIA;
+    private javax.swing.JPanel panel_Det_Iva_Favor;
+    private javax.swing.JPanel panel_Filtro;
+    private javax.swing.JPanel panel_RIM;
+    private javax.swing.JPanel panel_RIPM;
+    private javax.swing.JPanel panel_RelacionDep;
+    private javax.swing.JPanel panel_contenidoGlobal;
+    private javax.swing.JTabbedPane tp_Secciones;
     // End of variables declaration//GEN-END:variables
 }
