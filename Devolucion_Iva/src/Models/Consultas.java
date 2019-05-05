@@ -94,33 +94,36 @@ public class Consultas {
         String tableAux = "AUXILIAR" + v1 + v2;
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
-        System.out.println("periodo db: "+periodo);
-        System.out.println("ejercicio db: "+ejercicio);
-        System.out.println("noCuenta db: "+noCuenta);
-        String query = "";
+        String query;
+        
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
         try {
             conexion = connection.Entrar();
-//            if (ejercicio > 2018) {
-//                //CAMBIAR TOP
-//                query = "SELECT TOP(20)  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
-//                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
-//                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
-//                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
-//                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
-//                        + " MONTOMOV AS MONTO, ORDEN  "
-//                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-//                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-//                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
-//            } else {
+            if (ejercicio > 2018) {
+                //CAMBIAR TOP
+                query = "SELECT TOP(20)  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
+                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
+                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
+                        + " MONTOMOV AS MONTO, ORDEN  "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
+                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+            } else {
+                query = "SELECT TOP(20) A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
+                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
+                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+            }
 //                query = "SELECT TOP(20) A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
 //                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
 //                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
 //                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
 //                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
 //                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
-//            }
-            query="SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  FROM (CUENTAS18 A JOIN SALDOS18 B ON A.NUM_CTA = B.NUM_CTA   )  LEFT JOIN AUXILIAR18 C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (1))  WHERE A.NUM_CTA >= '115100100000000000002'   AND  A.NUM_CTA <= '115100100000000000002' ORDER BY 1,4,11,12,13,14,18";
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {

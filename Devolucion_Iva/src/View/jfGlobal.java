@@ -26,6 +26,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import Models.Consultas;
+import java.util.ArrayList;
 
 /**
  *
@@ -434,7 +435,28 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
     private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
-        // TODO add your handling code here:
+        //preparar vista
+        int mes = calendarMes.getMonth()+1;
+        System.out.println("numero mes: " + mes);
+        int year = calendarAnio.getYear();
+        System.out.println("c1");
+        Consultas cn = new Consultas();
+        System.out.println("c2");
+        List<AuxIvaAcred> aux = new ArrayList<>();
+        System.out.println("c3");
+        aux = cn.auxIvaAcredConsulta(mes, year, "115100100000000000002");
+        System.out.println("c4");
+        System.out.println("aux= " + aux.size());
+        if(!aux.isEmpty()){
+            for (int i = 0; i < aux.size(); i++) {
+                System.out.println("Acred: "+aux.get(i).getConcepto());
+                System.out.println("Acred: "+aux.get(i).getFecha());
+                System.out.println("Acred: "+aux.get(i).getTipoPoliza());
+                System.out.println("Acred: "+aux.get(i).getNoPoliza());
+                System.out.println("Acred: "+aux.get(i).getDebe());
+                System.out.println("\n");
+            }
+        }
     }//GEN-LAST:event_btnPDFActionPerformed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
@@ -497,11 +519,10 @@ public class jfGlobal extends javax.swing.JFrame {
         //correguir sintaxis de ruta, la conexion sql es estable
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
         //Lista de objetos xmlDatos
-        
+
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
 
-    
         if (!listPolizaDatos.isEmpty()) {
             for (int i = 0; i < listPolizaDatos.size(); i++) {
                 System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
