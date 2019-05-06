@@ -8,14 +8,17 @@ package Conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Macktronica
  */
 public class ConexionDB {
-     Connection cn = null;
-     //Pendiente cambiar datos de conexion
+
+    Connection cn = null;
+    //Pendiente cambiar datos de conexion
+
     public Connection Entrar() throws SQLException, ClassNotFoundException {
         try {
             //Servidor Agro
@@ -25,7 +28,8 @@ public class ConexionDB {
             String passwordDB = "0000";
             cn = DriverManager.getConnection(url, usuarioDB, passwordDB);
         } catch (SQLException | ClassNotFoundException e) {
-            cn=null;
+            cn = null;
+            JOptionPane.showMessageDialog(null, "No se pudo conectar con el servidor\n intentelo nuevamente por favor");
             System.out.println("Error conexion: " + e);
         }
         return cn;
@@ -35,6 +39,7 @@ public class ConexionDB {
         try {
             conex.close();
         } catch (SQLException e) {
+
             System.out.println("Error conexion: " + e);
         }
     }

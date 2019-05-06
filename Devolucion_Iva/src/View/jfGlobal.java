@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,7 +26,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import Models.Consultas;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 /**
  *
@@ -369,7 +366,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_resultIvaAcred.setLayout(panel_resultIvaAcredLayout);
         panel_resultIvaAcredLayout.setHorizontalGroup(
             panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 632, Short.MAX_VALUE)
         );
         panel_resultIvaAcredLayout.setVerticalGroup(
             panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -562,35 +559,12 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaIvaAcredMousePressed
 
     private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
-        //preparar vista
-        int mes = calendarMes.getMonth() + 1;
-        System.out.println("numero mes: " + mes);
-        int year = calendarAnio.getYear();
-        System.out.println("c1");
-        Consultas cn = new Consultas();
-        System.out.println("c2");
-        List<AuxIvaAcred> aux = new ArrayList<>();
-        System.out.println("c3");
-        aux = cn.auxIvaAcredConsulta(mes, year, "115100100000000000002");
-        System.out.println("c4");
-        System.out.println("aux= " + aux.size());
-        if (!aux.isEmpty()) {
-            for (int i = 0; i < aux.size(); i++) {
-                System.out.println("Acred: " + aux.get(i).getConcepto());
-                System.out.println("Acred: " + aux.get(i).getFecha());
-                System.out.println("Acred: " + aux.get(i).getTipoPoliza());
-                System.out.println("Acred: " + aux.get(i).getNoPoliza());
-                System.out.println("Acred: " + aux.get(i).getDebe());
-                System.out.println("\n");
-            }
-        }
+     
     }//GEN-LAST:event_btnPDFActionPerformed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
-
         //XML DATOS
         int mes = calendarMes.getMonth();
-        System.out.println("numero mes: " + mes);
         int year = calendarAnio.getYear();
         String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
             "11 Noviembre", "12 Diciembre"};
@@ -610,7 +584,6 @@ public class jfGlobal extends javax.swing.JFrame {
         selectorCarpetaXml.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorCarpetaXml.showOpenDialog(this);
         if (resultado == 0) {
-            System.out.println("resultado: " + resultado);
             File carpetaSeleccionada = selectorCarpetaXml.getSelectedFile();
             String rutaCarpeta = carpetaSeleccionada.getAbsolutePath();
             ivaAcred = new IvaAcredController();
@@ -656,16 +629,16 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
 
-        if (!listPolizaDatos.isEmpty()) {
-            for (int i = 0; i < listPolizaDatos.size(); i++) {
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
-                System.out.println("\n");
-            }
-        }
+//        if (!listPolizaDatos.isEmpty()) {
+//            for (int i = 0; i < listPolizaDatos.size(); i++) {
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
+//                System.out.println("\n");
+//            }
+//        }
 
         //Solicitud datos BD
         //checar esta validacion
@@ -747,8 +720,6 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
             btnXmlCargar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
         }
 
     }
@@ -830,7 +801,6 @@ public class jfGlobal extends javax.swing.JFrame {
         AuxIvaAcredController auxController = new AuxIvaAcredController();
         DecimalFormat formateador = new DecimalFormat("####.##");
         // Esto sale en pantalla con dos decimales, es decir, 3,43
-        System.out.println(formateador.format(3.43242383));
         listAuxIvaAcreds = auxController.solicitudAuxIvaAcred(mes, anio);
         if (!listAuxIvaAcreds.isEmpty()) {
             for (int i = 0; i < listAuxIvaAcreds.size(); i++) {
@@ -874,17 +844,17 @@ public class jfGlobal extends javax.swing.JFrame {
                     case 3:
                         //Concepto
                         columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(600);
+                        columna.setMinWidth(800);
                         break;
                     case 4:
                         //Debe
                         columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
+                        columna.setMinWidth(100);
                         break;
                     case 5:
                         //Haber
                         columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
+                        columna.setMinWidth(100);
                         break;
 
                     default:
@@ -892,8 +862,6 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
 
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
         }
 
     }
