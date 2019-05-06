@@ -12,7 +12,6 @@ package Models;
 import Conexion.ConexionDB;
 import Controllers.PolizaDatos;
 import Controllers.AuxIvaAcred;
-import Controllers.RetencionIvaMes;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,6 +30,7 @@ public class Consultas {
     private PolizaDatos polizaDatos;
     private AuxIvaAcred auxIvaAcred;
     private RetencionIvaMes retencionIvaMes;
+    private RetencionIvaPagadaMes retencionIvaPagadaMes;
 
     /**
      * Función que consulta las polizas de un ejercicio y periodo espefico en la
@@ -189,7 +189,7 @@ public class Consultas {
                 //tipo poliza, numero poliza, fecha, concepto, debe, haber
                 retencionIvaMes = new RetencionIvaMes();
                 retencionIvaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ"));
+                retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
                 retencionIvaMes.setFecha(resultSet.getString("FECHA"));
                 retencionIvaMes.setConcepto(resultSet.getString("CONCEP_PO"));
                 retencionIvaMes.setConceptosBase(resultSet.getString("NOMBRE"));
@@ -203,4 +203,59 @@ public class Consultas {
         }
         return listRetencion;
     }
+
+    public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String tableAux = "AUXILIAR" + v1 + v2;
+        String tableCuentas = "CUENTAS" + v1 + v2;
+        String tableSaldos = "SALDOS" + v1 + v2;
+        String query;
+
+        List<RetencionIvaPagadaMes> listRetencionPagada = new ArrayList<>();
+        try {
+            conexion = connection.Entrar();
+            if (ejercicio > 2018) {
+                //CAMBIAR TOP
+                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
+                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
+                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
+                        + " MONTOMOV AS MONTO, ORDEN  "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
+                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+            } else {
+                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
+                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
+                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+            }
+
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                //tipo poliza, numero poliza, fecha, concepto, debe, haber
+                retencionIvaPagadaMes = new RetencionIvaPagadaMes();
+                retencionIvaPagadaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                retencionIvaPagadaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
+                retencionIvaPagadaMes.setFecha(resultSet.getString("FECHA"));
+                retencionIvaPagadaMes.setConcepto(resultSet.getString("CONCEP_PO"));
+                retencionIvaPagadaMes.setConceptosBase(resultSet.getString("NOMBRE"));
+                listRetencionPagada.add(retencionIvaPagadaMes);
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return listRetencionPagada;
+    }
+
 }

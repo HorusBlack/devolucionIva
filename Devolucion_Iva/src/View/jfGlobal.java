@@ -10,8 +10,9 @@ import Controllers.PolizaDatos;
 import Controllers.AuxIvaAcred;
 import Controllers.AuxIvaAcredController;
 import Controllers.ControllerAction;
-import Controllers.RetencionIvaMes;
+import Models.RetencionIvaMes;
 import Controllers.XmlDatos;
+import Models.RetencionIvaPagadaMes;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -45,6 +46,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private AuxIvaAcred auxIvaAcred;
     private List<AuxIvaAcred> listAuxIvaAcreds;
     private List<RetencionIvaMes> listRetencionIvaMeses;
+    private List<RetencionIvaPagadaMes> listRetencionIvaPagadaMes;
 
     /**
      * Creates new form jfGlobal
@@ -96,10 +98,14 @@ public class jfGlobal extends javax.swing.JFrame {
         table_totalAuxIvaAcred = new javax.swing.JTable();
         panel_RIM = new javax.swing.JPanel();
         panel_RetIvaMes = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        SpIva2 = new javax.swing.JScrollPane();
         tabla_RetIvaMes = new javax.swing.JTable();
         lb_TItuloIvaRetenidoMes = new javax.swing.JLabel();
         panel_RIPM = new javax.swing.JPanel();
+        panel_RetIvaMes1 = new javax.swing.JPanel();
+        SpIva3 = new javax.swing.JScrollPane();
+        tabla_RetIvaMesPagada = new javax.swing.JTable();
+        lb_RIPM = new javax.swing.JLabel();
         panel_AT_16 = new javax.swing.JPanel();
         panel_AT_Cero = new javax.swing.JPanel();
         panel_RelacionDep = new javax.swing.JPanel();
@@ -458,6 +464,9 @@ public class jfGlobal extends javax.swing.JFrame {
 
         panel_RetIvaMes.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        SpIva2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        tabla_RetIvaMes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tabla_RetIvaMes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -466,23 +475,35 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane3.setViewportView(tabla_RetIvaMes);
+        tabla_RetIvaMes.setToolTipText("");
+        tabla_RetIvaMes.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabla_RetIvaMes.setEnabled(false);
+        tabla_RetIvaMes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabla_RetIvaMesMousePressed(evt);
+            }
+        });
+        SpIva2.setViewportView(tabla_RetIvaMes);
 
         javax.swing.GroupLayout panel_RetIvaMesLayout = new javax.swing.GroupLayout(panel_RetIvaMes);
         panel_RetIvaMes.setLayout(panel_RetIvaMesLayout);
         panel_RetIvaMesLayout.setHorizontalGroup(
             panel_RetIvaMesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_RetIvaMesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panel_RetIvaMesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_RetIvaMesLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(SpIva2, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         panel_RetIvaMesLayout.setVerticalGroup(
             panel_RetIvaMesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_RetIvaMesLayout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 411, Short.MAX_VALUE)
+            .addGroup(panel_RetIvaMesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_RetIvaMesLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(SpIva2, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         lb_TItuloIvaRetenidoMes.setFont(new java.awt.Font("Source Code Pro Medium", 1, 14)); // NOI18N
@@ -509,20 +530,78 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addComponent(lb_TItuloIvaRetenidoMes)
                 .addGap(18, 18, 18)
                 .addComponent(panel_RetIvaMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("RENTENCIONES DE IVA DEL MES", panel_RIM);
+
+        panel_RetIvaMes1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        SpIva3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        tabla_RetIvaMesPagada.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tabla_RetIvaMesPagada.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tabla_RetIvaMesPagada.setToolTipText("");
+        tabla_RetIvaMesPagada.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabla_RetIvaMesPagada.setEnabled(false);
+        tabla_RetIvaMesPagada.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabla_RetIvaMesPagadaMousePressed(evt);
+            }
+        });
+        SpIva3.setViewportView(tabla_RetIvaMesPagada);
+
+        javax.swing.GroupLayout panel_RetIvaMes1Layout = new javax.swing.GroupLayout(panel_RetIvaMes1);
+        panel_RetIvaMes1.setLayout(panel_RetIvaMes1Layout);
+        panel_RetIvaMes1Layout.setHorizontalGroup(
+            panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 749, Short.MAX_VALUE)
+            .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        panel_RetIvaMes1Layout.setVerticalGroup(
+            panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 411, Short.MAX_VALUE)
+            .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        lb_RIPM.setFont(new java.awt.Font("Source Code Pro Medium", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout panel_RIPMLayout = new javax.swing.GroupLayout(panel_RIPM);
         panel_RIPM.setLayout(panel_RIPMLayout);
         panel_RIPMLayout.setHorizontalGroup(
             panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 777, Short.MAX_VALUE)
+            .addGroup(panel_RIPMLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panel_RetIvaMes1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panel_RIPMLayout.createSequentialGroup()
+                        .addComponent(lb_RIPM)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panel_RIPMLayout.setVerticalGroup(
             panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 631, Short.MAX_VALUE)
+            .addGroup(panel_RIPMLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(lb_RIPM)
+                .addGap(18, 18, 18)
+                .addComponent(panel_RetIvaMes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(167, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("RET DE IVA PAGADAS EN EL MES", panel_RIPM);
@@ -702,6 +781,8 @@ public class jfGlobal extends javax.swing.JFrame {
         inicializarTablaTotalAuxAcred(nameMes[mes], year, totalAuxCred);
         //Inicializar Tabla RetencionIvaMes
         inicializarTablaRetencionIvaMes(nameMes[mes], mes, year);
+        //Inicializar Tabla RetencionIvaMesPagadas
+        inicializarTablaRetencionIvaMesPagadas(nameMes[mes], mes, year);
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
@@ -725,6 +806,14 @@ public class jfGlobal extends javax.swing.JFrame {
     private void tabla_ivaAuxAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_ivaAuxAcredMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_tabla_ivaAuxAcredMousePressed
+
+    private void tabla_RetIvaMesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_RetIvaMesMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabla_RetIvaMesMousePressed
+
+    private void tabla_RetIvaMesPagadaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_RetIvaMesPagadaMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabla_RetIvaMesPagadaMousePressed
 
     /*
     ################INICIA###################
@@ -1071,7 +1160,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     case 3:
                         //Concepto
                         columna = tabla_RetIvaMes.getColumn(titulos[i]);
-                        columna.setMinWidth(800);
+                        columna.setMinWidth(600);
                         break;
                     case 4:
                         //RFC
@@ -1079,7 +1168,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         columna.setMinWidth(150);
                         break;
                     case 5:
-                        //Concepto
+                        //Concepto Gasto
                         columna = tabla_RetIvaMes.getColumn(titulos[i]);
                         columna.setMinWidth(300);
                         break;
@@ -1119,6 +1208,116 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
             lb_TItuloIvaRetenidoMes.setText("DETALLE DE IVA RETENIDO DEL MES DE: " + numMes.toUpperCase() + " " + anio);
+        }
+    }
+
+    /*
+    ################FINALIZA###################
+    Funciones: RETENCION IVA MES
+     */
+ /*
+    ################INICIA###################
+    Funciones: RETENCION IVA MES
+     */
+    private void inicializarTablaRetencionIvaMesPagadas(String numMes, int mes, int anio) {
+        tablaIva = new DefaultTableModel();
+        String[] titulos = {"Póliza", "", "Fecha", "Concepto", "RFC Proveedor", "Concepto Gasto", "SubTotal 16%", "Iva Acreditable 16%", "Otros Conceptos Base", "Importe", "Total Pagado", "Factura"};
+        //Ingresando titulos
+        tablaIva.setColumnIdentifiers(titulos);
+        controllerAction = new ControllerAction();
+        DecimalFormat formateador = new DecimalFormat("####.##");
+        // Esto sale en pantalla con dos decimales, es decir, 3,43
+        listRetencionIvaPagadaMes = controllerAction.solicitudRetencionesIvaMesPagada(mes, anio);
+        if (!listRetencionIvaPagadaMes.isEmpty()) {
+            for (int i = 0; i < listRetencionIvaPagadaMes.size(); i++) {
+                String stringDate = listRetencionIvaPagadaMes.get(i).getFecha();
+                String newDate = "";
+
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+                    newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                }
+
+                tablaIva.addRow(new Object[]{listRetencionIvaPagadaMes.get(i).getTipoPoliza(), listRetencionIvaPagadaMes.get(i).getPolCombinada().trim(), newDate, listRetencionIvaPagadaMes.get(i).getConcepto(), "RFC:PENDIENTE",
+                    "Concepto Gasto:PENDIENTE", "SubTotal:PENDIENTE", "Iva Acreditable:PENDIENTE", listRetencionIvaPagadaMes.get(i).getConceptosBase(), "Importe Retenido:PENDIENTE", "Total Pagado:PENDIENTE",
+                    "Factura:PENDIENTE"});
+
+            }
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+            tabla_RetIvaMesPagada.setModel(tablaIva);
+            tabla_RetIvaMesPagada.setRowSorter(ordenTabla);
+            TableColumn columna;
+            for (int i = 0; i < 12; i++) {
+                switch (i) {
+                    case 0:
+                        //Poliza
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 1:
+                        //PolizaCombinada
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(35);
+                        break;
+                    case 2:
+                        //Fecha
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(80);
+                        break;
+                    case 3:
+                        //Concepto
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(600);
+                        break;
+                    case 4:
+                        //RFC
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 5:
+                        //Concepto Gasto
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(300);
+                        break;
+                    case 6:
+                        //SubTotal
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 7:
+                        //Iva Acreditable
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(90);
+                        break;
+                    case 8:
+                        //Otros conceptos
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(300);
+                        break;
+                    case 9:
+                        //Importe Retenido
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 10:
+                        //Total pagado
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 11:
+                        //Factura
+                        columna = tabla_RetIvaMesPagada.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            lb_RIPM.setText("DETALLE DE IVA RETENIDO PAGADO DEL MES DE: " + numMes.toUpperCase() + " " + anio);
         }
     }
 
@@ -1181,6 +1380,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JScrollPane ScrollTotalIva;
     private javax.swing.JScrollPane SpIva;
     private javax.swing.JScrollPane SpIva1;
+    private javax.swing.JScrollPane SpIva2;
+    private javax.swing.JScrollPane SpIva3;
     private javax.swing.JButton btnGuardarIva;
     private javax.swing.JButton btnPDF;
     private javax.swing.JButton btnProcesarIva;
@@ -1190,9 +1391,9 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbT1;
     private javax.swing.JLabel lbT_mesAuxIvaAcred;
+    private javax.swing.JLabel lb_RIPM;
     private javax.swing.JLabel lb_TItuloIvaRetenidoMes;
     private javax.swing.JPanel panelConcepto;
     private javax.swing.JPanel panelInfo;
@@ -1209,6 +1410,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_RIPM;
     private javax.swing.JPanel panel_RelacionDep;
     private javax.swing.JPanel panel_RetIvaMes;
+    private javax.swing.JPanel panel_RetIvaMes1;
     private javax.swing.JPanel panel_TablaIvaAcred;
     private javax.swing.JPanel panel_contenidoGlobal;
     private javax.swing.JPanel panel_dataIvaAcred;
@@ -1218,6 +1420,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JTable tablaTotalIva;
     private javax.swing.JTable tabla_AuxDepositos;
     private javax.swing.JTable tabla_RetIvaMes;
+    private javax.swing.JTable tabla_RetIvaMesPagada;
     private javax.swing.JTable tabla_ivaAuxAcred;
     private javax.swing.JTable table_totalAuxIvaAcred;
     private javax.swing.JTabbedPane tp_Secciones;

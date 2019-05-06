@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controllers;
+package Models;
 
 /**
  *
  * @author horusblack
  */
-public class RetencionIvaMes {
+public class RetencionIvaPagadaMes {
 
     private String tipoPoliza, polCombinada, concepto, rfcProveedor, conceptoGasto, conceptosBase, factura, fecha;
     private double subTotal, ivaAcreditable, importe, total;
@@ -109,5 +109,4 @@ public class RetencionIvaMes {
     public void setTotal(double total) {
         this.total = total;
     }
-
 }

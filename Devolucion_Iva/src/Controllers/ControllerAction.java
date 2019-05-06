@@ -6,6 +6,8 @@
 package Controllers;
 
 import Models.Consultas;
+import Models.RetencionIvaMes;
+import Models.RetencionIvaPagadaMes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +16,17 @@ import java.util.List;
  * @author horusblack
  */
 public class ControllerAction {
+
     //PENDIENTE PASAR TODO AQUI
     private Consultas consultas;
-    private List<RetencionIvaMes> retencionIvaMes;
+    private List<RetencionIvaMes> listRetencionIvaMes;
+    private List<RetencionIvaPagadaMes> ListRetencionIvaPagadaMeses;
     private final static String NO_CUENTA = "115100100000000000002";
 
     /**
-     * Funcion que solicita datos referente a las retenciones de iva del mes y retorna una lista de datos
+     * Funcion que solicita datos referente a las retenciones de iva del mes y
+     * retorna una lista de datos
+     *
      * @param periodo
      * @param ejercicio
      * @return List RetencionIvaMes
@@ -28,12 +34,32 @@ public class ControllerAction {
     public List<RetencionIvaMes> solicitudRetencionesIvaMes(int periodo, int ejercicio) {
 
         consultas = new Consultas();
-        retencionIvaMes = new ArrayList<>();
+        listRetencionIvaMes = new ArrayList<>();
         periodo += 1;
 
         if (periodo > 0 && ejercicio >= 2017) {
-            retencionIvaMes = consultas.retencionIvaMesConsulta(periodo, ejercicio, NO_CUENTA);
+            listRetencionIvaMes = consultas.retencionIvaMesConsulta(periodo, ejercicio, NO_CUENTA);
         }
-        return retencionIvaMes;
+        return listRetencionIvaMes;
+    }
+
+    /**
+     * Funcion que solicita datos referente a las retenciones de iva del mes pagadas y
+     * retorna una lista de datos
+     *
+     * @param periodo
+     * @param ejercicio
+     * @return List RetencionIvaMes
+     */
+    public List<RetencionIvaPagadaMes> solicitudRetencionesIvaMesPagada(int periodo, int ejercicio) {
+
+        consultas = new Consultas();
+        ListRetencionIvaPagadaMeses = new ArrayList<>();
+        periodo += 1;
+
+        if (periodo > 0 && ejercicio >= 2017) {
+            ListRetencionIvaPagadaMeses = consultas.retencionesIvaMesPagada(periodo, ejercicio, NO_CUENTA);
+        }
+        return ListRetencionIvaPagadaMeses;
     }
 }
