@@ -101,7 +101,7 @@ public class Consultas {
             conexion = connection.Entrar();
             if (ejercicio > 2018) {
                 //CAMBIAR TOP
-                query = "SELECT TOP(20)  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
+                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
                         + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
                         + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
                         + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
@@ -111,19 +111,14 @@ public class Consultas {
                         + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
             } else {
-                query = "SELECT TOP(20) A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
+                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
                         + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
                         + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
                         + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
             }
-//                query = "SELECT TOP(20) A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-//                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
-//                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
-//                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-//                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-//                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
