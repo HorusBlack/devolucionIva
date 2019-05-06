@@ -343,6 +343,7 @@ public class jfGlobal extends javax.swing.JFrame {
         ));
         tabla_ivaAuxAcred.setToolTipText("");
         tabla_ivaAuxAcred.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabla_ivaAuxAcred.setEnabled(false);
         tabla_ivaAuxAcred.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tabla_ivaAuxAcredMousePressed(evt);
@@ -572,8 +573,9 @@ public class jfGlobal extends javax.swing.JFrame {
             txta_Concepto.setVisible(true);
 
             //obteniendo el valor de la celda en la coordenada
-            String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
-            txta_Concepto.setText(codigo);
+//            String codigo = (String) tablaIva.getValueAt(tablaIvaAcred.getSelectedRow(), 5);
+//            if(!codigo.isEmpty() || !codigo.equals(""))
+//            txta_Concepto.setText(codigo);
 
             // Lo imprimimos en pantalla
         }
