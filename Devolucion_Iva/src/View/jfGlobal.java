@@ -96,6 +96,9 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_resultIvaAcred = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_totalAuxIvaAcred = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        btn_ExportExcel_AuxIvaAcred = new javax.swing.JButton();
         panel_RIM = new javax.swing.JPanel();
         panel_RetIvaMes = new javax.swing.JPanel();
         SpIva2 = new javax.swing.JScrollPane();
@@ -329,7 +332,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(lbT1)
                     .addComponent(lbT_mesAuxIvaAcred)
                     .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(449, Short.MAX_VALUE))
         );
         panel_CabecerAuxIvaLayout.setVerticalGroup(
             panel_CabecerAuxIvaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -401,20 +404,55 @@ public class jfGlobal extends javax.swing.JFrame {
         table_totalAuxIvaAcred.setEnabled(false);
         jScrollPane1.setViewportView(table_totalAuxIvaAcred);
 
+        jLabel2.setText("Exportar");
+
+        btn_ExportExcel_AuxIvaAcred.setBackground(new java.awt.Color(102, 255, 153));
+        btn_ExportExcel_AuxIvaAcred.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel-icon72.png"))); // NOI18N
+        btn_ExportExcel_AuxIvaAcred.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ExportExcel_AuxIvaAcredActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_ExportExcel_AuxIvaAcred, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(11, 11, 11)
+                .addComponent(btn_ExportExcel_AuxIvaAcred, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panel_resultIvaAcredLayout = new javax.swing.GroupLayout(panel_resultIvaAcred);
         panel_resultIvaAcred.setLayout(panel_resultIvaAcredLayout);
         panel_resultIvaAcredLayout.setHorizontalGroup(
             panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_resultIvaAcredLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_resultIvaAcredLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
         panel_resultIvaAcredLayout.setVerticalGroup(
             panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_resultIvaAcredLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                .addGroup(panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -814,6 +852,10 @@ public class jfGlobal extends javax.swing.JFrame {
     private void tabla_RetIvaMesPagadaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_RetIvaMesPagadaMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_tabla_RetIvaMesPagadaMousePressed
+
+    private void btn_ExportExcel_AuxIvaAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ExportExcel_AuxIvaAcredActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ExportExcel_AuxIvaAcredActionPerformed
 
     /*
     ################INICIA###################
@@ -1386,9 +1428,12 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JButton btnPDF;
     private javax.swing.JButton btnProcesarIva;
     private javax.swing.JButton btnXmlCargar;
+    private javax.swing.JButton btn_ExportExcel_AuxIvaAcred;
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbT1;
