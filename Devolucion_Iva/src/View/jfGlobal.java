@@ -10,12 +10,14 @@ import Controllers.PolizaDatos;
 import Controllers.AuxIvaAcred;
 import Controllers.AuxIvaAcredController;
 import Controllers.ControllerAction;
+import Controllers.GeneradorExcel;
 import Models.RetencionIvaMes;
 import Controllers.XmlDatos;
 import Models.RetencionIvaPagadaMes;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -28,6 +30,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -854,7 +858,12 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_tabla_RetIvaMesPagadaMousePressed
 
     private void btn_ExportExcel_AuxIvaAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ExportExcel_AuxIvaAcredActionPerformed
-        // TODO add your handling code here:
+        try {
+            GeneradorExcel generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcel(tabla_ivaAuxAcred, "PRUEBA AUXILIAR IVA A CRED", "ENERO", "2018");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un problema al generar el documentos");
+        }
     }//GEN-LAST:event_btn_ExportExcel_AuxIvaAcredActionPerformed
 
     /*
