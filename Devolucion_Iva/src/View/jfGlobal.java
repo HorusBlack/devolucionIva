@@ -30,19 +30,17 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author horusblack
  */
 public class jfGlobal extends javax.swing.JFrame {
-
+    
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
-    private int numRegistros;
+    private int numRegistros, numAnio;
     private double totalAuxCred;
     private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
@@ -775,7 +773,7 @@ public class jfGlobal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaIvaAcredMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaIvaAcredMousePressed
-
+        
         String numCol = "";
         //Obtiene el no. de columna y lo comvierte en String
         numCol = Arrays.toString(tablaIvaAcred.getSelectedColumns());
@@ -805,14 +803,16 @@ public class jfGlobal extends javax.swing.JFrame {
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
         //XML DATOS
         int mes = calendarMes.getMonth();
-
+        
         int year = calendarAnio.getYear();
         String[] numMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
             "11 Noviembre", "12 Diciembre"};
         String[] nameMes = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
             "Noviembre", "Diciembre"};
-
-        String urlMes = numMes[mes];
+        
+        String urlMes = nameMes[mes];
+        periodo = numMes[mes];
+        numAnio = year;
         tablaIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
         inicializarTablaIva(urlMes, mes, year);
@@ -860,7 +860,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private void btn_ExportExcel_AuxIvaAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ExportExcel_AuxIvaAcredActionPerformed
         try {
             GeneradorExcel generadorExcel = new GeneradorExcel();
-            generadorExcel.generarExcel(tabla_ivaAuxAcred, "PRUEBA AUXILIAR IVA A CRED", "ENERO", "2018");
+            generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, "AUXILIAR IVA A CRED", periodo, String.valueOf(numAnio));
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Ocurrio un problema al generar el documentos");
         }
@@ -910,24 +910,24 @@ public class jfGlobal extends javax.swing.JFrame {
             //llenando la tabla de la info
 
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-
+                
                 String string = llenarDatosTabla.get(i).getFechaFactura();
                 String[] parts = string.split("T");
                 String part1 = parts[0];
                 String newstring = "";
-
+                
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
                     newstring = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
+                    
                 } catch (ParseException ex) {
                     JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
                 }
-
+                
                 tablaIva.addRow(new Object[]{"N/D", newstring, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
-
+                
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
@@ -982,11 +982,11 @@ public class jfGlobal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-
+                
             }
             btnXmlCargar.setEnabled(true);
         }
-
+        
     }
 
     /**
@@ -1025,9 +1025,9 @@ public class jfGlobal extends javax.swing.JFrame {
                 default:
                     break;
             }
-
+            
         }
-
+        
     }
 
     /**
@@ -1045,7 +1045,7 @@ public class jfGlobal extends javax.swing.JFrame {
         txta_Concepto.setVisible(false);
         txta_Concepto.setLineWrap(true);
         btnXmlCargar.setEnabled(false);
-
+        
     }
 
     /*
@@ -1072,18 +1072,18 @@ public class jfGlobal extends javax.swing.JFrame {
             for (int i = 0; i < listAuxIvaAcreds.size(); i++) {
                 String stringDate = listAuxIvaAcreds.get(i).getFecha();
                 String newDate = "";
-
+                
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
                     newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
+                    
                 } catch (ParseException ex) {
                     JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
                 }
                 tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate, listAuxIvaAcreds.get(i).getConcepto(),
                     formateador.format(listAuxIvaAcreds.get(i).getDebe()), formateador.format(listAuxIvaAcreds.get(i).getHaber())});
                 totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
-
+                
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
             tabla_ivaAuxAcred.setModel(tablaIva);
@@ -1123,16 +1123,16 @@ public class jfGlobal extends javax.swing.JFrame {
                         columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
-
+                    
                     default:
                         break;
                 }
-
+                
             }
             lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
         }
     }
-
+    
     private void inicializarTablaTotalAuxAcred(String mes, int anio, double total_cien) {
         tablaIva = new DefaultTableModel();
         String[] titulos = {"", "Descripción", "Totales"};
@@ -1149,7 +1149,7 @@ public class jfGlobal extends javax.swing.JFrame {
         tablaIva.addRow(new Object[]{"IGUAL", "", ""});
         tablaIva.addRow(new Object[]{"", "SALDO A FAVOR DEL PERIODO SUJETO A DEVOLUCION", formateador.format(0)});
         table_totalAuxIvaAcred.setModel(tablaIva);
-
+        
     }
 
     /*
@@ -1173,19 +1173,19 @@ public class jfGlobal extends javax.swing.JFrame {
             for (int i = 0; i < listRetencionIvaMeses.size(); i++) {
                 String stringDate = listRetencionIvaMeses.get(i).getFecha();
                 String newDate = "";
-
+                
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
                     newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
+                    
                 } catch (ParseException ex) {
                     JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
                 }
-
+                
                 tablaIva.addRow(new Object[]{listRetencionIvaMeses.get(i).getTipoPoliza(), listRetencionIvaMeses.get(i).getPolCombinada().trim(), newDate, listRetencionIvaMeses.get(i).getConcepto(), "RFC:PENDIENTE",
                     "Concepto Gasto:PENDIENTE", "SubTotal:PENDIENTE", "Iva Acreditable:PENDIENTE", listRetencionIvaMeses.get(i).getConceptosBase(), "Importe Retenido:PENDIENTE", "Total Pagado:PENDIENTE",
                     "Factura:PENDIENTE"});
-
+                
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
             tabla_RetIvaMes.setModel(tablaIva);
@@ -1256,7 +1256,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-
+                
             }
             lb_TItuloIvaRetenidoMes.setText("DETALLE DE IVA RETENIDO DEL MES DE: " + numMes.toUpperCase() + " " + anio);
         }
@@ -1283,19 +1283,19 @@ public class jfGlobal extends javax.swing.JFrame {
             for (int i = 0; i < listRetencionIvaPagadaMes.size(); i++) {
                 String stringDate = listRetencionIvaPagadaMes.get(i).getFecha();
                 String newDate = "";
-
+                
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
                     newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
+                    
                 } catch (ParseException ex) {
                     JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
                 }
-
+                
                 tablaIva.addRow(new Object[]{listRetencionIvaPagadaMes.get(i).getTipoPoliza(), listRetencionIvaPagadaMes.get(i).getPolCombinada().trim(), newDate, listRetencionIvaPagadaMes.get(i).getConcepto(), "RFC:PENDIENTE",
                     "Concepto Gasto:PENDIENTE", "SubTotal:PENDIENTE", "Iva Acreditable:PENDIENTE", listRetencionIvaPagadaMes.get(i).getConceptosBase(), "Importe Retenido:PENDIENTE", "Total Pagado:PENDIENTE",
                     "Factura:PENDIENTE"});
-
+                
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
             tabla_RetIvaMesPagada.setModel(tablaIva);
@@ -1366,7 +1366,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-
+                
             }
             lb_RIPM.setText("DETALLE DE IVA RETENIDO PAGADO DEL MES DE: " + numMes.toUpperCase() + " " + anio);
         }
@@ -1385,7 +1385,7 @@ public class jfGlobal extends javax.swing.JFrame {
         String[] titulos = {"Fecha", "Concepto", "Debe"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
-
+        
     }
 
     /*

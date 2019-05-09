@@ -34,7 +34,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class GeneradorExcel {
 
-    public void generarExcel(JTable tabla, String tituloPestaniaHoja, String periodo, String anio) throws IOException {
+    private int numFilasTabla, numColumnasTabla, filaDatos;
+
+    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, String tituloPestaniaHoja, String periodo, String anio) throws IOException {
         JFileChooser seleccionar = new JFileChooser();
         File archivo;
         if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
@@ -48,6 +50,8 @@ public class GeneradorExcel {
             CellStyle tituloEstilo = book.createCellStyle();
             CellStyle subTitulos = book.createCellStyle();
             CellStyle subTitulosDos = book.createCellStyle();
+            CellStyle sbt3 = book.createCellStyle();
+            CellStyle sbt4 = book.createCellStyle();
 
             tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
             tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -57,6 +61,12 @@ public class GeneradorExcel {
 
             subTitulosDos.setAlignment(HorizontalAlignment.CENTER);
             subTitulosDos.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            sbt3.setAlignment(HorizontalAlignment.LEFT);
+            sbt3.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            sbt4.setAlignment(HorizontalAlignment.LEFT);
+            sbt4.setVerticalAlignment(VerticalAlignment.CENTER);
 
             /*
             Importar font de Poi
@@ -92,21 +102,35 @@ public class GeneradorExcel {
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
-            hoja.addMergedRegion(new CellRangeAddress(1, 1, 2, 12));
+            hoja.addMergedRegion(new CellRangeAddress(1, 1, 2, 10));
 
             subTitulos.setFont(fuenteSubtitulo);
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
             celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
-            hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 12));
+            hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
             celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
-            hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 12));
+            hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
+
+            sbt3.setFont(fuenteSubtituloDos);
+            Row fs3 = hoja.createRow(5);
+            Cell cs3 = fs3.createCell(0);
+            cs3.setCellStyle(sbt3);
+            cs3.setCellValue("RELACIÓN DEL 100% DE IVA ACREDITABLE");
+            hoja.addMergedRegion(new CellRangeAddress(5, 5, 0, 5));
+
+            sbt4.setFont(fuenteSubtituloDos);
+            Row fs4 = hoja.createRow(6);
+            Cell cs4 = fs4.createCell(0);
+            cs4.setCellStyle(sbt4);
+            cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
+            hoja.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
 
             String[] cabecera = new String[]{"Tipo Póliza", "Numero Póliza", "Fecha", "Concepto", "Debe", "Haber"};
 
@@ -183,13 +207,45 @@ public class GeneradorExcel {
             font.setColor(IndexedColors.WHITE.getIndex());
             font.setFontHeightInPoints((short) 12);
             headerStyle.setFont(font);
+            //autosize
 
-            Row filaEncabezado = hoja.createRow(4);
+            Row filaEncabezado = hoja.createRow(7);
             for (int i = 0; i < cabecera.length; i++) {
                 Cell celdaEncabezado = filaEncabezado.createCell(i);
                 celdaEncabezado.setCellStyle(headerStyle);
                 celdaEncabezado.setCellValue(cabecera[i]);
+
             }
+            /*EMPIEZA PARTE DE LOS REGISTROS*/
+            numFilasTabla = tableAuxIvaAcred1.getRowCount();
+            numColumnasTabla = tableAuxIvaAcred1.getColumnCount();
+            //Inicio de fila para empezar a dibujar los registros
+            filaDatos = 8;
+            CellStyle datosEstilo = book.createCellStyle();
+            datosEstilo.setBorderBottom(BorderStyle.THIN);
+            datosEstilo.setBorderLeft(BorderStyle.THIN);
+            datosEstilo.setBorderRight(BorderStyle.THIN);
+            datosEstilo.setBorderTop(BorderStyle.THIN);
+
+            for (int i = 0; i < numFilasTabla; i++) {
+                //?
+                Row fila = hoja.createRow(i + filaDatos);
+                //?
+                for (int j = 0; j < numColumnasTabla; j++) {
+                    Cell celda = fila.createCell(j);
+                    celda.setCellStyle(datosEstilo);
+                    celda.setCellValue(String.valueOf(tableAuxIvaAcred1.getValueAt(i, j)));
+                }
+            }
+
+            //tamaño automatico a celdas
+            hoja.autoSizeColumn(0);
+            hoja.autoSizeColumn(1);
+            hoja.autoSizeColumn(2);
+            hoja.autoSizeColumn(3);
+            hoja.autoSizeColumn(4);
+
+            hoja.setZoom(100);
 
             try {
                 //Creando el archivo fisico
