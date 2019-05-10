@@ -34,9 +34,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class GeneradorExcel {
 
-    private int numFilasTabla, numColumnasTabla, filaDatos;
+    private int numFilasTabla, numColumnasTabla, filaDatos, ultimaFilaRegistros;
 
-    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, String tituloPestaniaHoja, String periodo, String anio) throws IOException {
+    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, JTable table_AuxIvaAcredTotal, String tituloPestaniaHoja, String periodo, String anio) throws IOException {
         JFileChooser seleccionar = new JFileChooser();
         File archivo;
         if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
@@ -45,14 +45,16 @@ public class GeneradorExcel {
             //nuevo archivo
             book = new XSSFWorkbook();
             //hoja de trabajo
-            Sheet hoja = book.createSheet(tituloPestaniaHoja + " " + periodo);
-            //Definiendo alineamiento de titulo
+            Sheet hoja = book.createSheet(tituloPestaniaHoja + " " + periodo.toUpperCase()+" "+anio);
+            //Titulos de tablas combinadas
+            /*Titulos y subtitulos de cabecezas*/
             CellStyle tituloEstilo = book.createCellStyle();
             CellStyle subTitulos = book.createCellStyle();
             CellStyle subTitulosDos = book.createCellStyle();
             CellStyle sbt3 = book.createCellStyle();
             CellStyle sbt4 = book.createCellStyle();
 
+            //Definiendo alineamiento de los titulos y subtitulos
             tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
             tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
 
@@ -219,9 +221,12 @@ public class GeneradorExcel {
             /*EMPIEZA PARTE DE LOS REGISTROS*/
             numFilasTabla = tableAuxIvaAcred1.getRowCount();
             numColumnasTabla = tableAuxIvaAcred1.getColumnCount();
+            ultimaFilaRegistros = (tableAuxIvaAcred1.getRowCount()) + 9;
+
             //Inicio de fila para empezar a dibujar los registros
             filaDatos = 8;
             CellStyle datosEstilo = book.createCellStyle();
+            //bordes de la tabla
             datosEstilo.setBorderBottom(BorderStyle.THIN);
             datosEstilo.setBorderLeft(BorderStyle.THIN);
             datosEstilo.setBorderRight(BorderStyle.THIN);
@@ -230,7 +235,7 @@ public class GeneradorExcel {
             for (int i = 0; i < numFilasTabla; i++) {
                 //?
                 Row fila = hoja.createRow(i + filaDatos);
-                //?
+                //Obteniendo información de las columnas
                 for (int j = 0; j < numColumnasTabla; j++) {
                     Cell celda = fila.createCell(j);
                     celda.setCellStyle(datosEstilo);
@@ -244,11 +249,56 @@ public class GeneradorExcel {
             hoja.autoSizeColumn(2);
             hoja.autoSizeColumn(3);
             hoja.autoSizeColumn(4);
-
+            //zoom de la hoja
             hoja.setZoom(100);
 
+            //Inicia tabla de total iva acred (Ver si se puede hacer con una sola instancia)
+            CellStyle txtT1 = book.createCellStyle();
+            txtT1.setAlignment(HorizontalAlignment.CENTER);
+
+            Font fontTotal = (Font) book.createFont();
+            fontTotal.setFontName("Arial");
+            fontTotal.setBold(true);
+            fontTotal.setColor(IndexedColors.BLACK.getIndex());
+            fontTotal.setFontHeightInPoints((short) 12);
+
+            txtT1.setFont(fontTotal);
+
+            //checar que cuadre
+            Row filaTotal_1 = hoja.createRow(ultimaFilaRegistros);
+            Cell ct_1 = filaTotal_1.createCell(3);
+            ct_1.setCellStyle(txtT1);
+            ct_1.setCellValue("TOTAL AL 100% DE IVA ACREDITABLE");
+
+            Row filaTotal_2 = hoja.createRow((ultimaFilaRegistros) + 1);
+            Cell ct_2 = filaTotal_2.createCell(3);
+            ct_2.setCellStyle(txtT1);
+            ct_2.setCellValue("IVA RETENIDO EN DICIEMBRE Y ENTERADO EN " + periodo.toUpperCase() + " " + anio);
+
+            Row filaTotal_3 = hoja.createRow((ultimaFilaRegistros) + 2);
+            Cell ct_3 = filaTotal_3.createCell(3);
+            ct_3.setCellStyle(txtT1);
+            ct_3.setCellValue("IVA RETENIDO POR CLIENTES EN EL PERIODO");
+
+            Row filaTotal_4 = hoja.createRow((ultimaFilaRegistros) + 3);
+            Cell ct_4 = filaTotal_4.createCell(3);
+            ct_4.setCellStyle(txtT1);
+            ct_4.setCellValue("TOTAL DE IVA ACREDITABLE DEL PERIODO");
+
+            Row filaTotal_5 = hoja.createRow((ultimaFilaRegistros) + 4);
+            Cell ct_5 = filaTotal_5.createCell(3);
+            ct_5.setCellStyle(txtT1);
+            ct_5.setCellValue("IVA CAUSADO Y COBRADO A CLIENTES EN EL PERIODO");
+
+            Row filaTotal_6 = hoja.createRow((ultimaFilaRegistros) + 5);
+            Cell ct_6 = filaTotal_6.createCell(3);
+            ct_6.setCellStyle(txtT1);
+            ct_6.setCellValue("SALDO A FAVOR DEL PERIODO SUJETO A DEVOLUCION");
+
+            //Este codigo solo es para combinar celdas
+            //hoja.addMergedRegion(new CellRangeAddress((ultimaFilaRegistros) + (1), (ultimaFilaRegistros) + (1), 3, 3));
+            //Creando el archivo fisico
             try {
-                //Creando el archivo fisico
                 book.write(new FileOutputStream(archivo + ".xlsx"));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
