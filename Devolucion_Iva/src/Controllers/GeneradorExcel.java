@@ -35,14 +35,26 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class GeneradorExcel {
 
     private int numFilasTabla, numColumnasTabla, filaDatos, ultimaFilaRegistros;
+    private Workbook book;
+    private JFileChooser seleccionar;
 
-    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, JTable table_AuxIvaAcredTotal, String tituloPestaniaHoja, String periodo, String anio) throws IOException {
+    /**
+     * Funcion que genera un archivo excel para la vista la seccion de auxiliar
+     * iva acred
+     *
+     * @param tableAuxIvaAcred1
+     * @param table_AuxIvaAcredTotal
+     * @param tituloPestaniaHoja
+     * @param periodo
+     * @param anio
+     */
+    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, JTable table_AuxIvaAcredTotal, String tituloPestaniaHoja, String periodo, String anio) {
 
-        JFileChooser seleccionar = new JFileChooser();
+        seleccionar = new JFileChooser();
         File archivo;
         if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
-            Workbook book;
+
             //nuevo archivo
             book = new XSSFWorkbook();
             //hoja de trabajo
@@ -273,7 +285,7 @@ public class GeneradorExcel {
             Cell ctVal_1 = filaTotal_1.createCell(4);
             ctVal_1.setCellStyle(txtT2);
             ctVal_1.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(0, 2)));
-            
+
             Row filaTotal_2 = hoja.createRow((ultimaFilaRegistros) + 1);
             Cell ct_2 = filaTotal_2.createCell(3);
             ct_2.setCellStyle(txtT1);
@@ -282,6 +294,10 @@ public class GeneradorExcel {
             Cell ctVal_2 = filaTotal_2.createCell(4);
             ctVal_2.setCellStyle(txtT2);
             ctVal_2.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(1, 2)));
+
+            Cell ct_2_1 = filaTotal_2.createCell(2);
+            ct_2_1.setCellStyle(txtT1);
+            ct_2_1.setCellValue("MAS");
 
             Row filaTotal_3 = hoja.createRow((ultimaFilaRegistros) + 2);
             Cell ct_3 = filaTotal_3.createCell(3);
@@ -292,7 +308,12 @@ public class GeneradorExcel {
             ctVal_3.setCellStyle(txtT2);
             ctVal_3.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(2, 2)));
 
-            Row filaTotal_4 = hoja.createRow((ultimaFilaRegistros) + 3);
+            Row filaTotal_4_1 = hoja.createRow((ultimaFilaRegistros) + 3);
+            Cell ct_4_1 = filaTotal_4_1.createCell(2);
+            ct_4_1.setCellStyle(txtT1);
+            ct_4_1.setCellValue("IGUAL");
+
+            Row filaTotal_4 = hoja.createRow((ultimaFilaRegistros) + 4);
             Cell ct_4 = filaTotal_4.createCell(3);
             ct_4.setCellStyle(txtT1);
             ct_4.setCellValue("TOTAL DE IVA ACREDITABLE DEL PERIODO");
@@ -301,7 +322,12 @@ public class GeneradorExcel {
             ctVal_4.setCellStyle(txtT2);
             ctVal_4.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(4, 2)));
 
-            Row filaTotal_5 = hoja.createRow((ultimaFilaRegistros) + 4);
+            Row filaTotal_5_1 = hoja.createRow((ultimaFilaRegistros) + 5);
+            Cell ct_5_1 = filaTotal_5_1.createCell(2);
+            ct_5_1.setCellStyle(txtT1);
+            ct_5_1.setCellValue("MENOS");
+
+            Row filaTotal_5 = hoja.createRow((ultimaFilaRegistros) + 6);
             Cell ct_5 = filaTotal_5.createCell(3);
             ct_5.setCellStyle(txtT1);
             ct_5.setCellValue("IVA CAUSADO Y COBRADO A CLIENTES EN EL PERIODO");
@@ -310,15 +336,21 @@ public class GeneradorExcel {
             ctVal_5.setCellStyle(txtT2);
             ctVal_5.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(6, 2)));
 
-            Row filaTotal_6 = hoja.createRow((ultimaFilaRegistros) + 5);
-            Cell ct_6 = filaTotal_6.createCell(3);
+            Row filaTotal_6 = hoja.createRow((ultimaFilaRegistros) + 7);
+            Cell ct_6 = filaTotal_6.createCell(2);
             ct_6.setCellStyle(txtT1);
-            ct_6.setCellValue("SALDO A FAVOR DEL PERIODO SUJETO A DEVOLUCIÓN");
+            ct_6.setCellValue("IGUAL");
 
-            Cell ctVal_6 = filaTotal_6.createCell(4);
-            ctVal_6.setCellStyle(txtT2);
-            ctVal_6.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(8, 2)));
+            Row filaTotal_7 = hoja.createRow((ultimaFilaRegistros) + 8);
+            Cell ct_7 = filaTotal_7.createCell(3);
+            ct_7.setCellStyle(txtT1);
+            ct_7.setCellValue("SALDO A FAVOR DEL PERIODO SUJETO A DEVOLUCIÓN");
 
+            Cell ctVal_7 = filaTotal_7.createCell(4);
+            ctVal_7.setCellStyle(txtT2);
+            ctVal_7.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(8, 2)));
+
+            //EXTRAS
             hoja.autoSizeColumn(0);
             hoja.autoSizeColumn(1);
             hoja.autoSizeColumn(2);
@@ -333,10 +365,86 @@ public class GeneradorExcel {
             //Creando el archivo fisico
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-            } catch (FileNotFoundException ex) {
+            }catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
+    public void generarExcelIvaRetenidoMes(JTable jtableIvaRetenidoMes, String tituloPestaniaHoja, String periodo, String anio) {
+        seleccionar = new JFileChooser();
+        File archivo;
+        if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
+            archivo = seleccionar.getSelectedFile();
+
+            //nuevo archivo
+            book = new XSSFWorkbook();
+            //hoja de trabajo
+            Sheet hoja = book.createSheet(tituloPestaniaHoja + " " + periodo.toUpperCase() + " " + anio);
+            //Titulos de tablas combinadas
+            /*Titulos y subtitulos de cabecezas*/
+            CellStyle tituloEstilo = book.createCellStyle();
+            tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
+            tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            Font fuenteTitulo = (Font) book.createFont();
+            fuenteTitulo.setFontName("Arial");
+            fuenteTitulo.setBold(true);
+            fuenteTitulo.setColor(IndexedColors.BLACK.getIndex());
+            fuenteTitulo.setFontHeightInPoints((short) 19);
+            tituloEstilo.setFont(fuenteTitulo);
+
+            Row filaTitulo = hoja.createRow(1);
+            //Empieza a dibujar desde x celda
+            Cell celdaTitulo = filaTitulo.createCell(1);
+            celdaTitulo.setCellStyle(tituloEstilo);
+            //Titulo de la cabecera en Hoja de trabajo
+            celdaTitulo.setCellValue("DETALLE DE IVA RETENIDO DEL MES DE " + periodo.toUpperCase() + " " + anio);
+
+            hoja.addMergedRegion(new CellRangeAddress(1, 1, 2, 7));
+            
+            
+
+            String[] cabecera = new String[]{"FECHA", "CONCEPTO O TEXTO", "RFC DEL PROVEEDOR", "CONCEPTO DEL GASTO", "SUBTOTAL TASA 16% de IVA", "IVA ACREDITABLE TAZA 16%", "OTROS CONCEPTOS BASE",
+                 "IMPORTE", "TOTAL PAGADO", "FACTURA"};
+            
+            CellStyle headerStyle = book.createCellStyle();
+
+            headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+            
+            Font font = book.createFont();
+            font.setFontName("Calibri");
+            font.setBold(true);
+            font.setColor(IndexedColors.WHITE.getIndex());
+            font.setFontHeightInPoints((short) 12);
+            headerStyle.setFont(font);
+            
+            Row cabeceraDetalles = hoja.createRow(3);
+            //Empieza a dibujar desde x celda
+            Cell celdaPoliza = cabeceraDetalles.createCell(0);
+            celdaPoliza.setCellStyle(headerStyle);
+            //Titulo de la cabecera en Hoja de trabajo
+            celdaPoliza.setCellValue("POLIZA");
+
+            hoja.addMergedRegion(new CellRangeAddress(3, 3, 0, 1));
+            
+             for (int i = 2; i < cabecera.length; i++) {
+                Cell celdaEncabezado = cabeceraDetalles.createCell(i);
+                celdaEncabezado.setCellStyle(headerStyle);
+                celdaEncabezado.setCellValue(cabecera[i]);
+            }
+            
+             try {
+                book.write(new FileOutputStream(archivo + ".xlsx"));
+            }catch (IOException ex) {
+                Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }
 }
