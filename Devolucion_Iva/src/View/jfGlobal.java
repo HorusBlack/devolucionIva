@@ -810,7 +810,7 @@ public class jfGlobal extends javax.swing.JFrame {
         String[] nameMes = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
             "Noviembre", "Diciembre"};
 
-        String urlMes = nameMes[mes];
+        String urlMes = numMes[mes];
         periodo = nameMes[mes];
         numAnio = year;
         tablaIvaAcred.removeAll();
