@@ -365,7 +365,131 @@ public class GeneradorExcel {
         }
     }
 
-    public void generarExcelIvaRetenidoMes(JTable jtableIvaRetenidoMes, String tituloPestaniaHoja, String periodo, String anio) {
+    public void generarExcelIvaRetenidoMesDetalle(JTable tableRIM, String tituloPestaniaHoja, String periodo, String anio) {
+        seleccionar = new JFileChooser();
+        File archivo;
+        if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
+            archivo = seleccionar.getSelectedFile();
+
+            //nuevo archivo
+            book = new XSSFWorkbook();
+            //hoja de trabajo
+            Sheet hoja = book.createSheet(tituloPestaniaHoja + " " + periodo.toUpperCase() + " " + anio);
+            //Titulos de tablas combinadas
+            /*Titulos y subtitulos de cabecezas*/
+            CellStyle tituloEstilo = book.createCellStyle();
+            tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
+            tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            Font fuenteTitulo = (Font) book.createFont();
+            fuenteTitulo.setFontName("Arial");
+            fuenteTitulo.setBold(true);
+            fuenteTitulo.setColor(IndexedColors.BLACK.getIndex());
+            fuenteTitulo.setFontHeightInPoints((short) 19);
+            tituloEstilo.setFont(fuenteTitulo);
+
+            Row filaTitulo = hoja.createRow(1);
+            //Empieza a dibujar desde x celda
+            Cell celdaTitulo = filaTitulo.createCell(1);
+            celdaTitulo.setCellStyle(tituloEstilo);
+            //Titulo de la cabecera en Hoja de trabajo
+            celdaTitulo.setCellValue("DETALLE DE IVA RETENIDO DEL MES DE " + periodo.toUpperCase() + " " + anio);
+
+            hoja.addMergedRegion(new CellRangeAddress(1, 1, 1, 6));
+
+            String[] cabecera = new String[]{"", "", "FECHA", "CONCEPTO O TEXTO", "RFC DEL PROVEEDOR", "CONCEPTO DEL GASTO", "SUBTOTAL TASA 16% de IVA", "IVA ACREDITABLE TAZA 16%", "OTROS CONCEPTOS BASE",
+                "IMPORTE RETENIDO", "TOTAL PAGADO", "FACTURA"};
+
+            CellStyle headerStyle = book.createCellStyle();
+
+            headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+
+            Font font = book.createFont();
+            font.setFontName("Calibri");
+            font.setBold(true);
+            font.setColor(IndexedColors.BLACK.getIndex());
+            font.setFontHeightInPoints((short) 12);
+            headerStyle.setFont(font);
+
+            Row cabeceraDetalles = hoja.createRow(3);
+            //Empieza a dibujar desde x celda
+            Cell celdaPoliza = cabeceraDetalles.createCell(0);
+            celdaPoliza.setCellStyle(headerStyle);
+            //Titulo de la cabecera en Hoja de trabajo
+            celdaPoliza.setCellValue("POLIZA");
+            hoja.addMergedRegion(new CellRangeAddress(3, 3, 0, 1));
+
+            for (int i = 2; i < cabecera.length; i++) {
+                Cell celdaEncabezado = cabeceraDetalles.createCell(i);
+                celdaEncabezado.setCellStyle(headerStyle);
+                celdaEncabezado.setCellValue(cabecera[i]);
+            }
+
+            /*EMPIEZA PARTE DE LOS REGISTROS*/
+            numFilasTabla = tableRIM.getRowCount();
+            numColumnasTabla = tableRIM.getColumnCount();
+            //No.filas de cabecera+inicio de datos+1  (RIMP)
+            ultimaFilaRegistros = (tableRIM.getRowCount()) + 9;
+            //Desde donde empezar a poner los datos
+            filaDatos = 4;
+            CellStyle datosEstilo = book.createCellStyle();
+            //bordes de la tabla
+            datosEstilo.setBorderBottom(BorderStyle.THIN);
+            datosEstilo.setBorderLeft(BorderStyle.THIN);
+            datosEstilo.setBorderRight(BorderStyle.THIN);
+            datosEstilo.setBorderTop(BorderStyle.THIN);
+
+            for (int i = 0; i < numFilasTabla; i++) {
+                //?
+                Row fila = hoja.createRow(i + filaDatos);
+                //Obteniendo información de las columnas
+                for (int j = 0; j < numColumnasTabla; j++) {
+                    Cell celda = fila.createCell(j);
+                    celda.setCellStyle(datosEstilo);
+                    celda.setCellValue(String.valueOf(tableRIM.getValueAt(i, j)));
+                }
+            }
+
+            //Extras
+            CellStyle Extra = book.createCellStyle();
+            Extra.setAlignment(HorizontalAlignment.CENTER);
+
+            Font fontExtra = (Font) book.createFont();
+            fontExtra.setFontName("Arial");
+            fontExtra.setBold(true);
+            fontExtra.setColor(IndexedColors.BLACK.getIndex());
+            fontExtra.setFontHeightInPoints((short) 12);
+            Extra.setFont(fontExtra);
+
+            Row extraRow = hoja.createRow((ultimaFilaRegistros) + 3);
+            Cell ct_1 = extraRow.createCell(4);
+            ct_1.setCellStyle(Extra);
+            ct_1.setCellValue("\"BAJO PROTESTA DE DECIR LA VERDAD\"");
+
+            Row extraRow2 = hoja.createRow((ultimaFilaRegistros) + 6);
+            Cell ct_2 = extraRow2.createCell(4);
+            ct_2.setCellStyle(Extra);
+            ct_2.setCellValue("\"REPRESENTANTE LEGAL\"");
+
+            for (int i = 0; i < 12; i++) {
+                hoja.autoSizeColumn(i);
+            }
+
+            try {
+                book.write(new FileOutputStream(archivo + ".xlsx"));
+            } catch (IOException ex) {
+                Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    public void generarExcelIvaRetenidoMesPagado(JTable jtableIvaRetenidoMes, String tituloPestaniaHoja, String periodo, String anio) {
         seleccionar = new JFileChooser();
         File archivo;
         if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
@@ -466,18 +590,17 @@ public class GeneradorExcel {
             fontExtra.setFontHeightInPoints((short) 12);
             Extra.setFont(fontExtra);
 
-            Row extraRow = hoja.createRow((ultimaFilaRegistros)+3);
+            Row extraRow = hoja.createRow((ultimaFilaRegistros) + 3);
             Cell ct_1 = extraRow.createCell(4);
             ct_1.setCellStyle(Extra);
             ct_1.setCellValue("\"BAJO PROTESTA DE DECIR LA VERDAD\"");
-            
-            Row extraRow2 = hoja.createRow((ultimaFilaRegistros)+6);
+
+            Row extraRow2 = hoja.createRow((ultimaFilaRegistros) + 6);
             Cell ct_2 = extraRow2.createCell(4);
             ct_2.setCellStyle(Extra);
             ct_2.setCellValue("\"REPRESENTANTE LEGAL\"");
-            
 
-            for (int i = 0; i <12; i++) {
+            for (int i = 0; i < 12; i++) {
                 hoja.autoSizeColumn(i);
             }
 
