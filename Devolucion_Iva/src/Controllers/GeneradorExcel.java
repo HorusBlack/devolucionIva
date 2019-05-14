@@ -364,7 +364,14 @@ public class GeneradorExcel {
             }
         }
     }
-
+    
+    /**
+     * * Funcion que genera un archivo excel para la vista Detalles de Iva retenido del mes
+     * @param tableRIM
+     * @param tituloPestaniaHoja
+     * @param periodo
+     * @param anio 
+     */
     public void generarExcelIvaRetenidoMesDetalle(JTable tableRIM, String tituloPestaniaHoja, String periodo, String anio) {
         seleccionar = new JFileChooser();
         File archivo;
@@ -488,7 +495,14 @@ public class GeneradorExcel {
 
         }
     }
-
+    
+    /**
+     * Función que genera un archivo excel para la vista Detalles de iva retenido y pagado del mes
+     * @param jtableIvaRetenidoMes
+     * @param tituloPestaniaHoja
+     * @param periodo
+     * @param anio 
+     */
     public void generarExcelIvaRetenidoMesPagado(JTable jtableIvaRetenidoMes, String tituloPestaniaHoja, String periodo, String anio) {
         seleccionar = new JFileChooser();
         File archivo;

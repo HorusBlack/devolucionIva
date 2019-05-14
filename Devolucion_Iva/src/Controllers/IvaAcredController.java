@@ -40,6 +40,7 @@ public class IvaAcredController {
      * @return List<XmlDatos>
      */
     public List<XmlDatos> datosDevolucionIva(String URL) {
+        String nameArchivo;
         //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
         DecimalFormat formateador = new DecimalFormat("0.00000");
         //url de la carpeta del xml
@@ -159,6 +160,12 @@ public class IvaAcredController {
                                             p_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
                                             co_TimbreFiscalD = p_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
                                             folioFiscal = co_TimbreFiscalD.getValorDeAtributo("UUID").toUpperCase();
+                                            String x="07092B35-C136-4F9E-B08F-9CFE7183FD54";
+                                            if(folioFiscal.equals(x.toUpperCase())){
+                                                nameArchivo=archivo.getName();
+                                                System.out.println("nombre Archivo: "+nameArchivo);
+                                                //002 IVA: Importe="56.28", ES EL MISMO PARA TODO
+                                            }
                                             infoXml.setFolioFiscal(folioFiscal);
 
                                             break;

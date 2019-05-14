@@ -1403,7 +1403,6 @@ public class jfGlobal extends javax.swing.JFrame {
         String[] titulos = {"Fecha", "Concepto", "Debe"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
-
     }
 
     /*
