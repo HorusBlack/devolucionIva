@@ -106,13 +106,13 @@ public class jfGlobal extends javax.swing.JFrame {
         tabla_RetIvaMes = new javax.swing.JTable();
         lb_TItuloIvaRetenidoMes = new javax.swing.JLabel();
         panel_RIPM = new javax.swing.JPanel();
-        lb_RIPM = new javax.swing.JLabel();
         panel_RetIvaMes1 = new javax.swing.JPanel();
         SpIva3 = new javax.swing.JScrollPane();
         tabla_RetIvaMesPagada = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         btn_ExportExcel_RIMP = new javax.swing.JButton();
+        lb_RIPM = new javax.swing.JLabel();
         panel_AT_16 = new javax.swing.JPanel();
         panel_AT_Cero = new javax.swing.JPanel();
         panel_RelacionDep = new javax.swing.JPanel();
@@ -185,7 +185,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 441, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
@@ -280,7 +280,7 @@ public class jfGlobal extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
@@ -378,7 +378,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_TablaIvaAcredLayout.setVerticalGroup(
             panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 85, Short.MAX_VALUE)
+            .addGap(0, 143, Short.MAX_VALUE)
             .addGroup(panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_TablaIvaAcredLayout.createSequentialGroup()
                     .addContainerGap()
@@ -563,8 +563,6 @@ public class jfGlobal extends javax.swing.JFrame {
 
         tp_Secciones.addTab("RENTENCIONES DE IVA DEL MES", panel_RIM);
 
-        lb_RIPM.setFont(new java.awt.Font("Source Code Pro Medium", 1, 14)); // NOI18N
-
         panel_RetIvaMes1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         SpIva3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -598,21 +596,26 @@ public class jfGlobal extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_ExportExcel_RIMP, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btn_ExportExcel_RIMP, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel3)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addComponent(btn_ExportExcel_RIMP, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        lb_RIPM.setFont(new java.awt.Font("Source Code Pro Medium", 1, 14)); // NOI18N
+        lb_RIPM.setText("PURBEA");
 
         javax.swing.GroupLayout panel_RetIvaMes1Layout = new javax.swing.GroupLayout(panel_RetIvaMes1);
         panel_RetIvaMes1.setLayout(panel_RetIvaMes1Layout);
@@ -620,25 +623,24 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(653, Short.MAX_VALUE))
-            .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
-                    .addContainerGap()
+                .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
-                    .addContainerGap()))
+                    .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
+                        .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lb_RIPM))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panel_RetIvaMes1Layout.setVerticalGroup(
             panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
-                .addGap(230, 230, 230)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_RetIvaMes1Layout.createSequentialGroup()
+                .addComponent(lb_RIPM, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(SpIva3, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(494, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout panel_RIPMLayout = new javax.swing.GroupLayout(panel_RIPM);
@@ -647,20 +649,13 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_RIPMLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_RIPMLayout.createSequentialGroup()
-                        .addComponent(lb_RIPM)
-                        .addGap(360, 360, 360))
-                    .addGroup(panel_RIPMLayout.createSequentialGroup()
-                        .addComponent(panel_RetIvaMes1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addComponent(panel_RetIvaMes1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panel_RIPMLayout.setVerticalGroup(
             panel_RIPMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_RIPMLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(lb_RIPM)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
                 .addComponent(panel_RetIvaMes1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -675,7 +670,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_16Layout.setVerticalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 441, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
@@ -688,7 +683,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_CeroLayout.setVerticalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 441, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
@@ -701,7 +696,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_RelacionDepLayout.setVerticalGroup(
             panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 441, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RELACION DEPOSITOS", panel_RelacionDep);
@@ -749,7 +744,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_AuxDepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel_AuxDepositos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(252, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("AUXILIAR  DE DEPOSITOS", panel_AuxDep);
@@ -765,7 +760,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobalLayout.setVerticalGroup(
             panel_contenidoGlobalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_contenidoGlobalLayout.createSequentialGroup()
-                .addComponent(tp_Secciones, javax.swing.GroupLayout.PREFERRED_SIZE, 504, Short.MAX_VALUE)
+                .addComponent(tp_Secciones, javax.swing.GroupLayout.PREFERRED_SIZE, 562, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -786,8 +781,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(panel_Filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panel_contenidoGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panel_contenidoGlobal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
