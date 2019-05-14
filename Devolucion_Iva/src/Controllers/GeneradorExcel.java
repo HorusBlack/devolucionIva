@@ -7,7 +7,6 @@ package Controllers;
 //Poi 3.16
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -234,6 +233,7 @@ public class GeneradorExcel {
             /*EMPIEZA PARTE DE LOS REGISTROS*/
             numFilasTabla = tableAuxIvaAcred1.getRowCount();
             numColumnasTabla = tableAuxIvaAcred1.getColumnCount();
+            //No.filas de cabecera+inicio de datos+1
             ultimaFilaRegistros = (tableAuxIvaAcred1.getRowCount()) + 9;
 
             //Inicio de fila para empezar a dibujar los registros
@@ -350,22 +350,16 @@ public class GeneradorExcel {
             ctVal_7.setCellStyle(txtT2);
             ctVal_7.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(8, 2)));
 
-            //EXTRAS
-            hoja.autoSizeColumn(0);
-            hoja.autoSizeColumn(1);
-            hoja.autoSizeColumn(2);
-            hoja.autoSizeColumn(3);
-            hoja.autoSizeColumn(4);
-            hoja.autoSizeColumn(5);
-            //zoom de la hoja
-            hoja.setZoom(100);
+            for (int i = 0; i < 6; i++) {
+                hoja.autoSizeColumn(i);
+            }
 
             //Este codigo solo es para combinar celdas
             //hoja.addMergedRegion(new CellRangeAddress((ultimaFilaRegistros) + (1), (ultimaFilaRegistros) + (1), 3, 3));
             //Creando el archivo fisico
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-            }catch (IOException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -401,13 +395,11 @@ public class GeneradorExcel {
             //Titulo de la cabecera en Hoja de trabajo
             celdaTitulo.setCellValue("DETALLE DE IVA RETENIDO DEL MES DE " + periodo.toUpperCase() + " " + anio);
 
-            hoja.addMergedRegion(new CellRangeAddress(1, 1, 2, 7));
-            
-            
+            hoja.addMergedRegion(new CellRangeAddress(1, 1, 1, 6));
 
-            String[] cabecera = new String[]{"FECHA", "CONCEPTO O TEXTO", "RFC DEL PROVEEDOR", "CONCEPTO DEL GASTO", "SUBTOTAL TASA 16% de IVA", "IVA ACREDITABLE TAZA 16%", "OTROS CONCEPTOS BASE",
-                 "IMPORTE", "TOTAL PAGADO", "FACTURA"};
-            
+            String[] cabecera = new String[]{"", "", "FECHA", "CONCEPTO O TEXTO", "RFC DEL PROVEEDOR", "CONCEPTO DEL GASTO", "SUBTOTAL TASA 16% de IVA", "IVA ACREDITABLE TAZA 16%", "OTROS CONCEPTOS BASE",
+                "IMPORTE", "TOTAL PAGADO", "FACTURA"};
+
             CellStyle headerStyle = book.createCellStyle();
 
             headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -416,35 +408,85 @@ public class GeneradorExcel {
             headerStyle.setBorderLeft(BorderStyle.THIN);
             headerStyle.setBorderRight(BorderStyle.THIN);
             headerStyle.setBorderTop(BorderStyle.THIN);
-            
+
             Font font = book.createFont();
             font.setFontName("Calibri");
             font.setBold(true);
-            font.setColor(IndexedColors.WHITE.getIndex());
+            font.setColor(IndexedColors.BLACK.getIndex());
             font.setFontHeightInPoints((short) 12);
             headerStyle.setFont(font);
-            
+
             Row cabeceraDetalles = hoja.createRow(3);
             //Empieza a dibujar desde x celda
             Cell celdaPoliza = cabeceraDetalles.createCell(0);
             celdaPoliza.setCellStyle(headerStyle);
             //Titulo de la cabecera en Hoja de trabajo
             celdaPoliza.setCellValue("POLIZA");
-
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 0, 1));
-            
-             for (int i = 2; i < cabecera.length; i++) {
+
+            for (int i = 2; i < cabecera.length; i++) {
                 Cell celdaEncabezado = cabeceraDetalles.createCell(i);
                 celdaEncabezado.setCellStyle(headerStyle);
                 celdaEncabezado.setCellValue(cabecera[i]);
             }
+
+            /*EMPIEZA PARTE DE LOS REGISTROS*/
+            numFilasTabla = jtableIvaRetenidoMes.getRowCount();
+            numColumnasTabla = jtableIvaRetenidoMes.getColumnCount();
+            //No.filas de cabecera+inicio de datos+1  (RIMP)
+            ultimaFilaRegistros = (jtableIvaRetenidoMes.getRowCount()) + 9;
+            //Desde donde empezar a poner los datos
+            filaDatos = 4;
+            CellStyle datosEstilo = book.createCellStyle();
+            //bordes de la tabla
+            datosEstilo.setBorderBottom(BorderStyle.THIN);
+            datosEstilo.setBorderLeft(BorderStyle.THIN);
+            datosEstilo.setBorderRight(BorderStyle.THIN);
+            datosEstilo.setBorderTop(BorderStyle.THIN);
+
+            for (int i = 0; i < numFilasTabla; i++) {
+                //?
+                Row fila = hoja.createRow(i + filaDatos);
+                //Obteniendo información de las columnas
+                for (int j = 0; j < numColumnasTabla; j++) {
+                    Cell celda = fila.createCell(j);
+                    celda.setCellStyle(datosEstilo);
+                    celda.setCellValue(String.valueOf(jtableIvaRetenidoMes.getValueAt(i, j)));
+                }
+            }
+
+            //Extras
+            CellStyle Extra = book.createCellStyle();
+            Extra.setAlignment(HorizontalAlignment.CENTER);
+
+            Font fontExtra = (Font) book.createFont();
+            fontExtra.setFontName("Arial");
+            fontExtra.setBold(true);
+            fontExtra.setColor(IndexedColors.BLACK.getIndex());
+            fontExtra.setFontHeightInPoints((short) 12);
+            Extra.setFont(fontExtra);
+
+            Row extraRow = hoja.createRow((ultimaFilaRegistros)+3);
+            Cell ct_1 = extraRow.createCell(4);
+            ct_1.setCellStyle(Extra);
+            ct_1.setCellValue("\"BAJO PROTESTA DE DECIR LA VERDAD\"");
             
-             try {
+            Row extraRow2 = hoja.createRow((ultimaFilaRegistros)+6);
+            Cell ct_2 = extraRow2.createCell(4);
+            ct_2.setCellStyle(Extra);
+            ct_2.setCellValue("\"REPRESENTANTE LEGAL\"");
+            
+
+            for (int i = 0; i <12; i++) {
+                hoja.autoSizeColumn(i);
+            }
+
+            try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-            }catch (IOException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
     }
 }
