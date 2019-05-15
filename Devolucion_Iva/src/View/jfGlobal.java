@@ -77,15 +77,16 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_Cien_FIA = new javax.swing.JPanel();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
-        tablaIvaAcred = new javax.swing.JTable();
+        tablaCienIvaAcred = new javax.swing.JTable();
         ScrollTotalIva = new javax.swing.JScrollPane();
         tablaTotalIva = new javax.swing.JTable();
-        btnGuardarIva = new javax.swing.JButton();
-        btnPDF = new javax.swing.JButton();
         panelConcepto = new javax.swing.JPanel();
         scrollPaneConcepto = new javax.swing.JScrollPane();
         txta_Concepto = new javax.swing.JTextArea();
         lb_100 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        btn_ExportExcel_100 = new javax.swing.JButton();
         panel_Aux_IA = new javax.swing.JPanel();
         panel_CabecerAuxIva = new javax.swing.JPanel();
         lbT1 = new javax.swing.JLabel();
@@ -200,8 +201,8 @@ public class jfGlobal extends javax.swing.JFrame {
 
         SpIva.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        tablaIvaAcred.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        tablaIvaAcred.setModel(new javax.swing.table.DefaultTableModel(
+        tablaCienIvaAcred.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tablaCienIvaAcred.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -209,9 +210,9 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
         ));
-        tablaIvaAcred.setToolTipText("");
-        tablaIvaAcred.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        SpIva.setViewportView(tablaIvaAcred);
+        tablaCienIvaAcred.setToolTipText("");
+        tablaCienIvaAcred.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        SpIva.setViewportView(tablaCienIvaAcred);
 
         ScrollTotalIva.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
 
@@ -225,18 +226,6 @@ public class jfGlobal extends javax.swing.JFrame {
             }
         ));
         ScrollTotalIva.setViewportView(tablaTotalIva);
-
-        btnGuardarIva.setBackground(new java.awt.Color(51, 204, 255));
-        btnGuardarIva.setText("Guardar");
-
-        btnPDF.setBackground(new java.awt.Color(204, 0, 51));
-        btnPDF.setForeground(new java.awt.Color(255, 255, 255));
-        btnPDF.setText("Generar PDF");
-        btnPDF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPDFActionPerformed(evt);
-            }
-        });
 
         panelConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder("Concepto XML Completo"));
 
@@ -263,6 +252,39 @@ public class jfGlobal extends javax.swing.JFrame {
 
         lb_100.setFont(new java.awt.Font("Source Code Pro", 1, 14)); // NOI18N
 
+        jLabel5.setText("Exportar");
+
+        btn_ExportExcel_100.setBackground(new java.awt.Color(102, 255, 153));
+        btn_ExportExcel_100.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel-icon72.png"))); // NOI18N
+        btn_ExportExcel_100.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ExportExcel_100ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel5))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btn_ExportExcel_100, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_ExportExcel_100, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
         panelInfo.setLayout(panelInfoLayout);
         panelInfoLayout.setHorizontalGroup(
@@ -274,10 +296,8 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(ScrollTotalIva, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGuardarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnPDF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(340, 340, 340))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(376, 376, 376))
                     .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(panelConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
@@ -294,14 +314,11 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addComponent(SpIva, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
-                        .addComponent(btnPDF)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGuardarIva)
-                        .addGap(10, 10, 10))
-                    .addComponent(ScrollTotalIva, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelInfoLayout.createSequentialGroup()
+                        .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout panel_Cien_FIALayout = new javax.swing.GroupLayout(panel_Cien_FIA);
@@ -828,10 +845,6 @@ public class jfGlobal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
-
-    }//GEN-LAST:event_btnPDFActionPerformed
-
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
         //XML DATOS
         int intNumMes = calendarMes.getMonth();
@@ -845,7 +858,7 @@ public class jfGlobal extends javax.swing.JFrame {
         String urlMes = numeroMes[intNumMes];
         periodo = nombreDelMes[intNumMes];
         numAnio = intNumYear;
-        tablaIvaAcred.removeAll();
+        tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
         inicializarTablaIva(urlMes, periodo, intNumMes, intNumYear);
         inicializarTablaTotalIva();
@@ -891,6 +904,11 @@ public class jfGlobal extends javax.swing.JFrame {
         generadorExcel = new GeneradorExcel();
         generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
     }//GEN-LAST:event_btn_ExportExcel_RIMActionPerformed
+
+    private void btn_ExportExcel_100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ExportExcel_100ActionPerformed
+        generadorExcel = new GeneradorExcel();
+        generadorExcel.generarExcelCienIvaAcred(tablaCienIvaAcred, tablaTotalIva, "100% FACTURAS DE IVA ACRED", periodo.toUpperCase(), String.valueOf(numAnio));
+    }//GEN-LAST:event_btn_ExportExcel_100ActionPerformed
 
     /*
     ################INICIA###################
@@ -958,8 +976,8 @@ public class jfGlobal extends javax.swing.JFrame {
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-            tablaIvaAcred.setModel(tablaIva);
-            tablaIvaAcred.setRowSorter(ordenTabla);
+            tablaCienIvaAcred.setModel(tablaIva);
+            tablaCienIvaAcred.setRowSorter(ordenTabla);
 
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
@@ -967,42 +985,42 @@ public class jfGlobal extends javax.swing.JFrame {
                 switch (i) {
                     case 0:
                         //factura
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(50);
                         break;
                     case 1:
                         //Fecha Factura
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(130);
                         break;
                     case 2:
                         //#poliza
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(50);
                         break;
                     case 3:
                         //Fecha Poliza
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(130);
                         break;
                     case 4:
                         //Folio Fiscal
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(270);
                         break;
                     case 5:
                         //Conceptos XML
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(300);
                         break;
                     case 6:
                         //Sub-total
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(70);
                         break;
                     case 7:
                         //Iva
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(40);
                         break;
                     default:
@@ -1461,10 +1479,9 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JScrollPane SpIva1;
     private javax.swing.JScrollPane SpIva3;
     private javax.swing.JScrollPane SpIva4;
-    private javax.swing.JButton btnGuardarIva;
-    private javax.swing.JButton btnPDF;
     private javax.swing.JButton btnProcesarIva;
     private javax.swing.JButton btnXmlCargar;
+    private javax.swing.JButton btn_ExportExcel_100;
     private javax.swing.JButton btn_ExportExcel_AuxIvaAcred;
     private javax.swing.JButton btn_ExportExcel_RIM;
     private javax.swing.JButton btn_ExportExcel_RIMP;
@@ -1474,9 +1491,11 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbT1;
@@ -1505,7 +1524,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_detRIM;
     private javax.swing.JPanel panel_resultIvaAcred;
     private javax.swing.JScrollPane scrollPaneConcepto;
-    private javax.swing.JTable tablaIvaAcred;
+    private javax.swing.JTable tablaCienIvaAcred;
     private javax.swing.JTable tablaTotalIva;
     private javax.swing.JTable tabla_AuxDepositos;
     private javax.swing.JTable tabla_RIM;

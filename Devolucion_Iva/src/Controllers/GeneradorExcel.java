@@ -37,6 +37,148 @@ public class GeneradorExcel {
     private Workbook book;
     private JFileChooser seleccionar;
 
+    public void generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+
+        seleccionar = new JFileChooser();
+        File archivo;
+        if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
+            archivo = seleccionar.getSelectedFile();
+
+            //nuevo archivo
+            book = new XSSFWorkbook();
+            //hoja de trabajo
+            Sheet hoja = book.createSheet(tituloPestaniaHoja + " " + periodo.toUpperCase() + " " + anio);
+            //Titulos de tablas combinadas
+            /*Titulos y subtitulos de cabecezas*/
+            CellStyle tituloEstilo = book.createCellStyle();
+            CellStyle subTitulos = book.createCellStyle();
+            CellStyle subTitulosDos = book.createCellStyle();
+            CellStyle sbt3 = book.createCellStyle();
+            CellStyle sbt4 = book.createCellStyle();
+
+            //Definiendo alineamiento de los titulos y subtitulos
+            tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
+            tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            subTitulos.setAlignment(HorizontalAlignment.CENTER);
+            subTitulos.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            subTitulosDos.setAlignment(HorizontalAlignment.CENTER);
+            subTitulosDos.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            sbt3.setAlignment(HorizontalAlignment.LEFT);
+            sbt3.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            sbt4.setAlignment(HorizontalAlignment.LEFT);
+            sbt4.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            /*
+            Importar font de Poi
+            Propiedades de la fuente
+             */
+            Font fuenteTitulo = (Font) book.createFont();
+            fuenteTitulo.setFontName("Arial");
+            fuenteTitulo.setBold(true);
+            fuenteTitulo.setColor(IndexedColors.BLACK.getIndex());
+            fuenteTitulo.setFontHeightInPoints((short) 19);
+
+            Font fuenteSubtitulo = (Font) book.createFont();
+            fuenteSubtitulo.setFontName("Arial");
+            fuenteSubtitulo.setBold(true);
+            fuenteSubtitulo.setColor(IndexedColors.BLACK.getIndex());
+            fuenteSubtitulo.setFontHeightInPoints((short) 16);
+
+            Font fuenteSubtituloDos = (Font) book.createFont();
+            fuenteSubtituloDos.setFontName("Arial");
+            fuenteSubtituloDos.setBold(true);
+            fuenteSubtituloDos.setColor(IndexedColors.BLACK.getIndex());
+            fuenteSubtituloDos.setFontHeightInPoints((short) 13);
+
+            //editando el titulo
+            tituloEstilo.setFont(fuenteTitulo);
+            //Crea fila en hoja
+            Row filaTitulo = hoja.createRow(1);
+            //Empieza a dibujar desde x celda
+            Cell celdaTitulo = filaTitulo.createCell(2);
+            celdaTitulo.setCellStyle(tituloEstilo);
+            //Titulo de la cabecera en Hoja de trabajo
+            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+
+            //(int firstRow, int lastRow, int firstCol, int lastCol)
+            //alcance del conbinado de celdas
+            hoja.addMergedRegion(new CellRangeAddress(1, 1, 2, 10));
+
+            subTitulos.setFont(fuenteSubtitulo);
+            Row filaSubtitulo = hoja.createRow(2);
+            Cell celdaSubTitulo = filaSubtitulo.createCell(2);
+            celdaSubTitulo.setCellStyle(subTitulos);
+            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
+
+            subTitulosDos.setFont(fuenteSubtituloDos);
+            Row filaSubtituloDos = hoja.createRow(3);
+            Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
+            celdaSubTituloDos.setCellStyle(subTitulosDos);
+            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
+
+            sbt3.setFont(fuenteSubtituloDos);
+            Row fs3 = hoja.createRow(5);
+            Cell cs3 = fs3.createCell(0);
+            cs3.setCellStyle(sbt3);
+            cs3.setCellValue("RELACION DEL 100% DE OPERACIONES CON PROVEEDORES TASA 16 %");
+            hoja.addMergedRegion(new CellRangeAddress(5, 5, 0, 5));
+
+            sbt4.setFont(fuenteSubtituloDos);
+            Row fs4 = hoja.createRow(6);
+            Cell cs4 = fs4.createCell(0);
+            cs4.setCellStyle(sbt4);
+            cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
+            hoja.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
+
+            String[] cabecera = new String[]{"No. FACTURA", "FECHA DE FACTURA", "POLIZA", "FECHA DE LA POLIZA", "FOLIO FISCAL", "CONCEPTO SEGÚN XML", "SUBTOTAL",
+                "IVA", "IVA RETENIDO", "ISR RETENIDO", "TOTAL", "CRUCE CON EDO DE CTA"};
+            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO", "RFC PROVEEDOR"};
+            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO"};
+
+            //Bordes de las celdas
+            CellStyle headerStyle = book.createCellStyle();
+
+            headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+
+            Font font = book.createFont();
+            font.setFontName("Arial");
+            font.setBold(true);
+            font.setColor(IndexedColors.WHITE.getIndex());
+            font.setFontHeightInPoints((short) 12);
+            headerStyle.setFont(font);
+
+            Row filaEncabezado_1 = hoja.createRow(7);
+
+            for (int i = 0; i < 12; i++) {
+
+                Cell celdaEncabezado = filaEncabezado_1.createCell(i);
+                celdaEncabezado.setCellStyle(headerStyle);
+                celdaEncabezado.setCellValue(cabecera[i]);
+                hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
+            }
+            //El auto ajuste no se esta cargando checar
+            for (int i = 0; i < 20; i++) {
+                hoja.autoSizeColumn(i);
+            }
+            try {
+                book.write(new FileOutputStream(archivo + ".xlsx"));
+            } catch (IOException ex) {
+                Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     /**
      * Funcion que genera un archivo excel para la vista la seccion de auxiliar
      * iva acred
@@ -364,13 +506,15 @@ public class GeneradorExcel {
             }
         }
     }
-    
+
     /**
-     * * Funcion que genera un archivo excel para la vista Detalles de Iva retenido del mes
+     * * Funcion que genera un archivo excel para la vista Detalles de Iva
+     * retenido del mes
+     *
      * @param tableRIM
      * @param tituloPestaniaHoja
      * @param periodo
-     * @param anio 
+     * @param anio
      */
     public void generarExcelIvaRetenidoMesDetalle(JTable tableRIM, String tituloPestaniaHoja, String periodo, String anio) {
         seleccionar = new JFileChooser();
@@ -495,13 +639,15 @@ public class GeneradorExcel {
 
         }
     }
-    
+
     /**
-     * Función que genera un archivo excel para la vista Detalles de iva retenido y pagado del mes
+     * Función que genera un archivo excel para la vista Detalles de iva
+     * retenido y pagado del mes
+     *
      * @param jtableIvaRetenidoMes
      * @param tituloPestaniaHoja
      * @param periodo
-     * @param anio 
+     * @param anio
      */
     public void generarExcelIvaRetenidoMesPagado(JTable jtableIvaRetenidoMes, String tituloPestaniaHoja, String periodo, String anio) {
         seleccionar = new JFileChooser();
