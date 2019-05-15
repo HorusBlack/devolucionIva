@@ -363,7 +363,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
-    private void inicializarTablaIva(String numMes, int mes, int anio) {
+    private void inicializarTablaIva(String numeroMes, int mes, int anio) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
@@ -375,10 +375,10 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         //Clase que obtiene los datos xml
         ivaAcred = new IvaAcredController();
         //url de los documentos Mack
-        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
-        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numeroMes;
+        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numeroMes;
         //correguir sintaxis de ruta, la conexion sql es estable
-        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
+        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numeroMes;
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);

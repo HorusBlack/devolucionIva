@@ -154,7 +154,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="tp_Secciones" pref="562" max="32767" attributes="0"/>
+                  <Component id="tp_Secciones" pref="583" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -182,7 +182,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="499" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="520" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -253,6 +253,10 @@
                                       <Component id="panelConcepto" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lb_100" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="591" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
@@ -261,7 +265,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="SpIva" pref="249" max="32767" attributes="0"/>
+                              <Component id="lb_100" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="SpIva" pref="264" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
@@ -282,8 +288,8 @@
                     <Container class="javax.swing.JScrollPane" name="SpIva">
                       <Properties>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="100% IVA ACREDITABLE"/>
+                          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+                            <EtchetBorder/>
                           </Border>
                         </Property>
                       </Properties>
@@ -411,6 +417,13 @@
                         </Container>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JLabel" name="lb_100">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Source Code Pro" size="14" style="1"/>
+                        </Property>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>
@@ -571,7 +584,7 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="143" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="164" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
@@ -785,7 +798,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="lb_RIM" min="-2" pref="24" max="-2" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="SpIva4" pref="321" max="32767" attributes="0"/>
+                              <Component id="SpIva4" pref="342" max="32767" attributes="0"/>
                               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -951,7 +964,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="lb_RIPM" min="-2" pref="24" max="-2" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="SpIva3" pref="321" max="32767" attributes="0"/>
+                              <Component id="SpIva3" pref="342" max="32767" attributes="0"/>
                               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -1071,7 +1084,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="499" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="520" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1093,7 +1106,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="499" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="520" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1115,7 +1128,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="499" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="520" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1144,7 +1157,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="panel_AuxDepositos" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="252" max="32767" attributes="0"/>
+                          <EmptySpace pref="273" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

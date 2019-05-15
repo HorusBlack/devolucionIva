@@ -49,7 +49,7 @@ public class Consultas {
         Connection conexion = null;
         try {
             conexion = connection.Entrar();
-            query = "SELECT TOP(10) TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO,LOGAUDITA,Convert(date,FECHA_POL) FECHA,ORIGEN,NUMPARCUA,"
+            query = "SELECT TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO,LOGAUDITA,Convert(date,FECHA_POL) FECHA,ORIGEN,NUMPARCUA,"
                     + "CASE TIENEDOCUMENTOS WHEN  1  THEN 'S' WHEN 0 THEN 'N' END AS TIENEDOCUMENTOS, ESPOLIZAPRIVADA ,CONCEP_PO,CONTABILIZ "
                     + "FROM " + tablaPoliza + " P LEFT JOIN TIPOSPOL TP ON(P.TIPO_POLI=TP.TIPO) "
                     + "WHERE (TIPO_POLI = 'Eg' )  AND (PERIODO = " + periodo + " AND EJERCICIO = " + ejercicio + " )  "
@@ -112,11 +112,13 @@ public class Consultas {
                         + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
             } else {
                 query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
-                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
+                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
+                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN '0' ELSE NUM_POLIZ END) NUM_POLIZ,"
+                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
+                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
 
             stmt = conexion.createStatement();
@@ -125,8 +127,8 @@ public class Consultas {
                 //tipo poliza, numero poliza, fecha, concepto, debe, haber
                 auxIvaAcred = new AuxIvaAcred();
                 auxIvaAcred.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                auxIvaAcred.setNoPoliza(resultSet.getInt("NUM_POLIZ"));
-                auxIvaAcred.setFecha(resultSet.getString("FECHA"));
+                auxIvaAcred.setNoPoliza(resultSet.getString("NUM_POLIZ"));
+                auxIvaAcred.setFecha(resultSet.getString("FECHA_POL"));
                 auxIvaAcred.setConcepto(resultSet.getString("CONCEP_PO"));
                 auxIvaAcred.setDebe(resultSet.getDouble("MONTO"));
                 auxIvaAcred.setHaber(0);
@@ -174,11 +176,13 @@ public class Consultas {
                         + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
             } else {
                 query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
-                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
+                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
+                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ,"
+                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
+                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
 
             stmt = conexion.createStatement();
@@ -187,8 +191,13 @@ public class Consultas {
                 //tipo poliza, numero poliza, fecha, concepto, debe, haber
                 retencionIvaMes = new RetencionIvaMes();
                 retencionIvaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
-                retencionIvaMes.setFecha(resultSet.getString("FECHA"));
+                //Algunos no tienen segunda parte
+                if (resultSet.getString("TIPO_POLI").length() > 2) {
+                    retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
+                } else {
+                    retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI"));
+                }
+                retencionIvaMes.setFecha(resultSet.getString("FECHA_POL"));
                 retencionIvaMes.setConcepto(resultSet.getString("CONCEP_PO"));
                 retencionIvaMes.setConceptosBase(resultSet.getString("NOMBRE"));
                 listRetencion.add(retencionIvaMes);
@@ -229,11 +238,13 @@ public class Consultas {
                         + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
             } else {
                 query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA,"
-                        + " TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= " + noCuenta + "  AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
+                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
+                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ,"
+                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
+                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
 
             stmt = conexion.createStatement();
@@ -243,7 +254,7 @@ public class Consultas {
                 retencionIvaPagadaMes = new RetencionIvaPagadaMes();
                 retencionIvaPagadaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
                 retencionIvaPagadaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
-                retencionIvaPagadaMes.setFecha(resultSet.getString("FECHA"));
+                retencionIvaPagadaMes.setFecha(resultSet.getString("FECHA_POL"));
                 retencionIvaPagadaMes.setConcepto(resultSet.getString("CONCEP_PO"));
                 retencionIvaPagadaMes.setConceptosBase(resultSet.getString("NOMBRE"));
                 listRetencionPagada.add(retencionIvaPagadaMes);

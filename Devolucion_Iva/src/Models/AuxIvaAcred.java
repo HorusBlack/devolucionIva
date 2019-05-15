@@ -6,14 +6,26 @@
 package Models;
 
 /**
- *Clase que recibe y administra la informacion de un objeto AuxIvaAcred
+ * Clase que recibe y administra la informacion de un objeto AuxIvaAcred
+ *
  * @author horusblack
  */
 public class AuxIvaAcred {
 
-    private String tipoPoliza, fecha, concepto;
+    private String tipoPoliza, fecha, concepto, noPoliza;
+
+    public String getNoPoliza() {
+        return noPoliza;
+    }
+
+    public void setNoPoliza(String noPoliza) {
+        this.noPoliza = noPoliza;
+    }
     private double debe, haber;
-    private int noPoliza;
+
+    public String getFecha() {
+        return fecha;
+    }
 
     public String getTipoPoliza() {
         return tipoPoliza;
@@ -21,10 +33,6 @@ public class AuxIvaAcred {
 
     public void setTipoPoliza(String tipoPoliza) {
         this.tipoPoliza = tipoPoliza;
-    }
-
-    public String getFecha() {
-        return fecha;
     }
 
     public void setFecha(String fecha) {
@@ -55,15 +63,4 @@ public class AuxIvaAcred {
         this.haber = haber;
     }
 
-    public int getNoPoliza() {
-        return noPoliza;
-    }
-
-    public void setNoPoliza(int noPoliza) {
-        this.noPoliza = noPoliza;
-    }
-
-
-    
-    
 }
