@@ -6,8 +6,8 @@
 package View;
 
 import Controllers.IvaAcredController;
-import Controllers.PolizaDatos;
-import Controllers.XmlDatos;
+import Models.PolizaDatos;
+import Models.XmlDatos;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;

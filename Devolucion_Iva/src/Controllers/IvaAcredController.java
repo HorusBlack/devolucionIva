@@ -6,6 +6,8 @@
 package Controllers;
 
 import Models.Consultas;
+import Models.PolizaDatos;
+import Models.XmlDatos;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -26,11 +28,11 @@ public class IvaAcredController {
 
     private Consultas consultas;
     private Tag raizXml, et_Concepto;
-    private Tag p_Conceptos, p_Complemento, c_Concepto, co_TimbreFiscalD;
-    private String fechaFactura, folioFiscal, subTotal, total;
+    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital;
+    private String fechaFactura, folioFiscal, subTotal, total, iva;
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
-    private List<Tag> listEtiquetas;
+    private List<Tag> cfdi_Comprobante;
 
     /**
      * Funcion que recibe una url en forma de String, para obtener datos de
@@ -74,37 +76,40 @@ public class IvaAcredController {
                                 total = raizXml.getValorDeAtributo("Total");
                                 infoXml.setTotal(total);
 
+                   
                                 //tomando todos las etiquetas de un xml y guardandolas en una lista
-                                listEtiquetas = raizXml.getTagsHijos();
+                                cfdi_Comprobante = raizXml.getTagsHijos();
 
-                                for (int i = 0; i < listEtiquetas.size(); i++) {
-                                    String nombreEtiqueta = listEtiquetas.get(i).toString();
-
+                                for (int i = 0; i < cfdi_Comprobante.size(); i++) {
+                                    //Obteniendo todas las etiquetas hijo de la raiz
+                                    String nombreEtiqueta = cfdi_Comprobante.get(i).toString();
+                                    //Buscando el la sub-etiqueta deceada
                                     switch (nombreEtiqueta) {
                                         case "<cfdi:Conceptos>":
-                                            List<Tag> multiConceptos;
-                                            multiConceptos = listEtiquetas.get(i).getTagsHijos();
+                                            List<Tag> cfdi_Conceptos;
+                                            cfdi_Conceptos = cfdi_Comprobante.get(i).getTagsHijos();
 
-                                            for (int j = 0; j < multiConceptos.size(); j++) {
-                                                c_Concepto = multiConceptos.get(j);
+                                            for (int j = 0; j < cfdi_Conceptos.size(); j++) {
+                                                //obteniendo el la primera sub-etiqueta de <cfdi:Conceptos>
+                                                cfdi_Concepto_h = cfdi_Conceptos.get(j);
 
                                                 String valUnidad, claveUnidad, claveProvServ;
-
                                                 //validando que existan atributos que pueden o no estar en el xml
+
                                                 try {
-                                                    valUnidad = c_Concepto.getValorDeAtributo("Unidad");
+                                                    valUnidad = cfdi_Concepto_h.getValorDeAtributo("Unidad");
                                                 } catch (AtributoNotFoundException ex) {
                                                     valUnidad = "N/A";
                                                 }
 
                                                 try {
-                                                    claveUnidad = c_Concepto.getValorDeAtributo("ClaveUnidad");
+                                                    claveUnidad = cfdi_Concepto_h.getValorDeAtributo("ClaveUnidad");
                                                 } catch (AtributoNotFoundException ex) {
                                                     claveUnidad = "";
                                                 }
 
                                                 try {
-                                                    claveProvServ = c_Concepto.getValorDeAtributo("ClaveProdSer");
+                                                    claveProvServ = cfdi_Concepto_h.getValorDeAtributo("ClaveProdSer");
                                                 } catch (AtributoNotFoundException ex) {
                                                     claveProvServ = "";
                                                 }
@@ -112,11 +117,11 @@ public class IvaAcredController {
                                                 //Cadena del concepto
                                                 if (valoresConcepto.toString().isEmpty()) {
                                                     valoresConcepto.append("Importe=\"");
-                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Importe"));
+                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Importe"));
                                                     valoresConcepto.append("\" ValorUnitario=\"");
-                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("ValorUnitario"))));
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(cfdi_Concepto_h.getValorDeAtributo("ValorUnitario"))));
                                                     valoresConcepto.append("\" Descripción=\"");
-                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Descripcion"));
+                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
                                                     if (!claveUnidad.equals("")) {
                                                         valoresConcepto.append("\" ClaveUnidad=\"");
                                                         valoresConcepto.append(claveUnidad.toUpperCase());
@@ -128,16 +133,16 @@ public class IvaAcredController {
                                                     valoresConcepto.append("\" Unidad=\"");
                                                     valoresConcepto.append(valUnidad.toUpperCase());
                                                     valoresConcepto.append("\" Cantidad=\"");
-                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("Cantidad"))));
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(cfdi_Concepto_h.getValorDeAtributo("Cantidad"))));
                                                     valoresConcepto.append("\"");
                                                 }
                                                 if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
                                                     valoresConcepto.append("\nImporte=\"");
-                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Importe"));
+                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Importe"));
                                                     valoresConcepto.append("\" ValorUnitario=\"");
-                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("ValorUnitario"))));
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(cfdi_Concepto_h.getValorDeAtributo("ValorUnitario"))));
                                                     valoresConcepto.append("\" Descripción=\"");
-                                                    valoresConcepto.append(c_Concepto.getValorDeAtributo("Descripcion"));
+                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
                                                     if (!claveUnidad.equals("")) {
                                                         valoresConcepto.append("\" ClaveUnidad=\"");
                                                         valoresConcepto.append(claveUnidad.toUpperCase());
@@ -149,7 +154,7 @@ public class IvaAcredController {
                                                     valoresConcepto.append("\" Unidad=\"");
                                                     valoresConcepto.append(valUnidad.toUpperCase());
                                                     valoresConcepto.append("\" Cantidad=\"");
-                                                    valoresConcepto.append(formateador.format(Double.parseDouble(c_Concepto.getValorDeAtributo("Cantidad"))));
+                                                    valoresConcepto.append(formateador.format(Double.parseDouble(cfdi_Concepto_h.getValorDeAtributo("Cantidad"))));
                                                     valoresConcepto.append("\"");
                                                 }
                                             }
@@ -157,17 +162,16 @@ public class IvaAcredController {
 
                                             break;
                                         case "<cfdi:Complemento>":
-                                            p_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
-                                            co_TimbreFiscalD = p_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
-                                            folioFiscal = co_TimbreFiscalD.getValorDeAtributo("UUID").toUpperCase();
-                                            String x="07092B35-C136-4F9E-B08F-9CFE7183FD54";
-                                            if(folioFiscal.equals(x.toUpperCase())){
-                                                nameArchivo=archivo.getName();
-                                                System.out.println("nombre Archivo: "+nameArchivo);
-                                                //002 IVA: Importe="56.28", ES EL MISMO PARA TODO
-                                            }
+                                            cfdi_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
+                                            tfd_TimbreFiscalDigital = cfdi_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
+                                            folioFiscal = tfd_TimbreFiscalDigital.getValorDeAtributo("UUID").toUpperCase();
                                             infoXml.setFolioFiscal(folioFiscal);
 
+                                            break;
+                                        case "<cfdi:Impuestos>":
+                                            cfdi_Impuestos=raizXml.getTagHijoByName("cfdi:Impuestos");
+                                            iva=cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                            infoXml.setIva(iva);
                                             break;
                                         default:
                                             break;
@@ -191,10 +195,11 @@ public class IvaAcredController {
         }
         return datosXml;
     }
-    
+
     /**
-     * Funcion que obtiene un Periodo [int] y un ejercicio [int] y solicitar los datos
-     * a la base.
+     * Funcion que obtiene un Periodo [int] y un ejercicio [int] y solicitar los
+     * datos a la base.
+     *
      * @param periodo
      * @param ejercicio
      * @return List PolizaDatos
@@ -204,7 +209,7 @@ public class IvaAcredController {
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
         periodo += 1;
-        
+
         if (periodo > 0 && ejercicio >= 2017) {
             polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio);
         }
@@ -212,8 +217,9 @@ public class IvaAcredController {
     }
 
     /**
-     * Funcion booleana que verifica que la url de un directorio contenga en su interior
-     * al menos un archivo XML
+     * Funcion booleana que verifica que la url de un directorio contenga en su
+     * interior al menos un archivo XML
+     *
      * @param url
      * @return boolean
      */

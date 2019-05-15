@@ -10,8 +10,6 @@ package Models;
  * @author Macktronica
  */
 import Conexion.ConexionDB;
-import Controllers.PolizaDatos;
-import Controllers.AuxIvaAcred;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;

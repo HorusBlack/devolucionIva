@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controllers;
+package Models;
 
 /**
  *Clase que recibe y administra la informacion de un objeto AuxIvaAcred

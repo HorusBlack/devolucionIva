@@ -6,13 +6,13 @@
 package View;
 
 import Controllers.IvaAcredController;
-import Controllers.PolizaDatos;
-import Controllers.AuxIvaAcred;
+import Models.PolizaDatos;
+import Models.AuxIvaAcred;
 import Controllers.AuxIvaAcredController;
 import Controllers.ControllerAction;
 import Controllers.GeneradorExcel;
 import Models.RetencionIvaMes;
-import Controllers.XmlDatos;
+import Models.XmlDatos;
 import Models.RetencionIvaPagadaMes;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -932,18 +932,18 @@ public class jfGlobal extends javax.swing.JFrame {
                 String string = llenarDatosTabla.get(i).getFechaFactura();
                 String[] parts = string.split("T");
                 String part1 = parts[0];
-                String newstring = "";
+                String dateFormat = "";
 
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                    newstring = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                    dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                 } catch (ParseException ex) {
                     JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
                 }
 
-                tablaIva.addRow(new Object[]{"N/D", newstring, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
-                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+                tablaIva.addRow(new Object[]{"N/D", dateFormat, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), llenarDatosTabla.get(i).getIva(), "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
 
             }

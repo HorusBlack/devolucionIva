@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controllers;
+package Models;
 
 /**
  *
@@ -11,7 +11,15 @@ package Controllers;
  */
 public class XmlDatos {
 
-    private String fechaFactura, subTotal, Total, conceptoXml, folioFiscal;
+    private String fechaFactura, subTotal, Total, conceptoXml, folioFiscal, iva;
+
+    public String getIva() {
+        return iva;
+    }
+
+    public void setIva(String iva) {
+        this.iva = iva;
+    }
     
 
     public String getFechaFactura() {

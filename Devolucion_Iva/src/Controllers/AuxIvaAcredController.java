@@ -5,6 +5,7 @@
  */
 package Controllers;
 
+import Models.AuxIvaAcred;
 import Models.Consultas;
 import java.util.ArrayList;
 import java.util.List;
