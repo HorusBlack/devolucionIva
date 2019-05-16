@@ -11,16 +11,31 @@ package Models;
  */
 public class XmlDatos {
 
-    private String fechaFactura, subTotal, Total, conceptoXml, folioFiscal, iva;
+    private String fechaFactura, subTotal, Total, conceptoXml, folioFiscal, iva, iva_retenido, isr;
 
     public String getIva() {
         return iva;
     }
 
+    public String getIva_retenido() {
+        return iva_retenido;
+    }
+
+    public void setIva_retenido(String iva_retenido) {
+        this.iva_retenido = iva_retenido;
+    }
+
+    public String getIsr() {
+        return isr;
+    }
+
+    public void setIsr(String isr) {
+        this.isr = isr;
+    }
+
     public void setIva(String iva) {
         this.iva = iva;
     }
-    
 
     public String getFechaFactura() {
         return fechaFactura;

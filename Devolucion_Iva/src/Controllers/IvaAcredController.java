@@ -41,7 +41,7 @@ public class IvaAcredController {
      * @param URL
      * @return List<XmlDatos>
      */
-    public List<XmlDatos> datosDevolucionIva(String URL) {
+    public List<XmlDatos> listDatosXmlCienAcred(String URL) {
         String nameArchivo;
         //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
         DecimalFormat formateador = new DecimalFormat("0.00000");

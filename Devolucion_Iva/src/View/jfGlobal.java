@@ -48,6 +48,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private List<RetencionIvaMes> listRetencionIvaMeses;
     private List<RetencionIvaPagadaMes> listRetencionIvaPagadaMes;
     private GeneradorExcel generadorExcel;
+    private List<XmlDatos> xmlDatosList;
 
     /**
      * Creates new form jfGlobal
@@ -880,11 +881,15 @@ public class jfGlobal extends javax.swing.JFrame {
             File carpetaSeleccionada = selectorCarpetaXml.getSelectedFile();
             String rutaCarpeta = carpetaSeleccionada.getAbsolutePath();
             ivaAcred = new IvaAcredController();
-            if (ivaAcred.validarArchivosCarpeta(rutaCarpeta)) {
-                //Pendiente metodo que empalme xml nuevos con datos de la tabla(Que vienen desde la BD)
-                JOptionPane.showMessageDialog(this, "Anexando archivos a tabla");
+            xmlDatosList = ivaAcred.listDatosXmlCienAcred(rutaCarpeta);
+            if (xmlDatosList.size() > 0) {
+                System.out.println("Lista cargada manual: " + xmlDatosList.size());
+                //Sustituir valores
+                Jf_XmlDataManual jf = new Jf_XmlDataManual(xmlDatosList);
+                jf.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "No existen documentos XML dentro de la carpeta seleccionada");
+
+                JOptionPane.showMessageDialog(this, "No existen documentos XML validos dentro de la carpeta seleccionada");
             }
         }
 
@@ -935,7 +940,7 @@ public class jfGlobal extends javax.swing.JFrame {
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
         //Lista de objetos xmlDatos
 
-        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
+        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
 
 //        if (!listPolizaDatos.isEmpty()) {
@@ -971,7 +976,6 @@ public class jfGlobal extends javax.swing.JFrame {
                 tablaIva.addRow(new Object[]{"N/D", dateFormat, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), llenarDatosTabla.get(i).getIva(), "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
-
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
@@ -1029,7 +1033,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
-            btnXmlCargar.setEnabled(true);
+
         }
 
     }
@@ -1089,7 +1093,6 @@ public class jfGlobal extends javax.swing.JFrame {
 
         txta_Concepto.setVisible(false);
         txta_Concepto.setLineWrap(true);
-        btnXmlCargar.setEnabled(false);
 
     }
 

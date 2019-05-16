@@ -380,7 +380,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         //correguir sintaxis de ruta, la conexion sql es estable
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numeroMes;
         //Lista de objetos xmlDatos
-        List<XmlDatos> llenarDatosTabla = ivaAcred.datosDevolucionIva(URL_Lx);
+        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
         if (!listPolizaDatos.isEmpty()) {
             for (int i = 0; i < listPolizaDatos.size(); i++) {
