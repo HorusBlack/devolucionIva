@@ -138,37 +138,72 @@ public class GeneradorExcel {
 
             String[] cabecera = new String[]{"No. FACTURA", "FECHA DE FACTURA", "POLIZA", "FECHA DE LA POLIZA", "FOLIO FISCAL", "CONCEPTO SEGÚN XML", "SUBTOTAL",
                 "IVA", "IVA RETENIDO", "ISR RETENIDO", "TOTAL", "CRUCE CON EDO DE CTA"};
-            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO", "RFC PROVEEDOR"};
+            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
             String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO"};
 
             //Bordes de las celdas
-            CellStyle headerStyle = book.createCellStyle();
+            CellStyle celdasCabeceraTabla = book.createCellStyle();
 
-            headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            headerStyle.setBorderBottom(BorderStyle.THIN);
-            headerStyle.setBorderLeft(BorderStyle.THIN);
-            headerStyle.setBorderRight(BorderStyle.THIN);
-            headerStyle.setBorderTop(BorderStyle.THIN);
+            celdasCabeceraTabla.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
+            celdasCabeceraTabla.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            celdasCabeceraTabla.setBorderBottom(BorderStyle.THIN);
+            celdasCabeceraTabla.setBorderLeft(BorderStyle.THIN);
+            celdasCabeceraTabla.setBorderRight(BorderStyle.THIN);
+            celdasCabeceraTabla.setBorderTop(BorderStyle.THIN);
+            celdasCabeceraTabla.setAlignment(HorizontalAlignment.CENTER);
+            celdasCabeceraTabla.setVerticalAlignment(VerticalAlignment.CENTER);
 
             Font font = book.createFont();
             font.setFontName("Arial");
             font.setBold(true);
             font.setColor(IndexedColors.WHITE.getIndex());
             font.setFontHeightInPoints((short) 12);
-            headerStyle.setFont(font);
-
+            celdasCabeceraTabla.setFont(font);
+            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
 
             for (int i = 0; i < 12; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
-                celdaEncabezado.setCellStyle(headerStyle);
+                celdaEncabezado.setCellStyle(celdasCabeceraTabla);
                 celdaEncabezado.setCellValue(cabecera[i]);
                 hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
             }
+            
+            //INICIA AJUSTE DEL PAGO
+            Cell celdaEncabezadoPago = filaEncabezado_1.createCell(12);
+            celdaEncabezadoPago.setCellStyle(celdasCabeceraTabla);
+            celdaEncabezadoPago.setCellValue("PAGO");
+            hoja.addMergedRegion(new CellRangeAddress(7, 7, 12, 14));
+
+            int j = 0;
+            Row subPago = hoja.createRow(8);
+            for (int i = 12; i < 15; i++) {
+
+                Cell celdaEncabezado = subPago.createCell(i);
+                celdaEncabezado.setCellStyle(celdasCabeceraTabla);
+                celdaEncabezado.setCellValue(cabeceraPago[j]);
+                j++;
+            }
+            Cell celdaRFC = filaEncabezado_1.createCell(15);
+            celdaRFC.setCellStyle(celdasCabeceraTabla);
+            celdaRFC.setCellValue("RFC PROVEEDOR");
+            hoja.addMergedRegion(new CellRangeAddress(7, 8, 15, 15));
+            //FIN AJUSTE DEL PAGO
+            
+            //ULTIMA SECCION CABECERAS
+            int k=0;
+            for (int i = 16; i <20 ; i++) {
+
+                Cell celdaEncabezado_3 = filaEncabezado_1.createCell(i);
+                celdaEncabezado_3.setCellStyle(celdasCabeceraTabla);
+                celdaEncabezado_3.setCellValue(cabeceraCuentasPolizas[k]);
+                hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
+                k++;
+            }
+            
             //El auto ajuste no se esta cargando checar
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 22; i++) {
                 hoja.autoSizeColumn(i);
             }
             try {
