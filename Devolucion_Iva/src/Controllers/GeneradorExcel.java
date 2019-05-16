@@ -33,7 +33,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class GeneradorExcel {
 
-    private int numFilasTabla, numColumnasTabla, filaDatos, ultimaFilaRegistros;
+    private int numFilasTabla, numColumnasTabla, empezarLlenadoDesdeFila, ultimaFilaRegistros;
     private Workbook book;
     private JFileChooser seleccionar;
 
@@ -139,7 +139,7 @@ public class GeneradorExcel {
             String[] cabecera = new String[]{"No. FACTURA", "FECHA DE FACTURA", "POLIZA", "FECHA DE LA POLIZA", "FOLIO FISCAL", "CONCEPTO SEGÚN XML", "SUBTOTAL",
                 "IVA", "IVA RETENIDO", "ISR RETENIDO", "TOTAL", "CRUCE CON EDO DE CTA"};
             String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
-            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO"};
+            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO", "OBSERVACIONES"};
 
             //Bordes de las celdas
             CellStyle celdasCabeceraTabla = book.createCellStyle();
@@ -168,8 +168,9 @@ public class GeneradorExcel {
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
                 celdaEncabezado.setCellValue(cabecera[i]);
                 hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
+
             }
-            
+
             //INICIA AJUSTE DEL PAGO
             Cell celdaEncabezadoPago = filaEncabezado_1.createCell(12);
             celdaEncabezadoPago.setCellStyle(celdasCabeceraTabla);
@@ -190,10 +191,10 @@ public class GeneradorExcel {
             celdaRFC.setCellValue("RFC PROVEEDOR");
             hoja.addMergedRegion(new CellRangeAddress(7, 8, 15, 15));
             //FIN AJUSTE DEL PAGO
-            
+
             //ULTIMA SECCION CABECERAS
-            int k=0;
-            for (int i = 16; i <20 ; i++) {
+            int k = 0;
+            for (int i = 16; i < 21; i++) {
 
                 Cell celdaEncabezado_3 = filaEncabezado_1.createCell(i);
                 celdaEncabezado_3.setCellStyle(celdasCabeceraTabla);
@@ -201,11 +202,62 @@ public class GeneradorExcel {
                 hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
                 k++;
             }
-            
-            //El auto ajuste no se esta cargando checar
+
+            //INICIA PARTE DATOS
+            numFilasTabla = tablaCienPorciento.getRowCount();
+            numColumnasTabla = tablaCienPorciento.getColumnCount();
+            //No.filas de cabecera+inicio de datos+1
+            ultimaFilaRegistros = (tablaCienPorciento.getRowCount()) + 10;
+            empezarLlenadoDesdeFila = 9;
+
+            CellStyle datosEstilo = book.createCellStyle();
+            //bordes de la tabla
+
+            datosEstilo.setBorderBottom(BorderStyle.THIN);
+            datosEstilo.setBorderLeft(BorderStyle.THIN);
+            datosEstilo.setBorderRight(BorderStyle.THIN);
+            datosEstilo.setBorderTop(BorderStyle.THIN);
+
+            for (int i = 0; i < numFilasTabla; i++) {
+                //?
+                Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
+                //Obteniendo información de las columnas
+                for (int a = 0; a < numColumnasTabla; a++) {
+                    Cell celda = fila.createCell(a);
+                    celda.setCellStyle(datosEstilo);
+                    celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
+                }
+            }
+
+            //FIN PARTE DATOS
             for (int i = 0; i < 22; i++) {
                 hoja.autoSizeColumn(i);
             }
+
+            //damos tamano a la columna
+            for (int i = 0; i < 4; i++) {
+                int tamano = 6000;
+                hoja.setColumnWidth(i, tamano);
+            }
+
+            for (int i = 8; i < 10; i++) {
+                int tamano = 3500;
+                hoja.setColumnWidth(i, tamano);
+            }
+
+            for (int i = 8; i < 9; i++) {
+                int tamano = 3000;
+                hoja.setColumnWidth(i, tamano);
+            }
+            for (int i = 15; i < 21; i++) {
+                int tamano = 7000;
+                hoja.setColumnWidth(i, tamano);
+            }
+
+            hoja.setColumnWidth(11, 4000);
+            /*
+            PENDIENTE AJUSTAR FORMATO DEL EXCEL, Y COMPLETAR TABLA DE TOTALES
+            */
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
             } catch (IOException ex) {
@@ -414,9 +466,10 @@ public class GeneradorExcel {
             ultimaFilaRegistros = (tableAuxIvaAcred1.getRowCount()) + 9;
 
             //Inicio de fila para empezar a dibujar los registros
-            filaDatos = 8;
+            empezarLlenadoDesdeFila = 8;
             CellStyle datosEstilo = book.createCellStyle();
             //bordes de la tabla
+
             datosEstilo.setBorderBottom(BorderStyle.THIN);
             datosEstilo.setBorderLeft(BorderStyle.THIN);
             datosEstilo.setBorderRight(BorderStyle.THIN);
@@ -424,7 +477,7 @@ public class GeneradorExcel {
 
             for (int i = 0; i < numFilasTabla; i++) {
                 //?
-                Row fila = hoja.createRow(i + filaDatos);
+                Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
                 //Obteniendo información de las columnas
                 for (int j = 0; j < numColumnasTabla; j++) {
                     Cell celda = fila.createCell(j);
@@ -622,7 +675,7 @@ public class GeneradorExcel {
             //No.filas de cabecera+inicio de datos+1  (RIMP)
             ultimaFilaRegistros = (tableRIM.getRowCount()) + 9;
             //Desde donde empezar a poner los datos
-            filaDatos = 4;
+            empezarLlenadoDesdeFila = 4;
             CellStyle datosEstilo = book.createCellStyle();
             //bordes de la tabla
             datosEstilo.setBorderBottom(BorderStyle.THIN);
@@ -632,7 +685,7 @@ public class GeneradorExcel {
 
             for (int i = 0; i < numFilasTabla; i++) {
                 //?
-                Row fila = hoja.createRow(i + filaDatos);
+                Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
                 //Obteniendo información de las columnas
                 for (int j = 0; j < numColumnasTabla; j++) {
                     Cell celda = fila.createCell(j);
@@ -755,7 +808,7 @@ public class GeneradorExcel {
             //No.filas de cabecera+inicio de datos+1  (RIMP)
             ultimaFilaRegistros = (jtableIvaRetenidoMes.getRowCount()) + 9;
             //Desde donde empezar a poner los datos
-            filaDatos = 4;
+            empezarLlenadoDesdeFila = 4;
             CellStyle datosEstilo = book.createCellStyle();
             //bordes de la tabla
             datosEstilo.setBorderBottom(BorderStyle.THIN);
@@ -765,7 +818,7 @@ public class GeneradorExcel {
 
             for (int i = 0; i < numFilasTabla; i++) {
                 //?
-                Row fila = hoja.createRow(i + filaDatos);
+                Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
                 //Obteniendo información de las columnas
                 for (int j = 0; j < numColumnasTabla; j++) {
                     Cell celda = fila.createCell(j);
