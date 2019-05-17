@@ -9,8 +9,13 @@ import Models.XmlDatos;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Jf_XmlDataManual extends javax.swing.JFrame {
 
-    private final List<XmlDatos> xmlDatosList;
+    private List<XmlDatos> xmlDatosList;
 
     /**
      * Creates new form NewJFrame
@@ -30,8 +35,7 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
     public Jf_XmlDataManual(List<XmlDatos> listaDatos) {
         initComponents();
         preConfiguracion();
-        setTabla();
-        xmlDatosList = listaDatos;
+        setTabla(listaDatos);
 
     }
 
@@ -42,7 +46,11 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
 
     }
 
-    private void setTabla() {
+    private void setTabla(List<XmlDatos> listaDatos) {
+        xmlDatosList = new ArrayList<>();
+        xmlDatosList = listaDatos;
+        Object[][] datos = null;
+        Object[][] datos_2 = new Object[xmlDatosList.size()][10];
 
         // Esta lista contiene los nombres que se mostrarán en el encabezado de cada columna de la grilla
         String[] columnas = new String[]{"Seleccion", "Fecha Factura", "Folio Fiscal", "Concepto XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
@@ -64,15 +72,35 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
 
         // Agrego los registros que contendrá la grilla.
         // Observen que el último campo es un botón
-        Object[][] datos = new Object[][]{
-            {false, "20/01/2018", "abc123", "N/D", "20", "0.16", "0", "0", "20.16", new JButton("Clic aquí")},
-            {false, "20/01/2018", "abc123", "N/D", "20", "0.16", "0", "0", "20.16", new JButton("Clic aquí")},
-            {false, "20/01/2018", "abc123", "N/D", "20", "0.16", "0", "0", "20.16", new JButton("Clic aquí")}
-        };
+        for (int i = 0; i < xmlDatosList.size(); i++) {
+            String string = xmlDatosList.get(i).getFechaFactura();
+            String[] parts = string.split("T");
+            String part1 = parts[0];
+            String dateFormat = "";
+            //No se estan cargando todos los datos
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+            }
+
+            datos_2[i][0]= false;
+            datos_2[i][1]=dateFormat;
+            datos_2[i][2]=xmlDatosList.get(i).getFolioFiscal();
+            datos_2[i][3]=xmlDatosList.get(i).getConceptoXml();
+            datos_2[i][4]=xmlDatosList.get(i).getSubTotal();
+            datos_2[i][5]=xmlDatosList.get(i).getIva();
+            datos_2[i][6]=xmlDatosList.get(i).getIva_retenido();
+            datos_2[i][7]=xmlDatosList.get(i).getIsr();
+            datos_2[i][8]=xmlDatosList.get(i).getTotal();
+            datos_2[i][9]=new JButton("Quitar");
+        }
 
         // Defino el TableModel y le indico los datos y nombres de columnas
         jTableEjemplo.setModel(new javax.swing.table.DefaultTableModel(
-                datos,
+                datos_2,
                 columnas) {
             // Esta variable nos permite conocer de antemano los tipos de datos de cada columna, dentro del TableModel
             Class[] tipos = tiposColumnas;
