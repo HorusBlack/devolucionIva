@@ -70,6 +70,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_Filtro = new javax.swing.JPanel();
         calendarMes = new com.toedter.calendar.JMonthChooser();
         calendarAnio = new com.toedter.calendar.JYearChooser();
+        jPanel1 = new javax.swing.JPanel();
         btnProcesarIva = new javax.swing.JButton();
         btnXmlCargar = new javax.swing.JButton();
         panel_contenidoGlobal = new javax.swing.JPanel();
@@ -131,20 +132,40 @@ public class jfGlobal extends javax.swing.JFrame {
 
         calendarAnio.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccionar Año"));
 
-        btnProcesarIva.setBackground(new java.awt.Color(153, 204, 255));
-        btnProcesarIva.setText("Procesar");
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Procesar/Buscar"));
+
+        btnProcesarIva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/confirmacion(1).png"))); // NOI18N
         btnProcesarIva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProcesarIvaActionPerformed(evt);
             }
         });
 
-        btnXmlCargar.setText("Cargar Carpeta XML");
+        btnXmlCargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/choose.png"))); // NOI18N
         btnXmlCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXmlCargarActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(btnProcesarIva)
+                .addGap(18, 18, 18)
+                .addComponent(btnXmlCargar))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnXmlCargar)
+                    .addComponent(btnProcesarIva))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout panel_FiltroLayout = new javax.swing.GroupLayout(panel_Filtro);
         panel_Filtro.setLayout(panel_FiltroLayout);
@@ -156,9 +177,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnXmlCargar))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel_FiltroLayout.setVerticalGroup(
@@ -169,11 +188,8 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(calendarAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(calendarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panel_FiltroLayout.createSequentialGroup()
-                        .addComponent(btnProcesarIva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnXmlCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel_contenidoGlobal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -187,7 +203,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
+            .addGap(0, 571, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
@@ -322,7 +338,7 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_Cien_FIALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_Cien_FIALayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 528, Short.MAX_VALUE)
+                .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 543, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -394,7 +410,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_TablaIvaAcredLayout.setVerticalGroup(
             panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addGap(0, 215, Short.MAX_VALUE)
             .addGroup(panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_TablaIvaAcredLayout.createSequentialGroup()
                     .addContainerGap()
@@ -562,7 +578,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_detRIMLayout.createSequentialGroup()
                 .addComponent(lb_RIM, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -680,7 +696,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_16Layout.setVerticalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
+            .addGap(0, 571, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
@@ -693,7 +709,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_CeroLayout.setVerticalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
+            .addGap(0, 571, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
@@ -706,7 +722,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_RelacionDepLayout.setVerticalGroup(
             panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
+            .addGap(0, 571, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RELACION DEPOSITOS", panel_RelacionDep);
@@ -754,7 +770,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_AuxDepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel_AuxDepositos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(309, Short.MAX_VALUE))
+                .addContainerGap(324, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("AUXILIAR  DE DEPOSITOS", panel_AuxDep);
@@ -770,7 +786,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobalLayout.setVerticalGroup(
             panel_contenidoGlobalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_contenidoGlobalLayout.createSequentialGroup()
-                .addComponent(tp_Secciones, javax.swing.GroupLayout.PREFERRED_SIZE, 619, Short.MAX_VALUE)
+                .addComponent(tp_Secciones, javax.swing.GroupLayout.PREFERRED_SIZE, 634, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -798,8 +814,28 @@ public class jfGlobal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAIAActionPerformed
+        generadorExcel = new GeneradorExcel();
+        generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
+    }//GEN-LAST:event_btnAIAActionPerformed
+
+    private void btnCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCienAcredActionPerformed
+        generadorExcel = new GeneradorExcel();
+        generadorExcel.generarExcelCienIvaAcred(tablaCienIvaAcred, tablaTotalIva, "100% FACTURAS DE IVA ACRED", periodo.toUpperCase(), String.valueOf(numAnio));
+    }//GEN-LAST:event_btnCienAcredActionPerformed
+
+    private void btnExcelRIMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMActionPerformed
+        generadorExcel = new GeneradorExcel();
+        generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+    }//GEN-LAST:event_btnExcelRIMActionPerformed
+
+    private void btnExcelRIMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMPActionPerformed
+        generadorExcel = new GeneradorExcel();
+        generadorExcel.generarExcelIvaRetenidoMesPagado(tabla_RetIvaMesPagada, "RET DE IVA PAGADAS EN EL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+    }//GEN-LAST:event_btnExcelRIMPActionPerformed
+
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
-        //XML DATOS
+       //XML DATOS
         int intNumMes = calendarMes.getMonth();
 
         int intNumYear = calendarAnio.getYear();
@@ -815,7 +851,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Inicializar Tabla 100 Iva Acred
         inicializarTablaIva(urlMes, periodo, intNumMes, intNumYear);
         inicializarTablaTotalIva();
-        //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder        
+        //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear);
         inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, totalAuxCred);
@@ -844,28 +880,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No existen documentos XML validos dentro de la carpeta seleccionada");
             }
         }
-
     }//GEN-LAST:event_btnXmlCargarActionPerformed
-
-    private void btnAIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAIAActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
-    }//GEN-LAST:event_btnAIAActionPerformed
-
-    private void btnCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCienAcredActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelCienIvaAcred(tablaCienIvaAcred, tablaTotalIva, "100% FACTURAS DE IVA ACRED", periodo.toUpperCase(), String.valueOf(numAnio));
-    }//GEN-LAST:event_btnCienAcredActionPerformed
-
-    private void btnExcelRIMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
-    }//GEN-LAST:event_btnExcelRIMActionPerformed
-
-    private void btnExcelRIMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMPActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelIvaRetenidoMesPagado(tabla_RetIvaMesPagada, "RET DE IVA PAGADAS EN EL MES", periodo.toUpperCase(), String.valueOf(numAnio));
-    }//GEN-LAST:event_btnExcelRIMPActionPerformed
 
     /*
     ################INICIA###################
@@ -1442,14 +1457,11 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JButton btnXmlCargar;
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
