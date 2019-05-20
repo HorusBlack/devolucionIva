@@ -14,20 +14,25 @@ import Controllers.GeneradorExcel;
 import Models.RetencionIvaMes;
 import Models.XmlDatos;
 import Models.RetencionIvaPagadaMes;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 
 /**
@@ -83,12 +88,17 @@ public class jfGlobal extends javax.swing.JFrame {
         tablaCienIvaAcred = new javax.swing.JTable();
         ScrollTotalIva = new javax.swing.JScrollPane();
         tablaTotalIva = new javax.swing.JTable();
-        panelConcepto = new javax.swing.JPanel();
-        scrollPaneConcepto = new javax.swing.JScrollPane();
-        txta_Concepto = new javax.swing.JTextArea();
         lb_100 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        btnCienAcred = new javax.swing.JButton();
+        btnExcelCienAcred = new javax.swing.JButton();
+        panelBusquedaManual = new javax.swing.JPanel();
+        PanelTabla = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabla_ManualCarga = new javax.swing.JTable();
+        PanelAction = new javax.swing.JPanel();
+        btnOk = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnExitPanel = new javax.swing.JButton();
         panel_Aux_IA = new javax.swing.JPanel();
         panel_CabecerAuxIva = new javax.swing.JPanel();
         lbT1 = new javax.swing.JLabel();
@@ -135,14 +145,14 @@ public class jfGlobal extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Procesar/Buscar"));
 
-        btnProcesarIva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/confirmacion(1).png"))); // NOI18N
+        btnProcesarIva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/filter32.png"))); // NOI18N
         btnProcesarIva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProcesarIvaActionPerformed(evt);
             }
         });
 
-        btnXmlCargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/choose.png"))); // NOI18N
+        btnXmlCargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/difference.png"))); // NOI18N
         btnXmlCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXmlCargarActionPerformed(evt);
@@ -160,12 +170,8 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnXmlCargar)
-                    .addComponent(btnProcesarIva))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnProcesarIva)
+            .addComponent(btnXmlCargar)
         );
 
         javax.swing.GroupLayout panel_FiltroLayout = new javax.swing.GroupLayout(panel_Filtro);
@@ -200,11 +206,11 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_Det_Iva_Favor.setLayout(panel_Det_Iva_FavorLayout);
         panel_Det_Iva_FavorLayout.setHorizontalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 777, Short.MAX_VALUE)
+            .addGap(0, 782, Short.MAX_VALUE)
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGap(0, 706, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
@@ -241,37 +247,14 @@ public class jfGlobal extends javax.swing.JFrame {
         ));
         ScrollTotalIva.setViewportView(tablaTotalIva);
 
-        panelConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder("Concepto XML Completo"));
-
-        txta_Concepto.setColumns(30);
-        txta_Concepto.setRows(5);
-        txta_Concepto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txta_Concepto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txta_Concepto.setEnabled(false);
-        scrollPaneConcepto.setViewportView(txta_Concepto);
-
-        javax.swing.GroupLayout panelConceptoLayout = new javax.swing.GroupLayout(panelConcepto);
-        panelConcepto.setLayout(panelConceptoLayout);
-        panelConceptoLayout.setHorizontalGroup(
-            panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelConceptoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scrollPaneConcepto)
-                .addContainerGap())
-        );
-        panelConceptoLayout.setVerticalGroup(
-            panelConceptoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPaneConcepto)
-        );
-
         lb_100.setFont(new java.awt.Font("Source Code Pro", 1, 14)); // NOI18N
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
 
-        btnCienAcred.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel.png"))); // NOI18N
-        btnCienAcred.addActionListener(new java.awt.event.ActionListener() {
+        btnExcelCienAcred.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
+        btnExcelCienAcred.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCienAcredActionPerformed(evt);
+                btnExcelCienAcredActionPerformed(evt);
             }
         });
 
@@ -280,14 +263,105 @@ public class jfGlobal extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(btnCienAcred)
+                .addComponent(btnExcelCienAcred)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(btnCienAcred)
+                .addComponent(btnExcelCienAcred)
                 .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        panelBusquedaManual.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        PanelTabla.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Encontrados"));
+
+        tabla_ManualCarga.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(tabla_ManualCarga);
+
+        javax.swing.GroupLayout PanelTablaLayout = new javax.swing.GroupLayout(PanelTabla);
+        PanelTabla.setLayout(PanelTablaLayout);
+        PanelTablaLayout.setHorizontalGroup(
+            PanelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelTablaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        PanelTablaLayout.setVerticalGroup(
+            PanelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        PanelAction.setBorder(javax.swing.BorderFactory.createTitledBorder("Procesar/Borrar Seleccionados"));
+
+        btnOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/confirmacion32.png"))); // NOI18N
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/borrar32.png"))); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnExitPanel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/exit.png"))); // NOI18N
+        btnExitPanel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitPanelActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PanelActionLayout = new javax.swing.GroupLayout(PanelAction);
+        PanelAction.setLayout(PanelActionLayout);
+        PanelActionLayout.setHorizontalGroup(
+            PanelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelActionLayout.createSequentialGroup()
+                .addComponent(btnOk)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDelete)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExitPanel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        PanelActionLayout.setVerticalGroup(
+            PanelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnOk)
+            .addComponent(btnDelete)
+            .addComponent(btnExitPanel)
+        );
+
+        javax.swing.GroupLayout panelBusquedaManualLayout = new javax.swing.GroupLayout(panelBusquedaManual);
+        panelBusquedaManual.setLayout(panelBusquedaManualLayout);
+        panelBusquedaManualLayout.setHorizontalGroup(
+            panelBusquedaManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBusquedaManualLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(PanelTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PanelAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        panelBusquedaManualLayout.setVerticalGroup(
+            panelBusquedaManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBusquedaManualLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBusquedaManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PanelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PanelAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
@@ -296,19 +370,19 @@ public class jfGlobal extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SpIva, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(panelInfoLayout.createSequentialGroup()
+                .addComponent(ScrollTotalIva, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(87, 87, 87))
+            .addGroup(panelInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(ScrollTotalIva, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(361, 361, 361))
-                    .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(panelConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(panelInfoLayout.createSequentialGroup()
                         .addComponent(lb_100, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(591, 591, 591))))
+                        .addGap(591, 591, 591))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
+                        .addComponent(panelBusquedaManual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         panelInfoLayout.setVerticalGroup(
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,14 +390,14 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lb_100)
                 .addGap(18, 18, 18)
-                .addComponent(SpIva, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(250, 250, 250))
+                .addComponent(SpIva, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelBusquedaManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_Cien_FIALayout = new javax.swing.GroupLayout(panel_Cien_FIA);
@@ -339,8 +413,8 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_Cien_FIALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_Cien_FIALayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 543, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("100% FACTURAS DE IVA ACRED", panel_Cien_FIA);
@@ -365,7 +439,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(lbT1)
                     .addComponent(lbT_mesAuxIvaAcred)
                     .addComponent(jLabel1))
-                .addContainerGap(449, Short.MAX_VALUE))
+                .addContainerGap(454, Short.MAX_VALUE))
         );
         panel_CabecerAuxIvaLayout.setVerticalGroup(
             panel_CabecerAuxIvaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -411,7 +485,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_TablaIvaAcredLayout.setVerticalGroup(
             panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 215, Short.MAX_VALUE)
+            .addGap(0, 350, Short.MAX_VALUE)
             .addGroup(panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_TablaIvaAcredLayout.createSequentialGroup()
                     .addContainerGap()
@@ -434,7 +508,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
 
-        btnAIA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel.png"))); // NOI18N
+        btnAIA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
         btnAIA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAIAActionPerformed(evt);
@@ -460,7 +534,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panel_resultIvaAcredLayout.setVerticalGroup(
@@ -541,7 +615,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
 
-        btnExcelRIM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel.png"))); // NOI18N
+        btnExcelRIM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
         btnExcelRIM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcelRIMActionPerformed(evt);
@@ -566,12 +640,12 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_detRIMLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_detRIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(SpIva4)
+                    .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
                     .addGroup(panel_detRIMLayout.createSequentialGroup()
                         .addGroup(panel_detRIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lb_RIM)
                             .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 617, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panel_detRIMLayout.setVerticalGroup(
@@ -579,10 +653,10 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_detRIMLayout.createSequentialGroup()
                 .addComponent(lb_RIM, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout panel_RIMLayout = new javax.swing.GroupLayout(panel_RIM);
@@ -626,7 +700,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
 
-        btnExcelRIMP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel.png"))); // NOI18N
+        btnExcelRIMP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
         btnExcelRIMP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcelRIMPActionPerformed(evt);
@@ -651,7 +725,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
+                    .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
                     .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
                         .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lb_RIPM)
@@ -693,11 +767,11 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_AT_16.setLayout(panel_AT_16Layout);
         panel_AT_16Layout.setHorizontalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 777, Short.MAX_VALUE)
+            .addGap(0, 782, Short.MAX_VALUE)
         );
         panel_AT_16Layout.setVerticalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGap(0, 706, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
@@ -706,11 +780,11 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_AT_Cero.setLayout(panel_AT_CeroLayout);
         panel_AT_CeroLayout.setHorizontalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 777, Short.MAX_VALUE)
+            .addGap(0, 782, Short.MAX_VALUE)
         );
         panel_AT_CeroLayout.setVerticalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGap(0, 706, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
@@ -719,11 +793,11 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_RelacionDep.setLayout(panel_RelacionDepLayout);
         panel_RelacionDepLayout.setHorizontalGroup(
             panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 777, Short.MAX_VALUE)
+            .addGap(0, 782, Short.MAX_VALUE)
         );
         panel_RelacionDepLayout.setVerticalGroup(
             panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGap(0, 706, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RELACION DEPOSITOS", panel_RelacionDep);
@@ -746,7 +820,7 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_AuxDepositosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_AuxDepositosLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panel_AuxDepositosLayout.setVerticalGroup(
@@ -771,7 +845,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_AuxDepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel_AuxDepositos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(324, Short.MAX_VALUE))
+                .addContainerGap(459, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("AUXILIAR  DE DEPOSITOS", panel_AuxDep);
@@ -787,8 +861,8 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobalLayout.setVerticalGroup(
             panel_contenidoGlobalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_contenidoGlobalLayout.createSequentialGroup()
-                .addComponent(tp_Secciones, javax.swing.GroupLayout.PREFERRED_SIZE, 634, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(tp_Secciones, javax.swing.GroupLayout.PREFERRED_SIZE, 769, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -807,7 +881,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(panel_Filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel_contenidoGlobal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -816,23 +890,56 @@ public class jfGlobal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAIAActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
+        if (tabla_ivaAuxAcred.getRowCount() > 0) {
+            generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+
     }//GEN-LAST:event_btnAIAActionPerformed
 
-    private void btnCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCienAcredActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelCienIvaAcred(tablaCienIvaAcred, tablaTotalIva, "100% FACTURAS DE IVA ACRED", periodo.toUpperCase(), String.valueOf(numAnio));
-    }//GEN-LAST:event_btnCienAcredActionPerformed
+    private void btnExcelCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelCienAcredActionPerformed
+         generadorExcel = new GeneradorExcel();
+        if (tablaCienIvaAcred.getRowCount() > 0) {
+            if(periodo!=null && String.valueOf(numAnio)!=null){
+                generadorExcel.generarExcelCienIvaAcred(
+                    tablaCienIvaAcred,
+                    tablaTotalIva,
+                    "100% FACTURAS DE IVA ACRED",
+                    periodo.toUpperCase(),
+                    String.valueOf(numAnio));
+            }else{
+                generadorExcel.generarExcelCienIvaAcred(
+                    tablaCienIvaAcred,
+                    tablaTotalIva,
+                    "100% FACTURAS DE IVA ACRED",
+                    "(PERIODO: MANUAL)",
+                    "(AÑO: MANUAL)");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+
+    }//GEN-LAST:event_btnExcelCienAcredActionPerformed
 
     private void btnExcelRIMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+        if (tabla_RIM.getRowCount() > 0) {
+            generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
     }//GEN-LAST:event_btnExcelRIMActionPerformed
 
     private void btnExcelRIMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMPActionPerformed
-        generadorExcel = new GeneradorExcel();
-        generadorExcel.generarExcelIvaRetenidoMesPagado(tabla_RetIvaMesPagada, "RET DE IVA PAGADAS EN EL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+        if (tabla_RetIvaMesPagada.getRowCount() > 0) {
+            generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcelIvaRetenidoMesPagado(tabla_RetIvaMesPagada, "RET DE IVA PAGADAS EN EL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+
     }//GEN-LAST:event_btnExcelRIMPActionPerformed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
@@ -863,6 +970,7 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
+
         JFileChooser selectorCarpetaXml = new JFileChooser();
         selectorCarpetaXml.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int resultado = selectorCarpetaXml.showOpenDialog(this);
@@ -872,16 +980,68 @@ public class jfGlobal extends javax.swing.JFrame {
             ivaAcred = new IvaAcredController();
             xmlDatosList = ivaAcred.listDatosXmlCienAcred(rutaCarpeta);
             if (xmlDatosList.size() > 0) {
-                System.out.println("Lista cargada manual: " + xmlDatosList.size());
-                //Sustituir valores
-                Jf_XmlDataManual jf = new Jf_XmlDataManual(xmlDatosList);
-                jf.setVisible(true);
+                panelBusquedaManual.setVisible(true);
+                btnOk.setEnabled(true);
+                btnDelete.setEnabled(true);
+                setTabla(xmlDatosList);
             } else {
 
                 JOptionPane.showMessageDialog(this, "No existen documentos XML validos dentro de la carpeta seleccionada");
             }
         }
     }//GEN-LAST:event_btnXmlCargarActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int numFilas = tabla_ManualCarga.getModel().getColumnCount();
+        DefaultTableModel dtm = (DefaultTableModel) tabla_ManualCarga.getModel();
+        for (int i = 0; i <= numFilas; i++) {
+            try {
+                if (tabla_ManualCarga.getValueAt(i, 0).toString().equals("true")) {
+                    dtm.removeRow(i);
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        //PENDIENTE OBTENER TODOS LOS DATOS Y PASARLOS A OTRA VISTA
+
+        xmlDatosList = new ArrayList<>();
+
+        for (int i = 0; i < tabla_ManualCarga.getRowCount(); i++) {
+            XmlDatos xmlDatos = new XmlDatos();
+            xmlDatos.setFechaFactura(tabla_ManualCarga.getValueAt(i, 1).toString());
+            //Folio Fiscal
+            xmlDatos.setFolioFiscal(tabla_ManualCarga.getValueAt(i, 2).toString());
+            //Concepto
+            xmlDatos.setConceptoXml(tabla_ManualCarga.getValueAt(i, 3).toString());
+            //SubTotal
+            xmlDatos.setSubTotal(tabla_ManualCarga.getValueAt(i, 4).toString());
+            //Iva
+            if (tabla_ManualCarga.getValueAt(i, 5) != null) {
+                xmlDatos.setIva(tabla_ManualCarga.getValueAt(i, 5).toString());
+            } else {
+                xmlDatos.setIva("0");
+            }
+            //Iva Retenido
+            xmlDatos.setIva_retenido("0");
+            //ISR Retenido
+            xmlDatos.setIsr("0");
+            //Total
+            xmlDatos.setTotal(tabla_ManualCarga.getValueAt(i, 8).toString());
+            xmlDatosList.add(xmlDatos);
+            //Si no se pueden sacar los datos, traer la tabla aqui
+        }
+        inicializarTablaCienIvaAcredDesdeSeleccion(xmlDatosList);
+        inicializarTablaTotalIva();
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnExitPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitPanelActionPerformed
+        tabla_ManualCarga.removeAll();
+        panelBusquedaManual.setVisible(false);
+    }//GEN-LAST:event_btnExitPanelActionPerformed
 
     /*
     ################INICIA###################
@@ -1012,28 +1172,18 @@ public class jfGlobal extends javax.swing.JFrame {
      *
      * @param listSelectManual
      */
-    public void inicializarTablaCienIvaAcredDesdeSeleccion(List<XmlDatos> listSelectManual) {
-        System.out.println("Tamaño de datos entrada: " + listSelectManual.size());
-       DefaultTableModel tablaIvaCien = new DefaultTableModel();
+    private void inicializarTablaCienIvaAcredDesdeSeleccion(List<XmlDatos> listSelectManual) {
+        tablaIva = new DefaultTableModel();
+        tablaCienIvaAcred.removeAll();
         //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
             "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
             "Cta. de la que se realiza el pago", "Observaciones"};
         //Ingresando titulos
-        tablaIvaCien.setColumnIdentifiers(titulos);
+        tablaIva.setColumnIdentifiers(titulos);
         //Lista de objetos xmlDatos
 
         List<XmlDatos> llenarDatosTabla = listSelectManual;
-//        if (!llenarDatosTabla.isEmpty()) {
-//            for (int i = 0; i < llenarDatosTabla.size(); i++) {
-//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getFechaFactura());
-//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getFolioFiscal());
-//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getSubTotal());
-//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getConceptoXml());
-//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getIva());
-//                System.out.println("\n");
-//            }
-//        }
 
         //Solicitud datos BD
         //checar esta validacion
@@ -1041,16 +1191,15 @@ public class jfGlobal extends javax.swing.JFrame {
             //llenando la tabla de la info
 
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-
-                tablaIvaCien.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                System.out.println("Datos desde manual");
+                tablaIva.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), llenarDatosTabla.get(i).getIva(), "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D"});
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
-            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIvaCien);
-            tablaCienIvaAcred = new JTable();
-            tablaCienIvaAcred.setModel(tablaIvaCien);
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+            tablaCienIvaAcred.setModel(tablaIva);
             tablaCienIvaAcred.setRowSorter(ordenTabla);
 
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
@@ -1102,10 +1251,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
 
             }
+            //tablaCienIvaAcred.repaint();
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
-            System.out.println("Saliendo de funcion de jGlobal");
-        } else {
-            System.out.println("lista vacia");
         }
 
     }
@@ -1161,12 +1308,143 @@ public class jfGlobal extends javax.swing.JFrame {
         int width = pantalla.width;
         this.setSize(width / 2, height / 2);
         this.setLocationRelativeTo(null);
+        panelBusquedaManual.setVisible(false);
+        btnOk.setEnabled(false);
+        btnDelete.setEnabled(false);
         //Elementos adicionales
 
-        txta_Concepto.setVisible(false);
-        txta_Concepto.setLineWrap(true);
-
+//        txta_Concepto.setVisible(false);
+//        txta_Concepto.setLineWrap(true);
     }
+
+    private void setTabla(List<XmlDatos> listaDatos) {
+        xmlDatosList = new ArrayList<>();
+        xmlDatosList = listaDatos;
+
+        Object[][] datos = new Object[xmlDatosList.size()][10];
+
+        // Esta lista contiene los nombres que se mostrarán en el encabezado de cada columna de la grilla
+        String[] columnas = new String[]{"Marcar", "Fecha Factura", "Folio Fiscal", "Concepto XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
+            "Total", "Acción"};
+
+        // Estos son los tipos de datos de cada columna de la lista
+        final Class[] tiposColumnas = new Class[]{
+            java.lang.Boolean.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            java.lang.String.class,
+            JButton.class // <- noten que aquí se especifica que la última columna es un botón
+        };
+
+        // Agrego los registros que contendrá la grilla.
+        // Observen que el último campo es un botón
+        for (int i = 0; i < xmlDatosList.size(); i++) {
+            String string = xmlDatosList.get(i).getFechaFactura();
+            String[] parts = string.split("T");
+            String part1 = parts[0];
+            String dateFormat = "";
+            //No se estan cargando todos los datos
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+            }
+
+            datos[i][0] = false;
+            datos[i][1] = dateFormat;
+            datos[i][2] = xmlDatosList.get(i).getFolioFiscal();
+            datos[i][3] = xmlDatosList.get(i).getConceptoXml();
+            datos[i][4] = xmlDatosList.get(i).getSubTotal();
+            datos[i][5] = xmlDatosList.get(i).getIva();
+            datos[i][6] = xmlDatosList.get(i).getIva_retenido();
+            datos[i][7] = xmlDatosList.get(i).getIsr();
+            datos[i][8] = xmlDatosList.get(i).getTotal();
+            datos[i][9] = new JButton("Remover");
+        }
+
+        // Defino el TableModel y le indico los datos y nombres de columnas
+        tabla_ManualCarga.setModel(new javax.swing.table.DefaultTableModel(
+                datos,
+                columnas) {
+            // Esta variable nos permite conocer de antemano los tipos de datos de cada columna, dentro del TableModel
+            Class[] tipos = tiposColumnas;
+
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                // Este método es invocado por el CellRenderer para saber que dibujar en la celda,
+                // observen que estamos retornando la clase que definimos de antemano.
+                return tipos[columnIndex];
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Sobrescribimos este método para evitar que la columna que contiene los botones sea editada.
+                return !(this.getColumnClass(column).equals(JButton.class));
+            }
+        });
+
+        // El objetivo de la siguiente línea es indicar el CellRenderer que será utilizado para dibujar el botón
+        tabla_ManualCarga.setDefaultRenderer(JButton.class, (JTable jtable, Object objeto, boolean estaSeleccionado, boolean tieneElFoco, int fila, int columna) -> (Component) objeto /**
+         * Observen que todo lo que hacemos en éste método es retornar el objeto
+         * que se va a dibujar en la celda. Esto significa que se dibujará en la
+         * celda el objeto que devuelva el TableModel. También significa que
+         * este renderer nos permitiría dibujar cualquier objeto gráfico en la
+         * grilla, pues retorna el objeto tal y como lo recibe.
+         */
+        );
+
+        /**
+         * Por último, agregamos un listener que nos permita saber cuando fue
+         * pulsada la celda que contiene el botón. Noten que estamos capturando
+         * el clic sobre JTable, no el clic sobre el JButton. Esto también
+         * implica que en lugar de poner un botón en la celda, simplemente
+         * pudimos definir un CellRenderer que hiciera parecer que la celda
+         * contiene un botón. Es posible capturar el clic del botón, pero a mi
+         * parecer el efecto es el mismo y hacerlo de esta forma es más "simple"
+         */
+        tabla_ManualCarga.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tabla_ManualCarga.rowAtPoint(e.getPoint());
+                int columna = tabla_ManualCarga.columnAtPoint(e.getPoint());
+
+                /**
+                 * Preguntamos si hicimos clic sobre la celda que contiene el
+                 * botón, si tuviéramos más de un botón por fila tendríamos que
+                 * además preguntar por el contenido del botón o el nombre de la
+                 * columna
+                 */
+                if (tabla_ManualCarga.getModel().getColumnClass(columna).equals(JButton.class)) {
+                    /**
+                     * Aquí pueden poner lo que quieran, para efectos de este
+                     * ejemplo, voy a mostrar en un cuadro de dialogo todos los
+                     * campos de la fila que no sean un botón.
+                     */
+                    for (int i = 0; i < tabla_ManualCarga.getModel().getColumnCount(); i++) {
+                        if (!tabla_ManualCarga.getModel().getColumnClass(i).equals(JButton.class)) {
+                            //sb.append("\n").append(tabla_ManualCarga.getModel().getColumnName(i)).append(": ").append(tabla_ManualCarga.getModel().getValueAt(fila, i));
+                            try {
+                                DefaultTableModel dtm = (DefaultTableModel) tabla_ManualCarga.getModel(); //TableProducto es el nombre de mi tabla ;)
+                                dtm.removeRow(tabla_ManualCarga.getSelectedRow());
+                            } catch (ArrayIndexOutOfBoundsException ex) {
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        });
+    }
+
 
     /*
     ################FINALIZA###################
@@ -1549,15 +1827,20 @@ public class jfGlobal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PanelAction;
+    private javax.swing.JPanel PanelTabla;
     private javax.swing.JScrollPane ScrollTotalIva;
     private javax.swing.JScrollPane SpIva;
     private javax.swing.JScrollPane SpIva1;
     private javax.swing.JScrollPane SpIva3;
     private javax.swing.JScrollPane SpIva4;
     private javax.swing.JButton btnAIA;
-    private javax.swing.JButton btnCienAcred;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnExcelCienAcred;
     private javax.swing.JButton btnExcelRIM;
     private javax.swing.JButton btnExcelRIMP;
+    private javax.swing.JButton btnExitPanel;
+    private javax.swing.JButton btnOk;
     private javax.swing.JButton btnProcesarIva;
     private javax.swing.JButton btnXmlCargar;
     private com.toedter.calendar.JYearChooser calendarAnio;
@@ -1570,12 +1853,13 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbT1;
     private javax.swing.JLabel lbT_mesAuxIvaAcred;
     private javax.swing.JLabel lb_100;
     private javax.swing.JLabel lb_RIM;
     private javax.swing.JLabel lb_RIPM;
-    private javax.swing.JPanel panelConcepto;
+    private javax.swing.JPanel panelBusquedaManual;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panel_AT_16;
     private javax.swing.JPanel panel_AT_Cero;
@@ -1595,15 +1879,14 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_dataIvaAcred;
     private javax.swing.JPanel panel_detRIM;
     private javax.swing.JPanel panel_resultIvaAcred;
-    private javax.swing.JScrollPane scrollPaneConcepto;
     private javax.swing.JTable tablaCienIvaAcred;
     private javax.swing.JTable tablaTotalIva;
     private javax.swing.JTable tabla_AuxDepositos;
+    private javax.swing.JTable tabla_ManualCarga;
     private javax.swing.JTable tabla_RIM;
     private javax.swing.JTable tabla_RetIvaMesPagada;
     private javax.swing.JTable tabla_ivaAuxAcred;
     private javax.swing.JTable table_totalAuxIvaAcred;
     private javax.swing.JTabbedPane tp_Secciones;
-    private javax.swing.JTextArea txta_Concepto;
     // End of variables declaration//GEN-END:variables
 }

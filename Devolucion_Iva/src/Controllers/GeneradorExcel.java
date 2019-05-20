@@ -38,7 +38,7 @@ public class GeneradorExcel {
     private JFileChooser seleccionar;
 
     public void generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
-
+        System.out.println("Entrando a excel 100");
         seleccionar = new JFileChooser();
         File archivo;
         if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
