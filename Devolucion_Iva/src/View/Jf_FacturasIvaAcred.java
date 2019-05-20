@@ -37,7 +37,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     private int numRegistros;
     private IvaAcredController ivaAcred;
     private List<PolizaDatos> listPolizaDatos;
-
+    
     /**
      * Creates new form jframePrincipal
      */

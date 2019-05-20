@@ -28,6 +28,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
+import javax.swing.JTable;
 
 /**
  *
@@ -835,7 +836,7 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcelRIMPActionPerformed
 
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
-       //XML DATOS
+        //XML DATOS
         int intNumMes = calendarMes.getMonth();
 
         int intNumYear = calendarAnio.getYear();
@@ -849,7 +850,7 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
-        inicializarTablaIva(urlMes, periodo, intNumMes, intNumYear);
+        inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear);
         inicializarTablaTotalIva();
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
         //Inicializar Tabla Auxiliar Iva Acred
@@ -889,7 +890,7 @@ public class jfGlobal extends javax.swing.JFrame {
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
-    private void inicializarTablaIva(String numMes, String nombreMes, int mes, int anio) {
+    private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
@@ -1001,6 +1002,110 @@ public class jfGlobal extends javax.swing.JFrame {
             }
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
 
+        }
+
+    }
+
+    /**
+     * Función que llena una tabla con los resultados obtenidos de una busqueda
+     * manual de archivos XML validos
+     *
+     * @param listSelectManual
+     */
+    public void inicializarTablaCienIvaAcredDesdeSeleccion(List<XmlDatos> listSelectManual) {
+        System.out.println("Tamaño de datos entrada: " + listSelectManual.size());
+       DefaultTableModel tablaIvaCien = new DefaultTableModel();
+        //Titulos para la tabla
+        String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
+            "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
+            "Cta. de la que se realiza el pago", "Observaciones"};
+        //Ingresando titulos
+        tablaIvaCien.setColumnIdentifiers(titulos);
+        //Lista de objetos xmlDatos
+
+        List<XmlDatos> llenarDatosTabla = listSelectManual;
+//        if (!llenarDatosTabla.isEmpty()) {
+//            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getFechaFactura());
+//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getFolioFiscal());
+//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getSubTotal());
+//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getConceptoXml());
+//                System.out.println("Datos lpd: " + llenarDatosTabla.get(i).getIva());
+//                System.out.println("\n");
+//            }
+//        }
+
+        //Solicitud datos BD
+        //checar esta validacion
+        if (!llenarDatosTabla.isEmpty()) {
+            //llenando la tabla de la info
+
+            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+
+                tablaIvaCien.addRow(new Object[]{"N/D", llenarDatosTabla.get(i).getFechaFactura(), "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), llenarDatosTabla.get(i).getIva(), "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+                    "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D"});
+            }
+
+            //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIvaCien);
+            tablaCienIvaAcred = new JTable();
+            tablaCienIvaAcred.setModel(tablaIvaCien);
+            tablaCienIvaAcred.setRowSorter(ordenTabla);
+
+            //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
+            TableColumn columna;
+            for (int i = 0; i < 8; i++) {
+                switch (i) {
+                    case 0:
+                        //factura
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 1:
+                        //Fecha Factura
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 2:
+                        //#poliza
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(50);
+                        break;
+                    case 3:
+                        //Fecha Poliza
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 4:
+                        //Folio Fiscal
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(270);
+                        break;
+                    case 5:
+                        //Conceptos XML
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(300);
+                        break;
+                    case 6:
+                        //Sub-total
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(70);
+                        break;
+                    case 7:
+                        //Iva
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(40);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
+            System.out.println("Saliendo de funcion de jGlobal");
+        } else {
+            System.out.println("lista vacia");
         }
 
     }

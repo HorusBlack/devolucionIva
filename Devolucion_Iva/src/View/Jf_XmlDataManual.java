@@ -26,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 public class Jf_XmlDataManual extends javax.swing.JFrame {
 
     private List<XmlDatos> xmlDatosList;
+    public static int variableGlobal = 0;
 
     /**
      * Creates new form NewJFrame
@@ -49,8 +50,8 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
     private void setTabla(List<XmlDatos> listaDatos) {
         xmlDatosList = new ArrayList<>();
         xmlDatosList = listaDatos;
-        Object[][] datos = null;
-        Object[][] datos_2 = new Object[xmlDatosList.size()][10];
+
+        Object[][] datos = new Object[xmlDatosList.size()][10];
 
         // Esta lista contiene los nombres que se mostrarán en el encabezado de cada columna de la grilla
         String[] columnas = new String[]{"Marcar", "Fecha Factura", "Folio Fiscal", "Concepto XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
@@ -86,21 +87,21 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
             }
 
-            datos_2[i][0] = false;
-            datos_2[i][1] = dateFormat;
-            datos_2[i][2] = xmlDatosList.get(i).getFolioFiscal();
-            datos_2[i][3] = xmlDatosList.get(i).getConceptoXml();
-            datos_2[i][4] = xmlDatosList.get(i).getSubTotal();
-            datos_2[i][5] = xmlDatosList.get(i).getIva();
-            datos_2[i][6] = xmlDatosList.get(i).getIva_retenido();
-            datos_2[i][7] = xmlDatosList.get(i).getIsr();
-            datos_2[i][8] = xmlDatosList.get(i).getTotal();
-            datos_2[i][9] = new JButton("Remover");
+            datos[i][0] = false;
+            datos[i][1] = dateFormat;
+            datos[i][2] = xmlDatosList.get(i).getFolioFiscal();
+            datos[i][3] = xmlDatosList.get(i).getConceptoXml();
+            datos[i][4] = xmlDatosList.get(i).getSubTotal();
+            datos[i][5] = xmlDatosList.get(i).getIva();
+            datos[i][6] = xmlDatosList.get(i).getIva_retenido();
+            datos[i][7] = xmlDatosList.get(i).getIsr();
+            datos[i][8] = xmlDatosList.get(i).getTotal();
+            datos[i][9] = new JButton("Remover");
         }
 
         // Defino el TableModel y le indico los datos y nombres de columnas
-        jTableEjemplo.setModel(new javax.swing.table.DefaultTableModel(
-                datos_2,
+        tabla_ManualCarga.setModel(new javax.swing.table.DefaultTableModel(
+                datos,
                 columnas) {
             // Esta variable nos permite conocer de antemano los tipos de datos de cada columna, dentro del TableModel
             Class[] tipos = tiposColumnas;
@@ -120,7 +121,7 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
         });
 
         // El objetivo de la siguiente línea es indicar el CellRenderer que será utilizado para dibujar el botón
-        jTableEjemplo.setDefaultRenderer(JButton.class, (JTable jtable, Object objeto, boolean estaSeleccionado, boolean tieneElFoco, int fila, int columna) -> (Component) objeto /**
+        tabla_ManualCarga.setDefaultRenderer(JButton.class, (JTable jtable, Object objeto, boolean estaSeleccionado, boolean tieneElFoco, int fila, int columna) -> (Component) objeto /**
          * Observen que todo lo que hacemos en éste método es retornar el objeto
          * que se va a dibujar en la celda. Esto significa que se dibujará en la
          * celda el objeto que devuelva el TableModel. También significa que
@@ -138,11 +139,11 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
          * contiene un botón. Es posible capturar el clic del botón, pero a mi
          * parecer el efecto es el mismo y hacerlo de esta forma es más "simple"
          */
-        jTableEjemplo.addMouseListener(new MouseAdapter() {
+        tabla_ManualCarga.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int fila = jTableEjemplo.rowAtPoint(e.getPoint());
-                int columna = jTableEjemplo.columnAtPoint(e.getPoint());
+                int fila = tabla_ManualCarga.rowAtPoint(e.getPoint());
+                int columna = tabla_ManualCarga.columnAtPoint(e.getPoint());
 
                 /**
                  * Preguntamos si hicimos clic sobre la celda que contiene el
@@ -150,18 +151,18 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
                  * además preguntar por el contenido del botón o el nombre de la
                  * columna
                  */
-                if (jTableEjemplo.getModel().getColumnClass(columna).equals(JButton.class)) {
+                if (tabla_ManualCarga.getModel().getColumnClass(columna).equals(JButton.class)) {
                     /**
                      * Aquí pueden poner lo que quieran, para efectos de este
                      * ejemplo, voy a mostrar en un cuadro de dialogo todos los
                      * campos de la fila que no sean un botón.
                      */
-                    for (int i = 0; i < jTableEjemplo.getModel().getColumnCount(); i++) {
-                        if (!jTableEjemplo.getModel().getColumnClass(i).equals(JButton.class)) {
-                            //sb.append("\n").append(jTableEjemplo.getModel().getColumnName(i)).append(": ").append(jTableEjemplo.getModel().getValueAt(fila, i));
+                    for (int i = 0; i < tabla_ManualCarga.getModel().getColumnCount(); i++) {
+                        if (!tabla_ManualCarga.getModel().getColumnClass(i).equals(JButton.class)) {
+                            //sb.append("\n").append(tabla_ManualCarga.getModel().getColumnName(i)).append(": ").append(tabla_ManualCarga.getModel().getValueAt(fila, i));
                             try {
-                                DefaultTableModel dtm = (DefaultTableModel) jTableEjemplo.getModel(); //TableProducto es el nombre de mi tabla ;)
-                                dtm.removeRow(jTableEjemplo.getSelectedRow());
+                                DefaultTableModel dtm = (DefaultTableModel) tabla_ManualCarga.getModel(); //TableProducto es el nombre de mi tabla ;)
+                                dtm.removeRow(tabla_ManualCarga.getSelectedRow());
                             } catch (ArrayIndexOutOfBoundsException ex) {
 
                             }
@@ -186,7 +187,7 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
         PanelContenedor = new javax.swing.JPanel();
         PanelTabla = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableEjemplo = new javax.swing.JTable();
+        tabla_ManualCarga = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnOk = new javax.swing.JButton();
@@ -196,7 +197,7 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
 
         PanelTabla.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Encontrados"));
 
-        jTableEjemplo.setModel(new javax.swing.table.DefaultTableModel(
+        tabla_ManualCarga.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -204,7 +205,7 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTableEjemplo);
+        jScrollPane1.setViewportView(tabla_ManualCarga);
 
         javax.swing.GroupLayout PanelTablaLayout = new javax.swing.GroupLayout(PanelTabla);
         PanelTabla.setLayout(PanelTablaLayout);
@@ -316,11 +317,38 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         //PENDIENTE OBTENER TODOS LOS DATOS Y PASARLOS A OTRA VISTA
-        for (int i = 0; i < jTableEjemplo.getRowCount(); i++) {
-            for (int j = 0; j < jTableEjemplo.getColumnCount(); j++) {
-                System.out.print(jTableEjemplo.getValueAt(i, j));
+        jfGlobal globalDatos = new jfGlobal();
+        XmlDatos xmlDatos = new XmlDatos();
+        List<XmlDatos> xmlList = new ArrayList<>();
+        DefaultTableModel defaultTableModel = new DefaultTableModel();
+
+        for (int i = 0; i < tabla_ManualCarga.getRowCount(); i++) {
+            xmlDatos.setFechaFactura(tabla_ManualCarga.getValueAt(i, 1).toString());
+            //Folio Fiscal
+            xmlDatos.setFolioFiscal(tabla_ManualCarga.getValueAt(i, 2).toString());
+            //Concepto
+            xmlDatos.setConceptoXml(tabla_ManualCarga.getValueAt(i, 3).toString());
+            //SubTotal
+            xmlDatos.setSubTotal(tabla_ManualCarga.getValueAt(i, 4).toString());
+            //Iva
+            if (tabla_ManualCarga.getValueAt(i, 5) != null) {
+                xmlDatos.setIva(tabla_ManualCarga.getValueAt(i, 5).toString());
+            } else {
+                xmlDatos.setIva("0");
             }
+
+            //Iva Retenido
+            xmlDatos.setIva_retenido("0");
+            //ISR Retenido
+            xmlDatos.setIsr("0");
+            //Total
+            xmlDatos.setTotal(tabla_ManualCarga.getValueAt(i, 8).toString());
+            xmlList.add(xmlDatos);
+            //Si no se pueden sacar los datos, traer la tabla aqui
         }
+        globalDatos.inicializarTablaCienIvaAcredDesdeSeleccion(xmlList);
+        
+
     }//GEN-LAST:event_btnOkActionPerformed
 
     /**
@@ -329,13 +357,11 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
      * @param evt
      */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int numFilas = jTableEjemplo.getModel().getColumnCount();
-        System.out.println("f: " + numFilas);
-        DefaultTableModel dtm = (DefaultTableModel) jTableEjemplo.getModel();
+        int numFilas = tabla_ManualCarga.getModel().getColumnCount();
+        DefaultTableModel dtm = (DefaultTableModel) tabla_ManualCarga.getModel();
         for (int i = 0; i <= numFilas; i++) {
             try {
-                System.out.println("f: " + i);
-                if (jTableEjemplo.getValueAt(i, 0).toString().equals("true")) {
+                if (tabla_ManualCarga.getValueAt(i, 0).toString().equals("true")) {
                     dtm.removeRow(i);
                 }
             } catch (ArrayIndexOutOfBoundsException ex) {
@@ -353,6 +379,6 @@ public class Jf_XmlDataManual extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableEjemplo;
+    private javax.swing.JTable tabla_ManualCarga;
     // End of variables declaration//GEN-END:variables
 }
