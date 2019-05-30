@@ -41,7 +41,7 @@ public class GeneradorExcel {
         System.out.println("Entrando a excel 100");
         seleccionar = new JFileChooser();
         File archivo;
-        if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
+        if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
             //nuevo archivo

@@ -900,22 +900,22 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAIAActionPerformed
 
     private void btnExcelCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelCienAcredActionPerformed
-         generadorExcel = new GeneradorExcel();
+        generadorExcel = new GeneradorExcel();
         if (tablaCienIvaAcred.getRowCount() > 0) {
-            if(periodo!=null && String.valueOf(numAnio)!=null){
+            if (periodo != null && String.valueOf(numAnio) != null) {
                 generadorExcel.generarExcelCienIvaAcred(
-                    tablaCienIvaAcred,
-                    tablaTotalIva,
-                    "100% FACTURAS DE IVA ACRED",
-                    periodo.toUpperCase(),
-                    String.valueOf(numAnio));
-            }else{
+                        tablaCienIvaAcred,
+                        tablaTotalIva,
+                        "100% FACTURAS DE IVA ACRED",
+                        periodo.toUpperCase(),
+                        String.valueOf(numAnio));
+            } else {
                 generadorExcel.generarExcelCienIvaAcred(
-                    tablaCienIvaAcred,
-                    tablaTotalIva,
-                    "100% FACTURAS DE IVA ACRED",
-                    "(PERIODO: MANUAL)",
-                    "(AÑO: MANUAL)");
+                        tablaCienIvaAcred,
+                        tablaTotalIva,
+                        "100% FACTURAS DE IVA ACRED",
+                        "(PERIODO: MANUAL)",
+                        "(AÑO: MANUAL)");
             }
         } else {
             JOptionPane.showMessageDialog(this, "No existen registros para exportar");
@@ -1053,9 +1053,9 @@ public class jfGlobal extends javax.swing.JFrame {
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
-        String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
-            "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
-            "Cta. de la que se realiza el pago", "Observaciones"};
+        String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
+            "Retencion 10%", "Retencion 10.67%", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Relación con Actividad",
+            "Cruce Edo. Cuenta"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
 
@@ -1071,16 +1071,6 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
 
-//        if (!listPolizaDatos.isEmpty()) {
-//            for (int i = 0; i < listPolizaDatos.size(); i++) {
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
-//                System.out.println("\n");
-//            }
-//        }
         //Solicitud datos BD
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
@@ -1101,9 +1091,13 @@ public class jfGlobal extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
                 }
 
-                tablaIva.addRow(new Object[]{"N/D", dateFormat, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
-                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), llenarDatosTabla.get(i).getIva(), "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
-                    "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
+                /*
+                String[] titulos = {" "Relación con Actividad","Cruce Edo. Cuenta"};
+                 */
+                tablaIva.addRow(new Object[]{dateFormat, "Folio de Factura", llenarDatosTabla.get(i).getFolioFiscal(), "Proveedor", "RFC",
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%",
+                    llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fecha de Pago", "Cuenta de Banco", "Forma de Pago",
+                    "Relación con Actividad", "Cruce Edo. Cuenta"});
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
