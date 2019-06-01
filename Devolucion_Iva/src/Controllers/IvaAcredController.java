@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.jespxml.JespXML;
 import org.jespxml.excepciones.AtributoNotFoundException;
@@ -57,92 +59,89 @@ public class IvaAcredController {
                 if (archivos != null) {
                     if (archivos.length > 0) {
                         for (File archivo : archivos) {
-                            //verificando que sean archivos xml
-                            if (archivo.isFile() && (archivo.getName().endsWith(".xml") || archivo.getName().endsWith(".XML"))) {
-                                //obteniendo el archivo xml
-                                File oneFile = (File) archivo;
-                                //Obteniendo la ruta del archivo
-                                JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
-                                XmlDatos infoXml = new XmlDatos();
-                                StringBuilder valoresConcepto = new StringBuilder();
-                                //raiz de los archivos
-                                raizXml = fileXml.leerXML();
+                            try {
+                                //verificando que sean archivos xml
+                                if (archivo.isFile() && (archivo.getName().endsWith(".xml") || archivo.getName().endsWith(".XML"))) {
+                                    //obteniendo el archivo xml
+                                    File oneFile = (File) archivo;
+                                    //Obteniendo la ruta del archivo
+                                    JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
+                                    XmlDatos infoXml = new XmlDatos();
+                                    StringBuilder valoresConcepto = new StringBuilder();
+                                    //raiz de los archivos
+                                    raizXml = fileXml.leerXML();
 
-                                //Atributos de la raiz
-                                String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
-                                fechaFactura = raizXml.getValorDeAtributo("Fecha");
-                                infoXml.setFechaFactura(fechaFactura);
-                                subTotal = raizXml.getValorDeAtributo("SubTotal");
-                                infoXml.setSubTotal(subTotal);
-                                total = raizXml.getValorDeAtributo("Total");
-                                infoXml.setTotal(total);
+                                    //Atributos de la raiz
+                                    String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
+                                    fechaFactura = raizXml.getValorDeAtributo("Fecha");
+                                    infoXml.setFechaFactura(fechaFactura);
+                                    subTotal = raizXml.getValorDeAtributo("SubTotal");
+                                    infoXml.setSubTotal(subTotal);
+                                    total = raizXml.getValorDeAtributo("Total");
+                                    infoXml.setTotal(total);
 
-                                //tomando todos las etiquetas de un xml y guardandolas en una lista
-                                cfdi_Comprobante = raizXml.getTagsHijos();
+                                    //tomando todos las etiquetas de un xml y guardandolas en una lista
+                                    cfdi_Comprobante = raizXml.getTagsHijos();
 
-                                for (int i = 0; i < cfdi_Comprobante.size(); i++) {
-                                    //Obteniendo todas las etiquetas hijo de la raiz
-                                    String nombreEtiqueta = cfdi_Comprobante.get(i).toString();
-                                    //Buscando el la sub-etiqueta deceada
-                                    switch (nombreEtiqueta) {
-                                        case "<cfdi:Conceptos>":
-                                            List<Tag> cfdi_Conceptos;
-                                            cfdi_Conceptos = cfdi_Comprobante.get(i).getTagsHijos();
+                                    for (int i = 0; i < cfdi_Comprobante.size(); i++) {
+                                        //Obteniendo todas las etiquetas hijo de la raiz
+                                        String nombreEtiqueta = cfdi_Comprobante.get(i).toString();
+                                        //Buscando el la sub-etiqueta deceada
+                                        switch (nombreEtiqueta) {
+                                            case "<cfdi:Conceptos>":
+                                                List<Tag> cfdi_Conceptos;
+                                                cfdi_Conceptos = cfdi_Comprobante.get(i).getTagsHijos();
 
-                                            for (int j = 0; j < cfdi_Conceptos.size(); j++) {
-                                                //obteniendo el la primera sub-etiqueta de <cfdi:Conceptos>
-                                                cfdi_Concepto_h = cfdi_Conceptos.get(j);
+                                                for (int j = 0; j < cfdi_Conceptos.size(); j++) {
+                                                    //obteniendo el la primera sub-etiqueta de <cfdi:Conceptos>
+                                                    cfdi_Concepto_h = cfdi_Conceptos.get(j);
 
-                                              
+                                                    //Cadena del concepto
+                                                    if (valoresConcepto.toString().isEmpty()) {
 
-                                                //Cadena del concepto
-                                                if (valoresConcepto.toString().isEmpty()) {
-                                                    
-                                                    
-                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
-                                                   
-                                                }
-                                                if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
-                                                    if(!valoresConcepto.toString().equals(cfdi_Concepto_h.getValorDeAtributo("Descripcion"))){
-                                                        valoresConcepto.append(". ");
-                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
+                                                        valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
+
+                                                    }
+                                                    if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
+                                                        if (!valoresConcepto.toString().equals(cfdi_Concepto_h.getValorDeAtributo("Descripcion"))) {
+                                                            valoresConcepto.append(". ");
+                                                            valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            infoXml.setConceptoXml(valoresConcepto.toString());
+                                                infoXml.setConceptoXml(valoresConcepto.toString());
 
-                                            break;
-                                        case "<cfdi:Complemento>":
-                                            cfdi_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
-                                            tfd_TimbreFiscalDigital = cfdi_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
-                                            folioFiscal = tfd_TimbreFiscalDigital.getValorDeAtributo("UUID").toUpperCase();
-                                            infoXml.setFolioFiscal(folioFiscal);
+                                                break;
+                                            case "<cfdi:Complemento>":
+                                                cfdi_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
+                                                tfd_TimbreFiscalDigital = cfdi_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
+                                                folioFiscal = tfd_TimbreFiscalDigital.getValorDeAtributo("UUID").toUpperCase();
+                                                infoXml.setFolioFiscal(folioFiscal);
 
-                                            break;
-                                        case "<cfdi:Impuestos>":
-                                            cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
-                                            iva = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
-                                            infoXml.setIva(iva);
-                                            break;
-                                        default:
-                                            break;
+                                                break;
+                                            case "<cfdi:Impuestos>":
+                                                cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
+                                                iva = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                                infoXml.setIva(iva);
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                     }
+                                    datosXml.add(infoXml);
                                 }
-                                datosXml.add(infoXml);
-                            }
 
+                            } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
+                                Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
+                            }
                         }
                     }
                 }
 
-            } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
-                System.out.println("error IvaAcredController: " + e);
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
                 //AQUI SE GENERA EL PROBLEMA 
-                System.out.println("null IvaAcredController: " + ex);
-
+                Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
         return datosXml;
     }
