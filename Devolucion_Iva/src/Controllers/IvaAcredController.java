@@ -30,8 +30,8 @@ public class IvaAcredController {
 
     private Consultas consultas;
     private Tag raizXml, et_Concepto;
-    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital;
-    private String fechaFactura, folioFiscal, subTotal, total, iva;
+    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital, cfdi_Emisor;
+    private String fechaFactura, folioFiscal, folioInterno, subTotal, total, iva, rfc, proveedor, formaPago;
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> cfdi_Comprobante;
@@ -73,12 +73,21 @@ public class IvaAcredController {
 
                                     //Atributos de la raiz
                                     String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
+
                                     fechaFactura = raizXml.getValorDeAtributo("Fecha");
                                     infoXml.setFechaFactura(fechaFactura);
+
+                                    folioInterno = raizXml.getValorDeAtributo("Folio");
+                                    infoXml.setFolioInterno(folioInterno);
+
                                     subTotal = raizXml.getValorDeAtributo("SubTotal");
                                     infoXml.setSubTotal(subTotal);
+
                                     total = raizXml.getValorDeAtributo("Total");
                                     infoXml.setTotal(total);
+
+                                    formaPago = raizXml.getValorDeAtributo("FormaPago");
+                                    infoXml.setFormaPago(formaPago);
 
                                     //tomando todos las etiquetas de un xml y guardandolas en una lista
                                     cfdi_Comprobante = raizXml.getTagsHijos();
@@ -88,6 +97,14 @@ public class IvaAcredController {
                                         String nombreEtiqueta = cfdi_Comprobante.get(i).toString();
                                         //Buscando el la sub-etiqueta deceada
                                         switch (nombreEtiqueta) {
+                                            case "<cfdi:Emisor>":
+                                                cfdi_Emisor = raizXml.getTagHijoByName("cfdi:Emisor");
+                                                rfc = cfdi_Emisor.getValorDeAtributo("Rfc");
+                                                proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
+                                                infoXml.setRfc(rfc);
+                                                infoXml.setProveedor(proveedor);
+
+                                                break;
                                             case "<cfdi:Conceptos>":
                                                 List<Tag> cfdi_Conceptos;
                                                 cfdi_Conceptos = cfdi_Comprobante.get(i).getTagsHijos();
