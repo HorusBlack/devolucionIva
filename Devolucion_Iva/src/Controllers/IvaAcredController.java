@@ -68,6 +68,7 @@ public class IvaAcredController {
                                     JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
                                     XmlDatos infoXml = new XmlDatos();
                                     StringBuilder valoresConcepto = new StringBuilder();
+                                    String formaDePagoDescripcion="";
                                     //raiz de los archivos
                                     raizXml = fileXml.leerXML();
 
@@ -87,7 +88,78 @@ public class IvaAcredController {
                                     infoXml.setTotal(total);
 
                                     formaPago = raizXml.getValorDeAtributo("FormaPago");
-                                    infoXml.setFormaPago(formaPago);
+                                    switch (formaPago) {
+                                        case "01":
+                                            formaDePagoDescripcion = "Efectivo";
+                                            break;
+                                        case "02":
+                                            formaDePagoDescripcion = "Cheque nominativo";
+                                            break;
+                                        case "03":
+                                            formaDePagoDescripcion = "Transferencia electrónica de fondos";
+                                            break;
+                                        case "04":
+                                            formaDePagoDescripcion = "Tarjeta de crédito";
+                                            break;
+                                        case "05":
+                                            formaDePagoDescripcion = "Monedero electrónico";
+                                            break;
+                                        case "06":
+                                            formaDePagoDescripcion = "Dinero electrónico";
+                                            break;
+                                        case "08":
+                                            formaDePagoDescripcion = "Vales de despensa";
+                                            break;
+                                        case "12":
+                                            formaDePagoDescripcion = "Dación en pago";
+                                            break;
+                                        case "13":
+                                            formaDePagoDescripcion = "Pago por subrogación";
+                                            break;
+                                        case "14":
+                                            formaDePagoDescripcion = "Pago por consignación";
+                                            break;
+                                        case "15":
+                                            formaDePagoDescripcion = "Condonación";
+                                            break;
+                                        case "17":
+                                            formaDePagoDescripcion = "Compensación";
+                                            break;
+                                        case "23":
+                                            formaDePagoDescripcion = "Novación";
+                                            break;
+                                        case "24":
+                                            formaDePagoDescripcion = "Confusión";
+                                            break;
+                                        case "25":
+                                            formaDePagoDescripcion = "Remisión de deuda";
+                                            break;
+                                        case "26":
+                                            formaDePagoDescripcion = "Prescripción o caducidad";
+                                            break;
+                                        case "27":
+                                            formaDePagoDescripcion = "A satisfacción del acreedor";
+                                            break;
+                                        case "28":
+                                            formaDePagoDescripcion = "Tarjeta de débito";
+                                            break;
+                                        case "29":
+                                            formaDePagoDescripcion = "Tarjeta de servicios";
+                                            break;
+                                        case "30":
+                                            formaDePagoDescripcion = "Aplicación de anticipos";
+                                            break;
+                                        case "31":
+                                            formaDePagoDescripcion = "Intermediario pagos";
+                                            break;
+                                        case "99":
+                                            formaDePagoDescripcion = "Por definir";
+                                            break;
+                                        default:
+                                            break;
+
+                                    }
+                                    infoXml.setFormaPago(formaDePagoDescripcion);
 
                                     //tomando todos las etiquetas de un xml y guardandolas en una lista
                                     cfdi_Comprobante = raizXml.getTagsHijos();
