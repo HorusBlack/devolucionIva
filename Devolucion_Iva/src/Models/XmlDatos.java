@@ -11,63 +11,8 @@ package Models;
  */
 public class XmlDatos {
 
-    private String fechaFactura, subTotal, Total, conceptoXml, folioFiscal, iva, iva_retenido, isr, folioInterno, rfc, proveedor, formaPago;
-
-    public String getIva() {
-        return iva;
-    }
-
-    public String getFolioInterno() {
-        return folioInterno;
-    }
-
-    public void setFolioInterno(String folioInterno) {
-        this.folioInterno = folioInterno;
-    }
-
-    public String getFormaPago() {
-        return formaPago;
-    }
-
-    public void setFormaPago(String formaPago) {
-        this.formaPago = formaPago;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    public String getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
-    }
-
-    public String getIva_retenido() {
-        return iva_retenido;
-    }
-
-    public void setIva_retenido(String iva_retenido) {
-        this.iva_retenido = iva_retenido;
-    }
-
-    public String getIsr() {
-        return isr;
-    }
-
-    public void setIsr(String isr) {
-        this.isr = isr;
-    }
-
-    public void setIva(String iva) {
-        this.iva = iva;
-    }
+    private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
+            folioInterno, rfc, proveedor, formaPago, iva;
 
     public String getFechaFactura() {
         return fechaFactura;
@@ -77,12 +22,12 @@ public class XmlDatos {
         this.fechaFactura = fechaFactura;
     }
 
-    public String getSubTotal() {
-        return subTotal;
+    public String getBaseCero() {
+        return baseCero;
     }
 
-    public void setSubTotal(String subTotal) {
-        this.subTotal = subTotal;
+    public void setBaseCero(String baseCero) {
+        this.baseCero = baseCero;
     }
 
     public String getTotal() {
@@ -108,4 +53,77 @@ public class XmlDatos {
     public void setFolioFiscal(String folioFiscal) {
         this.folioFiscal = folioFiscal;
     }
+
+    public String getBase16() {
+        return base16;
+    }
+
+    public void setBase16(String base16) {
+        this.base16 = base16;
+    }
+
+    public String getRetencionCuatro() {
+        return retencionCuatro;
+    }
+
+    public void setRetencionCuatro(String retencionCuatro) {
+        this.retencionCuatro = retencionCuatro;
+    }
+
+    public String getRetencionDiez() {
+        return retencionDiez;
+    }
+
+    public void setRetencionDiez(String retencionDiez) {
+        this.retencionDiez = retencionDiez;
+    }
+
+    public String getRetencion1016() {
+        return retencion1016;
+    }
+
+    public void setRetencion1016(String retencion1016) {
+        this.retencion1016 = retencion1016;
+    }
+
+    public String getFolioInterno() {
+        return folioInterno;
+    }
+
+    public void setFolioInterno(String folioInterno) {
+        this.folioInterno = folioInterno;
+    }
+
+    public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
+    }
+
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public String getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(String formaPago) {
+        this.formaPago = formaPago;
+    }
+
+    public String getIva() {
+        return iva;
+    }
+
+    public void setIva(String iva) {
+        this.iva = iva;
+    }
+
 }

@@ -1026,7 +1026,7 @@ public class jfGlobal extends javax.swing.JFrame {
             xmlDatos.setConceptoXml(tabla_ManualCarga.getValueAt(i, 6).toString());
 
             //SubTotal
-            xmlDatos.setSubTotal(tabla_ManualCarga.getValueAt(i, 7).toString());
+            xmlDatos.setBaseCero(tabla_ManualCarga.getValueAt(i, 7).toString());
             //Iva
 //            if (tabla_ManualCarga.getValueAt(i, 5) != null) {
 //                xmlDatos.setIva(tabla_ManualCarga.getValueAt(i, 5).toString());
@@ -1105,8 +1105,8 @@ public class jfGlobal extends javax.swing.JFrame {
                  */
                 tablaIva.addRow(new Object[]{dateFormat, llenarDatosTabla.get(i).getFolioInterno(), llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(), llenarDatosTabla.get(i).getConceptoXml(),
-                    llenarDatosTabla.get(i).getSubTotal(), "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%",
-                    llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fecha de Pago", "Cuenta de Banco",
+                    llenarDatosTabla.get(i).getBaseCero(), "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%",
+                    llenarDatosTabla.get(i).getBase16(), llenarDatosTabla.get(i).getTotal(), "Fecha de Pago", "Cuenta de Banco",
                     llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No.Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"});
             }
 
@@ -1257,9 +1257,9 @@ public class jfGlobal extends javax.swing.JFrame {
                 System.out.println("Datos desde manual");
                 tablaIva.addRow(new Object[]{llenarDatosTabla.get(i).getFechaFactura(), llenarDatosTabla.get(i).getFolioInterno(),
                     llenarDatosTabla.get(i).getFolioFiscal(), llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(),
-                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "Base 16%", "Retención 4%", "Retención 10%",
-                    "Retencion 10%", "Retención 10.67%", llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fehca de Pago",
-                    "Cuenta de banco", "Forma de Pago", "Tipo de Poliza", "No. de Poliza", "Relación con Actividad", "Cruce Edo Cuenta"});
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getBaseCero(), "Base 16%", "Retención 4%", "Retención 10%",
+                    "Retencion 10%", "Retención 10.67%", llenarDatosTabla.get(i).getBase16(), llenarDatosTabla.get(i).getTotal(), "Fehca de Pago",
+                    "Cuenta de banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No. de Poliza", "Relación con Actividad", "Cruce Edo Cuenta"});
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
@@ -1486,7 +1486,7 @@ public class jfGlobal extends javax.swing.JFrame {
             datos[i][4] = xmlDatosList.get(i).getProveedor();
             datos[i][5] = xmlDatosList.get(i).getRfc();
             datos[i][6] = xmlDatosList.get(i).getConceptoXml();
-            datos[i][7] = xmlDatosList.get(i).getSubTotal();
+            datos[i][7] = xmlDatosList.get(i).getBaseCero();
             datos[i][8] = "Base 16%";
             datos[i][9] = "Retención 4%";
             datos[i][10] = "Retención 10%";

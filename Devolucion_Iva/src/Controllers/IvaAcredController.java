@@ -31,7 +31,7 @@ public class IvaAcredController {
     private Consultas consultas;
     private Tag raizXml, et_Concepto;
     private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital, cfdi_Emisor;
-    private String fechaFactura, folioFiscal, folioInterno, subTotal, total, iva, rfc, proveedor, formaPago;
+    private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago;
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> cfdi_Comprobante;
@@ -81,8 +81,8 @@ public class IvaAcredController {
                                     folioInterno = raizXml.getValorDeAtributo("Folio");
                                     infoXml.setFolioInterno(folioInterno);
 
-                                    subTotal = raizXml.getValorDeAtributo("SubTotal");
-                                    infoXml.setSubTotal(subTotal);
+                                    baseCero = raizXml.getValorDeAtributo("SubTotal");
+                                    infoXml.setBaseCero(baseCero);
 
                                     total = raizXml.getValorDeAtributo("Total");
                                     infoXml.setTotal(total);
@@ -210,8 +210,8 @@ public class IvaAcredController {
                                                 break;
                                             case "<cfdi:Impuestos>":
                                                 cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
-                                                iva = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
-                                                infoXml.setIva(iva);
+                                                base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                                infoXml.setBase16(base16);
                                                 break;
                                             default:
                                                 break;
