@@ -1013,7 +1013,7 @@ public class jfGlobal extends javax.swing.JFrame {
         for (int i = 0; i < tabla_ManualCarga.getRowCount(); i++) {
             /*
             "Marcar", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto",
-            "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%", "Forma de Pago", "Acción"
+            "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%","Cuota compensatoria" ,"Forma de Pago", "Acción"
              */
             XmlDatos xmlDatos = new XmlDatos();
             xmlDatos.setFechaFactura(tabla_ManualCarga.getValueAt(i, 1).toString());
@@ -1039,7 +1039,8 @@ public class jfGlobal extends javax.swing.JFrame {
             //ISR Retenido
             // xmlDatos.setIsr("0");
             //Total
-            xmlDatos.setFormaPago((tabla_ManualCarga.getValueAt(i, 11).toString()));
+            xmlDatos.setCuotaCompensatoria((tabla_ManualCarga.getValueAt(i, 11).toString()));
+            xmlDatos.setFormaPago((tabla_ManualCarga.getValueAt(i, 12).toString()));
             //xmlDatos.setTotal(tabla_ManualCarga.getValueAt(i, 8).toString());
             xmlDatosList.add(xmlDatos);
             //Si no se pueden sacar los datos, traer la tabla aqui
@@ -1064,8 +1065,8 @@ public class jfGlobal extends javax.swing.JFrame {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
-            "Retencion 10%", "Retencion 10.67%", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad",
-            "Cruce Edo. Cuenta"};
+            "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza",
+            "Relación con Actividad", "Cruce Edo. Cuenta"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
 
@@ -1107,8 +1108,9 @@ public class jfGlobal extends javax.swing.JFrame {
                 tablaIva.addRow(new Object[]{dateFormat, llenarDatosTabla.get(i).getFolioInterno(), llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(), llenarDatosTabla.get(i).getConceptoXml(),
                     llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(), "Retencion 4%", "Retencion 10%", "Retencion 10.67%",
-                    llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fecha de Pago", "Cuenta de Banco",
-                    llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No.Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"});
+                    llenarDatosTabla.get(i).getCuotaCompensatoria(), llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(),
+                    "Fecha de Pago", "Cuenta de Banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No.Poliza", "Relación con Actividad",
+                    "Cruce Edo. Cuenta"});
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
@@ -1118,12 +1120,12 @@ public class jfGlobal extends javax.swing.JFrame {
 
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < 21; i++) {
                 switch (i) {
                     case 0:
                         //Fecha de Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(60);
+                        columna.setMinWidth(130);
                         break;
                     case 1:
                         //Folio Factura
@@ -1133,27 +1135,27 @@ public class jfGlobal extends javax.swing.JFrame {
                     case 2:
                         //Folio UUID
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(50);
+                        columna.setMinWidth(250);
                         break;
                     case 3:
                         //Proveedor
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(230);
+                        columna.setMinWidth(400);
                         break;
                     case 4:
                         //RFC
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
+                        columna.setMinWidth(120);
                         break;
                     case 5:
                         //Conceptos
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(400);
+                        columna.setMinWidth(500);
                         break;
                     case 6:
                         //Base 0%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
+                        columna.setMinWidth(60);
                         break;
                     case 7:
                         //BASE 16
@@ -1163,61 +1165,70 @@ public class jfGlobal extends javax.swing.JFrame {
                     case 8:
                         //Retencion 4%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(50);
+                        columna.setMinWidth(70);
                         break;
-                    default:
-                        break;
-                }
-
-            }
-
-            for (int i = 9; i < 18; i++) {
-                switch (i) {
                     case 9:
                         //Retencion 10%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 10:
-                        //Retencion 10.67
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 11:
-                        //IVA
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(70);
                         break;
-                    case 12:
-                        //Total
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 13:
-                        //Fecha de Pago
+
+                    case 10:
+                        //Retencion 10.67%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
+                    case 11:
+                        //CP
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(200);
+                        break;
+                    case 12:
+                        //IVA
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 13:
+                        //TOTAL
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(80);
+                        break;
                     case 14:
+                        //Fecha Pago
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 15:
                         //Cuenta de banco
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
-                    case 15:
+                    case 16:
                         //Forma de Pago
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(120);
                         break;
-                    case 16:
-                        //Relacion con Actividad
+                    case 17:
+                        //Tipo Poliza
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
-                    case 17:
-                        //Cruce Edo Cuenta
+                    case 18:
+                        //No. Poliza
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(80);
                         break;
+                    case 19:
+                        //Relacion de actividad
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 20:
+                        //Cruce Edo Cuenta
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+
                     default:
                         break;
                 }
@@ -1241,7 +1252,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Titulos para la tabla
         //Correguir titulos
         String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
-            "Retencion 10%", "Retencion 10.67%", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad",
+            "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad",
             "Cruce Edo. Cuenta"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
@@ -1259,8 +1270,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 tablaIva.addRow(new Object[]{llenarDatosTabla.get(i).getFechaFactura(), llenarDatosTabla.get(i).getFolioInterno(),
                     llenarDatosTabla.get(i).getFolioFiscal(), llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(),
                     llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(), "Retención 4%", "Retención 10%",
-                    "Retencion 10%", "Retención 10.67%", llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fehca de Pago",
-                    "Cuenta de banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No. de Poliza", "Relación con Actividad", "Cruce Edo Cuenta"});
+                    "Retencion 10%", "Retención 10.67%", llenarDatosTabla.get(i).getCuotaCompensatoria(), llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(),
+                    "Fecha de Pago", "Cuenta de banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No. de Poliza", "Relación con Actividad", "Cruce Edo Cuenta"});
             }
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
@@ -1270,107 +1281,123 @@ public class jfGlobal extends javax.swing.JFrame {
 
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
-            for (int i = 0; i <= 18; i++) {
+            for (int i = 0; i < 21; i++) {
                 switch (i) {
                     case 0:
                         //Fecha de Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(90);
                         break;
                     case 1:
                         //Folio Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(90);
                         break;
                     case 2:
                         //Folio UUID
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(150);
                         break;
                     case 3:
                         //Proveedor
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(350);
                         break;
                     case 4:
                         //RFC
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(150);
                         break;
                     case 5:
                         //Conceptos
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(500);
                         break;
                     case 6:
                         //Base 0%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(60);
                         break;
                     case 7:
                         //BASE 16
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(70);
                         break;
                     case 8:
                         //Retencion 4%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(50);
                         break;
                     case 9:
                         //Retencion 10%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(100);
                         break;
+
                     case 10:
-                        //Retencion 10.67
+                        //Retencion 10.67%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(150);
                         break;
                     case 11:
-                        //IVA
+                        //CP
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
                     case 12:
-                        //Total
+                        //IVA
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(150);
                         break;
                     case 13:
-                        //Fecha de Pago
+                        //TOTAL
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(80);
                         break;
                     case 14:
+                        //Fecha Pago
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 15:
                         //Cuenta de banco
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
-                    case 15:
+                    case 16:
                         //Forma de Pago
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
-                        break;
-                    case 16:
-                        //Relacion con Actividad
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(120);
                         break;
                     case 17:
+                        //Tipo Poliza
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 18:
+                        //No. Poliza
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(80);
+                        break;
+                    case 19:
+                        //Relacion de actividad
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 20:
                         //Cruce Edo Cuenta
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
+                        columna.setMinWidth(150);
                         break;
+
                     default:
                         break;
                 }
 
             }
-
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
-        }
 
+        }
     }
 
     /**
@@ -1437,15 +1464,16 @@ public class jfGlobal extends javax.swing.JFrame {
         xmlDatosList = new ArrayList<>();
         xmlDatosList = listaDatos;
 
-        Object[][] datos = new Object[xmlDatosList.size()][13];
+        Object[][] datos = new Object[xmlDatosList.size()][14];
 
         // Esta lista contiene los nombres que se mostrarán en el encabezado de cada columna de la grilla
         String[] columnas = new String[]{"Marcar", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto",
-            "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%", "Forma de Pago", "Acción"};
+            "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%", "Cuota Compensatoria", "Forma de Pago", "Acción"};
 
         // Estos son los tipos de datos de cada columna de la lista
         final Class[] tiposColumnas = new Class[]{
             java.lang.Boolean.class,
+            java.lang.String.class,
             java.lang.String.class,
             java.lang.String.class,
             java.lang.String.class,
@@ -1476,10 +1504,6 @@ public class jfGlobal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
             }
 
-            /*
-            "Marcar", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto",
-            "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%", "Forma de Pago", "Acción"
-             */
             //CUIDADO CON LAS COLUMNAS NULAS
             datos[i][0] = false;
             datos[i][1] = dateFormat;
@@ -1488,12 +1512,13 @@ public class jfGlobal extends javax.swing.JFrame {
             datos[i][4] = xmlDatosList.get(i).getProveedor();
             datos[i][5] = xmlDatosList.get(i).getRfc();
             datos[i][6] = xmlDatosList.get(i).getConceptoXml();
-            datos[i][7] = "0";
+            datos[i][7] = xmlDatosList.get(i).getBaseCero();
             datos[i][8] = xmlDatosList.get(i).getBase16();
             datos[i][9] = "Retención 4%";
             datos[i][10] = "Retención 10%";
-            datos[i][11] = xmlDatosList.get(i).getFormaPago();
-            datos[i][12] = new JButton("Remover");
+            datos[i][11] = xmlDatosList.get(i).getCuotaCompensatoria();
+            datos[i][12] = xmlDatosList.get(i).getFormaPago();
+            datos[i][13] = new JButton("Remover");
         }
 
         // Defino el TableModel y le indico los datos y nombres de columnas

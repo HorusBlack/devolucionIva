@@ -30,9 +30,9 @@ public class IvaAcredController {
 
     private Consultas consultas;
     private Tag raizXml, et_Concepto;
-    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital, cfdi_Emisor;
+    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo;
     private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
-            retencionCuatro, retencionDiez, retencion1016;
+            retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> cfdi_Comprobante;
@@ -67,6 +67,7 @@ public class IvaAcredController {
                                     File oneFile = (File) archivo;
                                     //Obteniendo la ruta del archivo
                                     JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
+                                    nombreArchivo = fileXml.getAbsolutePath();
                                     XmlDatos infoXml = new XmlDatos();
                                     StringBuilder valoresConcepto = new StringBuilder();
                                     String formaDePagoDescripcion = "";
@@ -182,7 +183,7 @@ public class IvaAcredController {
                                                 for (int j = 0; j < cfdi_Conceptos.size(); j++) {
                                                     //obteniendo el la primera sub-etiqueta de <cfdi:Conceptos>
                                                     cfdi_Concepto_h = cfdi_Conceptos.get(j);
-
+                                                    
                                                     //Cadena del concepto
                                                     if (valoresConcepto.toString().isEmpty()) {
 
@@ -207,15 +208,50 @@ public class IvaAcredController {
 
                                                 break;
                                             case "<cfdi:Impuestos>":
-                                                double calIva = 0;
-                                                cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
-                                                base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
-                                                calIva = Double.parseDouble(base16);
-                                                calIva *= 0.16;
-                                                iva = String.valueOf(formateador.format(calIva));
-                                                infoXml.setIva(iva);
-                                                infoXml.setBase16(base16);
 
+                                                double calIva = 0;
+                                                String tipoTasa;
+                                                cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
+
+                                                //Tipos de taza
+                                                cfdi_traslados = cfdi_Impuestos.getTagHijoByName("cfdi:Traslados");
+
+                                                cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
+
+                                                tipoTasa = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
+
+                                                //TasaOCuota puede aparecer tambien como tasa: De momento continuar sin tomarlo en cuenta
+                                                if (tipoTasa.equals("0.160000") || tipoTasa.equals("0.16")) {
+                                                    tipoTasa = "0.160000";
+                                                }
+                                                switch (tipoTasa) {
+                                                    case "0.000000":
+                                                        baseCero = cfdi_traslado_hijo.getValorDeAtributo("importe");
+                                                        infoXml.setBaseCero(baseCero);
+                                                        infoXml.setIva(" ");
+                                                        infoXml.setBase16(" ");
+                                                        infoXml.setCuotaCompensatoria(" ");
+                                                        break;
+                                                    case "0.160000":
+                                                        //Pendiente ajustar esto
+                                                        base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                                        calIva = Double.parseDouble(base16);
+                                                        calIva *= 0.16;
+                                                        iva = String.valueOf(formateador.format(calIva));
+                                                        infoXml.setIva(iva);
+                                                        infoXml.setBase16(base16);
+                                                        infoXml.setBaseCero(" ");
+                                                        infoXml.setCuotaCompensatoria(" ");
+                                                        break;
+                                                    case "0.090000":
+                                                        cuotaC = cfdi_traslado_hijo.getValorDeAtributo("importe");
+                                                        infoXml.setCuotaCompensatoria(cuotaC);
+                                                        infoXml.setIva(" ");
+                                                        infoXml.setBase16(" ");
+                                                        infoXml.setBaseCero(" ");
+                                                        break;
+                                                    //las retenciones estan dentro de impuestos, pero no dentro de traslado
+                                                }
                                                 //iva=base16*0.16
                                                 break;
                                             default:
@@ -226,7 +262,7 @@ public class IvaAcredController {
                                 }
 
                             } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
-                                Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
+                                //Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                             }
                         }
                     }
@@ -234,7 +270,7 @@ public class IvaAcredController {
 
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
                 //AQUI SE GENERA EL PROBLEMA 
-                Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return datosXml;

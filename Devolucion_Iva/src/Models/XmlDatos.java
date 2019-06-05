@@ -12,7 +12,15 @@ package Models;
 public class XmlDatos {
 
     private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
-            folioInterno, rfc, proveedor, formaPago, iva;
+            folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria;
+
+    public String getCuotaCompensatoria() {
+        return cuotaCompensatoria;
+    }
+
+    public void setCuotaCompensatoria(String cuotaCompensatoria) {
+        this.cuotaCompensatoria = cuotaCompensatoria;
+    }
 
     public String getFechaFactura() {
         return fechaFactura;
