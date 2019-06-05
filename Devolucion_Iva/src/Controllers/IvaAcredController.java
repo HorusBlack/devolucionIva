@@ -31,7 +31,8 @@ public class IvaAcredController {
     private Consultas consultas;
     private Tag raizXml, et_Concepto;
     private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, tfd_TimbreFiscalDigital, cfdi_Emisor;
-    private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago;
+    private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
+            retencionCuatro, retencionDiez, retencion1016;
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> cfdi_Comprobante;
@@ -46,7 +47,7 @@ public class IvaAcredController {
     public List<XmlDatos> listDatosXmlCienAcred(String URL) {
         String nameArchivo;
         //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
-        DecimalFormat formateador = new DecimalFormat("0.00000");
+        DecimalFormat formateador = new DecimalFormat("0.00");
         //url de la carpeta del xml
         if (!URL.isEmpty() || !URL.equals("")) {
             try {
@@ -68,7 +69,7 @@ public class IvaAcredController {
                                     JespXML fileXml = new JespXML(oneFile.getAbsolutePath());
                                     XmlDatos infoXml = new XmlDatos();
                                     StringBuilder valoresConcepto = new StringBuilder();
-                                    String formaDePagoDescripcion="";
+                                    String formaDePagoDescripcion = "";
                                     //raiz de los archivos
                                     raizXml = fileXml.leerXML();
 
@@ -80,9 +81,6 @@ public class IvaAcredController {
 
                                     folioInterno = raizXml.getValorDeAtributo("Folio");
                                     infoXml.setFolioInterno(folioInterno);
-
-                                    baseCero = raizXml.getValorDeAtributo("SubTotal");
-                                    infoXml.setBaseCero(baseCero);
 
                                     total = raizXml.getValorDeAtributo("Total");
                                     infoXml.setTotal(total);
@@ -209,9 +207,16 @@ public class IvaAcredController {
 
                                                 break;
                                             case "<cfdi:Impuestos>":
+                                                double calIva = 0;
                                                 cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
                                                 base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                                calIva = Double.parseDouble(base16);
+                                                calIva *= 0.16;
+                                                iva = String.valueOf(formateador.format(calIva));
+                                                infoXml.setIva(iva);
                                                 infoXml.setBase16(base16);
+
+                                                //iva=base16*0.16
                                                 break;
                                             default:
                                                 break;

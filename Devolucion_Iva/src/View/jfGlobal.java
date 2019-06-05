@@ -983,7 +983,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 panelBusquedaManual.setVisible(true);
                 btnOk.setEnabled(true);
                 btnDelete.setEnabled(true);
-                setTabla(xmlDatosList);
+                setTablaSeleccionManual(xmlDatosList);
             } else {
 
                 JOptionPane.showMessageDialog(this, "No existen documentos XML validos dentro de la carpeta seleccionada");
@@ -1027,6 +1027,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
             //SubTotal
             xmlDatos.setBaseCero(tabla_ManualCarga.getValueAt(i, 7).toString());
+            xmlDatos.setBase16(tabla_ManualCarga.getValueAt(i, 8).toString());
             //Iva
 //            if (tabla_ManualCarga.getValueAt(i, 5) != null) {
 //                xmlDatos.setIva(tabla_ManualCarga.getValueAt(i, 5).toString());
@@ -1105,8 +1106,8 @@ public class jfGlobal extends javax.swing.JFrame {
                  */
                 tablaIva.addRow(new Object[]{dateFormat, llenarDatosTabla.get(i).getFolioInterno(), llenarDatosTabla.get(i).getFolioFiscal(),
                     llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(), llenarDatosTabla.get(i).getConceptoXml(),
-                    llenarDatosTabla.get(i).getBaseCero(), "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%",
-                    llenarDatosTabla.get(i).getBase16(), llenarDatosTabla.get(i).getTotal(), "Fecha de Pago", "Cuenta de Banco",
+                    llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(), "Retencion 4%", "Retencion 10%", "Retencion 10.67%",
+                    llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fecha de Pago", "Cuenta de Banco",
                     llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No.Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"});
             }
 
@@ -1257,8 +1258,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 System.out.println("Datos desde manual");
                 tablaIva.addRow(new Object[]{llenarDatosTabla.get(i).getFechaFactura(), llenarDatosTabla.get(i).getFolioInterno(),
                     llenarDatosTabla.get(i).getFolioFiscal(), llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(),
-                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getBaseCero(), "Base 16%", "Retención 4%", "Retención 10%",
-                    "Retencion 10%", "Retención 10.67%", llenarDatosTabla.get(i).getBase16(), llenarDatosTabla.get(i).getTotal(), "Fehca de Pago",
+                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(), "Retención 4%", "Retención 10%",
+                    "Retencion 10%", "Retención 10.67%", llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(), "Fehca de Pago",
                     "Cuenta de banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No. de Poliza", "Relación con Actividad", "Cruce Edo Cuenta"});
             }
 
@@ -1432,7 +1433,7 @@ public class jfGlobal extends javax.swing.JFrame {
 //        txta_Concepto.setLineWrap(true);
     }
 
-    private void setTabla(List<XmlDatos> listaDatos) {
+    private void setTablaSeleccionManual(List<XmlDatos> listaDatos) {
         xmlDatosList = new ArrayList<>();
         xmlDatosList = listaDatos;
 
@@ -1479,6 +1480,7 @@ public class jfGlobal extends javax.swing.JFrame {
             "Marcar", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto",
             "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%", "Forma de Pago", "Acción"
              */
+            //CUIDADO CON LAS COLUMNAS NULAS
             datos[i][0] = false;
             datos[i][1] = dateFormat;
             datos[i][2] = xmlDatosList.get(i).getFolioInterno();
@@ -1486,8 +1488,8 @@ public class jfGlobal extends javax.swing.JFrame {
             datos[i][4] = xmlDatosList.get(i).getProveedor();
             datos[i][5] = xmlDatosList.get(i).getRfc();
             datos[i][6] = xmlDatosList.get(i).getConceptoXml();
-            datos[i][7] = xmlDatosList.get(i).getBaseCero();
-            datos[i][8] = "Base 16%";
+            datos[i][7] = "0";
+            datos[i][8] = xmlDatosList.get(i).getBase16();
             datos[i][9] = "Retención 4%";
             datos[i][10] = "Retención 10%";
             datos[i][11] = xmlDatosList.get(i).getFormaPago();
