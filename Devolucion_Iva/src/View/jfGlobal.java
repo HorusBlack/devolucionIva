@@ -1054,6 +1054,7 @@ public class jfGlobal extends javax.swing.JFrame {
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio) {
         tablaIva = new DefaultTableModel();
+       
         //Titulos para la tabla
         String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
             "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza",
@@ -1077,7 +1078,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
-            System.out.println("tamaño de lista 100 acred: " + llenarDatosTabla.size());
+            System.out.println("tamaño de lista 100% acred: " + llenarDatosTabla.size());
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
 
                 String string = llenarDatosTabla.get(i).getFechaFactura();
@@ -1498,20 +1499,32 @@ public class jfGlobal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
             }
             //HACER QUE SI SON NULOS, OBTENGAN UN NUEVO VALOR
-            
+            String folioInterno, folioFiscal, proveedor, rfc, concepto, b0, b16, r4, r10, cuota, formaPago;
+            folioInterno = (xmlDatosList.get(i).getFolioInterno() != null) ? xmlDatosList.get(i).getFolioInterno() : " ";
+            folioFiscal = (xmlDatosList.get(i).getFolioFiscal() != null) ? xmlDatosList.get(i).getFolioFiscal() : " ";
+            proveedor = (xmlDatosList.get(i).getProveedor() != null) ? xmlDatosList.get(i).getProveedor() : " ";
+            rfc = (xmlDatosList.get(i).getRfc() != null) ? xmlDatosList.get(i).getRfc() : " ";
+            concepto = (xmlDatosList.get(i).getConceptoXml() != null) ? xmlDatosList.get(i).getConceptoXml() : " ";
+            b0 = (xmlDatosList.get(i).getBaseCero() != null) ? xmlDatosList.get(i).getBaseCero() : " ";
+            b16 = (xmlDatosList.get(i).getBase16() != null) ? xmlDatosList.get(i).getBase16() : " ";
+            r4 = (xmlDatosList.get(i).getRetencionCuatro() != null) ? xmlDatosList.get(i).getRetencionCuatro() : " ";
+            r10 = (xmlDatosList.get(i).getRetencionDiez() != null) ? xmlDatosList.get(i).getRetencionDiez() : " ";
+            cuota = (xmlDatosList.get(i).getCuotaCompensatoria() != null) ? xmlDatosList.get(i).getCuotaCompensatoria() : " ";
+            formaPago = (xmlDatosList.get(i).getFormaPago() != null) ? xmlDatosList.get(i).getFormaPago() : " ";
+
             datos[i][0] = false;
             datos[i][1] = dateFormat;
-            datos[i][2] = xmlDatosList.get(i).getFolioInterno();
-            datos[i][3] = xmlDatosList.get(i).getFolioFiscal();
-            datos[i][4] = xmlDatosList.get(i).getProveedor();
-            datos[i][5] = xmlDatosList.get(i).getRfc();
-            datos[i][6] = xmlDatosList.get(i).getConceptoXml();
-            datos[i][7] = xmlDatosList.get(i).getBaseCero();
-            datos[i][8] = xmlDatosList.get(i).getBase16();
-            datos[i][9] = xmlDatosList.get(i).getRetencionCuatro();
-            datos[i][10] = xmlDatosList.get(i).getRetencionDiez();
-            datos[i][11] = xmlDatosList.get(i).getCuotaCompensatoria();
-            datos[i][12] = xmlDatosList.get(i).getFormaPago();
+            datos[i][2] = folioInterno;
+            datos[i][3] = folioFiscal;
+            datos[i][4] = proveedor;
+            datos[i][5] = rfc;
+            datos[i][6] = concepto;
+            datos[i][7] = b0;
+            datos[i][8] = b16;
+            datos[i][9] = r4;
+            datos[i][10] = r10;
+            datos[i][11] = cuota;
+            datos[i][12] = formaPago;
             datos[i][13] = new JButton("Remover");
         }
 
