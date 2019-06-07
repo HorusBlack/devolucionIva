@@ -414,7 +414,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 }
                 //Pasando datos de la lista a array para introducirlos en la tabla
                 tablaIva.addRow(new Object[]{"N/D", formatoFecha, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
-                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getSubTotal(), "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+                    llenarDatosTabla.get(i).getConceptoXml(), "", "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
                     "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
             }
 
