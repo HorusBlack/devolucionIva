@@ -136,9 +136,9 @@ public class GeneradorExcel {
             cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
             hoja.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
 
-            String[] cabecera = new String[]{"FECHA DE FACTURA","FOLIO DE FACTURA","FOLIO UUID","PROVEEDOR","RFC","CONCEPTO","BASE 0%","BASE 16%","RETENCIÓN 4%","RETENCIÓN 10%",
-            "RETENCIÓN 10.67%","COUTA COMPENSATORIA","IVA","TOTAL","FECHA DE PAGO","CUENTA DE BANCO","FORMA DE PAGO","TIPO POLIZA","NO. POLIZA","RELACIÓN CON ACTIVIDAD",
-            "CRUCE EDO. CUENTA"};
+            String[] cabecera = new String[]{"FECHA DE FACTURA", "FOLIO DE FACTURA", "FOLIO UUID", "PROVEEDOR", "RFC", "CONCEPTO", "BASE 0%", "BASE 16%", "RETENCIÓN 4%", "RETENCIÓN 10%",
+                "RETENCIÓN 10.67%", "COUTA COMPENSATORIA", "IVA", "TOTAL", "FECHA DE PAGO", "CUENTA DE BANCO", "FORMA DE PAGO", "TIPO POLIZA", "NO. POLIZA", "RELACIÓN CON ACTIVIDAD",
+                "CRUCE EDO. CUENTA"};
 //            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
 //            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO", "OBSERVACIONES"};
 
@@ -163,7 +163,7 @@ public class GeneradorExcel {
 //            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
 
-            for (int i = 0; i <cabecera.length; i++) {
+            for (int i = 0; i < cabecera.length; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
@@ -258,7 +258,7 @@ public class GeneradorExcel {
             hoja.setColumnWidth(11, 4000);
             /*
             PENDIENTE AJUSTAR FORMATO DEL EXCEL, Y COMPLETAR TABLA DE TOTALES
-            */
+             */
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
             } catch (IOException ex) {

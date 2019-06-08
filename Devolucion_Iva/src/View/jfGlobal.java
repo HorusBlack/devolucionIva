@@ -32,6 +32,7 @@ import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 
@@ -957,7 +958,8 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
-        inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear);
+        //inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear);
+        inicializarTablaCienIvaAcred_Nueva(urlMes, periodo, intNumMes, intNumYear);
         inicializarTablaTotalIva();
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
         //Inicializar Tabla Auxiliar Iva Acred
@@ -1241,8 +1243,6 @@ public class jfGlobal extends javax.swing.JFrame {
             "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
         //Ingresando titulos
 
-        tablaIva = new DefaultTableModel();
-
         //Clase que obtiene los datos xml
         ivaAcred = new IvaAcredController();
         //url de los documentos Mack
@@ -1254,6 +1254,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
+
         Object[][] myData = new Object[llenarDatosTabla.size()][22];
         //Solicitud datos BD
         //checar esta validacion
@@ -1278,20 +1279,56 @@ public class jfGlobal extends javax.swing.JFrame {
                 /*
                 String[] titulos = {" "Relación con Actividad","Cruce Edo. Cuenta"};
                  */
-                tablaIva.addRow(new Object[]{dateFormat, llenarDatosTabla.get(i).getFolioInterno(), llenarDatosTabla.get(i).getFolioFiscal(),
-                    llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(), llenarDatosTabla.get(i).getConceptoXml(),
-                    llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(), llenarDatosTabla.get(i).getRetencionCuatro(),
-                    llenarDatosTabla.get(i).getRetencionDiez(), llenarDatosTabla.get(i).getRetencion1016(),
-                    llenarDatosTabla.get(i).getCuotaCompensatoria(), llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(),
-                    "Fecha de Pago", "Cuenta de Banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No.Poliza", "Relación con Actividad",
-                    "Cruce Edo. Cuenta"});
+//            
+                myData[i][0] = false;
+                myData[i][1] = dateFormat;
+                myData[i][2] = llenarDatosTabla.get(i).getFolioInterno();
+                myData[i][3] = llenarDatosTabla.get(i).getFolioFiscal();
+                myData[i][4] = llenarDatosTabla.get(i).getProveedor();
+                myData[i][5] = llenarDatosTabla.get(i).getRfc();
+                myData[i][6] = llenarDatosTabla.get(i).getConceptoXml();
+                myData[i][7] = llenarDatosTabla.get(i).getBaseCero();
+                myData[i][8] = llenarDatosTabla.get(i).getBase16();
+                myData[i][9] = llenarDatosTabla.get(i).getRetencionCuatro();
+                myData[i][10] = llenarDatosTabla.get(i).getRetencionDiez();
+                myData[i][11] = llenarDatosTabla.get(i).getRetencion1016();
+                myData[i][12] = llenarDatosTabla.get(i).getCuotaCompensatoria();
+                myData[i][13] = llenarDatosTabla.get(i).getIva();
+                myData[i][14] = llenarDatosTabla.get(i).getTotal();
+                myData[i][15] = "Fecha de Pago";
+                myData[i][16] = "Cuenta de Banco";
+                myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
+                myData[i][18] = "Tipo de Poliza";
+                myData[i][19] = "No. Poliza";
+                myData[i][20] = "Relación con Actividad";
+                myData[i][21] = "Cruce Edo. Cuenta";
             }
+
+            tablaIva = new DefaultTableModel(myData, titulos) {
+                @Override
+                public Class<?> getColumnClass(int column) { //DETERMINA SI LA COLUMNA SERÁ CHECKBOX (BOOLEAN) O TEXTO (STRING)
+                    if (column == 0) {
+                        return Boolean.class;
+                    } else {
+                        return String.class;
+                    }
+                }
+
+                @Override
+                public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
+                    if (column == 0 || column == 9 || column == 10 || column == 11) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            };
 
             //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+
             tablaCienIvaAcred.setModel(tablaIva);
             tablaCienIvaAcred.setRowSorter(ordenTabla);
-
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
             for (int i = 0; i < 21; i++) {
