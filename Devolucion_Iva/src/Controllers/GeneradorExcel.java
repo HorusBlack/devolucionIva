@@ -136,10 +136,11 @@ public class GeneradorExcel {
             cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
             hoja.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
 
-            String[] cabecera = new String[]{"No. FACTURA", "FECHA DE FACTURA", "POLIZA", "FECHA DE LA POLIZA", "FOLIO FISCAL", "CONCEPTO SEGÚN XML", "SUBTOTAL",
-                "IVA", "IVA RETENIDO", "ISR RETENIDO", "TOTAL", "CRUCE CON EDO DE CTA"};
-            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
-            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO", "OBSERVACIONES"};
+            String[] cabecera = new String[]{"FECHA DE FACTURA","FOLIO DE FACTURA","FOLIO UUID","PROVEEDOR","RFC","CONCEPTO","BASE 0%","BASE 16%","RETENCIÓN 4%","RETENCIÓN 10%",
+            "RETENCIÓN 10.67%","COUTA COMPENSATORIA","IVA","TOTAL","FECHA DE PAGO","CUENTA DE BANCO","FORMA DE PAGO","TIPO POLIZA","NO. POLIZA","RELACIÓN CON ACTIVIDAD",
+            "CRUCE EDO. CUENTA"};
+//            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
+//            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO", "OBSERVACIONES"};
 
             //Bordes de las celdas
             CellStyle celdasCabeceraTabla = book.createCellStyle();
@@ -159,10 +160,10 @@ public class GeneradorExcel {
             font.setColor(IndexedColors.WHITE.getIndex());
             font.setFontHeightInPoints((short) 12);
             celdasCabeceraTabla.setFont(font);
-            //CABECERAS
+//            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
 
-            for (int i = 0; i < 12; i++) {
+            for (int i = 0; i <cabecera.length; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
@@ -170,38 +171,38 @@ public class GeneradorExcel {
                 hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
 
             }
-
-            //INICIA AJUSTE DEL PAGO
-            Cell celdaEncabezadoPago = filaEncabezado_1.createCell(12);
-            celdaEncabezadoPago.setCellStyle(celdasCabeceraTabla);
-            celdaEncabezadoPago.setCellValue("PAGO");
-            hoja.addMergedRegion(new CellRangeAddress(7, 7, 12, 14));
-
-            int j = 0;
-            Row subPago = hoja.createRow(8);
-            for (int i = 12; i < 15; i++) {
-
-                Cell celdaEncabezado = subPago.createCell(i);
-                celdaEncabezado.setCellStyle(celdasCabeceraTabla);
-                celdaEncabezado.setCellValue(cabeceraPago[j]);
-                j++;
-            }
-            Cell celdaRFC = filaEncabezado_1.createCell(15);
-            celdaRFC.setCellStyle(celdasCabeceraTabla);
-            celdaRFC.setCellValue("RFC PROVEEDOR");
-            hoja.addMergedRegion(new CellRangeAddress(7, 8, 15, 15));
-            //FIN AJUSTE DEL PAGO
-
-            //ULTIMA SECCION CABECERAS
-            int k = 0;
-            for (int i = 16; i < 21; i++) {
-
-                Cell celdaEncabezado_3 = filaEncabezado_1.createCell(i);
-                celdaEncabezado_3.setCellStyle(celdasCabeceraTabla);
-                celdaEncabezado_3.setCellValue(cabeceraCuentasPolizas[k]);
-                hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
-                k++;
-            }
+//
+//            //INICIA AJUSTE DEL PAGO
+//            Cell celdaEncabezadoPago = filaEncabezado_1.createCell(12);
+//            celdaEncabezadoPago.setCellStyle(celdasCabeceraTabla);
+//            celdaEncabezadoPago.setCellValue("PAGO");
+//            hoja.addMergedRegion(new CellRangeAddress(7, 7, 12, 14));
+//
+//            int j = 0;
+//            Row subPago = hoja.createRow(8);
+//            for (int i = 12; i < 15; i++) {
+//
+//                Cell celdaEncabezado = subPago.createCell(i);
+//                celdaEncabezado.setCellStyle(celdasCabeceraTabla);
+//                celdaEncabezado.setCellValue(cabeceraPago[j]);
+//                j++;
+//            }
+//            Cell celdaRFC = filaEncabezado_1.createCell(15);
+//            celdaRFC.setCellStyle(celdasCabeceraTabla);
+//            celdaRFC.setCellValue("RFC PROVEEDOR");
+//            hoja.addMergedRegion(new CellRangeAddress(7, 8, 15, 15));
+//            //FIN AJUSTE DEL PAGO
+//
+//            //ULTIMA SECCION CABECERAS
+//            int k = 0;
+//            for (int i = 16; i < 21; i++) {
+//
+//                Cell celdaEncabezado_3 = filaEncabezado_1.createCell(i);
+//                celdaEncabezado_3.setCellStyle(celdasCabeceraTabla);
+//                celdaEncabezado_3.setCellValue(cabeceraCuentasPolizas[k]);
+//                hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
+//                k++;
+//            }
 
             //INICIA PARTE DATOS
             numFilasTabla = tablaCienPorciento.getRowCount();
@@ -230,29 +231,29 @@ public class GeneradorExcel {
             }
 
             //FIN PARTE DATOS
-            for (int i = 0; i < 22; i++) {
+            for (int i = 0; i < 30; i++) {
                 hoja.autoSizeColumn(i);
             }
-
-            //damos tamano a la columna
-            for (int i = 0; i < 4; i++) {
-                int tamano = 6000;
-                hoja.setColumnWidth(i, tamano);
-            }
-
-            for (int i = 8; i < 10; i++) {
-                int tamano = 3500;
-                hoja.setColumnWidth(i, tamano);
-            }
-
-            for (int i = 8; i < 9; i++) {
-                int tamano = 3000;
-                hoja.setColumnWidth(i, tamano);
-            }
-            for (int i = 15; i < 21; i++) {
-                int tamano = 7000;
-                hoja.setColumnWidth(i, tamano);
-            }
+//
+//            //damos tamano a la columna
+//            for (int i = 0; i < 4; i++) {
+//                int tamano = 6000;
+//                hoja.setColumnWidth(i, tamano);
+//            }
+//
+//            for (int i = 8; i < 10; i++) {
+//                int tamano = 3500;
+//                hoja.setColumnWidth(i, tamano);
+//            }
+//
+//            for (int i = 8; i < 9; i++) {
+//                int tamano = 3000;
+//                hoja.setColumnWidth(i, tamano);
+//            }
+//            for (int i = 15; i < 21; i++) {
+//                int tamano = 7000;
+//                hoja.setColumnWidth(i, tamano);
+//            }
 
             hoja.setColumnWidth(11, 4000);
             /*

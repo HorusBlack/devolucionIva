@@ -1054,7 +1054,7 @@ public class jfGlobal extends javax.swing.JFrame {
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio) {
         tablaIva = new DefaultTableModel();
-       
+
         //Titulos para la tabla
         String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
             "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza",
@@ -1074,6 +1074,187 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
 
+        //Solicitud datos BD
+        //checar esta validacion
+        if (!llenarDatosTabla.isEmpty()) {
+            //llenando la tabla de la info
+            System.out.println("tamaño de lista 100% acred: " + llenarDatosTabla.size());
+            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+
+                String string = llenarDatosTabla.get(i).getFechaFactura();
+                String[] parts = string.split("T");
+                String part1 = parts[0];
+                String dateFormat = "";
+                //No se estan cargando todos los datos
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                    dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                }
+
+                /*
+                String[] titulos = {" "Relación con Actividad","Cruce Edo. Cuenta"};
+                 */
+                tablaIva.addRow(new Object[]{dateFormat, llenarDatosTabla.get(i).getFolioInterno(), llenarDatosTabla.get(i).getFolioFiscal(),
+                    llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(), llenarDatosTabla.get(i).getConceptoXml(),
+                    llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(), llenarDatosTabla.get(i).getRetencionCuatro(),
+                    llenarDatosTabla.get(i).getRetencionDiez(), llenarDatosTabla.get(i).getRetencion1016(),
+                    llenarDatosTabla.get(i).getCuotaCompensatoria(), llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(),
+                    "Fecha de Pago", "Cuenta de Banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No.Poliza", "Relación con Actividad",
+                    "Cruce Edo. Cuenta"});
+            }
+
+            //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+            tablaCienIvaAcred.setModel(tablaIva);
+            tablaCienIvaAcred.setRowSorter(ordenTabla);
+
+            //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
+            TableColumn columna;
+            for (int i = 0; i < 21; i++) {
+                switch (i) {
+                    case 0:
+                        //Fecha de Factura
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(130);
+                        break;
+                    case 1:
+                        //Folio Factura
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(90);
+                        break;
+                    case 2:
+                        //Folio UUID
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(250);
+                        break;
+                    case 3:
+                        //Proveedor
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(400);
+                        break;
+                    case 4:
+                        //RFC
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(120);
+                        break;
+                    case 5:
+                        //Conceptos
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(500);
+                        break;
+                    case 6:
+                        //Base 0%
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(60);
+                        break;
+                    case 7:
+                        //BASE 16
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(70);
+                        break;
+                    case 8:
+                        //Retencion 4%
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(70);
+                        break;
+                    case 9:
+                        //Retencion 10%
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(70);
+                        break;
+
+                    case 10:
+                        //Retencion 10.67%
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 11:
+                        //CP
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(200);
+                        break;
+                    case 12:
+                        //IVA
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 13:
+                        //TOTAL
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(80);
+                        break;
+                    case 14:
+                        //Fecha Pago
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 15:
+                        //Cuenta de banco
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(200);
+                        break;
+                    case 16:
+                        //Forma de Pago
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(120);
+                        break;
+                    case 17:
+                        //Tipo Poliza
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 18:
+                        //No. Poliza
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(80);
+                        break;
+                    case 19:
+                        //Relacion de actividad
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+                    case 20:
+                        //Cruce Edo Cuenta
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(150);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+            lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
+
+        }
+
+    }
+
+    private void inicializarTablaCienIvaAcred_Nueva(String numMes, String nombreMes, int mes, int anio) {
+
+        //Titulos para la tabla
+        String[] titulos = {"Accion", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
+            "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza",
+            "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
+        //Ingresando titulos
+
+        tablaIva = new DefaultTableModel();
+
+        //Clase que obtiene los datos xml
+        ivaAcred = new IvaAcredController();
+        //url de los documentos Mack
+        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
+        //correguir sintaxis de ruta, la conexion sql es estable
+        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
+        //Lista de objetos xmlDatos 
+
+        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
+        Object[][] myData = new Object[llenarDatosTabla.size()][22];
         //Solicitud datos BD
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
