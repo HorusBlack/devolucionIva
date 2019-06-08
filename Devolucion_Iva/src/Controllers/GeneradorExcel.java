@@ -124,19 +124,19 @@ public class GeneradorExcel {
 
             sbt3.setFont(fuenteSubtituloDos);
             Row fs3 = hoja.createRow(5);
-            Cell cs3 = fs3.createCell(0);
+            Cell cs3 = fs3.createCell(1);
             cs3.setCellStyle(sbt3);
             cs3.setCellValue("RELACION DEL 100% DE OPERACIONES CON PROVEEDORES TASA 16 %");
-            hoja.addMergedRegion(new CellRangeAddress(5, 5, 0, 5));
+            hoja.addMergedRegion(new CellRangeAddress(5, 5, 1, 4));
 
             sbt4.setFont(fuenteSubtituloDos);
             Row fs4 = hoja.createRow(6);
-            Cell cs4 = fs4.createCell(0);
+            Cell cs4 = fs4.createCell(1);
             cs4.setCellStyle(sbt4);
             cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
-            hoja.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
+            hoja.addMergedRegion(new CellRangeAddress(6, 6, 1, 4));
 
-            String[] cabecera = new String[]{"FECHA DE FACTURA", "FOLIO DE FACTURA", "FOLIO UUID", "PROVEEDOR", "RFC", "CONCEPTO", "BASE 0%", "BASE 16%", "RETENCIÓN 4%", "RETENCIÓN 10%",
+            String[] cabecera = new String[]{"", "FECHA DE FACTURA", "FOLIO DE FACTURA", "FOLIO UUID", "PROVEEDOR", "RFC", "CONCEPTO", "BASE 0%", "BASE 16%", "RETENCIÓN 4%", "RETENCIÓN 10%",
                 "RETENCIÓN 10.67%", "COUTA COMPENSATORIA", "IVA", "TOTAL", "FECHA DE PAGO", "CUENTA DE BANCO", "FORMA DE PAGO", "TIPO POLIZA", "NO. POLIZA", "RELACIÓN CON ACTIVIDAD",
                 "CRUCE EDO. CUENTA"};
 //            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
@@ -163,12 +163,12 @@ public class GeneradorExcel {
 //            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
 
-            for (int i = 0; i < cabecera.length; i++) {
+            for (int i = 1; i < cabecera.length; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
                 celdaEncabezado.setCellValue(cabecera[i]);
-                hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
+               // hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
 
             }
 //
@@ -209,7 +209,7 @@ public class GeneradorExcel {
             numColumnasTabla = tablaCienPorciento.getColumnCount();
             //No.filas de cabecera+inicio de datos+1
             ultimaFilaRegistros = (tablaCienPorciento.getRowCount()) + 10;
-            empezarLlenadoDesdeFila = 9;
+            empezarLlenadoDesdeFila = 8;
 
             CellStyle datosEstilo = book.createCellStyle();
             //bordes de la tabla
@@ -223,42 +223,20 @@ public class GeneradorExcel {
                 //?
                 Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
                 //Obteniendo información de las columnas
-                for (int a = 0; a < numColumnasTabla; a++) {
-                    Cell celda = fila.createCell(a);
+
+                for (int a = 1; a < numColumnasTabla; a++) {
+                    Cell celda = null;
+                    celda = fila.createCell(a);
                     celda.setCellStyle(datosEstilo);
                     celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
                 }
-            }
 
+            }
             //FIN PARTE DATOS
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 22; i++) {
                 hoja.autoSizeColumn(i);
             }
-//
-//            //damos tamano a la columna
-//            for (int i = 0; i < 4; i++) {
-//                int tamano = 6000;
-//                hoja.setColumnWidth(i, tamano);
-//            }
-//
-//            for (int i = 8; i < 10; i++) {
-//                int tamano = 3500;
-//                hoja.setColumnWidth(i, tamano);
-//            }
-//
-//            for (int i = 8; i < 9; i++) {
-//                int tamano = 3000;
-//                hoja.setColumnWidth(i, tamano);
-//            }
-//            for (int i = 15; i < 21; i++) {
-//                int tamano = 7000;
-//                hoja.setColumnWidth(i, tamano);
-//            }
 
-            hoja.setColumnWidth(11, 4000);
-            /*
-            PENDIENTE AJUSTAR FORMATO DEL EXCEL, Y COMPLETAR TABLA DE TOTALES
-             */
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
             } catch (IOException ex) {
