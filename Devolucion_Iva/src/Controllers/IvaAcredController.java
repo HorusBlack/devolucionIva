@@ -33,6 +33,8 @@ public class IvaAcredController {
     private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo;
     private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
             retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
+    private final String baseAgroecologia = "COI80Empre2";
+    private final String baseAstixa = "COI80Empre1";
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> cfdi_Comprobante;
@@ -42,7 +44,7 @@ public class IvaAcredController {
      * archivos xml segun los conceptos solicitados
      *
      * @param URL
-     * @return List<XmlDatos>
+     * @return List XmlDatos
      */
     public List<XmlDatos> listDatosXmlCienAcred(String URL) {
         String nameArchivo;
@@ -345,16 +347,24 @@ public class IvaAcredController {
      *
      * @param periodo
      * @param ejercicio
+     * @param numEmpresa
      * @return List PolizaDatos
      */
-    public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio) {
-
+    public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio, int numEmpresa) {
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
         periodo += 1;
+        String empresa = "";
+        if (numEmpresa == 0) {
+            empresa = baseAstixa;
+        }
+        else if(numEmpresa == 1)
+        {
+            empresa = baseAgroecologia;
+        }
 
         if (periodo > 0 && ejercicio >= 2017) {
-            polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio);
+            polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio, empresa);
         }
         return polizaDat;
     }

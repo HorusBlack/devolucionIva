@@ -36,9 +36,10 @@ public class Consultas {
      *
      * @param periodo int
      * @param ejercicio int
+     * @param dataBase
      * @return List PolizaDatos
      */
-    public List<PolizaDatos> polizasPeriodoEjercicio(int periodo, int ejercicio) {
+    public List<PolizaDatos> polizasPeriodoEjercicio(int periodo, int ejercicio, String dataBase) {
         connection = new ConexionDB();
         //String[] parts = string.split("T");
         String subFijoTabla = String.valueOf(ejercicio);
@@ -48,7 +49,7 @@ public class Consultas {
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         Connection conexion = null;
         try {
-            conexion = connection.Entrar();
+            conexion = connection.Entrar(dataBase);
             query = "SELECT TIPO_POLI,NUM_POLIZ,PERIODO,EJERCICIO,LOGAUDITA,Convert(date,FECHA_POL) FECHA,ORIGEN,NUMPARCUA,"
                     + "CASE TIENEDOCUMENTOS WHEN  1  THEN 'S' WHEN 0 THEN 'N' END AS TIENEDOCUMENTOS, ESPOLIZAPRIVADA ,CONCEP_PO,CONTABILIZ "
                     + "FROM " + tablaPoliza + " P LEFT JOIN TIPOSPOL TP ON(P.TIPO_POLI=TP.TIPO) "
@@ -85,7 +86,7 @@ public class Consultas {
      * @param noCuenta String
      * @return List AuxIvaAcred
      */
-    public List<AuxIvaAcred> auxIvaAcredConsulta(int periodo, int ejercicio, String noCuenta) {
+    public List<AuxIvaAcred> auxIvaAcredConsulta(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
         String subFijoTabla = String.valueOf(ejercicio);
@@ -98,7 +99,7 @@ public class Consultas {
 
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
         try {
-            conexion = connection.Entrar();
+            conexion = connection.Entrar(dataBase);
             if (ejercicio > 2018) {
                 //CAMBIAR TOP
                 query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
@@ -149,7 +150,7 @@ public class Consultas {
     /*
     PENDIENTE VER SI SE PUEDE HACER TODO EN UNA SOLA FUNCION
      */
-    public List<RetencionIvaMes> retencionIvaMesConsulta(int periodo, int ejercicio, String noCuenta) {
+    public List<RetencionIvaMes> retencionIvaMesConsulta(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
         String subFijoTabla = String.valueOf(ejercicio);
@@ -162,7 +163,7 @@ public class Consultas {
 
         List<RetencionIvaMes> listRetencion = new ArrayList<>();
         try {
-            conexion = connection.Entrar();
+            conexion = connection.Entrar(dataBase);
             if (ejercicio > 2018) {
                 //CAMBIAR TOP
                 query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
@@ -212,7 +213,7 @@ public class Consultas {
         return listRetencion;
     }
 
-    public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta) {
+    public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
         String subFijoTabla = String.valueOf(ejercicio);
@@ -225,7 +226,7 @@ public class Consultas {
 
         List<RetencionIvaPagadaMes> listRetencionPagada = new ArrayList<>();
         try {
-            conexion = connection.Entrar();
+            conexion = connection.Entrar(dataBase);
             if (ejercicio > 2018) {
                 //CAMBIAR TOP
                 query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"

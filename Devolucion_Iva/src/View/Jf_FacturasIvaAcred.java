@@ -37,7 +37,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     private int numRegistros;
     private IvaAcredController ivaAcred;
     private List<PolizaDatos> listPolizaDatos;
-    
+
     /**
      * Creates new form jframePrincipal
      */
@@ -357,7 +357,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No existen documentos XML dentro de la carpeta seleccionada");
             }
         }
-       
+
     }//GEN-LAST:event_btnXmlCargarActionPerformed
 
     /**
@@ -381,7 +381,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numeroMes;
         //Lista de objetos xmlDatos
         List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, 0);
         if (!listPolizaDatos.isEmpty()) {
             for (int i = 0; i < listPolizaDatos.size(); i++) {
                 System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());

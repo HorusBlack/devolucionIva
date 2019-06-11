@@ -19,11 +19,11 @@ public class ConexionDB {
     Connection cn = null;
     //Pendiente cambiar datos de conexion
 
-    public Connection Entrar() throws SQLException, ClassNotFoundException {
+    public Connection Entrar(String dataBase) throws SQLException, ClassNotFoundException {
         try {
             //Servidor Agro
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://25.62.86.238\\BASES;databaseName=COI80Empre2;";
+            String url = "jdbc:sqlserver://25.62.86.238\\BASES;databaseName=" + dataBase + ";";
             String usuarioDB = "Usuario";
             String passwordDB = "0000";
             cn = DriverManager.getConnection(url, usuarioDB, passwordDB);

@@ -15,18 +15,28 @@ import java.util.List;
  * @author horusblack
  */
 public class AuxIvaAcredController {
+
     private List<AuxIvaAcred> auxIvaAcred;
     private Consultas consultas;
-    private final static String NO_CUENTA="115100100000000000002";
-    
-     public List<AuxIvaAcred> solicitudAuxIvaAcred(int periodo, int ejercicio) {
+    private final static String NO_CUENTA = "115100100000000000002";
 
+    private final String baseAgroecologia = "COI80Empre2";
+    private final String baseAstixa = "COI80Empre1";
+
+    public List<AuxIvaAcred> solicitudAuxIvaAcred(int periodo, int ejercicio, int numEmpresa) {
+        //pendiente la validacion de la empresa
+        String dataBase = "";
+        if (numEmpresa == 0) {
+            dataBase = baseAstixa;
+        } else if (numEmpresa == 1) {
+            dataBase = baseAgroecologia;
+        }
         consultas = new Consultas();
         auxIvaAcred = new ArrayList<>();
         periodo += 1;
-        
+
         if (periodo > 0 && ejercicio >= 2017) {
-            auxIvaAcred = consultas.auxIvaAcredConsulta(periodo, ejercicio, NO_CUENTA);
+            auxIvaAcred = consultas.auxIvaAcredConsulta(periodo, ejercicio, NO_CUENTA, dataBase);
         }
         return auxIvaAcred;
     }

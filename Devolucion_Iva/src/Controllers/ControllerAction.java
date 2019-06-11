@@ -22,6 +22,9 @@ public class ControllerAction {
     private List<RetencionIvaMes> listRetencionIvaMes;
     private List<RetencionIvaPagadaMes> ListRetencionIvaPagadaMeses;
     private final static String NO_CUENTA = "115100100000000000002";
+    private final String baseAgroecologia = "COI80Empre2";
+    private final String baseAstixa = "COI80Empre1";
+    private String dataBase;
 
     /**
      * Funcion que solicita datos referente a las retenciones de iva del mes y
@@ -29,36 +32,46 @@ public class ControllerAction {
      *
      * @param periodo
      * @param ejercicio
+     * @param numEmpresa
      * @return List RetencionIvaMes
      */
-    public List<RetencionIvaMes> solicitudRetencionesIvaMes(int periodo, int ejercicio) {
-
+    public List<RetencionIvaMes> solicitudRetencionesIvaMes(int periodo, int ejercicio, int numEmpresa) {
+        if (numEmpresa == 0) {
+            dataBase = baseAstixa;
+        } else if (numEmpresa == 1) {
+            dataBase = baseAgroecologia;
+        }
         consultas = new Consultas();
         listRetencionIvaMes = new ArrayList<>();
         periodo += 1;
 
         if (periodo > 0 && ejercicio >= 2017) {
-            listRetencionIvaMes = consultas.retencionIvaMesConsulta(periodo, ejercicio, NO_CUENTA);
+            listRetencionIvaMes = consultas.retencionIvaMesConsulta(periodo, ejercicio, NO_CUENTA, dataBase);
         }
         return listRetencionIvaMes;
     }
 
     /**
-     * Funcion que solicita datos referente a las retenciones de iva del mes pagadas y
-     * retorna una lista de datos
+     * Funcion que solicita datos referente a las retenciones de iva del mes
+     * pagadas y retorna una lista de datos
      *
      * @param periodo
      * @param ejercicio
+     * @param numEmpresa
      * @return List RetencionIvaMes
      */
-    public List<RetencionIvaPagadaMes> solicitudRetencionesIvaMesPagada(int periodo, int ejercicio) {
-
+    public List<RetencionIvaPagadaMes> solicitudRetencionesIvaMesPagada(int periodo, int ejercicio, int numEmpresa) {
+        if (numEmpresa == 0) {
+            dataBase = baseAstixa;
+        } else if (numEmpresa == 1) {
+            dataBase = baseAgroecologia;
+        }
         consultas = new Consultas();
         ListRetencionIvaPagadaMeses = new ArrayList<>();
         periodo += 1;
 
         if (periodo > 0 && ejercicio >= 2017) {
-            ListRetencionIvaPagadaMeses = consultas.retencionesIvaMesPagada(periodo, ejercicio, NO_CUENTA);
+            ListRetencionIvaPagadaMeses = consultas.retencionesIvaMesPagada(periodo, ejercicio, NO_CUENTA, dataBase);
         }
         return ListRetencionIvaPagadaMeses;
     }
