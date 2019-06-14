@@ -188,25 +188,29 @@ public class Consultas {
 
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
-            while (resultSet.next()) {
-                //tipo poliza, numero poliza, fecha, concepto, debe, haber
-                retencionIvaMes = new RetencionIvaMes();
-                retencionIvaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                //Algunos no tienen segunda parte
-                if (resultSet.getString("TIPO_POLI").length() > 2) {
-                    retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
-                } else {
-                    retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI"));
+            try {
+                while (resultSet.next()) {
+                    //tipo poliza, numero poliza, fecha, concepto, debe, haber
+                    retencionIvaMes = new RetencionIvaMes();
+                    retencionIvaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                    //Algunos no tienen segunda parte
+                    if (resultSet.getString("TIPO_POLI").length() > 2) {
+                        retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
+                    } else {
+                        retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI"));
+                    }
+                    retencionIvaMes.setFecha(resultSet.getString("FECHA_POL"));
+                    retencionIvaMes.setConcepto(resultSet.getString("CONCEP_PO"));
+                    retencionIvaMes.setConceptosBase(resultSet.getString("NOMBRE"));
+                    listRetencion.add(retencionIvaMes);
                 }
-                retencionIvaMes.setFecha(resultSet.getString("FECHA_POL"));
-                retencionIvaMes.setConcepto(resultSet.getString("CONCEP_PO"));
-                retencionIvaMes.setConceptosBase(resultSet.getString("NOMBRE"));
-                listRetencion.add(retencionIvaMes);
+            } catch (NullPointerException e) {
+                Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-           
+
         } finally {
             ConexionDB.Salir(conexion);
         }

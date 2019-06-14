@@ -44,8 +44,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private DefaultTableModel tablaIva;
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
-    private int numRegistros, numAnio;
-    private double totalAuxCred;
+    private int numAnio;
+    private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva, totalAuxCred;
     private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
     private List<PolizaDatos> listPolizaDatos;
@@ -56,6 +56,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private GeneradorExcel generadorExcel;
     private List<XmlDatos> xmlDatosList;
 
+    //"Base 0%", "Base 16%", "Retención 4%", "Retención 10%", "Retención 10.67%", "IVA", "Total"
     /**
      * Creates new form jfGlobal
      */
@@ -234,7 +235,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
+            .addGap(0, 729, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
@@ -269,6 +270,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
         ));
+        tablaTotalIva.setOpaque(false);
         ScrollTotalIva.setViewportView(tablaTotalIva);
 
         lb_100.setFont(new java.awt.Font("Source Code Pro", 1, 14)); // NOI18N
@@ -394,15 +396,16 @@ public class jfGlobal extends javax.swing.JFrame {
             panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(SpIva, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(panelInfoLayout.createSequentialGroup()
-                .addComponent(ScrollTotalIva, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(253, 253, 253)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ScrollTotalIva, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(panelInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfoLayout.createSequentialGroup()
-                        .addComponent(lb_100, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lb_100, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                         .addGap(591, 591, 591))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfoLayout.createSequentialGroup()
                         .addComponent(panelBusquedaManual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -463,7 +466,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(lbT1)
                     .addComponent(lbT_mesAuxIvaAcred)
                     .addComponent(jLabel1))
-                .addContainerGap(454, Short.MAX_VALUE))
+                .addContainerGap(510, Short.MAX_VALUE))
         );
         panel_CabecerAuxIvaLayout.setVerticalGroup(
             panel_CabecerAuxIvaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -509,7 +512,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_TablaIvaAcredLayout.setVerticalGroup(
             panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 381, Short.MAX_VALUE)
             .addGroup(panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_TablaIvaAcredLayout.createSequentialGroup()
                     .addContainerGap()
@@ -558,7 +561,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panel_resultIvaAcredLayout.setVerticalGroup(
@@ -664,7 +667,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_detRIMLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_detRIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+                    .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                     .addGroup(panel_detRIMLayout.createSequentialGroup()
                         .addGroup(panel_detRIMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lb_RIM)
@@ -677,7 +680,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_detRIMLayout.createSequentialGroup()
                 .addComponent(lb_RIM, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                .addComponent(SpIva4, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
@@ -749,7 +752,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+                    .addComponent(SpIva3, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                     .addGroup(panel_RetIvaMes1Layout.createSequentialGroup()
                         .addGroup(panel_RetIvaMes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lb_RIPM)
@@ -795,7 +798,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_16Layout.setVerticalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
+            .addGap(0, 729, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
@@ -808,7 +811,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_AT_CeroLayout.setVerticalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
+            .addGap(0, 729, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
@@ -821,7 +824,7 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_RelacionDepLayout.setVerticalGroup(
             panel_RelacionDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
+            .addGap(0, 729, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("RELACION DEPOSITOS", panel_RelacionDep);
@@ -844,7 +847,7 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_AuxDepositosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_AuxDepositosLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panel_AuxDepositosLayout.setVerticalGroup(
@@ -869,7 +872,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_AuxDepLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel_AuxDepositos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(459, Short.MAX_VALUE))
+                .addContainerGap(485, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("AUXILIAR  DE DEPOSITOS", panel_AuxDep);
@@ -984,7 +987,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Inicializar Tabla 100 Iva Acred
         //inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear);
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
-        inicializarTablaTotalIva();
+
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
@@ -1063,7 +1066,7 @@ public class jfGlobal extends javax.swing.JFrame {
             //Si no se pueden sacar los datos, traer la tabla aqui
         }
         inicializarTablaCienIvaAcredDesdeSeleccion_nueva(xmlDatosList);
-        inicializarTablaTotalIva();
+        
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnExitPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitPanelActionPerformed
@@ -1090,15 +1093,27 @@ public class jfGlobal extends javax.swing.JFrame {
         ivaAcred = new IvaAcredController();
         //url de los documentos Mack
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
-        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numMes;
+        String URL_lap = "D:\\Windows-Antergos\\Macktronica\\Dac Simulacion\\" + anio + "\\" + numMes;
         //correguir sintaxis de ruta, la conexion sql es estable
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
         //Lista de objetos xmlDatos 
 
-        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
+        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_lap);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
 
         Object[][] myData = new Object[llenarDatosTabla.size()][22];
+        //Datos para los totales
+        base_0 = 0;
+        base_16 = 0;
+        retencion_4 = 0;
+        retencion_10 = 0;
+        retencion_1067 = 0;
+        cuotaCompensatoria = 0;
+        totalIva = 0;
+        total_devIva = 0;
+
+        double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
+
         //Solicitud datos BD
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
@@ -1145,6 +1160,58 @@ public class jfGlobal extends javax.swing.JFrame {
                 myData[i][19] = "No. Poliza";
                 myData[i][20] = "Relación con Actividad";
                 myData[i][21] = "Cruce Edo. Cuenta";
+                //Para el total
+                //0.00, null, ""
+                try {
+                    do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+
+                } catch (NullPointerException e) {
+                    do_text1 = 0;
+                }
+                base_0 += do_text1;
+                try {
+                    do_text2 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                } catch (NullPointerException e) {
+                    do_text2 = 0;
+                }
+                base_16 += do_text2;
+                try {
+                    do_text3 = (llenarDatosTabla.get(i).getRetencionCuatro().equals("") || llenarDatosTabla.get(i).getRetencionCuatro().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionCuatro());
+                } catch (NullPointerException e) {
+                    do_text3 = 0;
+                }
+                retencion_4 += do_text3;
+                try {
+                    do_text4 = (llenarDatosTabla.get(i).getRetencionDiez().equals("") || llenarDatosTabla.get(i).getRetencionDiez().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionDiez());
+                } catch (NullPointerException e) {
+                    do_text4 = 0;
+                }
+                retencion_10 += do_text4;
+                try {
+                    do_text5 = (llenarDatosTabla.get(i).getRetencion1016().equals("") || llenarDatosTabla.get(i).getRetencion1016().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencion1016());
+                } catch (NullPointerException e) {
+                    do_text5 = 0;
+                }
+                retencion_1067 += do_text5;
+                try {
+                    do_text6 = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                } catch (NullPointerException e) {
+                    do_text6 = 0;
+                }
+                totalIva += do_text6;
+                try {
+                    do_text7 = (llenarDatosTabla.get(i).getCuotaCompensatoria().equals("") || llenarDatosTabla.get(i).getCuotaCompensatoria().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getCuotaCompensatoria());
+                } catch (NullPointerException e) {
+                    do_text7 = 0;
+                }
+                cuotaCompensatoria += do_text7;
+                try {
+                    do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
+                } catch (NullPointerException e) {
+                    do_text8 = 0;
+                }
+                total_devIva += do_text8;
+
             }
 
             tablaIva = new DefaultTableModel(myData, titulos) {
@@ -1289,7 +1356,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
-
+            inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
         }
 
     }
@@ -1462,7 +1529,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Titulos para la tabla
         //Correguir titulos
 
-        String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
+        String[] titulos = {"Selección","Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
             "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza",
             "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
         //Ingresando titulos
@@ -1643,6 +1710,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
 
             }
+            //llamar el llenado de tabla
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
 
         }
@@ -1651,41 +1719,51 @@ public class jfGlobal extends javax.swing.JFrame {
     /**
      * Funcion que permite dar formato y valores a la tabla de totales
      */
-    private void inicializarTablaTotalIva() {
-        defaultTableIva = new DefaultTableModel();
-        String[] titulos = {"Gastos 16%", "Compras 0%", "IVA", "Total"};
-        Double[] valores = {0.00, 0.00, 0.00, 0.00};
+    private void inicializarTablaTotalIva(double base0, double base16, double retencion4, double retencion10, double retencion1016, double cuotaCom, double ivaT, double totalDev) {
+        defaultTableIva = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        DecimalFormat formateador = new DecimalFormat("0.00");
+
+        String[] titulos = {"Base 0%", "Base 16%", "Retención 4%", "Retención 10%", "Retención 10.67%", "Cuota Compensatoria", "IVA", "Total"};
+        String[] valores = {String.valueOf(formateador.format(base0)), String.valueOf(formateador.format(base16)), String.valueOf(formateador.format(retencion4)),
+            String.valueOf(formateador.format(retencion10)), String.valueOf(formateador.format(retencion1016)), String.valueOf(formateador.format(cuotaCom)),
+            String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev))};
         defaultTableIva.setColumnIdentifiers(titulos);
         defaultTableIva.addRow(valores);
-        TableColumn columna;
-        tablaTotalIva.setModel(defaultTableIva);
-        for (int i = 0; i <= 3; i++) {
-            switch (i) {
-                case 0:
-                    //factura
-                    columna = tablaTotalIva.getColumn(titulos[i]);
-                    columna.setMinWidth(90);
-                    break;
-                case 1:
-                    //Fecha Factura
-                    columna = tablaTotalIva.getColumn(titulos[i]);
-                    columna.setMinWidth(90);
-                    break;
-                case 2:
-                    //#poliza
-                    columna = tablaTotalIva.getColumn(titulos[i]);
-                    columna.setMinWidth(40);
-                    break;
-                case 3:
-                    //Fecha Poliza
-                    columna = tablaTotalIva.getColumn(titulos[i]);
-                    columna.setMinWidth(50);
-                    break;
-                default:
-                    break;
-            }
 
-        }
+//        TableColumn columna;
+        tablaTotalIva.setModel(defaultTableIva);
+//        for (int i = 0; i <= 3; i++) {
+//            switch (i) {
+//                case 0:
+//                    //factura
+//                    columna = tablaTotalIva.getColumn(titulos[i]);
+//                    columna.setMinWidth(90);
+//                    break;
+//                case 1:
+//                    //Fecha Factura
+//                    columna = tablaTotalIva.getColumn(titulos[i]);
+//                    columna.setMinWidth(90);
+//                    break;
+//                case 2:
+//                    //#poliza
+//                    columna = tablaTotalIva.getColumn(titulos[i]);
+//                    columna.setMinWidth(40);
+//                    break;
+//                case 3:
+//                    //Fecha Poliza
+//                    columna = tablaTotalIva.getColumn(titulos[i]);
+//                    columna.setMinWidth(50);
+//                    break;
+//                default:
+//                    break;
+//            }
+//
+//        }
 
     }
 
@@ -1709,6 +1787,7 @@ public class jfGlobal extends javax.swing.JFrame {
     }
 
     private void setTablaSeleccionManual(List<XmlDatos> listaDatos) {
+      /*Ajustar columnas. La tabla de totales debe igual sobreescribirse*/
         xmlDatosList = new ArrayList<>();
         xmlDatosList = listaDatos;
 

@@ -49,7 +49,7 @@ public class IvaAcredController {
     public List<XmlDatos> listDatosXmlCienAcred(String URL) {
         String nameArchivo;
         //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
-        DecimalFormat formateador = new DecimalFormat("0.00");
+        //DecimalFormat formateador = new DecimalFormat("0.00");
         //url de la carpeta del xml
         if (!URL.isEmpty() || !URL.equals("")) {
             try {
@@ -289,27 +289,27 @@ public class IvaAcredController {
                                                         case "0.000000":
                                                             baseCero = cfdi_traslado_hijo.getValorDeAtributo("importe");
                                                             infoXml.setBaseCero(baseCero);
-                                                            infoXml.setIva(" ");
-                                                            infoXml.setBase16(" ");
-                                                            infoXml.setCuotaCompensatoria(" ");
+                                                            infoXml.setIva("");
+                                                            infoXml.setBase16("");
+                                                            infoXml.setCuotaCompensatoria("");
                                                             break;
                                                         case "0.160000":
                                                             //Pendiente ajustar esto
                                                             base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
                                                             calIva = Double.parseDouble(base16);
                                                             calIva *= 0.16;
-                                                            iva = String.valueOf(formateador.format(calIva));
+                                                            iva = String.valueOf(calIva);
                                                             infoXml.setIva(iva);
                                                             infoXml.setBase16(base16);
-                                                            infoXml.setBaseCero(" ");
-                                                            infoXml.setCuotaCompensatoria(" ");
+                                                            infoXml.setBaseCero("");
+                                                            infoXml.setCuotaCompensatoria("");
                                                             break;
                                                         case "0.090000":
                                                             cuotaC = cfdi_traslado_hijo.getValorDeAtributo("importe");
                                                             infoXml.setCuotaCompensatoria(cuotaC);
-                                                            infoXml.setIva(" ");
-                                                            infoXml.setBase16(" ");
-                                                            infoXml.setBaseCero(" ");
+                                                            infoXml.setIva("");
+                                                            infoXml.setBase16("");
+                                                            infoXml.setBaseCero("");
                                                             break;
                                                         //las retenciones estan dentro de impuestos, pero no dentro de traslado
                                                         //iva=base16*0.16

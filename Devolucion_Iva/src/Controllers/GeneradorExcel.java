@@ -225,7 +225,7 @@ public class GeneradorExcel {
                 //Obteniendo información de las columnas
 
                 for (int a = 1; a < numColumnasTabla; a++) {
-                    Cell celda = null;
+                    Cell celda;
                     celda = fila.createCell(a);
                     celda.setCellStyle(datosEstilo);
                     celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
