@@ -1045,28 +1045,41 @@ public class jfGlobal extends javax.swing.JFrame {
             "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%","Cuota compensatoria" ,"Forma de Pago", "Acción"
              */
             XmlDatos xmlDatos = new XmlDatos();
+            //Fecha de factura
             xmlDatos.setFechaFactura(tabla_ManualCarga.getValueAt(i, 1).toString());
+            //Folio de factura
             xmlDatos.setFolioInterno(tabla_ManualCarga.getValueAt(i, 2).toString());
-            //Folio Fiscal
+            //Folio UUID
             xmlDatos.setFolioFiscal(tabla_ManualCarga.getValueAt(i, 3).toString());
+            //Proveedor
             xmlDatos.setProveedor((tabla_ManualCarga.getValueAt(i, 4).toString()));
+            //RFC
             xmlDatos.setRfc((tabla_ManualCarga.getValueAt(i, 5).toString()));
             //Concepto
             xmlDatos.setConceptoXml(tabla_ManualCarga.getValueAt(i, 6).toString());
-
-            //Si son nulos darles un nuevo valor
+            //Base 0
             xmlDatos.setBaseCero(tabla_ManualCarga.getValueAt(i, 7).toString());
+            //base 16
             xmlDatos.setBase16(tabla_ManualCarga.getValueAt(i, 8).toString());
+            //ret 4
             xmlDatos.setRetencionCuatro(tabla_ManualCarga.getValueAt(i, 9).toString());
+            //ret 10
             xmlDatos.setRetencionDiez(tabla_ManualCarga.getValueAt(i, 10).toString());
-            xmlDatos.setCuotaCompensatoria((tabla_ManualCarga.getValueAt(i, 11).toString()));
-            xmlDatos.setFormaPago((tabla_ManualCarga.getValueAt(i, 12).toString()));
-            //xmlDatos.setTotal(tabla_ManualCarga.getValueAt(i, 8).toString());
+            //ret 1016
+            xmlDatos.setRetencion1016((tabla_ManualCarga.getValueAt(i, 11).toString()));
+            //ret cuota
+            xmlDatos.setCuotaCompensatoria((tabla_ManualCarga.getValueAt(i, 12).toString()));
+            //ret IVa
+            xmlDatos.setIva((tabla_ManualCarga.getValueAt(i, 13).toString()));
+            //ret total
+            xmlDatos.setTotal((tabla_ManualCarga.getValueAt(i, 14).toString()));
+            //forma de pago
+            xmlDatos.setFormaPago((tabla_ManualCarga.getValueAt(i, 15).toString()));
             xmlDatosList.add(xmlDatos);
             //Si no se pueden sacar los datos, traer la tabla aqui
         }
         inicializarTablaCienIvaAcredDesdeSeleccion_nueva(xmlDatosList);
-        
+
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnExitPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitPanelActionPerformed
@@ -1084,7 +1097,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa) {
 
         //Titulos para la tabla
-        String[] titulos = {"Accion", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
+        String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
             "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza",
             "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
         //Ingresando titulos
@@ -1211,7 +1224,6 @@ public class jfGlobal extends javax.swing.JFrame {
                     do_text8 = 0;
                 }
                 total_devIva += do_text8;
-
             }
 
             tablaIva = new DefaultTableModel(myData, titulos) {
@@ -1529,7 +1541,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Titulos para la tabla
         //Correguir titulos
 
-        String[] titulos = {"Selección","Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
+        String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
             "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza",
             "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
         //Ingresando titulos
@@ -1539,6 +1551,16 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = listSelectManual;
         Object[][] myData = new Object[llenarDatosTabla.size()][22];
         //Solicitud datos BD
+        base_0 = 0;
+        base_16 = 0;
+        retencion_4 = 0;
+        retencion_10 = 0;
+        retencion_1067 = 0;
+        cuotaCompensatoria = 0;
+        totalIva = 0;
+        total_devIva = 0;
+
+        double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
         //checar esta validacion
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
@@ -1567,6 +1589,69 @@ public class jfGlobal extends javax.swing.JFrame {
                 myData[i][19] = "No. Poliza";
                 myData[i][20] = "Relación con Actividad";
                 myData[i][21] = "Cruce Edo. Cuenta";
+
+                System.out.println("base0: " + llenarDatosTabla.get(i).getBaseCero());
+                System.out.println("base16: " + llenarDatosTabla.get(i).getBase16());
+                System.out.println("r4: " + llenarDatosTabla.get(i).getRetencionCuatro());
+                System.out.println("r10: " + llenarDatosTabla.get(i).getRetencionDiez());
+                System.out.println("r6: " + llenarDatosTabla.get(i).getRetencion1016());
+                System.out.println("rcuota: " + llenarDatosTabla.get(i).getCuotaCompensatoria());
+                System.out.println("iva: " + llenarDatosTabla.get(i).getIva());
+                System.out.println("total: " + llenarDatosTabla.get(i).getTotal());
+
+                if (i != 0) {
+
+                    try {
+                        do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+
+                    } catch (NullPointerException e) {
+                        do_text1 = 0;
+                    }
+                    base_0 += do_text1;
+                    try {
+                        do_text2 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    } catch (NullPointerException e) {
+                        do_text2 = 0;
+                    }
+                    base_16 += do_text2;
+                    try {
+                        do_text3 = (llenarDatosTabla.get(i).getRetencionCuatro().equals("") || llenarDatosTabla.get(i).getRetencionCuatro().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionCuatro());
+                    } catch (NullPointerException e) {
+                        do_text3 = 0;
+                    }
+                    retencion_4 += do_text3;
+                    try {
+                        do_text4 = (llenarDatosTabla.get(i).getRetencionDiez().equals("") || llenarDatosTabla.get(i).getRetencionDiez().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionDiez());
+                    } catch (NullPointerException e) {
+                        do_text4 = 0;
+                    }
+                    retencion_10 += do_text4;
+                    try {
+                        do_text5 = (llenarDatosTabla.get(i).getRetencion1016().equals("") || llenarDatosTabla.get(i).getRetencion1016().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencion1016());
+                    } catch (NullPointerException e) {
+                        do_text5 = 0;
+                    }
+                    retencion_1067 += do_text5;
+                    try {
+                        do_text6 = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                    } catch (NullPointerException e) {
+                        do_text6 = 0;
+                    }
+                    totalIva += do_text6;
+                    try {
+                        do_text7 = (llenarDatosTabla.get(i).getCuotaCompensatoria().equals("") || llenarDatosTabla.get(i).getCuotaCompensatoria().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getCuotaCompensatoria());
+                    } catch (NullPointerException e) {
+                        do_text7 = 0;
+                    }
+                    cuotaCompensatoria += do_text7;
+                    try {
+                        do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
+                    } catch (NullPointerException e) {
+                        do_text8 = 0;
+                    }
+                    total_devIva += do_text8;
+                }
+
             }
 
             tablaIva = new DefaultTableModel(myData, titulos) {
@@ -1712,7 +1797,7 @@ public class jfGlobal extends javax.swing.JFrame {
             }
             //llamar el llenado de tabla
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
-
+            inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
         }
     }
 
@@ -1767,51 +1852,52 @@ public class jfGlobal extends javax.swing.JFrame {
 
     }
 
-    /**
-     * Metodo que preconfigura el diseño del jframe, posicion, tamaño, etc.
-     */
-    private void preConfiguracion() {
-        //Posicion del jframe
-        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = pantalla.height;
-        int width = pantalla.width;
-        this.setSize(width / 2, height / 2);
-        this.setLocationRelativeTo(null);
-        panelBusquedaManual.setVisible(false);
-        btnOk.setEnabled(false);
-        btnDelete.setEnabled(false);
-        //Elementos adicionales
-
-//        txta_Concepto.setVisible(false);
-//        txta_Concepto.setLineWrap(true);
-    }
-
     private void setTablaSeleccionManual(List<XmlDatos> listaDatos) {
-      /*Ajustar columnas. La tabla de totales debe igual sobreescribirse*/
+        /*Ajustar columnas. La tabla de totales debe igual sobreescribirse*/
         xmlDatosList = new ArrayList<>();
         xmlDatosList = listaDatos;
 
-        Object[][] datos = new Object[xmlDatosList.size()][14];
+        Object[][] datos = new Object[xmlDatosList.size()][17];
 
         // Esta lista contiene los nombres que se mostrarán en el encabezado de cada columna de la grilla
         String[] columnas = new String[]{"Marcar", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto",
-            "Base 0%", "Base 16%", "Retencion 4%", "Retencion 10%", "Cuota Compensatoria", "Forma de Pago", "Acción"};
+            "Base 0%", "Base 16%", "Retención 4%", "Retención 10%", "Retención 10.67%", "Cuota Compensatoria", "IVA", "Total", "Forma de Pago", "Acción"};
 
         // Estos son los tipos de datos de cada columna de la lista
         final Class[] tiposColumnas = new Class[]{
+            //marcador
             java.lang.Boolean.class,
+            //Fecha de factura
             java.lang.String.class,
+            //folio de factura
             java.lang.String.class,
+            //folio UUID
             java.lang.String.class,
+            //Proveedor
             java.lang.String.class,
+            //RFC
             java.lang.String.class,
+            //Concepto
             java.lang.String.class,
+            //Concepto
             java.lang.String.class,
+            //Base 0%
             java.lang.String.class,
+            //Base 16%
             java.lang.String.class,
+            //Retencion 4%
             java.lang.String.class,
+            //retencion 10%
             java.lang.String.class,
+            //Retencion 1067
             java.lang.String.class,
+            //Cuota Compensatoria
+            java.lang.String.class,
+            //Iva
+            java.lang.String.class,
+            //Total Iva
+            java.lang.String.class,
+            //btn remover
             JButton.class // <- noten que aquí se especifica que la última columna es un botón
         };
 
@@ -1831,18 +1917,21 @@ public class jfGlobal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
             }
             //HACER QUE SI SON NULOS, OBTENGAN UN NUEVO VALOR
-            String folioInterno, folioFiscal, proveedor, rfc, concepto, b0, b16, r4, r10, cuota, formaPago;
-            folioInterno = (xmlDatosList.get(i).getFolioInterno() != null) ? xmlDatosList.get(i).getFolioInterno() : " ";
-            folioFiscal = (xmlDatosList.get(i).getFolioFiscal() != null) ? xmlDatosList.get(i).getFolioFiscal() : " ";
-            proveedor = (xmlDatosList.get(i).getProveedor() != null) ? xmlDatosList.get(i).getProveedor() : " ";
+            String folioInterno, folioFiscal, proveedor, rfc, concepto, b0, b16, r4, r10, r1016, cuota, iva, total, formaPago;
+            folioInterno = (xmlDatosList.get(i).getFolioInterno() != null) ? xmlDatosList.get(i).getFolioInterno() : "";
+            folioFiscal = (xmlDatosList.get(i).getFolioFiscal() != null) ? xmlDatosList.get(i).getFolioFiscal() : "";
+            proveedor = (xmlDatosList.get(i).getProveedor() != null) ? xmlDatosList.get(i).getProveedor() : "";
             rfc = (xmlDatosList.get(i).getRfc() != null) ? xmlDatosList.get(i).getRfc() : " ";
-            concepto = (xmlDatosList.get(i).getConceptoXml() != null) ? xmlDatosList.get(i).getConceptoXml() : " ";
-            b0 = (xmlDatosList.get(i).getBaseCero() != null) ? xmlDatosList.get(i).getBaseCero() : " ";
-            b16 = (xmlDatosList.get(i).getBase16() != null) ? xmlDatosList.get(i).getBase16() : " ";
-            r4 = (xmlDatosList.get(i).getRetencionCuatro() != null) ? xmlDatosList.get(i).getRetencionCuatro() : " ";
-            r10 = (xmlDatosList.get(i).getRetencionDiez() != null) ? xmlDatosList.get(i).getRetencionDiez() : " ";
-            cuota = (xmlDatosList.get(i).getCuotaCompensatoria() != null) ? xmlDatosList.get(i).getCuotaCompensatoria() : " ";
-            formaPago = (xmlDatosList.get(i).getFormaPago() != null) ? xmlDatosList.get(i).getFormaPago() : " ";
+            concepto = (xmlDatosList.get(i).getConceptoXml() != null) ? xmlDatosList.get(i).getConceptoXml() : "";
+            b0 = (xmlDatosList.get(i).getBaseCero() != null) ? xmlDatosList.get(i).getBaseCero() : "";
+            b16 = (xmlDatosList.get(i).getBase16() != null) ? xmlDatosList.get(i).getBase16() : "";
+            r4 = (xmlDatosList.get(i).getRetencionCuatro() != null) ? xmlDatosList.get(i).getRetencionCuatro() : "";
+            r10 = (xmlDatosList.get(i).getRetencionDiez() != null) ? xmlDatosList.get(i).getRetencionDiez() : "";
+            r1016 = (xmlDatosList.get(i).getRetencion1016() != null) ? xmlDatosList.get(i).getRetencion1016() : "";
+            cuota = (xmlDatosList.get(i).getCuotaCompensatoria() != null) ? xmlDatosList.get(i).getCuotaCompensatoria() : "";
+            iva = (xmlDatosList.get(i).getIva() != null) ? xmlDatosList.get(i).getIva() : "";
+            total = (xmlDatosList.get(i).getTotal() != null) ? xmlDatosList.get(i).getTotal() : "";
+            formaPago = (xmlDatosList.get(i).getFormaPago() != null) ? xmlDatosList.get(i).getFormaPago() : "";
 
             datos[i][0] = false;
             datos[i][1] = dateFormat;
@@ -1855,9 +1944,12 @@ public class jfGlobal extends javax.swing.JFrame {
             datos[i][8] = b16;
             datos[i][9] = r4;
             datos[i][10] = r10;
-            datos[i][11] = cuota;
-            datos[i][12] = formaPago;
-            datos[i][13] = new JButton("Remover");
+            datos[i][11] = r1016;
+            datos[i][12] = cuota;
+            datos[i][13] = iva;
+            datos[i][14] = total;
+            datos[i][15] = formaPago;
+            datos[i][16] = new JButton("Remover");
         }
 
         // Defino el TableModel y le indico los datos y nombres de columnas
@@ -2276,6 +2368,25 @@ public class jfGlobal extends javax.swing.JFrame {
         String[] titulos = {"Fecha", "Concepto", "Debe"};
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
+    }
+
+    /**
+     * Metodo que preconfigura el diseño del jframe, posicion, tamaño, etc.
+     */
+    private void preConfiguracion() {
+        //Posicion del jframe
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = pantalla.height;
+        int width = pantalla.width;
+        this.setSize(width / 2, height / 2);
+        this.setLocationRelativeTo(null);
+        panelBusquedaManual.setVisible(false);
+        btnOk.setEnabled(false);
+        btnDelete.setEnabled(false);
+        //Elementos adicionales
+
+//        txta_Concepto.setVisible(false);
+//        txta_Concepto.setLineWrap(true);
     }
 
     /*
