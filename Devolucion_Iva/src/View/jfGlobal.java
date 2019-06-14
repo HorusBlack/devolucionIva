@@ -175,7 +175,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addComponent(btnXmlCargar)
         );
 
-        combo_Empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agroecología", "Astixa" }));
+        combo_Empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agroecología", "Asticsa" }));
 
         jLabel2.setText("Periodo");
 
@@ -503,7 +503,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_TablaIvaAcred.setLayout(panel_TablaIvaAcredLayout);
         panel_TablaIvaAcredLayout.setHorizontalGroup(
             panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 734, Short.MAX_VALUE)
             .addGroup(panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_TablaIvaAcredLayout.createSequentialGroup()
                     .addContainerGap()
@@ -512,12 +512,12 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         panel_TablaIvaAcredLayout.setVerticalGroup(
             panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 381, Short.MAX_VALUE)
+            .addGap(0, 340, Short.MAX_VALUE)
             .addGroup(panel_TablaIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_TablaIvaAcredLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(SpIva1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                    .addContainerGap()))
+                    .addComponent(SpIva1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         panel_resultIvaAcred.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -571,8 +571,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGroup(panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_resultIvaAcredLayout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
+                        .addGap(0, 168, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -583,17 +583,17 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGroup(panel_dataIvaAcredLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_dataIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panel_resultIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panel_TablaIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panel_TablaIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel_resultIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panel_dataIvaAcredLayout.setVerticalGroup(
             panel_dataIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_dataIvaAcredLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel_TablaIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel_resultIvaAcred, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel_TablaIvaAcred, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panel_resultIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -985,10 +985,8 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
-        //inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear);
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
 
-        //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, totalAuxCred);
@@ -1253,110 +1251,110 @@ public class jfGlobal extends javax.swing.JFrame {
             tablaCienIvaAcred.setRowSorter(ordenTabla);
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
-            for (int i = 0; i < 21; i++) {
+            for (int i = 1; i <= 21; i++) {
                 switch (i) {
-                    case 0:
+                    case 1:
                         //Fecha de Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(130);
                         break;
-                    case 1:
+                    case 2:
                         //Folio Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(90);
                         break;
-                    case 2:
+                    case 3:
                         //Folio UUID
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(250);
                         break;
-                    case 3:
+                    case 4:
                         //Proveedor
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(400);
                         break;
-                    case 4:
+                    case 5:
                         //RFC
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(120);
                         break;
-                    case 5:
+                    case 6:
                         //Conceptos
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(500);
                         break;
-                    case 6:
+                    case 7:
                         //Base 0%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(60);
                         break;
-                    case 7:
+                    case 8:
                         //BASE 16
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(70);
                         break;
-                    case 8:
+                    case 9:
                         //Retencion 4%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(70);
                         break;
-                    case 9:
+                    case 10:
                         //Retencion 10%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(70);
                         break;
 
-                    case 10:
+                    case 11:
                         //Retencion 10.67%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 11:
+                    case 12:
                         //CP
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
-                    case 12:
+                    case 13:
                         //IVA
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 13:
+                    case 14:
                         //TOTAL
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(80);
                         break;
-                    case 14:
+                    case 15:
                         //Fecha Pago
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 15:
+                    case 16:
                         //Cuenta de banco
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
-                    case 16:
+                    case 17:
                         //Forma de Pago
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(120);
                         break;
-                    case 17:
+                    case 18:
                         //Tipo Poliza
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
-                    case 18:
+                    case 19:
                         //No. Poliza
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(80);
                         break;
-                    case 19:
+                    case 20:
                         //Relacion de actividad
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 20:
+                    case 21:
                         //Cruce Edo Cuenta
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
@@ -1379,162 +1377,6 @@ public class jfGlobal extends javax.swing.JFrame {
      *
      * @param listSelectManual
      */
-    private void inicializarTablaCienIvaAcredDesdeSeleccion(List<XmlDatos> listSelectManual) {
-        tablaIva = new DefaultTableModel();
-        tablaCienIvaAcred.removeAll();
-        //Titulos para la tabla
-        //Correguir titulos
-        String[] titulos = {"Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
-            "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza",
-            "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
-        //Ingresando titulos
-        tablaIva.setColumnIdentifiers(titulos);
-        //Lista de objetos xmlDatos
-
-        List<XmlDatos> llenarDatosTabla = listSelectManual;
-
-        //Solicitud datos BD
-        //checar esta validacion
-        if (!llenarDatosTabla.isEmpty()) {
-            //llenando la tabla de la info
-
-            for (int i = 0; i < llenarDatosTabla.size(); i++) {
-                System.out.println("Datos desde manual");
-                tablaIva.addRow(new Object[]{llenarDatosTabla.get(i).getFechaFactura(), llenarDatosTabla.get(i).getFolioInterno(),
-                    llenarDatosTabla.get(i).getFolioFiscal(), llenarDatosTabla.get(i).getProveedor(), llenarDatosTabla.get(i).getRfc(),
-                    llenarDatosTabla.get(i).getConceptoXml(), llenarDatosTabla.get(i).getBaseCero(), llenarDatosTabla.get(i).getBase16(),
-                    llenarDatosTabla.get(i).getRetencionCuatro(), llenarDatosTabla.get(i).getRetencionDiez(), llenarDatosTabla.get(i).getRetencion1016(),
-                    llenarDatosTabla.get(i).getCuotaCompensatoria(), llenarDatosTabla.get(i).getIva(), llenarDatosTabla.get(i).getTotal(),
-                    "Fecha de Pago", "Cuenta de banco", llenarDatosTabla.get(i).getFormaPago(), "Tipo de Poliza", "No. de Poliza",
-                    "Relación con Actividad", "Cruce Edo Cuenta"});
-            }
-
-            //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
-            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-            tablaCienIvaAcred.setModel(tablaIva);
-            tablaCienIvaAcred.setRowSorter(ordenTabla);
-
-            //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
-            TableColumn columna;
-            for (int i = 0; i < 21; i++) {
-                switch (i) {
-                    case 0:
-                        //Fecha de Factura
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
-                        break;
-                    case 1:
-                        //Folio Factura
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
-                        break;
-                    case 2:
-                        //Folio UUID
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 3:
-                        //Proveedor
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(350);
-                        break;
-                    case 4:
-                        //RFC
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 5:
-                        //Conceptos
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(500);
-                        break;
-                    case 6:
-                        //Base 0%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(60);
-                        break;
-                    case 7:
-                        //BASE 16
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 8:
-                        //Retencion 4%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(50);
-                        break;
-                    case 9:
-                        //Retencion 10%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-
-                    case 10:
-                        //Retencion 10.67%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 11:
-                        //CP
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
-                        break;
-                    case 12:
-                        //IVA
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 13:
-                        //TOTAL
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(80);
-                        break;
-                    case 14:
-                        //Fecha Pago
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 15:
-                        //Cuenta de banco
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
-                        break;
-                    case 16:
-                        //Forma de Pago
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(120);
-                        break;
-                    case 17:
-                        //Tipo Poliza
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 18:
-                        //No. Poliza
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(80);
-                        break;
-                    case 19:
-                        //Relacion de actividad
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 20:
-                        //Cruce Edo Cuenta
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-
-                    default:
-                        break;
-                }
-
-            }
-            lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
-
-        }
-    }
-
     private void inicializarTablaCienIvaAcredDesdeSeleccion_nueva(List<XmlDatos> listSelectManual) {
 
         tablaCienIvaAcred.removeAll();
@@ -1681,110 +1523,110 @@ public class jfGlobal extends javax.swing.JFrame {
 
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
-            for (int i = 0; i < 21; i++) {
-                switch (i) {
-                    case 0:
+            for (int i = 1; i <= 21; i++) {
+               switch (i) {
+                    case 1:
                         //Fecha de Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
+                        columna.setMinWidth(130);
                         break;
-                    case 1:
+                    case 2:
                         //Folio Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(90);
                         break;
-                    case 2:
+                    case 3:
                         //Folio UUID
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 3:
-                        //Proveedor
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(350);
+                        columna.setMinWidth(250);
                         break;
                     case 4:
-                        //RFC
+                        //Proveedor
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
+                        columna.setMinWidth(400);
                         break;
                     case 5:
+                        //RFC
+                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(120);
+                        break;
+                    case 6:
                         //Conceptos
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(500);
                         break;
-                    case 6:
+                    case 7:
                         //Base 0%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(60);
                         break;
-                    case 7:
+                    case 8:
                         //BASE 16
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(70);
                         break;
-                    case 8:
+                    case 9:
                         //Retencion 4%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(50);
+                        columna.setMinWidth(70);
                         break;
-                    case 9:
+                    case 10:
                         //Retencion 10%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
+                        columna.setMinWidth(70);
                         break;
 
-                    case 10:
+                    case 11:
                         //Retencion 10.67%
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 11:
+                    case 12:
                         //CP
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
-                    case 12:
+                    case 13:
                         //IVA
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 13:
+                    case 14:
                         //TOTAL
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(80);
                         break;
-                    case 14:
+                    case 15:
                         //Fecha Pago
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 15:
+                    case 16:
                         //Cuenta de banco
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(200);
                         break;
-                    case 16:
+                    case 17:
                         //Forma de Pago
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(120);
                         break;
-                    case 17:
+                    case 18:
                         //Tipo Poliza
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
-                    case 18:
+                    case 19:
                         //No. Poliza
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(80);
                         break;
-                    case 19:
+                    case 20:
                         //Relacion de actividad
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);
                         break;
-                    case 20:
+                    case 21:
                         //Cruce Edo Cuenta
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
                         columna.setMinWidth(150);

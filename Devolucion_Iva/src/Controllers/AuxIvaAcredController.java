@@ -18,8 +18,12 @@ public class AuxIvaAcredController {
 
     private List<AuxIvaAcred> auxIvaAcred;
     private Consultas consultas;
+    //Antigua
     private final static String NO_CUENTA = "115100100000000000002";
-
+    //Cuenta de AgroEcologia
+    private final static String NO_CUENTA_BANORTE7444="111500700100000000003";
+    
+    
     private final String baseAgroecologia = "COI80Empre2";
     private final String baseAstixa = "COI80Empre1";
 
