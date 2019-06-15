@@ -32,8 +32,9 @@ public class IvaAcredController {
     private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo;
     private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
             retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
-    private final String baseAgroecologia = "COI80Empre2";
-    private final String baseAstixa = "COI80Empre1";
+    private final String COI_AGRO = "COI80Empre2";
+    private final String COI_ADSTICSA = "COI80Empre1";
+    private final String CUENTA_BANCOMER_AGRO = "111500700100000000003";
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
     private List<Tag> cfdi_Comprobante;
@@ -350,20 +351,25 @@ public class IvaAcredController {
      * @return List PolizaDatos
      */
     public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio, int numEmpresa) {
+        //CHECAR EL PROCESO POR SECCIONES[PRIMERO BASE DE DATOS]
+        System.out.println("Valores recibidos controller");
+        System.out.println("Periodo : "+periodo+" Ejercicio: "+ejercicio+" NumEmpresa: "+numEmpresa);
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
         periodo += 1;
-        String empresa = "";
+        String base_empresa = "";
+        String cuentaBanco = "";
         if (numEmpresa == 0) {
-            empresa = baseAstixa;
+            base_empresa = COI_ADSTICSA;
+        } else if (numEmpresa == 1) {
+            base_empresa = COI_AGRO;
+            cuentaBanco = CUENTA_BANCOMER_AGRO;
         }
-        else if(numEmpresa == 1)
-        {
-            empresa = baseAgroecologia;
-        }
-
+        //Intentar mientras solo con agro, despues con adstisa (lo de las cuentas)
+        //A partir de que mes y año
         if (periodo > 0 && ejercicio >= 2017) {
-            polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio, empresa);
+            //LLenar con la información de la base de datos
+            polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio, cuentaBanco, (numEmpresa+1), base_empresa);
         }
         return polizaDat;
     }

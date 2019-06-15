@@ -11,6 +11,7 @@ import Models.AuxIvaAcred;
 import Controllers.AuxIvaAcredController;
 import Controllers.ControllerAction;
 import Controllers.GeneradorExcel;
+import Models.Consultas;
 import Models.RetencionIvaMes;
 import Models.XmlDatos;
 import Models.RetencionIvaPagadaMes;
@@ -87,6 +88,7 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobal = new javax.swing.JPanel();
         tp_Secciones = new javax.swing.JTabbedPane();
         panel_Det_Iva_Favor = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         panel_Cien_FIA = new javax.swing.JPanel();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
@@ -175,7 +177,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addComponent(btnXmlCargar)
         );
 
-        combo_Empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agroecología", "Asticsa" }));
+        combo_Empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Asticsa", "Agroecología", " " }));
 
         jLabel2.setText("Periodo");
 
@@ -227,15 +229,28 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panel_contenidoGlobal.setAutoscrolls(true);
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_Det_Iva_FavorLayout = new javax.swing.GroupLayout(panel_Det_Iva_Favor);
         panel_Det_Iva_Favor.setLayout(panel_Det_Iva_FavorLayout);
         panel_Det_Iva_FavorLayout.setHorizontalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 782, Short.MAX_VALUE)
+            .addGroup(panel_Det_Iva_FavorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(697, Short.MAX_VALUE))
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 729, Short.MAX_VALUE)
+            .addGroup(panel_Det_Iva_FavorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(695, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
@@ -985,8 +1000,9 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
+        System.out.println("Antes de cargar");
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
-
+        System.out.println("Despues de cargar");
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, totalAuxCred);
@@ -1085,6 +1101,12 @@ public class jfGlobal extends javax.swing.JFrame {
         panelBusquedaManual.setVisible(false);
     }//GEN-LAST:event_btnExitPanelActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Consultas cn = new Consultas();
+
+        cn.polizasPeriodoEjercicio(1, 2018, "111500700100000000003", 2, "COI80Empre2");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /*
     ################INICIA###################
     Funciones: 100% iva acred
@@ -1093,13 +1115,27 @@ public class jfGlobal extends javax.swing.JFrame {
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa) {
-
+//        listPolizaDatos = new ArrayList<>();
+//        System.out.println("Entrando a consulta");
+//        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes,anio,numEmpresa);
+//        if (!listPolizaDatos.isEmpty()) {
+//            for (int k = 0; k < listPolizaDatos.size(); k++) {
+//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getIdDoctodig());
+//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getEmpresa());
+//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getNombreXml());
+//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getNumeroPoliza());
+//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getRutaXml());
+//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getTipoPoliza());
+//                //15
+//            }
+//        }
         //Titulos para la tabla
-        String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%", "Base 16%", "Retencion 4%",
-            "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago", "Cuenta de Banco", "Forma de Pago", "Tipo Poliza",
-            "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
-        //Ingresando titulos
 
+        String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
+            "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
+            "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
+        //Ingresando titulos
+        //ID_DOCTODIG, ARCHIVO, CLAVE_POLIZA, TIPO, EMPRESA, PROCESADO
         //Clase que obtiene los datos xml
         ivaAcred = new IvaAcredController();
         //url de los documentos Mack
@@ -1110,7 +1146,6 @@ public class jfGlobal extends javax.swing.JFrame {
         //Lista de objetos xmlDatos 
 
         List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_lap);
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
 
         Object[][] myData = new Object[llenarDatosTabla.size()][22];
         //Datos para los totales
@@ -1524,7 +1559,7 @@ public class jfGlobal extends javax.swing.JFrame {
             //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
             TableColumn columna;
             for (int i = 1; i <= 21; i++) {
-               switch (i) {
+                switch (i) {
                     case 1:
                         //Fecha de Factura
                         columna = tablaCienIvaAcred.getColumn(titulos[i]);
@@ -2290,6 +2325,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
     private javax.swing.JComboBox<String> combo_Empresa;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

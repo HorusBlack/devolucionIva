@@ -385,10 +385,10 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         if (!listPolizaDatos.isEmpty()) {
             for (int i = 0; i < listPolizaDatos.size(); i++) {
                 System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
                 System.out.println("\n");
             }
         }

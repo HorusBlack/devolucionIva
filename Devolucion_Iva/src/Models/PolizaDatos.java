@@ -5,32 +5,54 @@
  */
 package Models;
 
-import java.util.Date;
-
 /**
- * Clase que se encarga de generar un objeto tipo PolizaDatos
- * de la informacion proporcionada de la BD
+ * Clase que se encarga de generar un objeto tipo PolizaDatos de la informacion
+ * proporcionada de la BD
+ *
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
 public class PolizaDatos {
 
-    /**
-     * ORIGEN
-     */
-    private int numeroPoliza, ejercicio, periodo;
-    private Date fechaPoliza;
-    private String conceptoPoliza, documentos, tipoPoliza, contabilizada, origen;
+    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza;
 
-    public int getNumeroPoliza() {
+    public String getIdDoctodig() {
+        return idDoctodig;
+    }
+
+    public void setIdDoctodig(String idDoctodig) {
+        this.idDoctodig = idDoctodig;
+    }
+
+    public String getNumeroPoliza() {
         return numeroPoliza;
     }
 
-    public int getPeriodo() {
-        return periodo;
+    public void setNumeroPoliza(String numeroPoliza) {
+        this.numeroPoliza = numeroPoliza;
     }
 
-    public void setPeriodo(int periodo) {
-        this.periodo = periodo;
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public String getRutaXml() {
+        return rutaXml;
+    }
+
+    public void setRutaXml(String rutaXml) {
+        this.rutaXml = rutaXml;
+    }
+
+    public String getNombreXml() {
+        return nombreXml;
+    }
+
+    public void setNombreXml(String nombreXml) {
+        this.nombreXml = nombreXml;
     }
 
     public String getTipoPoliza() {
@@ -39,58 +61,6 @@ public class PolizaDatos {
 
     public void setTipoPoliza(String tipoPoliza) {
         this.tipoPoliza = tipoPoliza;
-    }
-
-    public String getContabilizada() {
-        return contabilizada;
-    }
-
-    public void setContabilizada(String contabilizada) {
-        this.contabilizada = contabilizada;
-    }
-
-    public String getOrigen() {
-        return origen;
-    }
-
-    public void setOrigen(String origen) {
-        this.origen = origen;
-    }
-
-    public void setNumeroPoliza(int numeroPoliza) {
-        this.numeroPoliza = numeroPoliza;
-    }
-
-    public int getEjercicio() {
-        return ejercicio;
-    }
-
-    public void setEjercicio(int ejercicio) {
-        this.ejercicio = ejercicio;
-    }
-
-    public Date getFechaPoliza() {
-        return fechaPoliza;
-    }
-
-    public void setFechaPoliza(Date fechaPoliza) {
-        this.fechaPoliza = fechaPoliza;
-    }
-
-    public String getConceptoPoliza() {
-        return conceptoPoliza;
-    }
-
-    public void setConceptoPoliza(String conceptoPoliza) {
-        this.conceptoPoliza = conceptoPoliza;
-    }
-
-    public String getDocumentos() {
-        return documentos;
-    }
-
-    public void setDocumentos(String documentos) {
-        this.documentos = documentos;
     }
 
 }
