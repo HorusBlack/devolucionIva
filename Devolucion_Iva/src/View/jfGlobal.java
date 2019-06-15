@@ -1146,9 +1146,10 @@ public class jfGlobal extends javax.swing.JFrame {
         String URL_lap = "D:\\Windows-Antergos\\Macktronica\\Dac Simulacion\\" + anio + "\\" + numMes;
         //correguir sintaxis de ruta, la conexion sql es estable
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
+        String urlDac="\\\\25.62.86.238\\dacaspel\\Documentos digitales\\Comprobantes Digitales\\2018\\01 Enero\\AIC171129UAAFA00021.xml";
         //Lista de objetos xmlDatos 
 
-        llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_lap);
+        llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(urlDac);
 
         Object[][] myData = new Object[llenarDatosTabla.size()][22];
         //Datos para los totales
