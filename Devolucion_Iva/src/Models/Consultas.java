@@ -43,10 +43,6 @@ public class Consultas {
      */
     public List<PolizaDatos> polizasPeriodoEjercicio(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
             String dataBase) {
-
-        System.out.println("Valores recibidos consulta");
-        System.out.println("Periodo: " + periodo + " Ejercicio: " + ejercicio + " Cuenta: " + numeroCuenta + " empresa: " + numeroEmpresa + " DB: " + dataBase);
-
         connection = new ConexionDB();
         //String[] parts = string.split("T");
         String subFijoTabla = String.valueOf(ejercicio);
@@ -59,16 +55,14 @@ public class Consultas {
         String subBaseCoi = "COI80Empre" + numeroEmpresa;
         if (periodo < 10) {
             subFijoPeriodo = "0" + periodo;
-            System.out.println("periodo string: " + subFijoPeriodo);
         } else {
             subFijoPeriodo = String.valueOf(periodo);
-            System.out.println("periodo string: " + subFijoPeriodo);
         }
         String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
-        System.out.println(subFijoCuenta);
-        System.out.println(subFijoAuxiliar);
-        System.out.println(subFijoSaldos);
-        System.out.println(subBaseCoi);
+//        System.out.println(subFijoCuenta);
+//        System.out.println(subFijoAuxiliar);
+//        System.out.println(subFijoSaldos);
+//        System.out.println(subBaseCoi);
 
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         Connection conexion = null;
@@ -86,9 +80,7 @@ public class Consultas {
             //erro sql aqui
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
-            System.out.println("Registros SQL");
             while (resultSet.next()) {
-                System.out.println("Registros SQL DENTRO");
                 polizaDatos = new PolizaDatos();
                 polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
                 polizaDatos.setRutaXml(resultSet.getString("RUTA"));
@@ -97,16 +89,15 @@ public class Consultas {
                 polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
                 polizaDatosList.add(polizaDatos);
-                for (int i = 0; i < polizaDatosList.size(); i++) {
-                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getIdDoctodig());
-                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getEmpresa());
-                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getNombreXml());
-                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getNumeroPoliza());
-                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getRutaXml());
-                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getTipoPoliza());
-                }
+//                for (int i = 0; i < polizaDatosList.size(); i++) {
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getIdDoctodig());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getEmpresa());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getNombreXml());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getNumeroPoliza());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getRutaXml());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getTipoPoliza());
+//                }
             }
-            System.out.println("Registros SQL FIN");
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

@@ -49,12 +49,13 @@ public class jfGlobal extends javax.swing.JFrame {
     private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva, totalAuxCred;
     private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
-    private List<PolizaDatos> listPolizaDatos;
+    private GeneradorExcel generadorExcel;
     private AuxIvaAcred auxIvaAcred;
     private List<AuxIvaAcred> listAuxIvaAcreds;
+    private List<PolizaDatos> listPolizaDatos;
     private List<RetencionIvaMes> listRetencionIvaMeses;
     private List<RetencionIvaPagadaMes> listRetencionIvaPagadaMes;
-    private GeneradorExcel generadorExcel;
+
     private List<XmlDatos> xmlDatosList;
 
     //"Base 0%", "Base 16%", "Retención 4%", "Retención 10%", "Retención 10.67%", "IVA", "Total"
@@ -1115,29 +1116,31 @@ public class jfGlobal extends javax.swing.JFrame {
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa) {
-//        listPolizaDatos = new ArrayList<>();
-//        System.out.println("Entrando a consulta");
-//        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes,anio,numEmpresa);
-//        if (!listPolizaDatos.isEmpty()) {
-//            for (int k = 0; k < listPolizaDatos.size(); k++) {
-//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getIdDoctodig());
-//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getEmpresa());
-//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getNombreXml());
-//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getNumeroPoliza());
-//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getRutaXml());
-//                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getTipoPoliza());
-//                //15
-//            }
-//        }
-        //Titulos para la tabla
+        ivaAcred = new IvaAcredController();
+        List<XmlDatos> llenarDatosTabla = new ArrayList<>();
+        listPolizaDatos = new ArrayList<>();
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
 
+        if (!listPolizaDatos.isEmpty()) {
+            for (int k = 0; k < listPolizaDatos.size(); k++) {
+                //Concatenar la Ruta del XMl junto con su nombre
+                // \\servidoragro(o la ip de hamachi)\DACASPEL\Comprobantes Digitales\2018\01 enero\AIC171129UAAFA00021.xml
+                System.out.println("ID DOC: " + listPolizaDatos.get(k).getIdDoctodig());
+                System.out.println("ID EMPRESA: " + listPolizaDatos.get(k).getEmpresa());
+                System.out.println("ARCHIVO XML: " + listPolizaDatos.get(k).getNombreXml());
+                System.out.println("NUM POLIZA: " + listPolizaDatos.get(k).getNumeroPoliza());
+                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getRutaXml());
+                System.out.println("TIPO POLIZA: " + listPolizaDatos.get(k).getTipoPoliza());
+                //15
+            }
+        }
+        //Titulos para la tabla
         String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
             "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
             "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
         //Ingresando titulos
-        //ID_DOCTODIG, ARCHIVO, CLAVE_POLIZA, TIPO, EMPRESA, PROCESADO
         //Clase que obtiene los datos xml
-        ivaAcred = new IvaAcredController();
+
         //url de los documentos Mack
         String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
         String URL_lap = "D:\\Windows-Antergos\\Macktronica\\Dac Simulacion\\" + anio + "\\" + numMes;
@@ -1145,7 +1148,7 @@ public class jfGlobal extends javax.swing.JFrame {
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
         //Lista de objetos xmlDatos 
 
-        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_lap);
+        llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_lap);
 
         Object[][] myData = new Object[llenarDatosTabla.size()][22];
         //Datos para los totales

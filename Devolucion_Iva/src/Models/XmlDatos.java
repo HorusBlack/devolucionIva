@@ -13,9 +13,42 @@ public class XmlDatos {
 
     private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
             folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria;
+    private String idDoctoDig, numeroPoliza, tipoPoliza, nombreArchivoXml;
 
     public String getCuotaCompensatoria() {
         return cuotaCompensatoria;
+    }
+
+    public String getIdDoctoDig() {
+        return idDoctoDig;
+    }
+
+    public void setIdDoctoDig(String idDoctoDig) {
+        this.idDoctoDig = idDoctoDig;
+    }
+
+    public String getNumeroPoliza() {
+        return numeroPoliza;
+    }
+
+    public void setNumeroPoliza(String numeroPoliza) {
+        this.numeroPoliza = numeroPoliza;
+    }
+
+    public String getTipoPoliza() {
+        return tipoPoliza;
+    }
+
+    public void setTipoPoliza(String tipoPoliza) {
+        this.tipoPoliza = tipoPoliza;
+    }
+
+    public String getNombreArchivoXml() {
+        return nombreArchivoXml;
+    }
+
+    public void setNombreArchivoXml(String nombreArchivoXml) {
+        this.nombreArchivoXml = nombreArchivoXml;
     }
 
     public void setCuotaCompensatoria(String cuotaCompensatoria) {

@@ -352,7 +352,6 @@ public class IvaAcredController {
      */
     public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio, int numEmpresa) {
         //CHECAR EL PROCESO POR SECCIONES[PRIMERO BASE DE DATOS]
-        System.out.println("Valores recibidos controller");
         System.out.println("Periodo : "+periodo+" Ejercicio: "+ejercicio+" NumEmpresa: "+numEmpresa);
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
