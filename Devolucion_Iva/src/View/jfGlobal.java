@@ -46,7 +46,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
     private int numAnio;
-    private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva, totalAuxCred;
+    private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, 
+            total_devIva, totalAuxCred;
     private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
     private GeneradorExcel generadorExcel;
