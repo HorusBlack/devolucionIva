@@ -46,7 +46,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
     private int numAnio;
-    private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, 
+    private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva,
             total_devIva, totalAuxCred;
     private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
@@ -1121,7 +1121,7 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
-
+        String ultimaRuta = "";
         if (!listPolizaDatos.isEmpty()) {
             for (int k = 0; k < listPolizaDatos.size(); k++) {
                 //Concatenar la Ruta del XMl junto con su nombre
@@ -1132,22 +1132,19 @@ public class jfGlobal extends javax.swing.JFrame {
                 System.out.println("NUM POLIZA: " + listPolizaDatos.get(k).getNumeroPoliza());
                 System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getRutaXml());
                 System.out.println("TIPO POLIZA: " + listPolizaDatos.get(k).getTipoPoliza());
-                //15
+                ultimaRuta = listPolizaDatos.get(k).getRutaXml() + listPolizaDatos.get(k).getNombreXml();
             }
         }
         //Titulos para la tabla
         String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
             "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
             "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
-        //Ingresando titulos
         //Clase que obtiene los datos xml
-
-        //url de los documentos Mack
-        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numMes;
-        String URL_lap = "D:\\Windows-Antergos\\Macktronica\\Dac Simulacion\\" + anio + "\\" + numMes;
         //correguir sintaxis de ruta, la conexion sql es estable
         String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
-        String urlDac="\\\\25.62.86.238\\dacaspel\\Documentos digitales\\Comprobantes Digitales\\2018\\01 Enero\\AIC171129UAAFA00021.xml";
+        //String urlDac = "\\25.62.86.238\\dacaspel\\Documentos digitales\\Comprobantes Digitales\\2018\\01 Enero\\AIC171129UAAFA00021.xml";
+        String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
+        System.out.println("RUTA: " + urlDac);
         //Lista de objetos xmlDatos 
 
         llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(urlDac);
@@ -1407,6 +1404,8 @@ public class jfGlobal extends javax.swing.JFrame {
             }
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
             inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
         }
 
     }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.jespxml.JespXML;
 import org.jespxml.excepciones.AtributoNotFoundException;
@@ -332,7 +333,8 @@ public class IvaAcredController {
                 }
 
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
-                //AQUI SE GENERA EL PROBLEMA 
+                //AQUI SE GENERA EL PROBLEMA
+               
                 Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
