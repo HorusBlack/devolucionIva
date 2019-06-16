@@ -13,7 +13,15 @@ public class XmlDatos {
 
     private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
             folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria;
-    private String idDoctoDig, numeroPoliza, tipoPoliza, nombreArchivoXml;
+    private String idDoctoDig, numeroPoliza, tipoPoliza, nombreArchivoXml, codigoEmpresa;
+
+    public String getCodigoEmpresa() {
+        return codigoEmpresa;
+    }
+
+    public void setCodigoEmpresa(String codigoEmpresa) {
+        this.codigoEmpresa = codigoEmpresa;
+    }
 
     public String getCuotaCompensatoria() {
         return cuotaCompensatoria;

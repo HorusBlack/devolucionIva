@@ -179,7 +179,7 @@ public class jfGlobal extends javax.swing.JFrame {
             .addComponent(btnXmlCargar)
         );
 
-        combo_Empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Asticsa", "Agroecología", " " }));
+        combo_Empresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Asticsa", "Agroecología" }));
 
         jLabel2.setText("Periodo");
 
@@ -1123,289 +1123,278 @@ public class jfGlobal extends javax.swing.JFrame {
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
         String ultimaRuta = "";
         if (!listPolizaDatos.isEmpty()) {
-            for (int k = 0; k < listPolizaDatos.size(); k++) {
-                //Concatenar la Ruta del XMl junto con su nombre
-                // \\servidoragro(o la ip de hamachi)\DACASPEL\Comprobantes Digitales\2018\01 enero\AIC171129UAAFA00021.xml
-                System.out.println("ID DOC: " + listPolizaDatos.get(k).getIdDoctodig());
-                System.out.println("ID EMPRESA: " + listPolizaDatos.get(k).getEmpresa());
-                System.out.println("ARCHIVO XML: " + listPolizaDatos.get(k).getNombreXml());
-                System.out.println("NUM POLIZA: " + listPolizaDatos.get(k).getNumeroPoliza());
-                System.out.println("POLIZA DAT: " + listPolizaDatos.get(k).getRutaXml());
-                System.out.println("TIPO POLIZA: " + listPolizaDatos.get(k).getTipoPoliza());
-                ultimaRuta = listPolizaDatos.get(k).getRutaXml() + listPolizaDatos.get(k).getNombreXml();
-            }
-        }
-        //Titulos para la tabla
-        String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
-            "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
-            "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
-        //Clase que obtiene los datos xml
-        //correguir sintaxis de ruta, la conexion sql es estable
-        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
-        //String urlDac = "\\25.62.86.238\\dacaspel\\Documentos digitales\\Comprobantes Digitales\\2018\\01 Enero\\AIC171129UAAFA00021.xml";
-        String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
-        System.out.println("RUTA: " + urlDac);
-        //Lista de objetos xmlDatos 
+            //Titulos para la tabla
+            String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
+                "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
+                "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta"};
+            //Clase que obtiene los datos xml
+            //correguir sintaxis de ruta, la conexion sql es estable
+            String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
+            //String urlDac = "\\25.62.86.238\\dacaspel\\Documentos digitales\\Comprobantes Digitales\\2018\\01 Enero\\AIC171129UAAFA00021.xml";
+            String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
+            System.out.println("RUTA: " + urlDac);
+            //Lista de objetos xmlDatos 
 
-        llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(urlDac);
+            //llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(urlDac);
+            llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos);
+            Object[][] myData = new Object[llenarDatosTabla.size()][22];
+            //Datos para los totales
+            base_0 = 0;
+            base_16 = 0;
+            retencion_4 = 0;
+            retencion_10 = 0;
+            retencion_1067 = 0;
+            cuotaCompensatoria = 0;
+            totalIva = 0;
+            total_devIva = 0;
 
-        Object[][] myData = new Object[llenarDatosTabla.size()][22];
-        //Datos para los totales
-        base_0 = 0;
-        base_16 = 0;
-        retencion_4 = 0;
-        retencion_10 = 0;
-        retencion_1067 = 0;
-        cuotaCompensatoria = 0;
-        totalIva = 0;
-        total_devIva = 0;
+            double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
 
-        double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
+            //Solicitud datos BD
+            //checar esta validacion
+            if (!llenarDatosTabla.isEmpty()) {
+                //llenando la tabla de la info
+                System.out.println("tamaño de lista 100% acred: " + llenarDatosTabla.size());
+                for (int i = 0; i < llenarDatosTabla.size(); i++) {
 
-        //Solicitud datos BD
-        //checar esta validacion
-        if (!llenarDatosTabla.isEmpty()) {
-            //llenando la tabla de la info
-            System.out.println("tamaño de lista 100% acred: " + llenarDatosTabla.size());
-            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+                    String string = llenarDatosTabla.get(i).getFechaFactura();
+                    String[] parts = string.split("T");
+                    String part1 = parts[0];
+                    String dateFormat = "";
+                    //No se estan cargando todos los datos
+                    try {
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                        dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
-                String string = llenarDatosTabla.get(i).getFechaFactura();
-                String[] parts = string.split("T");
-                String part1 = parts[0];
-                String dateFormat = "";
-                //No se estan cargando todos los datos
-                try {
-                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                    dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                    } catch (ParseException ex) {
+                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                    }
 
-                } catch (ParseException ex) {
-                    JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
-                }
-
-                /*
+                    /*
                 String[] titulos = {" "Relación con Actividad","Cruce Edo. Cuenta"};
-                 */
+                     */
 //            
-                myData[i][0] = false;
-                myData[i][1] = dateFormat;
-                myData[i][2] = llenarDatosTabla.get(i).getFolioInterno();
-                myData[i][3] = llenarDatosTabla.get(i).getFolioFiscal();
-                myData[i][4] = llenarDatosTabla.get(i).getProveedor();
-                myData[i][5] = llenarDatosTabla.get(i).getRfc();
-                myData[i][6] = llenarDatosTabla.get(i).getConceptoXml();
-                myData[i][7] = llenarDatosTabla.get(i).getBaseCero();
-                myData[i][8] = llenarDatosTabla.get(i).getBase16();
-                myData[i][9] = llenarDatosTabla.get(i).getRetencionCuatro();
-                myData[i][10] = llenarDatosTabla.get(i).getRetencionDiez();
-                myData[i][11] = llenarDatosTabla.get(i).getRetencion1016();
-                myData[i][12] = llenarDatosTabla.get(i).getCuotaCompensatoria();
-                myData[i][13] = llenarDatosTabla.get(i).getIva();
-                myData[i][14] = llenarDatosTabla.get(i).getTotal();
-                myData[i][15] = "Fecha de Pago";
-                myData[i][16] = "Cuenta de Banco";
-                myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
-                myData[i][18] = "Tipo de Poliza";
-                myData[i][19] = "No. Poliza";
-                myData[i][20] = "Relación con Actividad";
-                myData[i][21] = "Cruce Edo. Cuenta";
-                //Para el total
-                //0.00, null, ""
-                try {
-                    do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+                    myData[i][0] = false;
+                    myData[i][1] = dateFormat;
+                    myData[i][2] = llenarDatosTabla.get(i).getFolioInterno();
+                    myData[i][3] = llenarDatosTabla.get(i).getFolioFiscal();
+                    myData[i][4] = llenarDatosTabla.get(i).getProveedor();
+                    myData[i][5] = llenarDatosTabla.get(i).getRfc();
+                    myData[i][6] = llenarDatosTabla.get(i).getConceptoXml();
+                    myData[i][7] = llenarDatosTabla.get(i).getBaseCero();
+                    myData[i][8] = llenarDatosTabla.get(i).getBase16();
+                    myData[i][9] = llenarDatosTabla.get(i).getRetencionCuatro();
+                    myData[i][10] = llenarDatosTabla.get(i).getRetencionDiez();
+                    myData[i][11] = llenarDatosTabla.get(i).getRetencion1016();
+                    myData[i][12] = llenarDatosTabla.get(i).getCuotaCompensatoria();
+                    myData[i][13] = llenarDatosTabla.get(i).getIva();
+                    myData[i][14] = llenarDatosTabla.get(i).getTotal();
+                    myData[i][15] = "Fecha de Pago";
+                    myData[i][16] = "Cuenta de Banco";
+                    myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
+                    myData[i][18] = llenarDatosTabla.get(i).getTipoPoliza();
+                    myData[i][19] = llenarDatosTabla.get(i).getNumeroPoliza();
+                    myData[i][20] = "Relación con Actividad";
+                    myData[i][21] = "Cruce Edo. Cuenta";
+                    //Para el total
+                    //0.00, null, ""
+                    try {
+                        do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
 
-                } catch (NullPointerException e) {
-                    do_text1 = 0;
-                }
-                base_0 += do_text1;
-                try {
-                    do_text2 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
-                } catch (NullPointerException e) {
-                    do_text2 = 0;
-                }
-                base_16 += do_text2;
-                try {
-                    do_text3 = (llenarDatosTabla.get(i).getRetencionCuatro().equals("") || llenarDatosTabla.get(i).getRetencionCuatro().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionCuatro());
-                } catch (NullPointerException e) {
-                    do_text3 = 0;
-                }
-                retencion_4 += do_text3;
-                try {
-                    do_text4 = (llenarDatosTabla.get(i).getRetencionDiez().equals("") || llenarDatosTabla.get(i).getRetencionDiez().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionDiez());
-                } catch (NullPointerException e) {
-                    do_text4 = 0;
-                }
-                retencion_10 += do_text4;
-                try {
-                    do_text5 = (llenarDatosTabla.get(i).getRetencion1016().equals("") || llenarDatosTabla.get(i).getRetencion1016().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencion1016());
-                } catch (NullPointerException e) {
-                    do_text5 = 0;
-                }
-                retencion_1067 += do_text5;
-                try {
-                    do_text6 = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
-                } catch (NullPointerException e) {
-                    do_text6 = 0;
-                }
-                totalIva += do_text6;
-                try {
-                    do_text7 = (llenarDatosTabla.get(i).getCuotaCompensatoria().equals("") || llenarDatosTabla.get(i).getCuotaCompensatoria().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getCuotaCompensatoria());
-                } catch (NullPointerException e) {
-                    do_text7 = 0;
-                }
-                cuotaCompensatoria += do_text7;
-                try {
-                    do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
-                } catch (NullPointerException e) {
-                    do_text8 = 0;
-                }
-                total_devIva += do_text8;
-            }
-
-            tablaIva = new DefaultTableModel(myData, titulos) {
-                @Override
-                public Class<?> getColumnClass(int column) { //DETERMINA SI LA COLUMNA SERÁ CHECKBOX (BOOLEAN) O TEXTO (STRING)
-                    if (column == 0) {
-                        return Boolean.class;
-                    } else {
-                        return String.class;
+                    } catch (NullPointerException e) {
+                        do_text1 = 0;
                     }
-                }
-
-                @Override
-                public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
-                    if (column == 0 || column == 9 || column == 10 || column == 11) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
-                        return true;
-                    } else {
-                        return false;
+                    base_0 += do_text1;
+                    try {
+                        do_text2 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    } catch (NullPointerException e) {
+                        do_text2 = 0;
                     }
-                }
-            };
-
-            //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
-            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-
-            tablaCienIvaAcred.setModel(tablaIva);
-            tablaCienIvaAcred.setRowSorter(ordenTabla);
-            //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
-            TableColumn columna;
-            for (int i = 1; i <= 21; i++) {
-                switch (i) {
-                    case 1:
-                        //Fecha de Factura
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(130);
-                        break;
-                    case 2:
-                        //Folio Factura
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
-                        break;
-                    case 3:
-                        //Folio UUID
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(250);
-                        break;
-                    case 4:
-                        //Proveedor
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(400);
-                        break;
-                    case 5:
-                        //RFC
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(120);
-                        break;
-                    case 6:
-                        //Conceptos
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(500);
-                        break;
-                    case 7:
-                        //Base 0%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(60);
-                        break;
-                    case 8:
-                        //BASE 16
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 9:
-                        //Retencion 4%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 10:
-                        //Retencion 10%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-
-                    case 11:
-                        //Retencion 10.67%
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 12:
-                        //CP
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
-                        break;
-                    case 13:
-                        //IVA
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 14:
-                        //TOTAL
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(80);
-                        break;
-                    case 15:
-                        //Fecha Pago
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 16:
-                        //Cuenta de banco
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
-                        break;
-                    case 17:
-                        //Forma de Pago
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(120);
-                        break;
-                    case 18:
-                        //Tipo Poliza
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 19:
-                        //No. Poliza
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(80);
-                        break;
-                    case 20:
-                        //Relacion de actividad
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 21:
-                        //Cruce Edo Cuenta
-                        columna = tablaCienIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-
-                    default:
-                        break;
+                    base_16 += do_text2;
+                    try {
+                        do_text3 = (llenarDatosTabla.get(i).getRetencionCuatro().equals("") || llenarDatosTabla.get(i).getRetencionCuatro().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionCuatro());
+                    } catch (NullPointerException e) {
+                        do_text3 = 0;
+                    }
+                    retencion_4 += do_text3;
+                    try {
+                        do_text4 = (llenarDatosTabla.get(i).getRetencionDiez().equals("") || llenarDatosTabla.get(i).getRetencionDiez().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionDiez());
+                    } catch (NullPointerException e) {
+                        do_text4 = 0;
+                    }
+                    retencion_10 += do_text4;
+                    try {
+                        do_text5 = (llenarDatosTabla.get(i).getRetencion1016().equals("") || llenarDatosTabla.get(i).getRetencion1016().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencion1016());
+                    } catch (NullPointerException e) {
+                        do_text5 = 0;
+                    }
+                    retencion_1067 += do_text5;
+                    try {
+                        do_text6 = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                    } catch (NullPointerException e) {
+                        do_text6 = 0;
+                    }
+                    totalIva += do_text6;
+                    try {
+                        do_text7 = (llenarDatosTabla.get(i).getCuotaCompensatoria().equals("") || llenarDatosTabla.get(i).getCuotaCompensatoria().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getCuotaCompensatoria());
+                    } catch (NullPointerException e) {
+                        do_text7 = 0;
+                    }
+                    cuotaCompensatoria += do_text7;
+                    try {
+                        do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
+                    } catch (NullPointerException e) {
+                        do_text8 = 0;
+                    }
+                    total_devIva += do_text8;
                 }
 
+                tablaIva = new DefaultTableModel(myData, titulos) {
+                    @Override
+                    public Class<?> getColumnClass(int column) { //DETERMINA SI LA COLUMNA SERÁ CHECKBOX (BOOLEAN) O TEXTO (STRING)
+                        if (column == 0) {
+                            return Boolean.class;
+                        } else {
+                            return String.class;
+                        }
+                    }
+
+                    @Override
+                    public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
+                        if (column == 0 || column == 9 || column == 10 || column == 11) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+
+                //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
+                TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+
+                tablaCienIvaAcred.setModel(tablaIva);
+                tablaCienIvaAcred.setRowSorter(ordenTabla);
+                //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
+                TableColumn columna;
+                for (int i = 1; i <= 21; i++) {
+                    switch (i) {
+                        case 1:
+                            //Fecha de Factura
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(130);
+                            break;
+                        case 2:
+                            //Folio Factura
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(90);
+                            break;
+                        case 3:
+                            //Folio UUID
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(250);
+                            break;
+                        case 4:
+                            //Proveedor
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(400);
+                            break;
+                        case 5:
+                            //RFC
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(120);
+                            break;
+                        case 6:
+                            //Conceptos
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(500);
+                            break;
+                        case 7:
+                            //Base 0%
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(60);
+                            break;
+                        case 8:
+                            //BASE 16
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 9:
+                            //Retencion 4%
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 10:
+                            //Retencion 10%
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+
+                        case 11:
+                            //Retencion 10.67%
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 12:
+                            //CP
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(200);
+                            break;
+                        case 13:
+                            //IVA
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 14:
+                            //TOTAL
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(80);
+                            break;
+                        case 15:
+                            //Fecha Pago
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 16:
+                            //Cuenta de banco
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(200);
+                            break;
+                        case 17:
+                            //Forma de Pago
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(120);
+                            break;
+                        case 18:
+                            //Tipo Poliza
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(100);
+                            break;
+                        case 19:
+                            //No. Poliza
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(80);
+                            break;
+                        case 20:
+                            //Relacion de actividad
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 21:
+                            //Cruce Edo Cuenta
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                }
+                lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
+                inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
             }
-            lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
-            inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
         }
 
     }
