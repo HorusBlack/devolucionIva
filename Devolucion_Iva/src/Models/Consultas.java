@@ -64,23 +64,33 @@ public class Consultas {
         //" + tableSaldos + "
         try {
             conexion = connection.Entrar(dataBase);
-            query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] "
-                    + "d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON "
-                    + "rel.ID_REGISTRO = reg.ID_REGISTRO WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND "
-                    + "reg.EMPRESA = " + numeroEmpresa + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') AND reg.CVEENTIDAD1 IN "
-                    + "(SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ FROM ([" + subBaseCoi + "].[dbo].[" + subFijoCuenta + "] A "
-                    + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C "
-                    + "ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + numeroCuenta + "'   AND  A.NUM_CTA <= '" + numeroCuenta + "' ) "
-                    + "order by  reg.CVEENTIDAD1";
+//            query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] "
+//                    + "d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON "
+//                    + "rel.ID_REGISTRO = reg.ID_REGISTRO WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND "
+//                    + "reg.EMPRESA = " + numeroEmpresa + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') AND reg.CVEENTIDAD1 IN "
+//                    + "(SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ FROM ([" + subBaseCoi + "].[dbo].[" + subFijoCuenta + "] A "
+//                    + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C "
+//                    + "ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + numeroCuenta + "'   AND  A.NUM_CTA <= '" + numeroCuenta + "' ) "
+//                    + "order by  reg.CVEENTIDAD1";
 
-            String query2 = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d \n"
-                    + "INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG \n"
-                    + "INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON rel.ID_REGISTRO = reg.ID_REGISTRO \n"
-                    + "INNER JOIN [COI80Empre2].[dbo].[AUXILIAR18] aux ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI\n"
-                    + "WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA = " + numeroEmpresa + " AND aux.PERIODO = 1 AND aux.EJERCICIO = 2018\n"
-                    + "AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') \n"
-                    + "AND reg.CVEENTIDAD1 IN (SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ FROM ([COI80Empre2].[dbo].[CUENTAS18] A JOIN [COI80Empre2].[dbo].[SALDOS18] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [COI80Empre2].[dbo].[AUXILIAR18] C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (1))  WHERE A.NUM_CTA >= '111500700100000000003'   AND  A.NUM_CTA <= '111500700100000000003' ) \n"
-                    + "GROUP BY aux.NUM_POLIZ, d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1, reg.CVEENTIDAD2,aux.FECHA_POL, reg.EMPRESA order by  reg.CVEENTIDAD1";
+            query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
+                    + " reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA "
+                    + "FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION]"
+                    + " rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS]"
+                    + " reg ON rel.ID_REGISTRO = reg.ID_REGISTRO INNER JOIN "
+                    + "[" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux ON reg.CVEENTIDAD1 = "
+                    + "aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
+                    + "WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' "
+                    + "AND reg.EMPRESA = " + numeroEmpresa + " AND aux.PERIODO = " + periodo + " AND "
+                    + "aux.EJERCICIO = " + ejercicio + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
+                    + "AND reg.CVEENTIDAD1 IN (SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE "
+                    + "NUM_POLIZ END) NUM_POLIZ FROM ([" + subBaseCoi + "].[dbo].[" + subFijoCuenta + "] A "
+                    + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  "
+                    + "LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C ON "
+                    + "(A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                    + "WHERE A.NUM_CTA >= '" + numeroCuenta + "' AND A.NUM_CTA <= '" + numeroCuenta + "' )"
+                    + "GROUP BY aux.NUM_POLIZ, d.ID_DOCTODIG, d.RUTA, d.ARCHIVO,"
+                    + " reg.CVEENTIDAD1, reg.CVEENTIDAD2,aux.FECHA_POL, reg.EMPRESA order by  reg.CVEENTIDAD1";
 
             //erro sql aqui
             stmt = conexion.createStatement();
@@ -93,6 +103,7 @@ public class Consultas {
                 polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
                 polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
                 if ("111500700100000000003".equals(numeroCuenta)) {
                     polizaDatos.setCuenta("Banorte 7444");
                 }

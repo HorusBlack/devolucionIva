@@ -1162,10 +1162,13 @@ public class jfGlobal extends javax.swing.JFrame {
                     String[] parts = string.split("T");
                     String part1 = parts[0];
                     String dateFormat = "";
+                    String fechaPago = "";
                     //No se estan cargando todos los datos
                     try {
                         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
                         dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                        date = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
+                        fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                     } catch (ParseException ex) {
                         JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
@@ -1190,7 +1193,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][12] = llenarDatosTabla.get(i).getCuotaCompensatoria();
                     myData[i][13] = llenarDatosTabla.get(i).getIva();
                     myData[i][14] = llenarDatosTabla.get(i).getTotal();
-                    myData[i][15] = "Fecha de Pago";
+                    myData[i][15] = fechaPago;
                     myData[i][16] = llenarDatosTabla.get(i).getCuenta();
                     myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
                     myData[i][18] = llenarDatosTabla.get(i).getTipoPoliza();

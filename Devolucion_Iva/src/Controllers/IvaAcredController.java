@@ -596,6 +596,7 @@ public class IvaAcredController {
                                         infoXml.setRetencionCuatro(retencionCuatro);
                                         infoXml.setRetencionDiez(retencionDiez);
                                         infoXml.setRetencion1016(retencion1016);
+                                        
 
                                         break;
                                     case "<cfdi:Complemento>":
@@ -682,6 +683,7 @@ public class IvaAcredController {
                             infoXml.setNumeroPoliza(listFicherosPolizaBase.get(p).getNumeroPoliza());
                             infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
                             infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
+                            infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
                             datosXml.add(infoXml);
 
                         } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
