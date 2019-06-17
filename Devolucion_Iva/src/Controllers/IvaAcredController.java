@@ -518,13 +518,15 @@ public class IvaAcredController {
                                                 cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
                                                 cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
                                                 String tipoTazaTem = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
-                                                if (tipoTazaTem == "0.000000") {
+                                                if ("0.000000".equals(tipoTazaTem)) {
                                                     if (baseCero.isEmpty()) {
                                                         baseCero = cfdi_traslado_hijo.getValorDeAtributo("Base");
                                                         baseCeroSuma = Double.parseDouble(baseCero);
+                                                        System.out.println("b0: "+baseCeroSuma);
                                                     } else {
                                                         baseCero = cfdi_traslado_hijo.getValorDeAtributo("Base");
                                                         baseCeroSuma += Double.parseDouble(baseCero);
+                                                        System.out.println("b02: "+baseCeroSuma);
                                                     }
 
                                                 }

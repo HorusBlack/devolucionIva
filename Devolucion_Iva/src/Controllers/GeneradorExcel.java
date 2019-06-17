@@ -192,7 +192,11 @@ public class GeneradorExcel {
                     Cell celda;
                     celda = fila.createCell(a);
                     celda.setCellStyle(datosEstilo);
-                    celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
+                    if (tablaCienPorciento.getValueAt(i, a) == null) {
+                        celda.setCellValue("");
+                    } else {
+                        celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
+                    }
                 }
 
             }
@@ -207,25 +211,58 @@ public class GeneradorExcel {
             fontTotal.setColor(IndexedColors.BLACK.getIndex());
             fontTotal.setFontHeightInPoints((short) 12);
             txtT1.setFont(fontTotal);
-            
-            //Acomodar la tabla total
-            Row filaTotal_1 = hoja.createRow(ultimaFilaRegistros + 1);
-            Cell ct_1 = filaTotal_1.createCell(3);
-            ct_1.setCellStyle(txtT1);
-            ct_1.setCellValue("TOTAL AL 100% DE IVA ACREDITABLE");
 
-            for (int i = 0; i < tablaTotalCien.getRowCount(); i++) {
-                //?
-                Row fila = hoja.createRow(ultimaFilaRegistros + 2);
-                //Obteniendo información de las columnas
+            CellStyle txtT2 = book.createCellStyle();
+            txtT1.setAlignment(HorizontalAlignment.CENTER);
 
-                for (int a = 0; a < tablaTotalCien.getColumnCount(); a++) {
-                    Cell celda;
-                    celda = fila.createCell(a);
-                    celda.setCellStyle(datosEstilo);
-                    celda.setCellValue(String.valueOf(tablaTotalCien.getValueAt(i, a)));
-                }
+            Font cabeceraTotales = (Font) book.createFont();
+            cabeceraTotales.setFontName("Arial");
+            cabeceraTotales.setBold(true);
+            cabeceraTotales.setColor(IndexedColors.BLACK.getIndex());
+            cabeceraTotales.setFontHeightInPoints((short) 10);
+            txtT2.setFont(cabeceraTotales);
 
+            Row stx = hoja.createRow(ultimaFilaRegistros + 1);
+            Cell st_1 = stx.createCell(7);
+            st_1.setCellStyle(txtT2);
+            st_1.setCellValue("Total Base 0%");
+
+            Cell st_2 = stx.createCell(8);
+            st_2.setCellStyle(txtT2);
+            st_2.setCellValue("Total Base 16%");
+
+            Cell st_3 = stx.createCell(9);
+            st_3.setCellStyle(txtT2);
+            st_3.setCellValue("Total Retención 4%");
+
+            Cell st_4 = stx.createCell(10);
+            st_4.setCellStyle(txtT2);
+            st_4.setCellValue("Total Retención 10%");
+
+            Cell st_5 = stx.createCell(11);
+            st_5.setCellStyle(txtT2);
+            st_5.setCellValue("Total Retención 10.67%");
+
+            Cell st_6 = stx.createCell(12);
+            st_6.setCellStyle(txtT2);
+            st_6.setCellValue("Total Cuota Compensatoria");
+
+            Cell st_7 = stx.createCell(13);
+            st_7.setCellStyle(txtT2);
+            st_7.setCellValue("Total IVA");
+
+            Cell st_8 = stx.createCell(14);
+            st_8.setCellStyle(txtT2);
+            st_8.setCellValue("Total Final");
+
+            Row fila = hoja.createRow(ultimaFilaRegistros + 2);
+            //Obteniendo información de las columnas
+
+            for (int a = 0; a < tablaTotalCien.getColumnCount(); a++) {
+                Cell celda;
+                celda = fila.createCell((a) + 7);
+                celda.setCellStyle(datosEstilo);
+                celda.setCellValue(String.valueOf(tablaTotalCien.getValueAt(0, a)));
             }
 
             //FIN TOTALES
