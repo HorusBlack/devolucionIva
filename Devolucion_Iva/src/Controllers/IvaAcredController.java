@@ -33,6 +33,7 @@ public class IvaAcredController {
     private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo;
     private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
             retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
+    private double baseCeroSuma = 0;
     private final String COI_AGRO = "COI80Empre2";
     private final String COI_ADSTICSA = "COI80Empre1";
     private final String BANCOMER_ADS_2678 = "111500200100000000003";
@@ -508,10 +509,26 @@ public class IvaAcredController {
                                                     valoresConcepto.append(". ");
                                                     valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
                                                 }
+
                                             }
-                                            //Retenciones
+
                                             try {
                                                 cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+                                                //suma de base 0
+                                                cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
+                                                cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
+                                                String tipoTazaTem = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
+                                                if (tipoTazaTem == "0.000000") {
+                                                    if (baseCero.isEmpty()) {
+                                                        baseCero = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                        baseCeroSuma = Double.parseDouble(baseCero);
+                                                    } else {
+                                                        baseCero = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                        baseCeroSuma += Double.parseDouble(baseCero);
+                                                    }
+
+                                                }
+                                                //retenciones
                                                 cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
                                                 retenciones = cfdi_Retenciones.getTagsHijos();
                                                 for (int k = 0; k < retenciones.size(); k++) {
@@ -538,7 +555,7 @@ public class IvaAcredController {
                                                             break;
                                                     }
                                                 }
-                                            } catch (TagHijoNotFoundException | NullPointerException e) {
+                                            } catch (TagHijoNotFoundException | NullPointerException | AtributoNotFoundException e) {
                                                 System.out.println("RT: " + e);
                                             }
 
@@ -550,7 +567,7 @@ public class IvaAcredController {
                                         infoXml.setRetencionCuatro(retencionCuatro);
                                         infoXml.setRetencionDiez(retencionDiez);
                                         infoXml.setRetencion1016(retencion1016);
-                                        
+
                                         break;
                                     case "<cfdi:Complemento>":
                                         try {
@@ -584,8 +601,8 @@ public class IvaAcredController {
                                             }
                                             switch (tipoTasa) {
                                                 case "0.000000":
-                                                    baseCero = cfdi_traslado_hijo.getValorDeAtributo("importe");
-                                                    infoXml.setBaseCero(baseCero);
+                                                    //verificar los valores
+                                                    infoXml.setBaseCero(String.valueOf(baseCeroSuma));
                                                     infoXml.setIva("");
                                                     infoXml.setBase16("");
                                                     infoXml.setCuotaCompensatoria("");
@@ -594,7 +611,7 @@ public class IvaAcredController {
                                                     //Pendiente ajustar esto
                                                     base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
                                                     calIva = Double.parseDouble(base16);
-                                                    calIva *= 0.16;
+                                                    calIva = calIva * 0.16;
                                                     iva = String.valueOf(calIva);
                                                     infoXml.setIva(iva);
                                                     infoXml.setBase16(base16);

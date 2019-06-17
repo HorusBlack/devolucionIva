@@ -139,8 +139,6 @@ public class GeneradorExcel {
             String[] cabecera = new String[]{"", "FECHA DE FACTURA", "FOLIO DE FACTURA", "FOLIO UUID", "PROVEEDOR", "RFC", "CONCEPTO", "BASE 0%", "BASE 16%", "RETENCIÓN 4%", "RETENCIÓN 10%",
                 "RETENCIÓN 10.67%", "COUTA COMPENSATORIA", "IVA", "TOTAL", "FECHA DE PAGO", "CUENTA DE BANCO", "FORMA DE PAGO", "TIPO POLIZA", "NO. POLIZA", "RELACIÓN CON ACTIVIDAD",
                 "CRUCE EDO. CUENTA"};
-//            String[] cabeceraPago = new String[]{"FECHA", "CONCEPTO SEGÚN ESTADO DE CUENTA", "FORMA DE PAGO"};
-//            String[] cabeceraCuentasPolizas = new String[]{"NOMBRE DEL PROVEEDOR", "CONCEPTO", "RELACION CON LA ACTIVIDAD", "CTA. DE LA QUE SE REALIZA EL PAGO", "OBSERVACIONES"};
 
             //Bordes de las celdas
             CellStyle celdasCabeceraTabla = book.createCellStyle();
@@ -168,41 +166,7 @@ public class GeneradorExcel {
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
                 celdaEncabezado.setCellValue(cabecera[i]);
-               // hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
-
             }
-//
-//            //INICIA AJUSTE DEL PAGO
-//            Cell celdaEncabezadoPago = filaEncabezado_1.createCell(12);
-//            celdaEncabezadoPago.setCellStyle(celdasCabeceraTabla);
-//            celdaEncabezadoPago.setCellValue("PAGO");
-//            hoja.addMergedRegion(new CellRangeAddress(7, 7, 12, 14));
-//
-//            int j = 0;
-//            Row subPago = hoja.createRow(8);
-//            for (int i = 12; i < 15; i++) {
-//
-//                Cell celdaEncabezado = subPago.createCell(i);
-//                celdaEncabezado.setCellStyle(celdasCabeceraTabla);
-//                celdaEncabezado.setCellValue(cabeceraPago[j]);
-//                j++;
-//            }
-//            Cell celdaRFC = filaEncabezado_1.createCell(15);
-//            celdaRFC.setCellStyle(celdasCabeceraTabla);
-//            celdaRFC.setCellValue("RFC PROVEEDOR");
-//            hoja.addMergedRegion(new CellRangeAddress(7, 8, 15, 15));
-//            //FIN AJUSTE DEL PAGO
-//
-//            //ULTIMA SECCION CABECERAS
-//            int k = 0;
-//            for (int i = 16; i < 21; i++) {
-//
-//                Cell celdaEncabezado_3 = filaEncabezado_1.createCell(i);
-//                celdaEncabezado_3.setCellStyle(celdasCabeceraTabla);
-//                celdaEncabezado_3.setCellValue(cabeceraCuentasPolizas[k]);
-//                hoja.addMergedRegion(new CellRangeAddress(7, 8, i, i));
-//                k++;
-//            }
 
             //INICIA PARTE DATOS
             numFilasTabla = tablaCienPorciento.getRowCount();
@@ -233,6 +197,38 @@ public class GeneradorExcel {
 
             }
             //FIN PARTE DATOS
+            //DATOS TOTAL
+            CellStyle txtT1 = book.createCellStyle();
+            txtT1.setAlignment(HorizontalAlignment.CENTER);
+
+            Font fontTotal = (Font) book.createFont();
+            fontTotal.setFontName("Arial");
+            fontTotal.setBold(true);
+            fontTotal.setColor(IndexedColors.BLACK.getIndex());
+            fontTotal.setFontHeightInPoints((short) 12);
+            txtT1.setFont(fontTotal);
+            
+            //Acomodar la tabla total
+            Row filaTotal_1 = hoja.createRow(ultimaFilaRegistros + 1);
+            Cell ct_1 = filaTotal_1.createCell(3);
+            ct_1.setCellStyle(txtT1);
+            ct_1.setCellValue("TOTAL AL 100% DE IVA ACREDITABLE");
+
+            for (int i = 0; i < tablaTotalCien.getRowCount(); i++) {
+                //?
+                Row fila = hoja.createRow(ultimaFilaRegistros + 2);
+                //Obteniendo información de las columnas
+
+                for (int a = 0; a < tablaTotalCien.getColumnCount(); a++) {
+                    Cell celda;
+                    celda = fila.createCell(a);
+                    celda.setCellStyle(datosEstilo);
+                    celda.setCellValue(String.valueOf(tablaTotalCien.getValueAt(i, a)));
+                }
+
+            }
+
+            //FIN TOTALES
             for (int i = 0; i < 22; i++) {
                 hoja.autoSizeColumn(i);
             }

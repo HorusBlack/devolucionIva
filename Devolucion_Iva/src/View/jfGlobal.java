@@ -1173,7 +1173,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 String[] titulos = {" "Relación con Actividad","Cruce Edo. Cuenta"};
                      */
 //            
-                    myData[i][0] = false;
+                    myData[i][0] = true;
                     myData[i][1] = dateFormat;
                     myData[i][2] = llenarDatosTabla.get(i).getFolioInterno();
                     myData[i][3] = llenarDatosTabla.get(i).getFolioFiscal();
