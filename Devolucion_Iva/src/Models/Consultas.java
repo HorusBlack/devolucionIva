@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Consultas {
-    
+
     private ConexionDB connection;
     private Statement stmt;
     private ResultSet resultSet;
@@ -72,6 +72,16 @@ public class Consultas {
                     + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C "
                     + "ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + numeroCuenta + "'   AND  A.NUM_CTA <= '" + numeroCuenta + "' ) "
                     + "order by  reg.CVEENTIDAD1";
+
+            String query2 = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d \n"
+                    + "INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG \n"
+                    + "INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON rel.ID_REGISTRO = reg.ID_REGISTRO \n"
+                    + "INNER JOIN [COI80Empre2].[dbo].[AUXILIAR18] aux ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI\n"
+                    + "WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA = " + numeroEmpresa + " AND aux.PERIODO = 1 AND aux.EJERCICIO = 2018\n"
+                    + "AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') \n"
+                    + "AND reg.CVEENTIDAD1 IN (SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ FROM ([COI80Empre2].[dbo].[CUENTAS18] A JOIN [COI80Empre2].[dbo].[SALDOS18] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [COI80Empre2].[dbo].[AUXILIAR18] C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (1))  WHERE A.NUM_CTA >= '111500700100000000003'   AND  A.NUM_CTA <= '111500700100000000003' ) \n"
+                    + "GROUP BY aux.NUM_POLIZ, d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1, reg.CVEENTIDAD2,aux.FECHA_POL, reg.EMPRESA order by  reg.CVEENTIDAD1";
+
             //erro sql aqui
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
@@ -83,7 +93,7 @@ public class Consultas {
                 polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
                 polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
-                if (numeroCuenta == "111500700100000000003") {
+                if ("111500700100000000003".equals(numeroCuenta)) {
                     polizaDatos.setCuenta("Banorte 7444");
                 }
                 polizaDatosList.add(polizaDatos);
@@ -95,7 +105,7 @@ public class Consultas {
         }
         return polizaDatosList;
     }
-    
+
     public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas, int numeroEmpresa,
             String dataBase) {
         System.out.println("Entro?");
@@ -115,7 +125,7 @@ public class Consultas {
             subFijoPeriodo = String.valueOf(periodo);
         }
         String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
-        
+
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         Connection conexion = null;
         //" + tableSaldos + "
@@ -199,7 +209,7 @@ public class Consultas {
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
         String query;
-        
+
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
@@ -224,7 +234,7 @@ public class Consultas {
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
-            
+
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
@@ -241,7 +251,7 @@ public class Consultas {
                 //existen polizas Dr, en Eg. ¿Es normal?
                 //(219902.42−208522−11380.7)+0.28
             }
-            
+
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -263,7 +273,7 @@ public class Consultas {
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
         String query;
-        
+
         List<RetencionIvaMes> listRetencion = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
@@ -288,7 +298,7 @@ public class Consultas {
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
-            
+
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             try {
@@ -310,16 +320,16 @@ public class Consultas {
             } catch (NullPointerException e) {
                 Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
             }
-            
+
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-            
+
         } finally {
             ConexionDB.Salir(conexion);
         }
         return listRetencion;
     }
-    
+
     public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
@@ -330,7 +340,7 @@ public class Consultas {
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
         String query;
-        
+
         List<RetencionIvaPagadaMes> listRetencionPagada = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
@@ -355,7 +365,7 @@ public class Consultas {
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
-            
+
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
@@ -375,5 +385,5 @@ public class Consultas {
         }
         return listRetencionPagada;
     }
-    
+
 }
