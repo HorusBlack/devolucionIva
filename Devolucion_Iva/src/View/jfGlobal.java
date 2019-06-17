@@ -1003,6 +1003,7 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
+        JOptionPane.showMessageDialog(this, "El proceso puede tardar unos momentos. \n Por favor espere...");
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
@@ -1011,6 +1012,7 @@ public class jfGlobal extends javax.swing.JFrame {
         inicializarTablaRetencionIvaMes(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         //Inicializar Tabla RetencionIvaMesPagadas
         inicializarTablaRetencionIvaMesPagadas(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
+        JOptionPane.showMessageDialog(this, "Proceso terminado");
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed

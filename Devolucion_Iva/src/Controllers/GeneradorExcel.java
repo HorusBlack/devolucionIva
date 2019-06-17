@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -272,6 +273,7 @@ public class GeneradorExcel {
 
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
+                JOptionPane.showMessageDialog(tablaTotalCien, "Exportación Completa");
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }

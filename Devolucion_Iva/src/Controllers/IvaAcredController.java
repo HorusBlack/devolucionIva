@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.jespxml.JespXML;
 import org.jespxml.excepciones.AtributoNotFoundException;
@@ -34,6 +33,8 @@ public class IvaAcredController {
     private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
             retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
     private double baseCeroSuma = 0;
+    private double base_16 = 0;
+    private String traslado = "";
     private final String COI_AGRO = "COI80Empre2";
     private final String COI_ADSTICSA = "COI80Empre1";
     private final String BANCOMER_ADS_2678 = "111500200100000000003";
@@ -218,9 +219,18 @@ public class IvaAcredController {
                                                 valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
                                             }
                                         }
+                                        System.out.println("Entrando");
+                                        cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+                                        //Aqui impuestos traslado
+                                        cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
+                                        cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
+                                        String traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                        System.out.println("Traslados: " + traslado);
                                         //Retenciones
                                         try {
-                                            cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+
+                                            System.out.println("Traslados: " + traslado);
+                                            //Retenciones
                                             cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
                                             retenciones = cfdi_Retenciones.getTagsHijos();
                                             for (int k = 0; k < retenciones.size(); k++) {
@@ -248,7 +258,7 @@ public class IvaAcredController {
                                                 }
                                             }
                                         } catch (TagHijoNotFoundException | NullPointerException e) {
-                                            System.out.println("RT: " + e);
+                                            // System.out.println("RT: " + e);
                                         }
 
                                     }
@@ -347,6 +357,12 @@ public class IvaAcredController {
         return datosXml;
     }
 
+    /**
+     * FUNCIONANDO
+     *
+     * @param listFicherosPolizaBase
+     * @return
+     */
     public List<XmlDatos> listDatosXmlCienAcred_List(List<PolizaDatos> listFicherosPolizaBase) {
 
         /*
@@ -382,7 +398,7 @@ public class IvaAcredController {
                             try {
                                 folioInterno = raizXml.getValorDeAtributo("Folio");
                             } catch (AtributoNotFoundException e) {
-                                folioInterno = " ";
+                                folioInterno = "";
                             }
 
                             infoXml.setFolioInterno(folioInterno);
@@ -464,7 +480,7 @@ public class IvaAcredController {
 
                                 }
                             } catch (AtributoNotFoundException e) {
-                                formaDePagoDescripcion = " ";
+                                formaDePagoDescripcion = "";
                             }
                             infoXml.setFormaPago(formaDePagoDescripcion);
 
@@ -483,7 +499,7 @@ public class IvaAcredController {
                                         try {
                                             proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
                                         } catch (AtributoNotFoundException e) {
-                                            proveedor = " ";
+                                            proveedor = "";
                                         }
                                         infoXml.setProveedor(proveedor);
 
@@ -512,24 +528,35 @@ public class IvaAcredController {
 
                                             }
 
+                                            //traslado
+                                            cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+                                            //Aqui impuestos traslado
+                                            cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
+                                            cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
+                                            String tipoBase = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
+                                            if ("0.000000".equals(tipoBase)) {
+                                                if ("".equals(traslado)) {
+                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                    baseCeroSuma = Double.parseDouble(traslado);
+                                                } else {
+                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                    baseCeroSuma += Double.parseDouble(traslado);
+                                                }
+                                            }
+                                            if (tipoBase.equals("0.160000") || tipoBase.equals("0.16")) {
+                                                if ("".equals(traslado)) {
+                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                    base_16 = Double.parseDouble(traslado);
+                                                } else {
+                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                    base_16 += Double.parseDouble(traslado);
+                                                }
+                                            }
+
+                                            //fin traslado
                                             try {
                                                 cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
-                                                //suma de base 0
-                                                cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
-                                                cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
-                                                String tipoTazaTem = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
-                                                if ("0.000000".equals(tipoTazaTem)) {
-                                                    if (baseCero.isEmpty()) {
-                                                        baseCero = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                        baseCeroSuma = Double.parseDouble(baseCero);
-                                                        System.out.println("b0: "+baseCeroSuma);
-                                                    } else {
-                                                        baseCero = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                        baseCeroSuma += Double.parseDouble(baseCero);
-                                                        System.out.println("b02: "+baseCeroSuma);
-                                                    }
 
-                                                }
                                                 //retenciones
                                                 cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
                                                 retenciones = cfdi_Retenciones.getTagsHijos();
@@ -608,17 +635,27 @@ public class IvaAcredController {
                                                     infoXml.setIva("");
                                                     infoXml.setBase16("");
                                                     infoXml.setCuotaCompensatoria("");
+                                                    baseCeroSuma = 0;
+                                                    traslado = "";
                                                     break;
                                                 case "0.160000":
                                                     //Pendiente ajustar esto
-                                                    base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
-                                                    calIva = Double.parseDouble(base16);
-                                                    calIva = calIva * 0.16;
+//                                                    base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+//                                                    calIva = Double.parseDouble(base16);
+//                                                    calIva = calIva * 0.16;
+//                                                    iva = String.valueOf(calIva);
+//                                                    infoXml.setIva(iva);
+//                                                    infoXml.setBase16(base16);
+//                                                    infoXml.setBaseCero("");
+//                                                    infoXml.setCuotaCompensatoria("");
+
+                                                    calIva = base_16 * 0.16;
                                                     iva = String.valueOf(calIva);
                                                     infoXml.setIva(iva);
-                                                    infoXml.setBase16(base16);
+                                                    infoXml.setBase16(String.valueOf(base_16));
                                                     infoXml.setBaseCero("");
-                                                    infoXml.setCuotaCompensatoria("");
+                                                    base_16 = 0;
+                                                    traslado = "";
                                                     break;
                                                 case "0.090000":
                                                     cuotaC = cfdi_traslado_hijo.getValorDeAtributo("importe");
@@ -631,7 +668,7 @@ public class IvaAcredController {
                                                 //iva=base16*0.16
                                             }
                                         } catch (AtributoNotFoundException e) {
-                                            //Sin importes
+                                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                                         }
 
                                         break;
