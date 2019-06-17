@@ -35,6 +35,12 @@ public class IvaAcredController {
             retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
     private final String COI_AGRO = "COI80Empre2";
     private final String COI_ADSTICSA = "COI80Empre1";
+    private final String BANCOMER_ADS_2678 = "111500200100000000003";
+    private final String SANTANDER_ADS_2399 = "111500300100000000003";
+    private final String SANTANDER2_ADS_6082 = "111500300200000000003";
+    private final String SANTANDER3_ADS_5170 = "203500300100000000003";
+    private final String BANORTE_ADS_0212 = "111500700100000000003";
+    private final String BANORTE2_ADS_7202 = "111500700200000000003";
     private final String CUENTA_BANCOMER_AGRO = "111500700100000000003";
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
@@ -544,7 +550,7 @@ public class IvaAcredController {
                                         infoXml.setRetencionCuatro(retencionCuatro);
                                         infoXml.setRetencionDiez(retencionDiez);
                                         infoXml.setRetencion1016(retencion1016);
-
+                                        
                                         break;
                                     case "<cfdi:Complemento>":
                                         try {
@@ -614,11 +620,12 @@ public class IvaAcredController {
                                         break;
                                 }
                             }
-                           
+
                             infoXml.setCodigoEmpresa(listFicherosPolizaBase.get(p).getEmpresa());
                             infoXml.setNombreArchivoXml(listFicherosPolizaBase.get(p).getNombreXml());
                             infoXml.setNumeroPoliza(listFicherosPolizaBase.get(p).getNumeroPoliza());
                             infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
+                            infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
                             datosXml.add(infoXml);
 
                         } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
@@ -650,7 +657,6 @@ public class IvaAcredController {
      */
     public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio, int numEmpresa) {
         //CHECAR EL PROCESO POR SECCIONES[PRIMERO BASE DE DATOS]
-        System.out.println("Periodo : " + periodo + " Ejercicio: " + ejercicio + " NumEmpresa: " + numEmpresa);
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
         periodo += 1;
@@ -658,16 +664,19 @@ public class IvaAcredController {
         String cuentaBanco = "";
         if (numEmpresa == 0) {
             base_empresa = COI_ADSTICSA;
+            String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
+            polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco, (numEmpresa + 1), base_empresa);
         } else if (numEmpresa == 1) {
             base_empresa = COI_AGRO;
             cuentaBanco = CUENTA_BANCOMER_AGRO;
+            if (periodo > 0 && ejercicio >= 2017) {
+                //LLenar con la información de la base de datos
+                polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
+            }
         }
         //Intentar mientras solo con agro, despues con adstisa (lo de las cuentas)
         //A partir de que mes y año
-        if (periodo > 0 && ejercicio >= 2017) {
-            //LLenar con la información de la base de datos
-            polizaDat = consultas.polizasPeriodoEjercicio(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
-        }
+
         return polizaDat;
     }
 

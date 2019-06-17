@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Consultas {
-
+    
     private ConexionDB connection;
     private Statement stmt;
     private ResultSet resultSet;
@@ -41,7 +41,7 @@ public class Consultas {
      * @param dataBase
      * @return List PolizaDatos
      */
-    public List<PolizaDatos> polizasPeriodoEjercicio(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
+    public List<PolizaDatos> polizasPeriodoEjercicio_Agroecologia(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
             String dataBase) {
         connection = new ConexionDB();
         //String[] parts = string.split("T");
@@ -59,11 +59,6 @@ public class Consultas {
             subFijoPeriodo = String.valueOf(periodo);
         }
         String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
-//        System.out.println(subFijoCuenta);
-//        System.out.println(subFijoAuxiliar);
-//        System.out.println(subFijoSaldos);
-//        System.out.println(subBaseCoi);
-
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         Connection conexion = null;
         //" + tableSaldos + "
@@ -88,20 +83,99 @@ public class Consultas {
                 polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
                 polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                if (numeroCuenta == "111500700100000000003") {
+                    polizaDatos.setCuenta("Banorte 7444");
+                }
                 polizaDatosList.add(polizaDatos);
-//                for (int i = 0; i < polizaDatosList.size(); i++) {
-//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getIdDoctodig());
-//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getEmpresa());
-//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getNombreXml());
-//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getNumeroPoliza());
-//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getRutaXml());
-//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(i).getTipoPoliza());
-//                }
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             ConexionDB.Salir(conexion);
+        }
+        return polizaDatosList;
+    }
+    
+    public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas, int numeroEmpresa,
+            String dataBase) {
+        System.out.println("Entro?");
+        connection = new ConexionDB();
+        //String[] parts = string.split("T");
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String subFijoPeriodo = "";
+        String subFijoCuenta = "CUENTAS" + v1 + v2;
+        String subFijoAuxiliar = "AUXILIAR" + v1 + v2;
+        String subFijoSaldos = "SALDOS" + v1 + v2;
+        String subBaseCoi = "COI80Empre" + numeroEmpresa;
+        if (periodo < 10) {
+            subFijoPeriodo = "0" + periodo;
+        } else {
+            subFijoPeriodo = String.valueOf(periodo);
+        }
+        String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
+        
+        ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
+        Connection conexion = null;
+        //" + tableSaldos + "
+        for (int i = 0; i < numeroCuentas.length; i++) {
+            try {
+                conexion = connection.Entrar(dataBase);
+                query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] "
+                        + "d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON "
+                        + "rel.ID_REGISTRO = reg.ID_REGISTRO WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND "
+                        + "reg.EMPRESA = " + numeroEmpresa + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') AND reg.CVEENTIDAD1 IN "
+                        + "(SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ FROM ([" + subBaseCoi + "].[dbo].[" + subFijoCuenta + "] A "
+                        + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C "
+                        + "ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + numeroCuentas[i] + "'   AND  A.NUM_CTA <= '" + numeroCuentas[i] + "' ) "
+                        + "order by  reg.CVEENTIDAD1";
+                //erro sql aqui
+                stmt = conexion.createStatement();
+                resultSet = stmt.executeQuery(query);
+                while (resultSet.next()) {
+                    polizaDatos = new PolizaDatos();
+                    polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
+                    polizaDatos.setRutaXml(resultSet.getString("RUTA"));
+                    polizaDatos.setNombreXml(resultSet.getString("ARCHIVO"));
+                    polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
+                    polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
+                    polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                    switch (numeroCuentas[i]) {
+                        case "111500200100000000003":
+                            polizaDatos.setCuenta("Bancomer 2678");
+                            break;
+                        case "111500300100000000003":
+                            polizaDatos.setCuenta("Santander 2399");
+                            break;
+                        case "111500300200000000003":
+                            polizaDatos.setCuenta("Santander 6082");
+                            break;
+                        case "203500300100000000003":
+                            polizaDatos.setCuenta("Santander 5170");
+                            break;
+                        case "111500700100000000003":
+                            polizaDatos.setCuenta("Banorte 0212");
+                            break;
+                        case "111500700200000000003":
+                            polizaDatos.setCuenta("Banorte 7202");
+                            break;
+                    }
+                    polizaDatosList.add(polizaDatos);
+//                for (int j = 0; j < polizaDatosList.size(); j++) {
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(j).getIdDoctodig());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(j).getEmpresa());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(j).getNombreXml());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(j).getNumeroPoliza());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(j).getRutaXml());
+//                    System.out.println("POLIZA DAT: " + polizaDatosList.get(j).getTipoPoliza());
+//                }
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                ConexionDB.Salir(conexion);
+            }
         }
         return polizaDatosList;
     }
@@ -125,7 +199,7 @@ public class Consultas {
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
         String query;
-
+        
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
@@ -150,7 +224,7 @@ public class Consultas {
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
-
+            
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
@@ -167,7 +241,7 @@ public class Consultas {
                 //existen polizas Dr, en Eg. ¿Es normal?
                 //(219902.42−208522−11380.7)+0.28
             }
-
+            
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -189,7 +263,7 @@ public class Consultas {
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
         String query;
-
+        
         List<RetencionIvaMes> listRetencion = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
@@ -214,7 +288,7 @@ public class Consultas {
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
-
+            
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             try {
@@ -236,16 +310,16 @@ public class Consultas {
             } catch (NullPointerException e) {
                 Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
             }
-
+            
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-
+            
         } finally {
             ConexionDB.Salir(conexion);
         }
         return listRetencion;
     }
-
+    
     public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
@@ -256,7 +330,7 @@ public class Consultas {
         String tableCuentas = "CUENTAS" + v1 + v2;
         String tableSaldos = "SALDOS" + v1 + v2;
         String query;
-
+        
         List<RetencionIvaPagadaMes> listRetencionPagada = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
@@ -281,7 +355,7 @@ public class Consultas {
                         + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
                         + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
             }
-
+            
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
@@ -301,5 +375,5 @@ public class Consultas {
         }
         return listRetencionPagada;
     }
-
+    
 }

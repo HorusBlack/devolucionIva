@@ -32,9 +32,12 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -56,10 +59,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private List<PolizaDatos> listPolizaDatos;
     private List<RetencionIvaMes> listRetencionIvaMeses;
     private List<RetencionIvaPagadaMes> listRetencionIvaPagadaMes;
-
     private List<XmlDatos> xmlDatosList;
 
-    //"Base 0%", "Base 16%", "Retención 4%", "Retención 10%", "Retención 10.67%", "IVA", "Total"
     /**
      * Creates new form jfGlobal
      */
@@ -1002,9 +1003,7 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
-        System.out.println("Antes de cargar");
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
-        System.out.println("Despues de cargar");
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, totalAuxCred);
@@ -1106,7 +1105,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Consultas cn = new Consultas();
 
-        cn.polizasPeriodoEjercicio(1, 2018, "111500700100000000003", 2, "COI80Empre2");
+        cn.polizasPeriodoEjercicio_Agroecologia(1, 2018, "111500700100000000003", 2, "COI80Empre2");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /*
@@ -1122,6 +1121,10 @@ public class jfGlobal extends javax.swing.JFrame {
         listPolizaDatos = new ArrayList<>();
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
         String ultimaRuta = "";
+        String op[] = {"Masculino", "Femenino"};
+
+        JComboBox sexo = new JComboBox(op);
+
         if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
             String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
@@ -1130,12 +1133,9 @@ public class jfGlobal extends javax.swing.JFrame {
             //Clase que obtiene los datos xml
             //correguir sintaxis de ruta, la conexion sql es estable
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
-            //String urlDac = "\\25.62.86.238\\dacaspel\\Documentos digitales\\Comprobantes Digitales\\2018\\01 Enero\\AIC171129UAAFA00021.xml";
             String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
             System.out.println("RUTA: " + urlDac);
             //Lista de objetos xmlDatos 
-
-            //llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(urlDac);
             llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos);
             Object[][] myData = new Object[llenarDatosTabla.size()][22];
             //Datos para los totales
@@ -1154,7 +1154,6 @@ public class jfGlobal extends javax.swing.JFrame {
             //checar esta validacion
             if (!llenarDatosTabla.isEmpty()) {
                 //llenando la tabla de la info
-                System.out.println("tamaño de lista 100% acred: " + llenarDatosTabla.size());
                 for (int i = 0; i < llenarDatosTabla.size(); i++) {
 
                     String string = llenarDatosTabla.get(i).getFechaFactura();
@@ -1190,12 +1189,11 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][13] = llenarDatosTabla.get(i).getIva();
                     myData[i][14] = llenarDatosTabla.get(i).getTotal();
                     myData[i][15] = "Fecha de Pago";
-                    myData[i][16] = "Cuenta de Banco";
+                    myData[i][16] = llenarDatosTabla.get(i).getCuenta();
                     myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
                     myData[i][18] = llenarDatosTabla.get(i).getTipoPoliza();
                     myData[i][19] = llenarDatosTabla.get(i).getNumeroPoliza();
-                    myData[i][20] = "Relación con Actividad";
-                    myData[i][21] = "Cruce Edo. Cuenta";
+                    myData[i][21] = "";
                     //Para el total
                     //0.00, null, ""
                     try {
@@ -1261,7 +1259,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
                     @Override
                     public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
-                        if (column == 0 || column == 9 || column == 10 || column == 11) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
+                        if (column == 0 || column == 20 || column == 21) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
                             return true;
                         } else {
                             return false;
@@ -1274,6 +1272,8 @@ public class jfGlobal extends javax.swing.JFrame {
 
                 tablaCienIvaAcred.setModel(tablaIva);
                 tablaCienIvaAcred.setRowSorter(ordenTabla);
+                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20));
+                //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
                 //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
                 TableColumn columna;
                 for (int i = 1; i <= 21; i++) {
@@ -2253,10 +2253,43 @@ public class jfGlobal extends javax.swing.JFrame {
         panelBusquedaManual.setVisible(false);
         btnOk.setEnabled(false);
         btnDelete.setEnabled(false);
-        //Elementos adicionales
+    }
 
-//        txta_Concepto.setVisible(false);
-//        txta_Concepto.setLineWrap(true);
+    public void comboBoxColuma_relacion(JTable table,
+            TableColumn sportColumn) {
+        //Set up the editor for the sport cells.
+        JComboBox comboBox = new JComboBox();
+        comboBox.addItem("Snowboarding");
+        comboBox.addItem("Rowing");
+        comboBox.addItem("Knitting");
+        comboBox.addItem("Speed reading");
+        comboBox.addItem("Pool");
+        comboBox.addItem("None of the above");
+        sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
+
+        //Set up tool tips for the sport cells.
+        DefaultTableCellRenderer renderer
+                = new DefaultTableCellRenderer();
+        renderer.setToolTipText("Click for combo box");
+        sportColumn.setCellRenderer(renderer);
+    }
+
+    public void comboBoxColumaCruceCta(JTable table,
+            TableColumn sportColumn) {
+        //Set up the editor for the sport cells.
+        JComboBox comboBox = new JComboBox();
+        comboBox.addItem("Dr");
+        comboBox.addItem("Eg");
+        comboBox.addItem("Ig");
+        comboBox.addItem("Tr");
+
+        sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
+
+        //Set up tool tips for the sport cells.
+        DefaultTableCellRenderer renderer
+                = new DefaultTableCellRenderer();
+        renderer.setToolTipText("Click for combo box");
+        sportColumn.setCellRenderer(renderer);
     }
 
     /*

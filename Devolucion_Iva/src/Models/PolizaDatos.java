@@ -13,10 +13,26 @@ package Models;
  */
 public class PolizaDatos {
 
-    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza;
+    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago;
 
     public String getIdDoctodig() {
         return idDoctodig;
+    }
+
+    public String getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(String cuenta) {
+        this.cuenta = cuenta;
+    }
+
+    public String getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(String fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
     public void setIdDoctodig(String idDoctodig) {
