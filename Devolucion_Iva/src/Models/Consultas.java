@@ -24,7 +24,7 @@ public class Consultas {
     private ConexionDB connection;
     private Statement stmt;
     private ResultSet resultSet;
-    private String query;
+    private String query, subQuery;
     private PolizaDatos polizaDatos;
     private AuxIvaAcred auxIvaAcred;
     private RetencionIvaMes retencionIvaMes;
@@ -64,14 +64,6 @@ public class Consultas {
         //" + tableSaldos + "
         try {
             conexion = connection.Entrar(dataBase);
-//            query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] "
-//                    + "d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON "
-//                    + "rel.ID_REGISTRO = reg.ID_REGISTRO WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND "
-//                    + "reg.EMPRESA = " + numeroEmpresa + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') AND reg.CVEENTIDAD1 IN "
-//                    + "(SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ FROM ([" + subBaseCoi + "].[dbo].[" + subFijoCuenta + "] A "
-//                    + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C "
-//                    + "ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + numeroCuenta + "'   AND  A.NUM_CTA <= '" + numeroCuenta + "' ) "
-//                    + "order by  reg.CVEENTIDAD1";
 
             query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
                     + " reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA "
@@ -104,9 +96,9 @@ public class Consultas {
                 polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
                 polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
-                if ("111500700100000000003".equals(numeroCuenta)) {
-                    polizaDatos.setCuenta("Banorte 7444");
-                }
+                polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
+                        subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio),
+                        resultSet.getString("TIPO"),resultSet.getString("CLAVE_POLISA")));
                 polizaDatosList.add(polizaDatos);
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -119,7 +111,7 @@ public class Consultas {
 
     public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas, int numeroEmpresa,
             String dataBase) {
-        System.out.println("Entro?");
+        
         connection = new ConexionDB();
         //String[] parts = string.split("T");
         String subFijoTabla = String.valueOf(ejercicio);
@@ -395,6 +387,45 @@ public class Consultas {
             ConexionDB.Salir(conexion);
         }
         return listRetencionPagada;
+    }
+
+    /**
+     * Función para obtener el nombre de la cuenta
+     *
+     * @param dataBase
+     * @param coiDb
+     * @param auxDb
+     * @param ctaDb
+     * @param noCuenta
+     * @param periodo
+     * @param ejercicio
+     * @param tipoPoli
+     * @param numPoliza
+     * @return
+     */
+    private String consultaNombreCuenta(String dataBase, String coiDb, String auxDb, String ctaDb,
+            String noCuenta, String periodo, String ejercicio, String tipoPoli, String numPoliza) {
+       ConexionDB connection2 = new ConexionDB();
+        Connection conexion = null;
+        String nombreConexion = "";
+        try {
+            conexion = connection2.Entrar(dataBase);
+            subQuery = "SELECT AUX.[NUM_CTA] ,CTA.[NOMBRE]"
+                    + " FROM [" + coiDb + "].[dbo].[" + auxDb + "] AUX"
+                    + " INNER JOIN [" + coiDb + "].[dbo].[" + ctaDb + "] CTA ON AUX.[NUM_CTA]=CTA.[NUM_CTA]"
+                    + " WHERE AUX.[NUM_CTA]='" + noCuenta + "' AND AUX.[PERIODO]=" + periodo + " "
+                    + " AND AUX.[EJERCICIO]=" + ejercicio + " AND AUX.[TIPO_POLI]='" + tipoPoli + "' "
+                    + " AND AUX.NUM_POLIZ =" + numPoliza + " "
+                    + " GROUP BY AUX.[NUM_CTA], CTA.[NOMBRE]";
+          Statement stmt2 = conexion.createStatement();
+          ResultSet resultSet2 = stmt2.executeQuery(subQuery);
+            while (resultSet2.next()) {
+                nombreConexion = resultSet2.getString("NOMBRE");
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return nombreConexion;
     }
 
 }

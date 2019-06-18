@@ -173,7 +173,7 @@ public class IvaAcredController {
 
                             }
                         } catch (AtributoNotFoundException e) {
-                            formaDePagoDescripcion = " ";
+                            formaDePagoDescripcion = "";
                         }
                         infoXml.setFormaPago(formaDePagoDescripcion);
 
@@ -192,7 +192,7 @@ public class IvaAcredController {
                                     try {
                                         proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
                                     } catch (AtributoNotFoundException e) {
-                                        proveedor = " ";
+                                        proveedor = "";
                                     }
                                     infoXml.setProveedor(proveedor);
 
@@ -219,17 +219,16 @@ public class IvaAcredController {
                                                 valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
                                             }
                                         }
-                                        System.out.println("Entrando");
+
                                         cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
                                         //Aqui impuestos traslado
                                         cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
                                         cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
                                         String traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                        System.out.println("Traslados: " + traslado);
+
                                         //Retenciones
                                         try {
 
-                                            System.out.println("Traslados: " + traslado);
                                             //Retenciones
                                             cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
                                             retenciones = cfdi_Retenciones.getTagsHijos();
@@ -258,7 +257,7 @@ public class IvaAcredController {
                                                 }
                                             }
                                         } catch (TagHijoNotFoundException | NullPointerException e) {
-                                            // System.out.println("RT: " + e);
+                                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                                         }
 
                                     }
@@ -277,7 +276,7 @@ public class IvaAcredController {
                                         tfd_TimbreFiscalDigital = cfdi_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
                                         folioFiscal = tfd_TimbreFiscalDigital.getValorDeAtributo("UUID").toUpperCase();
                                     } catch (TagHijoNotFoundException e) {
-                                        folioFiscal = " ";
+                                        folioFiscal = "";
                                     }
 
                                     infoXml.setFolioFiscal(folioFiscal);
@@ -331,7 +330,7 @@ public class IvaAcredController {
                                             //iva=base16*0.16
                                         }
                                     } catch (AtributoNotFoundException e) {
-                                        //Sin importes
+                                        Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                                     }
 
                                     break;
@@ -344,13 +343,9 @@ public class IvaAcredController {
                     } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
                         Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                     }
-                } else {
-                    System.out.println("No se encontraron datos");
                 }
 
             } catch (NullPointerException | IOException | ParserConfigurationException ex) {
-                //AQUI SE GENERA EL PROBLEMA
-
                 Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -585,7 +580,7 @@ public class IvaAcredController {
                                                     }
                                                 }
                                             } catch (TagHijoNotFoundException | NullPointerException | AtributoNotFoundException e) {
-                                                System.out.println("RT: " + e);
+                                                Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                                             }
 
                                         }
@@ -596,7 +591,6 @@ public class IvaAcredController {
                                         infoXml.setRetencionCuatro(retencionCuatro);
                                         infoXml.setRetencionDiez(retencionDiez);
                                         infoXml.setRetencion1016(retencion1016);
-                                        
 
                                         break;
                                     case "<cfdi:Complemento>":
@@ -689,13 +683,9 @@ public class IvaAcredController {
                         } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
                             Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                         }
-                    } else {
-                        System.out.println("No se encontraron datos");
                     }
 
                 } catch (NullPointerException | IOException | ParserConfigurationException ex) {
-                    //AQUI SE GENERA EL PROBLEMA
-
                     Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

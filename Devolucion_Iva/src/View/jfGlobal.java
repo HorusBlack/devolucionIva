@@ -1136,7 +1136,6 @@ public class jfGlobal extends javax.swing.JFrame {
             //correguir sintaxis de ruta, la conexion sql es estable
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
             String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
-            System.out.println("RUTA: " + urlDac);
             //Lista de objetos xmlDatos 
             llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos);
             Object[][] myData = new Object[llenarDatosTabla.size()][22];
@@ -1465,14 +1464,6 @@ public class jfGlobal extends javax.swing.JFrame {
                 myData[i][20] = "Relación con Actividad";
                 myData[i][21] = "Cruce Edo. Cuenta";
 
-                System.out.println("base0: " + llenarDatosTabla.get(i).getBaseCero());
-                System.out.println("base16: " + llenarDatosTabla.get(i).getBase16());
-                System.out.println("r4: " + llenarDatosTabla.get(i).getRetencionCuatro());
-                System.out.println("r10: " + llenarDatosTabla.get(i).getRetencionDiez());
-                System.out.println("r6: " + llenarDatosTabla.get(i).getRetencion1016());
-                System.out.println("rcuota: " + llenarDatosTabla.get(i).getCuotaCompensatoria());
-                System.out.println("iva: " + llenarDatosTabla.get(i).getIva());
-                System.out.println("total: " + llenarDatosTabla.get(i).getTotal());
 
                 if (i != 0) {
 
@@ -1927,7 +1918,6 @@ public class jfGlobal extends javax.swing.JFrame {
             for (int i = 0; i < listAuxIvaAcreds.size(); i++) {
                 String stringDate = listAuxIvaAcreds.get(i).getFecha();
                 String newDate = "";
-                //System.out.println("String date Aux Iva: "+stringDate);
                 if (stringDate != null) {
                     try {
                         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
