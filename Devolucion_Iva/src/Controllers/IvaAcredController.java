@@ -743,7 +743,8 @@ public class IvaAcredController {
         if (archivos != null) {
             if (archivos.length > 0) {
                 for (File xmlArchivo : archivos) {
-                    if (xmlArchivo.isFile() && (xmlArchivo.getName().endsWith(".xml") || xmlArchivo.getName().endsWith(".XML"))) {
+                    if (xmlArchivo.isFile() && (xmlArchivo.getName().endsWith(".xml")
+                            || xmlArchivo.getName().endsWith(".XML"))) {
                         numeroArchivos++;
                     }
                 }
@@ -753,5 +754,24 @@ public class IvaAcredController {
             }
         }
         return vacio;
+    }
+    
+    /**
+     * Funcion que retorna la lista de conceptos de relacion de la base de datos
+     * @param empresa
+     * @return 
+     */
+    public List<String> obtenerConceptosRelacion(int empresa) {
+        String db = "";
+        List<String> listConceptos = new ArrayList<>();
+        consultas = new Consultas();
+        if (empresa == 0) {
+            db = "COI80Empre1";
+            listConceptos = consultas.consultarConceptosRelacion(db);
+        } else {
+            db = "COI80Empre2";
+            listConceptos = consultas.consultarConceptosRelacion(db);
+        }
+        return listConceptos;
     }
 }

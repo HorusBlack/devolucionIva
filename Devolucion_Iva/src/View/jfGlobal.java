@@ -1276,7 +1276,8 @@ public class jfGlobal extends javax.swing.JFrame {
 
                 tablaCienIvaAcred.setModel(tablaIva);
                 tablaCienIvaAcred.setRowSorter(ordenTabla);
-                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20));
+                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20), 
+                                        numEmpresa);
                 //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
                 //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
                 TableColumn columna;
@@ -1463,7 +1464,6 @@ public class jfGlobal extends javax.swing.JFrame {
                 myData[i][19] = "No. Poliza";
                 myData[i][20] = "Relación con Actividad";
                 myData[i][21] = "Cruce Edo. Cuenta";
-
 
                 if (i != 0) {
 
@@ -2251,15 +2251,23 @@ public class jfGlobal extends javax.swing.JFrame {
     }
 
     public void comboBoxColuma_relacion(JTable table,
-            TableColumn sportColumn) {
+            TableColumn sportColumn, int empresa) {
         //Set up the editor for the sport cells.
         JComboBox comboBox = new JComboBox();
-        comboBox.addItem("Snowboarding");
-        comboBox.addItem("Rowing");
-        comboBox.addItem("Knitting");
-        comboBox.addItem("Speed reading");
-        comboBox.addItem("Pool");
-        comboBox.addItem("None of the above");
+        ivaAcred = new IvaAcredController();
+        List<String> tiposConceptos = ivaAcred.obtenerConceptosRelacion(empresa);
+        if (!tiposConceptos.isEmpty()) {
+            for (int i = 0; i < tiposConceptos.size(); i++) {
+                comboBox.addItem(tiposConceptos.get(i));
+            }
+        }
+//        comboBox.addItem("Snowboarding");
+//        comboBox.addItem("Rowing");
+//        comboBox.addItem("Knitting");
+//        comboBox.addItem("Speed reading");
+//        comboBox.addItem("Pool");
+//        comboBox.addItem("None of the above");
+
         sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
         //Set up tool tips for the sport cells.

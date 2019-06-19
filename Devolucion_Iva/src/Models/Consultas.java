@@ -98,7 +98,7 @@ public class Consultas {
                 polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
                 polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
                         subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio),
-                        resultSet.getString("TIPO"),resultSet.getString("CLAVE_POLISA")));
+                        resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
                 polizaDatosList.add(polizaDatos);
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -111,7 +111,7 @@ public class Consultas {
 
     public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas, int numeroEmpresa,
             String dataBase) {
-        
+
         connection = new ConexionDB();
         //String[] parts = string.split("T");
         String subFijoTabla = String.valueOf(ejercicio);
@@ -405,7 +405,7 @@ public class Consultas {
      */
     private String consultaNombreCuenta(String dataBase, String coiDb, String auxDb, String ctaDb,
             String noCuenta, String periodo, String ejercicio, String tipoPoli, String numPoliza) {
-       ConexionDB connection2 = new ConexionDB();
+        ConexionDB connection2 = new ConexionDB();
         Connection conexion = null;
         String nombreConexion = "";
         try {
@@ -417,8 +417,8 @@ public class Consultas {
                     + " AND AUX.[EJERCICIO]=" + ejercicio + " AND AUX.[TIPO_POLI]='" + tipoPoli + "' "
                     + " AND AUX.NUM_POLIZ =" + numPoliza + " "
                     + " GROUP BY AUX.[NUM_CTA], CTA.[NOMBRE]";
-          Statement stmt2 = conexion.createStatement();
-          ResultSet resultSet2 = stmt2.executeQuery(subQuery);
+            Statement stmt2 = conexion.createStatement();
+            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
             while (resultSet2.next()) {
                 nombreConexion = resultSet2.getString("NOMBRE");
             }
@@ -426,6 +426,29 @@ public class Consultas {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         }
         return nombreConexion;
+    }
+
+    public List<String> consultarConceptosRelacion(String dataBase) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        List<String> listaRelacion = new ArrayList<>();
+        try {
+            conexion = connection.Entrar(dataBase);
+            query = "SELECT [ID]\n"
+                    + " ,[CLAVE_CONCEPTO]\n"
+                    + " ,[DESCRIPCION]\n"
+                    + " FROM [" + dataBase + "].[dbo].[CONCEPTOS_RELACION]";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                relacion = resultSet.getString("DESCRIPCION");
+                listaRelacion.add(relacion);
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaRelacion;
     }
 
 }
