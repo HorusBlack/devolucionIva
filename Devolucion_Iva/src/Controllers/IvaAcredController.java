@@ -522,34 +522,40 @@ public class IvaAcredController {
                                                 }
 
                                             }
-
-                                            //traslado
-                                            cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
-                                            //Aqui impuestos traslado
-                                            cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
-                                            cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
-                                            String tipoBase = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
-                                            if ("0.000000".equals(tipoBase)) {
-                                                if ("".equals(traslado)) {
-                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                    baseCeroSuma = Double.parseDouble(traslado);
-                                                } else {
-                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                    baseCeroSuma += Double.parseDouble(traslado);
+                                            try {
+                                                //traslado
+                                                cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+                                                //Aqui impuestos traslado
+                                                cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
+                                                cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
+                                                String tipoBase = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
+                                                if ("0.000000".equals(tipoBase)) {
+                                                    if ("".equals(traslado)) {
+                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                        baseCeroSuma = Double.parseDouble(traslado);
+                                                    } else {
+                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                        baseCeroSuma += Double.parseDouble(traslado);
+                                                    }
                                                 }
-                                            }
-                                            if (tipoBase.equals("0.160000") || tipoBase.equals("0.16")) {
-                                                if ("".equals(traslado)) {
-                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                    base_16 = Double.parseDouble(traslado);
-                                                } else {
-                                                    traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                    base_16 += Double.parseDouble(traslado);
+                                                if (tipoBase.equals("0.160000") || tipoBase.equals("0.16")) {
+                                                    if ("".equals(traslado)) {
+                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                        base_16 = Double.parseDouble(traslado);
+                                                    } else {
+                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                        base_16 += Double.parseDouble(traslado);
+                                                    }
                                                 }
+                                            } catch (TagHijoNotFoundException e) {
+                                                baseCeroSuma = 0;
+                                                base_16 = 0;
                                             }
 
                                             //fin traslado
                                             try {
+                                                //No esta cargando en ascticsa, verificar el por que
+                                                //Optimizar la velocidad
                                                 cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
 
                                                 //retenciones
@@ -713,7 +719,10 @@ public class IvaAcredController {
         if (numEmpresa == 0) {
             base_empresa = COI_ADSTICSA;
             String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
-            polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco, (numEmpresa + 1), base_empresa);
+            if (periodo > 0 && ejercicio >= 2017) {
+                polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
+                        (numEmpresa + 1), base_empresa);
+            }
         } else if (numEmpresa == 1) {
             base_empresa = COI_AGRO;
             cuentaBanco = CUENTA_BANCOMER_AGRO;
@@ -755,11 +764,12 @@ public class IvaAcredController {
         }
         return vacio;
     }
-    
+
     /**
      * Funcion que retorna la lista de conceptos de relacion de la base de datos
+     *
      * @param empresa
-     * @return 
+     * @return
      */
     public List<String> obtenerConceptosRelacion(int empresa) {
         String db = "";
