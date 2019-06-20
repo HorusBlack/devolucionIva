@@ -176,6 +176,7 @@ public class Consultas {
                     polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
                     polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                     polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                    polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
                     polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
                             subFijoCuenta, numeroCuentas[i], String.valueOf(periodo), String.valueOf(ejercicio),
                             resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));

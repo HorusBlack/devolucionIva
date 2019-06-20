@@ -645,14 +645,14 @@ public class IvaAcredController {
                                                     break;
                                                 case "0.160000":
                                                     //Pendiente ajustar esto
-//                                                    base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
-//                                                    calIva = Double.parseDouble(base16);
-//                                                    calIva = calIva * 0.16;
-//                                                    iva = String.valueOf(calIva);
-//                                                    infoXml.setIva(iva);
-//                                                    infoXml.setBase16(base16);
-//                                                    infoXml.setBaseCero("");
-//                                                    infoXml.setCuotaCompensatoria("");
+                                                    base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                                    calIva = Double.parseDouble(base16);
+                                                    calIva = calIva * 0.16;
+                                                    iva = String.valueOf(calIva);
+                                                    infoXml.setIva(iva);
+                                                    infoXml.setBase16(base16);
+                                                    infoXml.setBaseCero("");
+                                                    infoXml.setCuotaCompensatoria("");
 
                                                     calIva = base_16 * 0.16;
                                                     iva = String.valueOf(calIva);

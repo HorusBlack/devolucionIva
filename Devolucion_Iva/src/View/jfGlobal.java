@@ -1173,9 +1173,17 @@ public class jfGlobal extends javax.swing.JFrame {
                     try {
                         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
                         dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                    } catch (ParseException ex) {
+                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                    }
+
+                    try {
                         //la fecha puede tener un problema
-                        date = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
-                        fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                        if (llenarDatosTabla.get(i).getFechaPago() != "" && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
+                            Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
+                            fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
+                        }
 
                     } catch (ParseException ex) {
                         JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
