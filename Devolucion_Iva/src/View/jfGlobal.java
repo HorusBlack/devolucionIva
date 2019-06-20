@@ -1115,12 +1115,19 @@ public class jfGlobal extends javax.swing.JFrame {
     Funciones: 100% iva acred
      */
     /**
-     * Metodo que obtiene y maqueta la tabla de devolucion de Iva
+     * Metodo que obtiene y maqueta la tabla de devolucion de Iva (Final)
+     *
+     * @param numMes
+     * @param nombreMes
+     * @param mes
+     * @param anio
+     * @param numEmpresa
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa) {
         ivaAcred = new IvaAcredController();
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
+        //retornando una lista de poliza de datos
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
         String ultimaRuta = "";
         String op[] = {"Masculino", "Femenino"};
@@ -1166,6 +1173,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     try {
                         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
                         dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                        //la fecha puede tener un problema
                         date = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
                         fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
@@ -1276,8 +1284,8 @@ public class jfGlobal extends javax.swing.JFrame {
 
                 tablaCienIvaAcred.setModel(tablaIva);
                 tablaCienIvaAcred.setRowSorter(ordenTabla);
-                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20), 
-                                        numEmpresa);
+                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20),
+                        numEmpresa);
                 //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
                 //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
                 TableColumn columna;
@@ -1400,6 +1408,8 @@ public class jfGlobal extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
         }
 
     }
@@ -1669,6 +1679,15 @@ public class jfGlobal extends javax.swing.JFrame {
 
     /**
      * Funcion que permite dar formato y valores a la tabla de totales
+     *
+     * @param base0
+     * @param base16
+     * @param retencion4
+     * @param retencion10
+     * @param retencion1016
+     * @param cuotaCom
+     * @param ivaT
+     * @param totalDev
      */
     private void inicializarTablaTotalIva(double base0, double base16, double retencion4, double retencion10, double retencion1016, double cuotaCom, double ivaT, double totalDev) {
         defaultTableIva = new DefaultTableModel() {
@@ -1718,6 +1737,12 @@ public class jfGlobal extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Funcion que permite solicitar y dibujar los datos de una carpeta xml de
+     * manera manual y poder eliminar los que sean necesarios
+     *
+     * @param listaDatos
+     */
     private void setTablaSeleccionManual(List<XmlDatos> listaDatos) {
         /*Ajustar columnas. La tabla de totales debe igual sobreescribirse*/
         xmlDatosList = new ArrayList<>();
@@ -1903,6 +1928,14 @@ public class jfGlobal extends javax.swing.JFrame {
     ################INICIA###################
     Funciones: Auxiliar Iva Acred
      */
+    /**
+     * Funcion que solicita y carga los datos de auxiliar iva acred
+     *
+     * @param numMes
+     * @param mes
+     * @param anio
+     * @param numEmpresa
+     */
     private void inicializarAuxIvaAcred(String numMes, int mes, int anio, int numEmpresa) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
@@ -1981,6 +2014,13 @@ public class jfGlobal extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Funcion que calcula el total global de retencion 100 de acred
+     *
+     * @param mes
+     * @param anio
+     * @param total_cien
+     */
     private void inicializarTablaTotalAuxAcred(String mes, int anio, double total_cien) {
         tablaIva = new DefaultTableModel();
         String[] titulos = {"", "Descripción", "Totales"};

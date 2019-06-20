@@ -353,7 +353,9 @@ public class IvaAcredController {
     }
 
     /**
-     * FUNCIONANDO
+     * Funcion que obtiene una lista de poliza de datos, para poder obtener la
+     * ruta de los archivos xml y terminar de llenar los datos de un objeto
+     * XmlDatos
      *
      * @param listFicherosPolizaBase
      * @return
@@ -366,6 +368,7 @@ public class IvaAcredController {
         //url de la carpeta del xml
         for (int p = 0; p < listFicherosPolizaBase.size(); p++) {
             String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
+            System.out.println("Archivo xml :" + URL);
             if (!URL.isEmpty() || !URL.equals("")) {
                 try {
                     //Tomando la ruta de la carpeta
@@ -554,11 +557,12 @@ public class IvaAcredController {
 
                                             //fin traslado
                                             try {
-                                                //No esta cargando en ascticsa, verificar el por que
+                                                //No aesta cargando en ascticsa, verificar el por que
                                                 //Optimizar la velocidad
                                                 cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
 
                                                 //retenciones
+                                                //probable problema
                                                 cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
                                                 retenciones = cfdi_Retenciones.getTagsHijos();
                                                 for (int k = 0; k < retenciones.size(); k++) {
