@@ -91,7 +91,6 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobal = new javax.swing.JPanel();
         tp_Secciones = new javax.swing.JTabbedPane();
         panel_Det_Iva_Favor = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         panel_Cien_FIA = new javax.swing.JPanel();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
@@ -232,28 +231,15 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_contenidoGlobal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panel_contenidoGlobal.setAutoscrolls(true);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panel_Det_Iva_FavorLayout = new javax.swing.GroupLayout(panel_Det_Iva_Favor);
         panel_Det_Iva_Favor.setLayout(panel_Det_Iva_FavorLayout);
         panel_Det_Iva_FavorLayout.setHorizontalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_Det_Iva_FavorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(697, Short.MAX_VALUE))
+            .addGap(0, 782, Short.MAX_VALUE)
         );
         panel_Det_Iva_FavorLayout.setVerticalGroup(
             panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_Det_Iva_FavorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(695, Short.MAX_VALUE))
+            .addGap(0, 729, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
@@ -1103,12 +1089,6 @@ public class jfGlobal extends javax.swing.JFrame {
         tabla_ManualCarga.removeAll();
         panelBusquedaManual.setVisible(false);
     }//GEN-LAST:event_btnExitPanelActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Consultas cn = new Consultas();
-
-        cn.polizasPeriodoEjercicio_Agroecologia(1, 2018, "111500700100000000003", 2, "COI80Empre2");
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /*
     ################INICIA###################
@@ -2402,7 +2382,6 @@ public class jfGlobal extends javax.swing.JFrame {
     private com.toedter.calendar.JYearChooser calendarAnio;
     private com.toedter.calendar.JMonthChooser calendarMes;
     private javax.swing.JComboBox<String> combo_Empresa;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
