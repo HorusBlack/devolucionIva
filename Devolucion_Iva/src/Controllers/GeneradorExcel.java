@@ -195,7 +195,10 @@ public class GeneradorExcel {
                     if (tablaCienPorciento.getValueAt(i, a) == null) {
                         celda.setCellValue("");
                     } else {
-                        celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
+                        if(a<22){
+                        celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));    
+                        }
+                        
                     }
                 }
 

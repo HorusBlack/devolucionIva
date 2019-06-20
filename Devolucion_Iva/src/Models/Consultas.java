@@ -12,6 +12,7 @@ package Models;
 import Conexion.ConexionDB;
 import java.sql.Statement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -428,6 +429,13 @@ public class Consultas {
         return nombreConexion;
     }
 
+    /**
+     * Metodo que consulta todos los conceptos Relación de actividades de la
+     * Base de datos
+     *
+     * @param dataBase
+     * @return
+     */
     public List<String> consultarConceptosRelacion(String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
@@ -449,6 +457,31 @@ public class Consultas {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listaRelacion;
+    }
+
+    private boolean insertarPolizasProcesadas(List<PolizaProcesada> datosPolizaProcesada, int numEmpresa) {
+        String dataBase = "";
+        connection = new ConexionDB();
+        Connection conexion = null;
+        try {
+            conexion = connection.Entrar(dataBase);
+            PreparedStatement ps;
+            for (int i = 0; i < datosPolizaProcesada.size(); i++) {
+                String query = "INSERT INTO [DOCUMENTOS_COI].[dbo].[POLIZA_PROCESADA] (ID_DOCTODIG ,ARCHIVO ,CLAVE_POLIZA ,TIPO ,EMPRESA ,PROCESADO) VALUES (?,?,?,?,?,?)";
+                /*
+                ps = conexion.prepareStatement(query);
+                ps.setString(1, "Barney");
+                ps.setString(2, "Rubble");
+                ps.setDate(3, startDate);
+                ps.setBoolean(4, false);
+                ps.setInt(5, 5000);
+                 */
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
     }
 
 }

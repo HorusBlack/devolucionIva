@@ -7,6 +7,7 @@ package Controllers;
 
 import Models.Consultas;
 import Models.PolizaDatos;
+import Models.PolizaProcesada;
 import Models.XmlDatos;
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class IvaAcredController {
     private final String CUENTA_BANCOMER_AGRO = "111500700100000000003";
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
+    private PolizaProcesada polizaProcesada;
     private List<Tag> cfdi_Comprobante;
 
     /**
@@ -688,6 +690,8 @@ public class IvaAcredController {
                             infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
                             infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
                             infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
+                            infoXml.setIdDoctoDig(listFicherosPolizaBase.get(p).getIdDoctodig());
+
                             datosXml.add(infoXml);
 
                         } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
@@ -788,4 +792,21 @@ public class IvaAcredController {
         }
         return listConceptos;
     }
+    
+    /**
+     *Funcion que valida que una lista de PolizaProcesada no este vacia y separa el no de empresa
+     * @param datosPolizaProcesada
+     * @param numeroEmpresa 
+     */
+    public void verificadorProcesadoPoliza(List<PolizaProcesada> datosPolizaProcesada, String numeroEmpresa) {
+        int ne = Integer.parseInt(numeroEmpresa);
+        if (!datosPolizaProcesada.isEmpty()) {
+            if (ne==1) {
+                //consulta para adsticsa
+            }else if(ne==2){
+                //consulta para agro
+            }
+        }
+    }
+
 }
