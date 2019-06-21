@@ -985,35 +985,42 @@ public class jfGlobal extends javax.swing.JFrame {
     private void btnExcelCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelCienAcredActionPerformed
         boolean resultadoExportacion = false;
         boolean resultadoFinal;
+        generadorExcel = new GeneradorExcel();
         if (tablaCienIvaAcred.getRowCount() > 0) {
             if (chbox_ExportarProcesar.isSelected()) {
-                
-                resultadoExportacion = procesarDevolucionIva(String.valueOf(numEmpresa+1));
-            }
-            generadorExcel = new GeneradorExcel();
 
-            if (periodo != null && String.valueOf(numAnio) != null) {
-                resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
-                        tablaCienIvaAcred,
+                resultadoExportacion = procesarDevolucionIva(String.valueOf(numEmpresa + 1));
+
+                if (periodo != null && String.valueOf(numAnio) != null) {
+                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
+                            tablaCienIvaAcred,
+                            tablaTotalIva,
+                            "100% FACTURAS DE IVA ACRED",
+                            periodo.toUpperCase(),
+                            String.valueOf(numAnio), resultadoExportacion);
+                } else {
+                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
+                            tablaCienIvaAcred,
+                            tablaTotalIva,
+                            "100% FACTURAS DE IVA ACRED",
+                            "(PERIODO: )",
+                            "(AÑO: )", resultadoExportacion);
+                }
+                if (resultadoFinal) {
+                    JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Hubo un problema al procesar la información. \n No obstante se exportarón los"
+                            + " datos con exito");
+                }
+            }
+            if (chbox_ExportarSoloRegistros.isSelected()) {
+                generadorExcel.generarSoloExcelCienIva(tablaCienIvaAcred,
                         tablaTotalIva,
                         "100% FACTURAS DE IVA ACRED",
                         periodo.toUpperCase(),
-                        String.valueOf(numAnio), resultadoExportacion);
-            } else {
-                resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
-                        tablaCienIvaAcred,
-                        tablaTotalIva,
-                        "100% FACTURAS DE IVA ACRED",
-                        "(PERIODO: )",
-                        "(AÑO: )", resultadoExportacion);
+                        String.valueOf(numAnio));
             }
-            if(resultadoFinal){
-                JOptionPane.showMessageDialog(this, "Proceso completado con exito");
-            }else{
-                JOptionPane.showMessageDialog(this, "Hubo un problema al procesar la información. \n No obstante se exportarón los"
-                        + " datos con exito");
-            }
-            
+
         } else {
             JOptionPane.showMessageDialog(this, "No existen registros para exportar");
         }
@@ -2360,7 +2367,7 @@ public class jfGlobal extends javax.swing.JFrame {
      * @return boolean
      */
     private boolean procesarDevolucionIva(String noEmpresa) {
-        System.out.println("num empresa: "+noEmpresa);
+        System.out.println("num empresa: " + noEmpresa);
         List<PolizaProcesada> datosProcesar = new ArrayList<>();
         ivaAcred = new IvaAcredController();
         for (int i = 0; i < tablaCienIvaAcred.getRowCount(); i++) {

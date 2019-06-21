@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -39,7 +40,7 @@ public class GeneradorExcel {
 
     /**
      * Función que genera un archivo excel apartir de los datos recibidos por
-     * una tabla.
+     * una tabla y confirma que los datos se procesaron correctamente en la BD.
      *
      * @param tablaCienPorciento
      * @param tablaTotalCien
@@ -47,7 +48,7 @@ public class GeneradorExcel {
      * @param periodo
      * @param anio
      * @param exitoExport
-     * @return
+     * @return boolean
      */
     public boolean generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, boolean exitoExport) {
         seleccionar = new JFileChooser();
@@ -296,6 +297,258 @@ public class GeneradorExcel {
             }
         }
         return exito3;
+    }
+    
+    /**
+     * Funcion que genera un archivo excel a partir de los datos recibidos por una jtable. 
+     * @param tablaCienPorciento
+     * @param tablaTotalCien
+     * @param tituloPestaniaHoja
+     * @param periodo
+     * @param anio 
+     */
+    public void generarSoloExcelCienIva(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+        seleccionar = new JFileChooser();
+        File archivo;
+        if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
+            archivo = seleccionar.getSelectedFile();
+
+            //nuevo archivo
+            book = new XSSFWorkbook();
+            //hoja de trabajo
+            Sheet hoja = book.createSheet(tituloPestaniaHoja + " " + periodo.toUpperCase() + " " + anio);
+            //Titulos de tablas combinadas
+            /*Titulos y subtitulos de cabecezas*/
+            CellStyle tituloEstilo = book.createCellStyle();
+            CellStyle subTitulos = book.createCellStyle();
+            CellStyle subTitulosDos = book.createCellStyle();
+            CellStyle sbt3 = book.createCellStyle();
+            CellStyle sbt4 = book.createCellStyle();
+
+            //Definiendo alineamiento de los titulos y subtitulos
+            tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
+            tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            subTitulos.setAlignment(HorizontalAlignment.CENTER);
+            subTitulos.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            subTitulosDos.setAlignment(HorizontalAlignment.CENTER);
+            subTitulosDos.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            sbt3.setAlignment(HorizontalAlignment.LEFT);
+            sbt3.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            sbt4.setAlignment(HorizontalAlignment.LEFT);
+            sbt4.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            /*
+            Importar font de Poi
+            Propiedades de la fuente
+             */
+            Font fuenteTitulo = (Font) book.createFont();
+            fuenteTitulo.setFontName("Arial");
+            fuenteTitulo.setBold(true);
+            fuenteTitulo.setColor(IndexedColors.BLACK.getIndex());
+            fuenteTitulo.setFontHeightInPoints((short) 19);
+
+            Font fuenteSubtitulo = (Font) book.createFont();
+            fuenteSubtitulo.setFontName("Arial");
+            fuenteSubtitulo.setBold(true);
+            fuenteSubtitulo.setColor(IndexedColors.BLACK.getIndex());
+            fuenteSubtitulo.setFontHeightInPoints((short) 16);
+
+            Font fuenteSubtituloDos = (Font) book.createFont();
+            fuenteSubtituloDos.setFontName("Arial");
+            fuenteSubtituloDos.setBold(true);
+            fuenteSubtituloDos.setColor(IndexedColors.BLACK.getIndex());
+            fuenteSubtituloDos.setFontHeightInPoints((short) 13);
+
+            //editando el titulo
+            tituloEstilo.setFont(fuenteTitulo);
+            //Crea fila en hoja
+            Row filaTitulo = hoja.createRow(1);
+            //Empieza a dibujar desde x celda
+            Cell celdaTitulo = filaTitulo.createCell(2);
+            celdaTitulo.setCellStyle(tituloEstilo);
+            //Titulo de la cabecera en Hoja de trabajo
+            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+
+            //(int firstRow, int lastRow, int firstCol, int lastCol)
+            //alcance del conbinado de celdas
+            hoja.addMergedRegion(new CellRangeAddress(1, 1, 2, 10));
+
+            subTitulos.setFont(fuenteSubtitulo);
+            Row filaSubtitulo = hoja.createRow(2);
+            Cell celdaSubTitulo = filaSubtitulo.createCell(2);
+            celdaSubTitulo.setCellStyle(subTitulos);
+            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
+
+            subTitulosDos.setFont(fuenteSubtituloDos);
+            Row filaSubtituloDos = hoja.createRow(3);
+            Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
+            celdaSubTituloDos.setCellStyle(subTitulosDos);
+            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
+
+            sbt3.setFont(fuenteSubtituloDos);
+            Row fs3 = hoja.createRow(5);
+            Cell cs3 = fs3.createCell(1);
+            cs3.setCellStyle(sbt3);
+            cs3.setCellValue("RELACION DEL 100% DE OPERACIONES CON PROVEEDORES TASA 16 %");
+            hoja.addMergedRegion(new CellRangeAddress(5, 5, 1, 4));
+
+            sbt4.setFont(fuenteSubtituloDos);
+            Row fs4 = hoja.createRow(6);
+            Cell cs4 = fs4.createCell(1);
+            cs4.setCellStyle(sbt4);
+            cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
+            hoja.addMergedRegion(new CellRangeAddress(6, 6, 1, 4));
+
+            String[] cabecera = new String[]{"", "FECHA DE FACTURA", "FOLIO DE FACTURA", "FOLIO UUID", "PROVEEDOR", "RFC", "CONCEPTO", "BASE 0%", "BASE 16%", "RETENCIÓN 4%", "RETENCIÓN 10%",
+                "RETENCIÓN 10.67%", "COUTA COMPENSATORIA", "IVA", "TOTAL", "FECHA DE PAGO", "CUENTA DE BANCO", "FORMA DE PAGO", "TIPO POLIZA", "NO. POLIZA", "RELACIÓN CON ACTIVIDAD",
+                "CRUCE EDO. CUENTA"};
+
+            //Bordes de las celdas
+            CellStyle celdasCabeceraTabla = book.createCellStyle();
+
+            celdasCabeceraTabla.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
+            celdasCabeceraTabla.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            celdasCabeceraTabla.setBorderBottom(BorderStyle.THIN);
+            celdasCabeceraTabla.setBorderLeft(BorderStyle.THIN);
+            celdasCabeceraTabla.setBorderRight(BorderStyle.THIN);
+            celdasCabeceraTabla.setBorderTop(BorderStyle.THIN);
+            celdasCabeceraTabla.setAlignment(HorizontalAlignment.CENTER);
+            celdasCabeceraTabla.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            Font font = book.createFont();
+            font.setFontName("Arial");
+            font.setBold(true);
+            font.setColor(IndexedColors.WHITE.getIndex());
+            font.setFontHeightInPoints((short) 12);
+            celdasCabeceraTabla.setFont(font);
+//            //CABECERAS
+            Row filaEncabezado_1 = hoja.createRow(7);
+
+            for (int i = 1; i < cabecera.length; i++) {
+
+                Cell celdaEncabezado = filaEncabezado_1.createCell(i);
+                celdaEncabezado.setCellStyle(celdasCabeceraTabla);
+                celdaEncabezado.setCellValue(cabecera[i]);
+            }
+
+            //INICIA PARTE DATOS
+            numFilasTabla = tablaCienPorciento.getRowCount();
+            numColumnasTabla = (tablaCienPorciento.getColumnCount() - 2);
+            //No.filas de cabecera+inicio de datos+1
+            ultimaFilaRegistros = (tablaCienPorciento.getRowCount()) + 10;
+            empezarLlenadoDesdeFila = 8;
+
+            CellStyle datosEstilo = book.createCellStyle();
+            //bordes de la tabla
+
+            datosEstilo.setBorderBottom(BorderStyle.THIN);
+            datosEstilo.setBorderLeft(BorderStyle.THIN);
+            datosEstilo.setBorderRight(BorderStyle.THIN);
+            datosEstilo.setBorderTop(BorderStyle.THIN);
+
+            for (int i = 0; i < numFilasTabla; i++) {
+                //?
+                Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
+                //Obteniendo información de las columnas
+
+                for (int a = 1; a < numColumnasTabla; a++) {
+                    Cell celda;
+                    celda = fila.createCell(a);
+                    celda.setCellStyle(datosEstilo);
+                    if (tablaCienPorciento.getValueAt(i, a) == null) {
+                        celda.setCellValue("");
+                    } else {
+                        if (a < 22) {
+                            celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
+                        }
+
+                    }
+                }
+
+            }
+            //FIN PARTE DATOS
+            //DATOS TOTAL
+            CellStyle txtT1 = book.createCellStyle();
+            txtT1.setAlignment(HorizontalAlignment.CENTER);
+
+            Font fontTotal = (Font) book.createFont();
+            fontTotal.setFontName("Arial");
+            fontTotal.setBold(true);
+            fontTotal.setColor(IndexedColors.BLACK.getIndex());
+            fontTotal.setFontHeightInPoints((short) 12);
+            txtT1.setFont(fontTotal);
+
+            CellStyle txtT2 = book.createCellStyle();
+            txtT1.setAlignment(HorizontalAlignment.CENTER);
+
+            Font cabeceraTotales = (Font) book.createFont();
+            cabeceraTotales.setFontName("Arial");
+            cabeceraTotales.setBold(true);
+            cabeceraTotales.setColor(IndexedColors.BLACK.getIndex());
+            cabeceraTotales.setFontHeightInPoints((short) 10);
+            txtT2.setFont(cabeceraTotales);
+
+            Row stx = hoja.createRow(ultimaFilaRegistros + 1);
+            Cell st_1 = stx.createCell(7);
+            st_1.setCellStyle(txtT2);
+            st_1.setCellValue("Total Base 0%");
+
+            Cell st_2 = stx.createCell(8);
+            st_2.setCellStyle(txtT2);
+            st_2.setCellValue("Total Base 16%");
+
+            Cell st_3 = stx.createCell(9);
+            st_3.setCellStyle(txtT2);
+            st_3.setCellValue("Total Retención 4%");
+
+            Cell st_4 = stx.createCell(10);
+            st_4.setCellStyle(txtT2);
+            st_4.setCellValue("Total Retención 10%");
+
+            Cell st_5 = stx.createCell(11);
+            st_5.setCellStyle(txtT2);
+            st_5.setCellValue("Total Retención 10.67%");
+
+            Cell st_6 = stx.createCell(12);
+            st_6.setCellStyle(txtT2);
+            st_6.setCellValue("Total Cuota Compensatoria");
+
+            Cell st_7 = stx.createCell(13);
+            st_7.setCellStyle(txtT2);
+            st_7.setCellValue("Total IVA");
+
+            Cell st_8 = stx.createCell(14);
+            st_8.setCellStyle(txtT2);
+            st_8.setCellValue("Total Final");
+
+            Row fila = hoja.createRow(ultimaFilaRegistros + 2);
+            //Obteniendo información de las columnas
+
+            for (int a = 0; a < tablaTotalCien.getColumnCount(); a++) {
+                Cell celda;
+                celda = fila.createCell((a) + 7);
+                celda.setCellStyle(datosEstilo);
+                celda.setCellValue(String.valueOf(tablaTotalCien.getValueAt(0, a)));
+            }
+
+            //FIN TOTALES
+            for (int i = 0; i < 22; i++) {
+                hoja.autoSizeColumn(i);
+            }
+
+            try {
+                book.write(new FileOutputStream(archivo + ".xlsx"));
+                JOptionPane.showMessageDialog(tablaTotalCien, "Exportacion Exitosa");
+            } catch (IOException ex) {
+                Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
