@@ -370,7 +370,7 @@ public class IvaAcredController {
         //url de la carpeta del xml
         for (int p = 0; p < listFicherosPolizaBase.size(); p++) {
             String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
-            System.out.println("Archivo xml :" + URL);
+            //System.out.println("Archivo xml :" + URL);
             if (!URL.isEmpty() || !URL.equals("")) {
                 try {
                     //Tomando la ruta de la carpeta

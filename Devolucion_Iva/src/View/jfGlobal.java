@@ -2367,7 +2367,7 @@ public class jfGlobal extends javax.swing.JFrame {
      * @return boolean
      */
     private boolean procesarDevolucionIva(String noEmpresa) {
-        System.out.println("num empresa: " + noEmpresa);
+        //System.out.println("num empresa: " + noEmpresa);
         List<PolizaProcesada> datosProcesar = new ArrayList<>();
         ivaAcred = new IvaAcredController();
         for (int i = 0; i < tablaCienIvaAcred.getRowCount(); i++) {
