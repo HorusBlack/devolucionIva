@@ -18,7 +18,7 @@ public class ConexionDB {
 
     Connection cn = null;
     //Pendiente cambiar datos de conexion
-
+    
     public Connection Entrar(String dataBase) throws SQLException, ClassNotFoundException {
         try {
             //Servidor Agro

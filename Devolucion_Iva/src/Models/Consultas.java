@@ -66,7 +66,7 @@ public class Consultas {
         try {
             conexion = connection.Entrar(dataBase);
 
-            query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
+            query = "SELECT TOP(5) d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
                     + " reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA "
                     + "FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION]"
                     + " rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS]"
@@ -148,7 +148,7 @@ public class Consultas {
             try {
                 conexion = connection.Entrar(dataBase);
 
-                query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
+                query = "SELECT TOP(2) d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
                         + " reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA "
                         + "FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION]"
                         + " rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS]"
@@ -421,6 +421,7 @@ public class Consultas {
             while (resultSet2.next()) {
                 nombreConexion = resultSet2.getString("NOMBRE");
             }
+
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -453,35 +454,51 @@ public class Consultas {
                 relacion = resultSet.getString("DESCRIPCION");
                 listaRelacion.add(relacion);
             }
+
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
         }
         return listaRelacion;
     }
 
-    private boolean insertarPolizasProcesadas(List<PolizaProcesada> datosPolizaProcesada, int numEmpresa) {
-        String dataBase = "";
+    /**
+     * Funcion que recibe una lisa de PolizaProcesada y realiza la inserción a
+     * la BD
+     *
+     * @param datosPolizaProcesada
+     * @param numEmpresa
+     * @return boolean
+     */
+    public boolean insertarPolizasProcesadas(List<PolizaProcesada> datosPolizaProcesada, int numEmpresa) {
+        boolean resultInsert = false;
+        String dataBase = "DOCUMENTOS_COI";
         connection = new ConexionDB();
         Connection conexion = null;
         try {
             conexion = connection.Entrar(dataBase);
             PreparedStatement ps;
             for (int i = 0; i < datosPolizaProcesada.size(); i++) {
-                String query = "INSERT INTO [DOCUMENTOS_COI].[dbo].[POLIZA_PROCESADA] (ID_DOCTODIG ,ARCHIVO ,CLAVE_POLIZA ,TIPO ,EMPRESA ,PROCESADO) VALUES (?,?,?,?,?,?)";
-                /*
-                ps = conexion.prepareStatement(query);
-                ps.setString(1, "Barney");
-                ps.setString(2, "Rubble");
-                ps.setDate(3, startDate);
-                ps.setBoolean(4, false);
-                ps.setInt(5, 5000);
-                 */
-            }
+                String queryPrepare = "INSERT INTO [dbo].[POLIZA_PROCESADA]"
+                        + " (ID_DOCTODIG ,ARCHIVO ,CLAVE_POLIZA ,TIPO ,EMPRESA ,PROCESADO) VALUES (?,?,?,?,?,?)";
 
+                ps = conexion.prepareStatement(queryPrepare);
+                ps.setInt(1, Integer.parseInt(datosPolizaProcesada.get(i).getIdDoctoDig()));
+                ps.setString(2, datosPolizaProcesada.get(i).getNombreArchivo());
+                ps.setInt(3, Integer.parseInt(datosPolizaProcesada.get(i).getClavePoliza()));
+                ps.setString(4, datosPolizaProcesada.get(i).getTipoPoliza());
+                ps.setInt(5, numEmpresa);
+                ps.setInt(6, 2);
+                ps.executeUpdate();
+            }
+            resultInsert = true;
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
         }
-        return true;
+        return resultInsert;
     }
 
 }

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,8 +37,22 @@ public class GeneradorExcel {
     private Workbook book;
     private JFileChooser seleccionar;
 
-    public void generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+    /**
+     * Función que genera un archivo excel apartir de los datos recibidos por
+     * una tabla.
+     *
+     * @param tablaCienPorciento
+     * @param tablaTotalCien
+     * @param tituloPestaniaHoja
+     * @param periodo
+     * @param anio
+     * @param exitoExport
+     * @return
+     */
+    public boolean generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, boolean exitoExport) {
         seleccionar = new JFileChooser();
+        boolean exito1, exito2, exito3 = false;
+        exito1 = exitoExport;
         File archivo;
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
@@ -170,7 +183,7 @@ public class GeneradorExcel {
 
             //INICIA PARTE DATOS
             numFilasTabla = tablaCienPorciento.getRowCount();
-            numColumnasTabla = tablaCienPorciento.getColumnCount();
+            numColumnasTabla = (tablaCienPorciento.getColumnCount() - 2);
             //No.filas de cabecera+inicio de datos+1
             ultimaFilaRegistros = (tablaCienPorciento.getRowCount()) + 10;
             empezarLlenadoDesdeFila = 8;
@@ -195,10 +208,10 @@ public class GeneradorExcel {
                     if (tablaCienPorciento.getValueAt(i, a) == null) {
                         celda.setCellValue("");
                     } else {
-                        if(a<22){
-                        celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));    
+                        if (a < 22) {
+                            celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
                         }
-                        
+
                     }
                 }
 
@@ -275,11 +288,14 @@ public class GeneradorExcel {
 
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-                JOptionPane.showMessageDialog(tablaTotalCien, "Exportación Completa");
+                exito2 = true;
+                exito3 = (exito1 && exito2);
+
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return exito3;
     }
 
     /**

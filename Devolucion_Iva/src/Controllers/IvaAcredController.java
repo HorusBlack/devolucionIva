@@ -792,21 +792,32 @@ public class IvaAcredController {
         }
         return listConceptos;
     }
-    
-    /**
-     *Funcion que valida que una lista de PolizaProcesada no este vacia y separa el no de empresa
-     * @param datosPolizaProcesada
-     * @param numeroEmpresa 
-     */
-    public void verificadorProcesadoPoliza(List<PolizaProcesada> datosPolizaProcesada, String numeroEmpresa) {
+
+   /**
+    * Funcion que valida que una lista de PolizaProcesada no este vacia y
+    * separa el no de empresa
+    * @param datosPolizaProcesada
+    * @param numeroEmpresa
+    * @return boolean 
+    */
+    public boolean verificadorProcesadoPoliza(List<PolizaProcesada> datosPolizaProcesada, String numeroEmpresa) {
         int ne = Integer.parseInt(numeroEmpresa);
+        boolean exito = false;
+        consultas = new Consultas();
         if (!datosPolizaProcesada.isEmpty()) {
-            if (ne==1) {
-                //consulta para adsticsa
-            }else if(ne==2){
-                //consulta para agro
+            if (ne == 1) {
+                exito = consultas.insertarPolizasProcesadas(datosPolizaProcesada, ne);
+            } else if (ne == 2) {
+                exito = consultas.insertarPolizasProcesadas(datosPolizaProcesada, ne);
             }
         }
+        return exito;
     }
+//Cambiar contraseñas rocketo fermin
+    //106931
 
+    //alta de usuarios
+    /*
+    
+     */
 }
