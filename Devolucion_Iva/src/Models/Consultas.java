@@ -501,5 +501,35 @@ public class Consultas {
         }
         return resultInsert;
     }
+    
+    /**
+     * Funcion qu consulta y obtiene la relacion con actividad de la BD
+     * @param dataBase
+     * @param RFC
+     * @return String
+     */
+    public String consultarRelacionActividad(String dataBase, String RFC) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        try {
+            conexion = connection.Entrar(dataBase);
+            query = "SELECT RA.RFC, CR.DESCRIPCION FROM [" + dataBase + "].[dbo].[RELACION_RFC_REL_ACT] RA "
+                    + "INNER JOIN [" + dataBase + "].[dbo].[CONCEPTOS_RELACION] CR "
+                    + "ON CR.CLAVE_CONCEPTO=RA.ID_RELACION_ACTIVIDAD WHERE RA.RFC='" + RFC + "'";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                relacion = resultSet.getString("DESCRIPCION");
+                System.out.println("Relacion: "+relacion);
+            }
 
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return relacion;
+    }
+    //Falta arreglar que solo consulte las que no estan procesadas
 }

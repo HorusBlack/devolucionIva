@@ -97,7 +97,7 @@ public class IvaAcredController {
                         }
 
                         infoXml.setFolioInterno(folioInterno);
-
+                        //total=(base0+base16)-(retencion4+retencion10+retencion1067)+(CP+IVA)total
                         total = raizXml.getValorDeAtributo("Total");
                         infoXml.setTotal(total);
 
@@ -190,6 +190,7 @@ public class IvaAcredController {
                                 case "<cfdi:Emisor>":
                                     cfdi_Emisor = raizXml.getTagHijoByName("cfdi:Emisor");
                                     rfc = cfdi_Emisor.getValorDeAtributo("Rfc");
+
                                     infoXml.setRfc(rfc);
                                     try {
                                         proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
@@ -360,13 +361,16 @@ public class IvaAcredController {
      * XmlDatos
      *
      * @param listFicherosPolizaBase
+     * @param db
      * @return
      */
-    public List<XmlDatos> listDatosXmlCienAcred_List(List<PolizaDatos> listFicherosPolizaBase) {
+    public List<XmlDatos> listDatosXmlCienAcred_List(List<PolizaDatos> listFicherosPolizaBase, String db) {
 
         /*
         IMPORTANTE: PARA QUE EL SISTEMA FUNCIONE DE MANERA REMOTA, SE DEBE TENER GUARDARA LA CONTRASEÑA Y USUARIO DEL HOST DONDE SE QUIERE ACCEDER
          */
+        consultas = new Consultas();
+        String descripcionRelacion = "";
         //url de la carpeta del xml
         for (int p = 0; p < listFicherosPolizaBase.size(); p++) {
             String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
@@ -496,6 +500,8 @@ public class IvaAcredController {
                                         cfdi_Emisor = raizXml.getTagHijoByName("cfdi:Emisor");
                                         rfc = cfdi_Emisor.getValorDeAtributo("Rfc");
                                         infoXml.setRfc(rfc);
+                                        descripcionRelacion = consultas.consultarRelacionActividad(db, rfc);
+                                        infoXml.setRelacion(descripcionRelacion);
                                         try {
                                             proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
                                         } catch (AtributoNotFoundException e) {
@@ -793,13 +799,14 @@ public class IvaAcredController {
         return listConceptos;
     }
 
-   /**
-    * Funcion que valida que una lista de PolizaProcesada no este vacia y
-    * separa el no de empresa
-    * @param datosPolizaProcesada
-    * @param numeroEmpresa
-    * @return boolean 
-    */
+    /**
+     * Funcion que valida que una lista de PolizaProcesada no este vacia y
+     * separa el no de empresa
+     *
+     * @param datosPolizaProcesada
+     * @param numeroEmpresa
+     * @return boolean
+     */
     public boolean verificadorProcesadoPoliza(List<PolizaProcesada> datosPolizaProcesada, String numeroEmpresa) {
         int ne = Integer.parseInt(numeroEmpresa);
         boolean exito = false;

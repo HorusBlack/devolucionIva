@@ -1204,6 +1204,7 @@ public class jfGlobal extends javax.swing.JFrame {
         ivaAcred = new IvaAcredController();
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
+        String bd = (numEmpresa == 0) ? "COI80Empre1" : "COI80Empre2";
         //retornando una lista de poliza de datos
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
         String ultimaRuta = "";
@@ -1222,7 +1223,7 @@ public class jfGlobal extends javax.swing.JFrame {
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
             String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
             //Lista de objetos xmlDatos 
-            llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos);
+            llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos, bd);
             Object[][] myData = new Object[llenarDatosTabla.size()][24];
             //Datos para los totales
             base_0 = 0;
@@ -1291,6 +1292,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
                     myData[i][18] = llenarDatosTabla.get(i).getTipoPoliza();
                     myData[i][19] = llenarDatosTabla.get(i).getNumeroPoliza();
+                    myData[i][20] = llenarDatosTabla.get(i).getRelacion(); 
                     myData[i][21] = "";
                     myData[i][22] = llenarDatosTabla.get(i).getIdDoctoDig();
                     myData[i][23] = llenarDatosTabla.get(i).getNombreArchivoXml();
@@ -1347,7 +1349,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     }
                     total_devIva += do_text8;
                 }
-
+                //checkbox para columna
                 tablaIva = new DefaultTableModel(myData, titulos) {
                     @Override
                     public Class<?> getColumnClass(int column) { //DETERMINA SI LA COLUMNA SERÁ CHECKBOX (BOOLEAN) O TEXTO (STRING)
@@ -1358,6 +1360,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         }
                     }
 
+                    //celdas editables
                     @Override
                     public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
                         if (column == 0 || column == 20 || column == 21) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
@@ -1372,9 +1375,10 @@ public class jfGlobal extends javax.swing.JFrame {
                 TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
 
                 tablaCienIvaAcred.setModel(tablaIva);
+                //ComboRelacion
                 tablaCienIvaAcred.setRowSorter(ordenTabla);
-                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20),
-                        numEmpresa);
+//                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20),
+//                        numEmpresa);
                 //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
                 //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
                 TableColumn columna;
