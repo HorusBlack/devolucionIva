@@ -1076,24 +1076,24 @@ public class jfGlobal extends javax.swing.JFrame {
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
 
-        JFileChooser selectorCarpetaXml = new JFileChooser();
-        selectorCarpetaXml.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int resultado = selectorCarpetaXml.showOpenDialog(this);
-        if (resultado == 0) {
-            File carpetaSeleccionada = selectorCarpetaXml.getSelectedFile();
-            String rutaCarpeta = carpetaSeleccionada.getAbsolutePath();
-            ivaAcred = new IvaAcredController();
-            xmlDatosList = ivaAcred.listDatosXmlCienAcred(rutaCarpeta);
-            if (xmlDatosList.size() > 0) {
-                panelBusquedaManual.setVisible(true);
-                btnOk.setEnabled(true);
-                btnDelete.setEnabled(true);
-                setTablaSeleccionManual(xmlDatosList);
-            } else {
-
-                JOptionPane.showMessageDialog(this, "No existen documentos XML validos dentro de la carpeta seleccionada");
-            }
-        }
+//        JFileChooser selectorCarpetaXml = new JFileChooser();
+//        selectorCarpetaXml.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        int resultado = selectorCarpetaXml.showOpenDialog(this);
+//        if (resultado == 0) {
+//            File carpetaSeleccionada = selectorCarpetaXml.getSelectedFile();
+//            String rutaCarpeta = carpetaSeleccionada.getAbsolutePath();
+//            ivaAcred = new IvaAcredController();
+//            xmlDatosList = ivaAcred.listDatosXmlCienAcred_List(rutaCarpeta);
+//            if (xmlDatosList.size() > 0) {
+//                panelBusquedaManual.setVisible(true);
+//                btnOk.setEnabled(true);
+//                btnDelete.setEnabled(true);
+//                setTablaSeleccionManual(xmlDatosList);
+//            } else {
+//
+//                JOptionPane.showMessageDialog(this, "No existen documentos XML validos dentro de la carpeta seleccionada");
+//            }
+//        }
     }//GEN-LAST:event_btnXmlCargarActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -2419,6 +2419,7 @@ public class jfGlobal extends javax.swing.JFrame {
         btnDelete.setEnabled(false);
         chbox_sinProcesar.setSelected(true);
         chbox_ExportarProcesar.setSelected(true);
+        btnXmlCargar.setEnabled(false);
     }
 
     /**

@@ -334,7 +334,7 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
         String urlMes = numMes[mes];
         tablaIvaAcred.removeAll();
         //INICIALIZAR TABLA
-        inicializarTablaIva(urlMes, mes, year);
+//        inicializarTablaIva(urlMes, mes, year);
         inicializarTablaTotalIva();
 
         //Ver si es posible cambiar el nombre de las carpetas para que tenga un mismo formato y sea mas facil acceder
@@ -363,125 +363,125 @@ public class Jf_FacturasIvaAcred extends javax.swing.JFrame {
     /**
      * Metodo que obtiene y maqueta la tabla de devolucion de Iva
      */
-    private void inicializarTablaIva(String numeroMes, int mes, int anio) {
-        tablaIva = new DefaultTableModel();
-        //Titulos para la tabla
-        String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
-            "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
-            "Cta. de la que se realiza el pago", "Observaciones"};
-        //Ingresando titulos
-        tablaIva.setColumnIdentifiers(titulos);
-
-        //Clase que obtiene los datos xml
-        ivaAcred = new IvaAcredController();
-        //url de los documentos Mack
-        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numeroMes;
-        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numeroMes;
-        //correguir sintaxis de ruta, la conexion sql es estable
-        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numeroMes;
-        //Lista de objetos xmlDatos
-        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, 0);
-        if (!listPolizaDatos.isEmpty()) {
-            for (int i = 0; i < listPolizaDatos.size(); i++) {
-                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
-//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
-                System.out.println("\n");
-            }
-        }
-        //Solicitud datos BD
-
-        //checar esta validacion
-        if (!llenarDatosTabla.isEmpty()) {
-            //llenando la tabla de la info
-
-            for (int i = 0; i < llenarDatosTabla.size(); i++) {
-
-                String string = llenarDatosTabla.get(i).getFechaFactura();
-                String[] parts = string.split("T");
-                String part1 = parts[0];
-                String formatoFecha = "";
-
-                try {
-                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                    formatoFecha = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
-                } catch (ParseException ex) {
-                    Logger.getLogger(Jf_FacturasIvaAcred.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                //Pasando datos de la lista a array para introducirlos en la tabla
-                tablaIva.addRow(new Object[]{"N/D", formatoFecha, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
-                    llenarDatosTabla.get(i).getConceptoXml(), "", "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
-                    "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
-            }
-
-            String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-                "Noviembre", "Diciembre"};
-
-            datosResumen(meses[mes], llenarDatosTabla.size(), anio);
-
-            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-            tablaIvaAcred.setModel(tablaIva);
-            tablaIvaAcred.setRowSorter(ordenTabla);
-
-            //tamaño manual
-            TableColumn columna;
-            for (int i = 0; i < 8; i++) {
-                switch (i) {
-                    case 0:
-                        //factura
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(50);
-                        break;
-                    case 1:
-                        //Fecha Factura
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(130);
-                        break;
-                    case 2:
-                        //#poliza
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(50);
-                        break;
-                    case 3:
-                        //Fecha Poliza
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(130);
-                        break;
-                    case 4:
-                        //Folio Fiscal
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(270);
-                        break;
-                    case 5:
-                        //Conceptos XML
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(300);
-                        break;
-                    case 6:
-                        //Sub-total
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 7:
-                        //Iva
-                        columna = tablaIvaAcred.getColumn(titulos[i]);
-                        columna.setMinWidth(40);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            btnXmlCargar.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
-        }
-
-    }
+//    private void inicializarTablaIva(String numeroMes, int mes, int anio) {
+//        tablaIva = new DefaultTableModel();
+//        //Titulos para la tabla
+//        String[] titulos = {"#Factura", "Fecha Factura", "#Poliza", "Fecha Poliza", "Folio Fiscal", "Conceptos XML", "Sub-Total", "IVA", "IVA Retenido", "ISR Retenido",
+//            "Total", "Cruce: Estado de cuenta", "Pago: Fecha", "Pago: Concepto S.E.C", "Pago: Forma Pago", "RFC Proveedor", "Nombre Proveedor", "Concepto", "Relación con Activ.",
+//            "Cta. de la que se realiza el pago", "Observaciones"};
+//        //Ingresando titulos
+//        tablaIva.setColumnIdentifiers(titulos);
+//
+//        //Clase que obtiene los datos xml
+//        ivaAcred = new IvaAcredController();
+//        //url de los documentos Mack
+//        String URL = "C:\\Users\\Macktronica\\Desktop\\Dac Simulacion\\" + anio + "\\" + numeroMes;
+//        String URL_lap = "H:\\Dac Simulacion\\" + anio + "\\" + numeroMes;
+//        //correguir sintaxis de ruta, la conexion sql es estable
+//        String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numeroMes;
+//        //Lista de objetos xmlDatos
+//        List<XmlDatos> llenarDatosTabla = ivaAcred.listDatosXmlCienAcred(URL_Lx);
+//        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, 0);
+//        if (!listPolizaDatos.isEmpty()) {
+//            for (int i = 0; i < listPolizaDatos.size(); i++) {
+//                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getNumeroPoliza());
+////                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getEjercicio());
+////                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getFechaPoliza());
+////                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getConceptoPoliza());
+////                System.out.println("Datos lpd: " + listPolizaDatos.get(i).getDocumentos());
+//                System.out.println("\n");
+//            }
+//        }
+//        //Solicitud datos BD
+//
+//        //checar esta validacion
+//        if (!llenarDatosTabla.isEmpty()) {
+//            //llenando la tabla de la info
+//
+//            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+//
+//                String string = llenarDatosTabla.get(i).getFechaFactura();
+//                String[] parts = string.split("T");
+//                String part1 = parts[0];
+//                String formatoFecha = "";
+//
+//                try {
+//                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+//                    formatoFecha = new SimpleDateFormat("dd-MM-yyyy").format(date);
+//
+//                } catch (ParseException ex) {
+//                    Logger.getLogger(Jf_FacturasIvaAcred.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                //Pasando datos de la lista a array para introducirlos en la tabla
+//                tablaIva.addRow(new Object[]{"N/D", formatoFecha, "N/D", "N/D", llenarDatosTabla.get(i).getFolioFiscal(),
+//                    llenarDatosTabla.get(i).getConceptoXml(), "", "N/D", "N/D", "N/D", llenarDatosTabla.get(i).getTotal(),
+//                    "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D", "N/D",});
+//            }
+//
+//            String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+//                "Noviembre", "Diciembre"};
+//
+//            datosResumen(meses[mes], llenarDatosTabla.size(), anio);
+//
+//            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+//            tablaIvaAcred.setModel(tablaIva);
+//            tablaIvaAcred.setRowSorter(ordenTabla);
+//
+//            //tamaño manual
+//            TableColumn columna;
+//            for (int i = 0; i < 8; i++) {
+//                switch (i) {
+//                    case 0:
+//                        //factura
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(50);
+//                        break;
+//                    case 1:
+//                        //Fecha Factura
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(130);
+//                        break;
+//                    case 2:
+//                        //#poliza
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(50);
+//                        break;
+//                    case 3:
+//                        //Fecha Poliza
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(130);
+//                        break;
+//                    case 4:
+//                        //Folio Fiscal
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(270);
+//                        break;
+//                    case 5:
+//                        //Conceptos XML
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(300);
+//                        break;
+//                    case 6:
+//                        //Sub-total
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(70);
+//                        break;
+//                    case 7:
+//                        //Iva
+//                        columna = tablaIvaAcred.getColumn(titulos[i]);
+//                        columna.setMinWidth(40);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//            }
+//            btnXmlCargar.setEnabled(true);
+//        } else {
+//            JOptionPane.showMessageDialog(this, "No existen archivos en este periodo para procesar");
+//        }
+//
+//    }
 
     private void inicializarTablaTotalIva() {
         defaultTableIva = new DefaultTableModel();
