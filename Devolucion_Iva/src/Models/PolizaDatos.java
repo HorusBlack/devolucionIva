@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Models;
-
+//lulu conexion computadora
 /**
  * Clase que se encarga de generar un objeto tipo PolizaDatos de la informacion
  * proporcionada de la BD
@@ -13,7 +13,15 @@ package Models;
  */
 public class PolizaDatos {
 
-    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago;
+    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago, montoMov;
+
+    public String getMontoMov() {
+        return montoMov;
+    }
+
+    public void setMontoMov(String montoMov) {
+        this.montoMov = montoMov;
+    }
 
     public String getIdDoctodig() {
         return idDoctodig;
