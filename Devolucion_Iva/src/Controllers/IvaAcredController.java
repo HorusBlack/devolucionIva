@@ -354,7 +354,6 @@ public class IvaAcredController {
 //        }
 //        return datosXml;
 //    }
-
     /**
      * Funcion que obtiene una lista de poliza de datos, para poder obtener la
      * ruta de los archivos xml y terminar de llenar los datos de un objeto
@@ -373,346 +372,380 @@ public class IvaAcredController {
         String descripcionRelacion = "";
         //url de la carpeta del xml
         for (int p = 0; p < listFicherosPolizaBase.size(); p++) {
-            String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
-            //System.out.println("Archivo xml :" + URL);
-            if (!URL.isEmpty() || !URL.equals("")) {
-                try {
-                    //Tomando la ruta de la carpeta
-                    JespXML xmlCarpeta = new JespXML(URL);
-
-                    //Aqui se podria checar el # de archivos disponibles
-                    if (!xmlCarpeta.getAbsolutePath().isEmpty()) {
+            switch (listFicherosPolizaBase.get(p).getConXml()) {
+                case 1:
+                    String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
+                    //System.out.println("Archivo xml :" + URL);
+                    if (!URL.isEmpty() || !URL.equals("")) {
                         try {
-                            //verificando que sean archivos xml
+                            //Tomando la ruta de la carpeta
+                            JespXML xmlCarpeta = new JespXML(URL);
 
-                            //Obteniendo la ruta del archivo
-                            JespXML fileXml = xmlCarpeta;
+                            //Aqui se podria checar el # de archivos disponibles
+                            if (!xmlCarpeta.getAbsolutePath().isEmpty()) {
+                                try {
+                                    //verificando que sean archivos xml
 
-                            XmlDatos infoXml = new XmlDatos();
-                            StringBuilder valoresConcepto = new StringBuilder();
-                            String formaDePagoDescripcion = "";
-                            //raiz de los archivos
-                            raizXml = fileXml.leerXML();
+                                    //Obteniendo la ruta del archivo
+                                    JespXML fileXml = xmlCarpeta;
 
-                            //Atributos de la raiz
-                            String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
+                                    XmlDatos infoXml = new XmlDatos();
+                                    StringBuilder valoresConcepto = new StringBuilder();
+                                    String formaDePagoDescripcion = "";
+                                    //raiz de los archivos
+                                    raizXml = fileXml.leerXML();
 
-                            fechaFactura = raizXml.getValorDeAtributo("Fecha");
-                            infoXml.setFechaFactura(fechaFactura);
-                            try {
-                                folioInterno = raizXml.getValorDeAtributo("Folio");
-                            } catch (AtributoNotFoundException e) {
-                                folioInterno = "";
-                            }
+                                    //Atributos de la raiz
+                                    String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
 
-                            infoXml.setFolioInterno(folioInterno);
+                                    fechaFactura = raizXml.getValorDeAtributo("Fecha");
+                                    infoXml.setFechaFactura(fechaFactura);
+                                    try {
+                                        folioInterno = raizXml.getValorDeAtributo("Folio");
+                                    } catch (AtributoNotFoundException e) {
+                                        folioInterno = "";
+                                    }
 
-                            total = raizXml.getValorDeAtributo("Total");
-                            infoXml.setTotal(total);
+                                    infoXml.setFolioInterno(folioInterno);
 
-                            try {
-                                formaPago = raizXml.getValorDeAtributo("FormaPago");
-                                switch (formaPago) {
-                                    case "01":
-                                        formaDePagoDescripcion = "Efectivo";
-                                        break;
-                                    case "02":
-                                        formaDePagoDescripcion = "Cheque nominativo";
-                                        break;
-                                    case "03":
-                                        formaDePagoDescripcion = "Transferencia electrónica de fondos";
-                                        break;
-                                    case "04":
-                                        formaDePagoDescripcion = "Tarjeta de crédito";
-                                        break;
-                                    case "05":
-                                        formaDePagoDescripcion = "Monedero electrónico";
-                                        break;
-                                    case "06":
-                                        formaDePagoDescripcion = "Dinero electrónico";
-                                        break;
-                                    case "08":
-                                        formaDePagoDescripcion = "Vales de despensa";
-                                        break;
-                                    case "12":
-                                        formaDePagoDescripcion = "Dación en pago";
-                                        break;
-                                    case "13":
-                                        formaDePagoDescripcion = "Pago por subrogación";
-                                        break;
-                                    case "14":
-                                        formaDePagoDescripcion = "Pago por consignación";
-                                        break;
-                                    case "15":
-                                        formaDePagoDescripcion = "Condonación";
-                                        break;
-                                    case "17":
-                                        formaDePagoDescripcion = "Compensación";
-                                        break;
-                                    case "23":
-                                        formaDePagoDescripcion = "Novación";
-                                        break;
-                                    case "24":
-                                        formaDePagoDescripcion = "Confusión";
-                                        break;
-                                    case "25":
-                                        formaDePagoDescripcion = "Remisión de deuda";
-                                        break;
-                                    case "26":
-                                        formaDePagoDescripcion = "Prescripción o caducidad";
-                                        break;
-                                    case "27":
-                                        formaDePagoDescripcion = "A satisfacción del acreedor";
-                                        break;
-                                    case "28":
-                                        formaDePagoDescripcion = "Tarjeta de débito";
-                                        break;
-                                    case "29":
-                                        formaDePagoDescripcion = "Tarjeta de servicios";
-                                        break;
-                                    case "30":
-                                        formaDePagoDescripcion = "Aplicación de anticipos";
-                                        break;
-                                    case "31":
-                                        formaDePagoDescripcion = "Intermediario pagos";
-                                        break;
-                                    case "99":
-                                        formaDePagoDescripcion = "Por definir";
-                                        break;
-                                    default:
+                                    total = raizXml.getValorDeAtributo("Total");
+                                    infoXml.setTotal(total);
+
+                                    try {
+                                        formaPago = raizXml.getValorDeAtributo("FormaPago");
+                                        switch (formaPago) {
+                                            case "01":
+                                                formaDePagoDescripcion = "Efectivo";
+                                                break;
+                                            case "02":
+                                                formaDePagoDescripcion = "Cheque nominativo";
+                                                break;
+                                            case "03":
+                                                formaDePagoDescripcion = "Transferencia electrónica de fondos";
+                                                break;
+                                            case "04":
+                                                formaDePagoDescripcion = "Tarjeta de crédito";
+                                                break;
+                                            case "05":
+                                                formaDePagoDescripcion = "Monedero electrónico";
+                                                break;
+                                            case "06":
+                                                formaDePagoDescripcion = "Dinero electrónico";
+                                                break;
+                                            case "08":
+                                                formaDePagoDescripcion = "Vales de despensa";
+                                                break;
+                                            case "12":
+                                                formaDePagoDescripcion = "Dación en pago";
+                                                break;
+                                            case "13":
+                                                formaDePagoDescripcion = "Pago por subrogación";
+                                                break;
+                                            case "14":
+                                                formaDePagoDescripcion = "Pago por consignación";
+                                                break;
+                                            case "15":
+                                                formaDePagoDescripcion = "Condonación";
+                                                break;
+                                            case "17":
+                                                formaDePagoDescripcion = "Compensación";
+                                                break;
+                                            case "23":
+                                                formaDePagoDescripcion = "Novación";
+                                                break;
+                                            case "24":
+                                                formaDePagoDescripcion = "Confusión";
+                                                break;
+                                            case "25":
+                                                formaDePagoDescripcion = "Remisión de deuda";
+                                                break;
+                                            case "26":
+                                                formaDePagoDescripcion = "Prescripción o caducidad";
+                                                break;
+                                            case "27":
+                                                formaDePagoDescripcion = "A satisfacción del acreedor";
+                                                break;
+                                            case "28":
+                                                formaDePagoDescripcion = "Tarjeta de débito";
+                                                break;
+                                            case "29":
+                                                formaDePagoDescripcion = "Tarjeta de servicios";
+                                                break;
+                                            case "30":
+                                                formaDePagoDescripcion = "Aplicación de anticipos";
+                                                break;
+                                            case "31":
+                                                formaDePagoDescripcion = "Intermediario pagos";
+                                                break;
+                                            case "99":
+                                                formaDePagoDescripcion = "Por definir";
+                                                break;
+                                            default:
+                                                formaDePagoDescripcion = "";
+                                                break;
+
+                                        }
+                                    } catch (AtributoNotFoundException e) {
                                         formaDePagoDescripcion = "";
-                                        break;
+                                    }
+                                    infoXml.setFormaPago(formaDePagoDescripcion);
 
-                                }
-                            } catch (AtributoNotFoundException e) {
-                                formaDePagoDescripcion = "";
-                            }
-                            infoXml.setFormaPago(formaDePagoDescripcion);
+                                    //tomando todos las etiquetas de un xml y guardandolas en una lista
+                                    cfdi_Comprobante = raizXml.getTagsHijos();
 
-                            //tomando todos las etiquetas de un xml y guardandolas en una lista
-                            cfdi_Comprobante = raizXml.getTagsHijos();
+                                    for (int i = 0; i < cfdi_Comprobante.size(); i++) {
+                                        //Obteniendo todas las etiquetas hijo de la raiz
+                                        String nombreEtiqueta = cfdi_Comprobante.get(i).toString();
+                                        //Buscando el la sub-etiqueta deceada
+                                        switch (nombreEtiqueta) {
+                                            case "<cfdi:Emisor>":
+                                                cfdi_Emisor = raizXml.getTagHijoByName("cfdi:Emisor");
+                                                rfc = cfdi_Emisor.getValorDeAtributo("Rfc");
+                                                infoXml.setRfc(rfc);
+                                                descripcionRelacion = consultas.consultarRelacionActividad(db, rfc);
+                                                infoXml.setRelacion(descripcionRelacion);
+                                                try {
+                                                    proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
+                                                } catch (AtributoNotFoundException e) {
+                                                    proveedor = "";
+                                                }
+                                                infoXml.setProveedor(proveedor);
 
-                            for (int i = 0; i < cfdi_Comprobante.size(); i++) {
-                                //Obteniendo todas las etiquetas hijo de la raiz
-                                String nombreEtiqueta = cfdi_Comprobante.get(i).toString();
-                                //Buscando el la sub-etiqueta deceada
-                                switch (nombreEtiqueta) {
-                                    case "<cfdi:Emisor>":
-                                        cfdi_Emisor = raizXml.getTagHijoByName("cfdi:Emisor");
-                                        rfc = cfdi_Emisor.getValorDeAtributo("Rfc");
-                                        infoXml.setRfc(rfc);
-                                        descripcionRelacion = consultas.consultarRelacionActividad(db, rfc);
-                                        infoXml.setRelacion(descripcionRelacion);
-                                        try {
-                                            proveedor = cfdi_Emisor.getValorDeAtributo("Nombre");
-                                        } catch (AtributoNotFoundException e) {
-                                            proveedor = "";
-                                        }
-                                        infoXml.setProveedor(proveedor);
-
-                                        break;
-                                    case "<cfdi:Conceptos>":
-                                        /*
+                                                break;
+                                            case "<cfdi:Conceptos>":
+                                                /*
                                         Desde aqui para los calculos reales
-                                        */
-                                        List<Tag> cfdi_Conceptos;
-                                        List<Tag> retenciones;
-                                        //Obteniendo hijos de cfdi:Conceptos
-                                        cfdi_Conceptos = cfdi_Comprobante.get(i).getTagsHijos();
+                                                 */
+                                                List<Tag> cfdi_Conceptos;
+                                                List<Tag> retenciones;
+                                                //Obteniendo hijos de cfdi:Conceptos
+                                                cfdi_Conceptos = cfdi_Comprobante.get(i).getTagsHijos();
 
-                                        for (int j = 0; j < cfdi_Conceptos.size(); j++) {
-                                            //obteniendo el la primera sub-etiqueta de <cfdi:Conceptos>
-                                            cfdi_Concepto_h = cfdi_Conceptos.get(j);
+                                                for (int j = 0; j < cfdi_Conceptos.size(); j++) {
+                                                    //obteniendo el la primera sub-etiqueta de <cfdi:Conceptos>
+                                                    cfdi_Concepto_h = cfdi_Conceptos.get(j);
 
-                                            //Cadena del concepto
-                                            if (valoresConcepto.toString().isEmpty()) {
+                                                    //Cadena del concepto
+                                                    if (valoresConcepto.toString().isEmpty()) {
 
-                                                valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
+                                                        valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
 
-                                            }
-                                            if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
-                                                if (!valoresConcepto.toString().equals(cfdi_Concepto_h.getValorDeAtributo("Descripcion"))) {
-                                                    valoresConcepto.append(". ");
-                                                    valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
+                                                    }
+                                                    if (!valoresConcepto.toString().isEmpty() && (numCertificado.equals(raizXml.getValorDeAtributo("NoCertificado")))) {
+                                                        if (!valoresConcepto.toString().equals(cfdi_Concepto_h.getValorDeAtributo("Descripcion"))) {
+                                                            valoresConcepto.append(". ");
+                                                            valoresConcepto.append(cfdi_Concepto_h.getValorDeAtributo("Descripcion"));
+                                                        }
+
+                                                    }
+                                                    try {
+                                                        //traslado
+                                                        cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+                                                        //Aqui impuestos traslado
+                                                        cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
+                                                        cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
+                                                        String tipoBase = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
+                                                        if ("0.000000".equals(tipoBase)) {
+                                                            if ("".equals(traslado)) {
+                                                                traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                                baseCeroSuma = Double.parseDouble(traslado);
+                                                            } else {
+                                                                traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                                baseCeroSuma += Double.parseDouble(traslado);
+                                                            }
+                                                        }
+                                                        if (tipoBase.equals("0.160000") || tipoBase.equals("0.16")) {
+                                                            if ("".equals(traslado)) {
+                                                                traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                                base_16 = Double.parseDouble(traslado);
+                                                            } else {
+                                                                traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
+                                                                base_16 += Double.parseDouble(traslado);
+                                                            }
+                                                        }
+                                                    } catch (TagHijoNotFoundException e) {
+                                                        baseCeroSuma = 0;
+                                                        base_16 = 0;
+                                                    }
+
+                                                    //fin traslado
+                                                    try {
+                                                        //No aesta cargando en ascticsa, verificar el por que
+                                                        //Optimizar la velocidad
+                                                        cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
+
+                                                        //retenciones
+                                                        //probable problema
+                                                        cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
+                                                        retenciones = cfdi_Retenciones.getTagsHijos();
+                                                        for (int k = 0; k < retenciones.size(); k++) {
+                                                            String tipoRetencion = "";
+                                                            cfdi_retencion_h = retenciones.get(k);
+                                                            tipoRetencion = cfdi_retencion_h.getValorDeAtributo("TasaOCuota");
+                                                            switch (tipoRetencion) {
+                                                                case "0.040000":
+                                                                    if (retencionCuatro.isEmpty()) {
+                                                                        retencionCuatro = cfdi_retencion_h.getValorDeAtributo("Importe");
+                                                                    }
+                                                                    break;
+                                                                case "0.100000":
+                                                                    if (retencionDiez.isEmpty()) {
+                                                                        retencionDiez = cfdi_retencion_h.getValorDeAtributo("Importe");
+                                                                    }
+                                                                    break;
+                                                                case "0.106700":
+                                                                    if (retencion1016.isEmpty()) {
+                                                                        retencion1016 = cfdi_retencion_h.getValorDeAtributo("Importe");
+                                                                    }
+                                                                    break;
+                                                                default:
+                                                                    break;
+                                                            }
+                                                        }
+                                                    } catch (TagHijoNotFoundException | NullPointerException | AtributoNotFoundException e) {
+                                                        Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
+                                                    }
+
                                                 }
 
-                                            }
-                                            try {
-                                                //traslado
-                                                cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
-                                                //Aqui impuestos traslado
-                                                cfdi_traslados = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Traslados");
+                                                //Descripcion:Concepto
+                                                infoXml.setConceptoXml(valoresConcepto.toString());
+                                                //Retenciones
+                                                infoXml.setRetencionCuatro(retencionCuatro);
+                                                infoXml.setRetencionDiez(retencionDiez);
+                                                infoXml.setRetencion1016(retencion1016);
+
+                                                break;
+                                            case "<cfdi:Complemento>":
+                                                try {
+                                                    cfdi_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
+                                                    tfd_TimbreFiscalDigital = cfdi_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
+                                                    folioFiscal = tfd_TimbreFiscalDigital.getValorDeAtributo("UUID").toUpperCase();
+                                                } catch (TagHijoNotFoundException e) {
+                                                    folioFiscal = " ";
+                                                }
+
+                                                infoXml.setFolioFiscal(folioFiscal);
+
+                                                break;
+                                            case "<cfdi:Impuestos>":
+
+                                                double calIva = 0;
+                                                String tipoTasa;
+                                                cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
+
+                                                //Tipos de taza
+                                                cfdi_traslados = cfdi_Impuestos.getTagHijoByName("cfdi:Traslados");
+
                                                 cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
-                                                String tipoBase = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
-                                                if ("0.000000".equals(tipoBase)) {
-                                                    if ("".equals(traslado)) {
-                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                        baseCeroSuma = Double.parseDouble(traslado);
-                                                    } else {
-                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                        baseCeroSuma += Double.parseDouble(traslado);
+
+                                                try {
+                                                    tipoTasa = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
+
+                                                    //TasaOCuota puede aparecer tambien como tasa: De momento continuar sin tomarlo en cuenta
+                                                    if (tipoTasa.equals("0.160000") || tipoTasa.equals("0.16")) {
+                                                        tipoTasa = "0.160000";
                                                     }
-                                                }
-                                                if (tipoBase.equals("0.160000") || tipoBase.equals("0.16")) {
-                                                    if ("".equals(traslado)) {
-                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                        base_16 = Double.parseDouble(traslado);
-                                                    } else {
-                                                        traslado = cfdi_traslado_hijo.getValorDeAtributo("Base");
-                                                        base_16 += Double.parseDouble(traslado);
+                                                    switch (tipoTasa) {
+                                                        case "0.000000":
+                                                            //verificar los valores
+                                                            infoXml.setBaseCero(String.valueOf(baseCeroSuma));
+                                                            infoXml.setIva("");
+                                                            infoXml.setBase16("");
+                                                            infoXml.setCuotaCompensatoria("");
+                                                            baseCeroSuma = 0;
+                                                            traslado = "";
+                                                            break;
+                                                        case "0.160000":
+                                                            //Pendiente ajustar esto
+                                                            base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
+                                                            calIva = Double.parseDouble(base16);
+                                                            calIva = calIva * 0.16;
+                                                            iva = String.valueOf(calIva);
+                                                            infoXml.setIva(iva);
+                                                            infoXml.setBase16(base16);
+                                                            infoXml.setBaseCero("");
+                                                            infoXml.setCuotaCompensatoria("");
+
+                                                            calIva = base_16 * 0.16;
+                                                            iva = String.valueOf(calIva);
+                                                            infoXml.setIva(iva);
+                                                            infoXml.setBase16(String.valueOf(base_16));
+                                                            infoXml.setBaseCero("");
+                                                            base_16 = 0;
+                                                            traslado = "";
+                                                            break;
+                                                        case "0.090000":
+                                                            cuotaC = cfdi_traslado_hijo.getValorDeAtributo("importe");
+                                                            infoXml.setCuotaCompensatoria(cuotaC);
+                                                            infoXml.setIva("");
+                                                            infoXml.setBase16("");
+                                                            infoXml.setBaseCero("");
+                                                            break;
+                                                        //las retenciones estan dentro de impuestos, pero no dentro de traslado
+                                                        //iva=base16*0.16
                                                     }
+                                                } catch (AtributoNotFoundException e) {
+                                                    Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                                                 }
-                                            } catch (TagHijoNotFoundException e) {
-                                                baseCeroSuma = 0;
-                                                base_16 = 0;
-                                            }
 
-                                            //fin traslado
-                                            try {
-                                                //No aesta cargando en ascticsa, verificar el por que
-                                                //Optimizar la velocidad
-                                                cfdi_ConceptoImpuestos = cfdi_Concepto_h.getTagHijoByName("cfdi:Impuestos");
-
-                                                //retenciones
-                                                //probable problema
-                                                cfdi_Retenciones = cfdi_ConceptoImpuestos.getTagHijoByName("cfdi:Retenciones");
-                                                retenciones = cfdi_Retenciones.getTagsHijos();
-                                                for (int k = 0; k < retenciones.size(); k++) {
-                                                    String tipoRetencion = "";
-                                                    cfdi_retencion_h = retenciones.get(k);
-                                                    tipoRetencion = cfdi_retencion_h.getValorDeAtributo("TasaOCuota");
-                                                    switch (tipoRetencion) {
-                                                        case "0.040000":
-                                                            if (retencionCuatro.isEmpty()) {
-                                                                retencionCuatro = cfdi_retencion_h.getValorDeAtributo("Importe");
-                                                            }
-                                                            break;
-                                                        case "0.100000":
-                                                            if (retencionDiez.isEmpty()) {
-                                                                retencionDiez = cfdi_retencion_h.getValorDeAtributo("Importe");
-                                                            }
-                                                            break;
-                                                        case "0.106700":
-                                                            if (retencion1016.isEmpty()) {
-                                                                retencion1016 = cfdi_retencion_h.getValorDeAtributo("Importe");
-                                                            }
-                                                            break;
-                                                        default:
-                                                            break;
-                                                    }
-                                                }
-                                            } catch (TagHijoNotFoundException | NullPointerException | AtributoNotFoundException e) {
-                                                Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
-                                            }
-
+                                                break;
+                                            default:
+                                                break;
                                         }
+                                    }
 
-                                        //Descripcion:Concepto
-                                        infoXml.setConceptoXml(valoresConcepto.toString());
-                                        //Retenciones
-                                        infoXml.setRetencionCuatro(retencionCuatro);
-                                        infoXml.setRetencionDiez(retencionDiez);
-                                        infoXml.setRetencion1016(retencion1016);
+                                    infoXml.setCodigoEmpresa(listFicherosPolizaBase.get(p).getEmpresa());
+                                    infoXml.setNombreArchivoXml(listFicherosPolizaBase.get(p).getNombreXml());
+                                    infoXml.setNumeroPoliza(listFicherosPolizaBase.get(p).getNumeroPoliza());
+                                    infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
+                                    infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
+                                    infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
+                                    infoXml.setIdDoctoDig(listFicherosPolizaBase.get(p).getIdDoctodig());
 
-                                        break;
-                                    case "<cfdi:Complemento>":
-                                        try {
-                                            cfdi_Complemento = raizXml.getTagHijoByName("cfdi:Complemento");
-                                            tfd_TimbreFiscalDigital = cfdi_Complemento.getTagHijoByName("tfd:TimbreFiscalDigital");
-                                            folioFiscal = tfd_TimbreFiscalDigital.getValorDeAtributo("UUID").toUpperCase();
-                                        } catch (TagHijoNotFoundException e) {
-                                            folioFiscal = " ";
-                                        }
+                                    datosXml.add(infoXml);
 
-                                        infoXml.setFolioFiscal(folioFiscal);
-
-                                        break;
-                                    case "<cfdi:Impuestos>":
-
-                                        double calIva = 0;
-                                        String tipoTasa;
-                                        cfdi_Impuestos = raizXml.getTagHijoByName("cfdi:Impuestos");
-
-                                        //Tipos de taza
-                                        cfdi_traslados = cfdi_Impuestos.getTagHijoByName("cfdi:Traslados");
-
-                                        cfdi_traslado_hijo = cfdi_traslados.getTagHijoByName("cfdi:Traslado");
-
-                                        try {
-                                            tipoTasa = cfdi_traslado_hijo.getValorDeAtributo("TasaOCuota");
-
-                                            //TasaOCuota puede aparecer tambien como tasa: De momento continuar sin tomarlo en cuenta
-                                            if (tipoTasa.equals("0.160000") || tipoTasa.equals("0.16")) {
-                                                tipoTasa = "0.160000";
-                                            }
-                                            switch (tipoTasa) {
-                                                case "0.000000":
-                                                    //verificar los valores
-                                                    infoXml.setBaseCero(String.valueOf(baseCeroSuma));
-                                                    infoXml.setIva("");
-                                                    infoXml.setBase16("");
-                                                    infoXml.setCuotaCompensatoria("");
-                                                    baseCeroSuma = 0;
-                                                    traslado = "";
-                                                    break;
-                                                case "0.160000":
-                                                    //Pendiente ajustar esto
-                                                    base16 = cfdi_Impuestos.getValorDeAtributo("totalImpuestosTrasladados");
-                                                    calIva = Double.parseDouble(base16);
-                                                    calIva = calIva * 0.16;
-                                                    iva = String.valueOf(calIva);
-                                                    infoXml.setIva(iva);
-                                                    infoXml.setBase16(base16);
-                                                    infoXml.setBaseCero("");
-                                                    infoXml.setCuotaCompensatoria("");
-
-                                                    calIva = base_16 * 0.16;
-                                                    iva = String.valueOf(calIva);
-                                                    infoXml.setIva(iva);
-                                                    infoXml.setBase16(String.valueOf(base_16));
-                                                    infoXml.setBaseCero("");
-                                                    base_16 = 0;
-                                                    traslado = "";
-                                                    break;
-                                                case "0.090000":
-                                                    cuotaC = cfdi_traslado_hijo.getValorDeAtributo("importe");
-                                                    infoXml.setCuotaCompensatoria(cuotaC);
-                                                    infoXml.setIva("");
-                                                    infoXml.setBase16("");
-                                                    infoXml.setBaseCero("");
-                                                    break;
-                                                //las retenciones estan dentro de impuestos, pero no dentro de traslado
-                                                //iva=base16*0.16
-                                            }
-                                        } catch (AtributoNotFoundException e) {
-                                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
-                                        }
-
-                                        break;
-                                    default:
-                                        break;
+                                } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
+                                    Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
                                 }
                             }
 
-                            infoXml.setCodigoEmpresa(listFicherosPolizaBase.get(p).getEmpresa());
-                            infoXml.setNombreArchivoXml(listFicherosPolizaBase.get(p).getNombreXml());
-                            infoXml.setNumeroPoliza(listFicherosPolizaBase.get(p).getNumeroPoliza());
-                            infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
-                            infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
-                            infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
-                            infoXml.setIdDoctoDig(listFicherosPolizaBase.get(p).getIdDoctodig());
-
-                            datosXml.add(infoXml);
-
-                        } catch (SAXException | AtributoNotFoundException | TagHijoNotFoundException e) {
-                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
+                        } catch (NullPointerException | IOException | ParserConfigurationException ex) {
+                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-
-                } catch (NullPointerException | IOException | ParserConfigurationException ex) {
-                    Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    break;
+                case 2:
+                    XmlDatos infoXml = new XmlDatos();
+                    infoXml.setFechaFactura("");
+                    infoXml.setFolioInterno("");
+                    infoXml.setTotal("");
+                    infoXml.setFormaPago("");
+                    infoXml.setRfc("");
+                    infoXml.setRelacion("");
+                    infoXml.setProveedor("");
+                    infoXml.setConceptoXml("");
+                    infoXml.setRetencionCuatro("");
+                    infoXml.setRetencionDiez("");
+                    infoXml.setRetencion1016("");
+                    infoXml.setFolioFiscal("");
+                    infoXml.setCodigoEmpresa("");
+                    infoXml.setNombreArchivoXml("");
+                    infoXml.setCuotaCompensatoria("");
+                    infoXml.setIva("");
+                    infoXml.setBase16("");
+                    infoXml.setBaseCero("");
+                    infoXml.setNumeroPoliza(listFicherosPolizaBase.get(p).getNumeroPoliza());
+                    infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
+                    infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
+                    infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
+                    infoXml.setIdDoctoDig("");
+                    datosXml.add(infoXml);
+                    break;
+                default:
+                    break;
             }
+
         }
 
         return datosXml;

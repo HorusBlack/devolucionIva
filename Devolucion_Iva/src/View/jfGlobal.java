@@ -32,6 +32,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -1234,6 +1236,8 @@ public class jfGlobal extends javax.swing.JFrame {
             cuotaCompensatoria = 0;
             totalIva = 0;
             total_devIva = 0;
+            String dateFormat = "";
+            String fechaPago = "";
 
             double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
 
@@ -1244,19 +1248,20 @@ public class jfGlobal extends javax.swing.JFrame {
                 for (int i = 0; i < llenarDatosTabla.size(); i++) {
 
                     String string = llenarDatosTabla.get(i).getFechaFactura();
-                    String[] parts = string.split("T");
-                    String part1 = parts[0];
-                    String dateFormat = "";
-                    String fechaPago = "";
-                    //No se estan cargando todos los datos
-                    try {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                        dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                    if (string != "") {
+                        String[] parts = string.split("T");
+                        String part1 = parts[0];
 
-                    } catch (ParseException ex) {
-                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                        //No se estan cargando todos los datos
+                        try {
+                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                            dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                        } catch (ParseException ex) {
+                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
                     }
-
                     try {
                         //la fecha puede tener un problema
                         if (llenarDatosTabla.get(i).getFechaPago() != "" && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
@@ -1265,7 +1270,8 @@ public class jfGlobal extends javax.swing.JFrame {
                         }
 
                     } catch (ParseException ex) {
-                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                        Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+
                     }
 
                     /*
@@ -1292,7 +1298,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][17] = llenarDatosTabla.get(i).getFormaPago();
                     myData[i][18] = llenarDatosTabla.get(i).getTipoPoliza();
                     myData[i][19] = llenarDatosTabla.get(i).getNumeroPoliza();
-                    myData[i][20] = llenarDatosTabla.get(i).getRelacion(); 
+                    myData[i][20] = llenarDatosTabla.get(i).getRelacion();
                     myData[i][21] = "";
                     myData[i][22] = llenarDatosTabla.get(i).getIdDoctoDig();
                     myData[i][23] = llenarDatosTabla.get(i).getNombreArchivoXml();

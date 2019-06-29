@@ -5,6 +5,7 @@
  */
 package Models;
 //lulu conexion computadora
+
 /**
  * Clase que se encarga de generar un objeto tipo PolizaDatos de la informacion
  * proporcionada de la BD
@@ -14,9 +15,18 @@ package Models;
 public class PolizaDatos {
 
     private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago, montoMov;
+    private int conXml;
 
     public String getMontoMov() {
         return montoMov;
+    }
+
+    public int getConXml() {
+        return conXml;
+    }
+
+    public void setConXml(int conXml) {
+        this.conXml = conXml;
     }
 
     public void setMontoMov(String montoMov) {
