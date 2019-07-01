@@ -208,6 +208,7 @@ public class Consultas {
                     polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
                             subFijoCuenta, numeroCuentas[i], String.valueOf(periodo), String.valueOf(ejercicio),
                             resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
+                    polizaDatos.setConXml(1);
                     polizaDatosList.add(polizaDatos);
                 }
             } catch (SQLException | ClassNotFoundException ex) {
