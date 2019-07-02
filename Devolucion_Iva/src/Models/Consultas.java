@@ -136,7 +136,7 @@ public class Consultas {
         return polizaDatosList;
     }
 
-    /**
+ /**
      * Función que consulta las polizas de un ejercicio y periodo espefico en la
      * base de datos de Adsticsa
      *
@@ -166,51 +166,70 @@ public class Consultas {
             subFijoPeriodo = String.valueOf(periodo);
         }
         String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
-
+        //OK
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         Connection conexion = null;
         //" + tableSaldos + "
         for (int i = 0; i < numeroCuentas.length; i++) {
+            List<PolizaDatos> lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuentas[i]);
             try {
                 conexion = connection.Entrar(dataBase);
+                if (!lpd.isEmpty()) {
 
-                query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA',"
-                        + " reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', reg.EMPRESA "
-                        + "FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION]"
-                        + " rel ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS]"
-                        + " reg ON rel.ID_REGISTRO = reg.ID_REGISTRO INNER JOIN "
-                        + "[" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux ON reg.CVEENTIDAD1 = "
-                        + "aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
-                        + "WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' "
-                        + "AND reg.EMPRESA = " + numeroEmpresa + " AND aux.PERIODO = " + periodo + " AND "
-                        + "aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
-                        + "AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
-                        + "AND reg.CVEENTIDAD1 IN (SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE "
-                        + "NUM_POLIZ END) NUM_POLIZ FROM ([" + subBaseCoi + "].[dbo].[" + subFijoCuenta + "] A "
-                        + "JOIN [" + subBaseCoi + "].[dbo].[" + subFijoSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  "
-                        + "LEFT JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] C ON "
-                        + "(A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= '" + numeroCuentas[i] + "' AND A.NUM_CTA <= '" + numeroCuentas[i] + "' )"
-                        + "GROUP BY aux.NUM_POLIZ, d.ID_DOCTODIG, d.RUTA, d.ARCHIVO,"
-                        + " reg.CVEENTIDAD1, reg.CVEENTIDAD2,aux.FECHA_POL, reg.EMPRESA order by  reg.CVEENTIDAD1";
-                //erro sql aqui
-                stmt = conexion.createStatement();
-                resultSet = stmt.executeQuery(query);
-                while (resultSet.next()) {
-                    polizaDatos = new PolizaDatos();
-                    polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
-                    polizaDatos.setRutaXml(resultSet.getString("RUTA"));
-                    polizaDatos.setNombreXml(resultSet.getString("ARCHIVO"));
-                    polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
-                    polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
-                    polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
-                    polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
-                    polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
-                            subFijoCuenta, numeroCuentas[i], String.valueOf(periodo), String.valueOf(ejercicio),
-                            resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
-                    polizaDatos.setConXml(1);
-                    polizaDatosList.add(polizaDatos);
+                    for (int x = 0; x < lpd.size(); x++) {
+                        query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
+                                + " aux.MONTOMOV,reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON"
+                                + " d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON rel.ID_REGISTRO = reg.ID_REGISTRO "
+                                + " INNER JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
+                                + " WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA= " + numeroEmpresa + " AND "
+                                + "aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
+                                + "AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
+                                + "AND reg.CVEENTIDAD1=" + lpd.get(x).getNumeroPoliza() + " AND reg.CVEENTIDAD2='" + lpd.get(x).getTipoPoliza() + "'";
+                        //erro sql aqui
+                        stmt = conexion.createStatement();
+                        resultSet = stmt.executeQuery(query);
+                        //No me devuelve nada por que no estan asociados
+                        if (resultSet.next() == false) {
+                            subQuery = "SELECT aux.NUM_CTA,aux.FECHA_POL, aux.TIPO_POLI,aux.NUM_POLIZ ,CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
+                                    + "aux.MONTOMOV "
+                                    + "FROM [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
+                                    + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
+                                    + "AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND "
+                                    + "aux.TIPO_POLI='" + lpd.get(x).getTipoPoliza() + "'";
+                            stmt = conexion.createStatement();
+                            subResultset = stmt.executeQuery(subQuery);
+                            if (subResultset.next()) {
+                                do {
+                                    polizaDatos = new PolizaDatos();
+                                    polizaDatos.setTipoPoliza(subResultset.getString("TIPO_POLI"));
+                                    polizaDatos.setNumeroPoliza(subResultset.getString("NUM_POLIZ"));
+                                    polizaDatos.setFechaPago(subResultset.getString("FECHA POLIZA"));
+                                    polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
+                                            subFijoCuenta, numeroCuentas[1], String.valueOf(periodo), String.valueOf(ejercicio),
+                                            subResultset.getString("TIPO_POLI"), subResultset.getString("NUM_POLIZ")));
+                                    polizaDatos.setConXml(2);
+                                    polizaDatosList.add(polizaDatos);
+                                } while (subResultset.next());
+                            }
+                        } else {
+                            do {
+                                polizaDatos = new PolizaDatos();
+                                polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
+                                polizaDatos.setRutaXml(resultSet.getString("RUTA"));
+                                polizaDatos.setNombreXml(resultSet.getString("ARCHIVO"));
+                                polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
+                                polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
+                                polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                                polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
+                                polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
+                                        subFijoCuenta, numeroCuentas[i], String.valueOf(periodo), String.valueOf(ejercicio),
+                                        resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
+                                polizaDatosList.add(polizaDatos);
+                            } while (resultSet.next());
+                        }
+                    }
                 }
+
             } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -219,7 +238,6 @@ public class Consultas {
         }
         return polizaDatosList;
     }
-
     /**
      * Funcion que consulta un no. de poliza existente segun una tabla, periodo
      * y anio
