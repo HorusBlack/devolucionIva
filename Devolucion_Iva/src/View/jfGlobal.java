@@ -1218,15 +1218,15 @@ public class jfGlobal extends javax.swing.JFrame {
             //Titulos para la tabla
             String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
                 "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
-                "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta",
-                "Id Doc", "Archivo"};
+                "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza","Relación con Actividad", "Cruce Edo. Cuenta",
+                "Id Doc", "Archivo","Cuenta Coi","MontoMov"};
             //Clase que obtiene los datos xml
             //correguir sintaxis de ruta, la conexion sql es estable
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
             String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
             //Lista de objetos xmlDatos 
             llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos, bd);
-            Object[][] myData = new Object[llenarDatosTabla.size()][24];
+            Object[][] myData = new Object[llenarDatosTabla.size()][26];
             //Datos para los totales
             base_0 = 0;
             base_16 = 0;
@@ -1302,6 +1302,8 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][21] = "";
                     myData[i][22] = llenarDatosTabla.get(i).getIdDoctoDig();
                     myData[i][23] = llenarDatosTabla.get(i).getNombreArchivoXml();
+                    myData[i][24] = llenarDatosTabla.get(i).getCuentaCoi();
+                    myData[i][25] = llenarDatosTabla.get(i).getMontoMov();
 
                     //Para el total
                     //0.00, null, ""
@@ -1369,7 +1371,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     //celdas editables
                     @Override
                     public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
-                        if (column == 0 || column == 20 || column == 21) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
+                        if (column == 0 || column == 21) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
                             return true;
                         } else {
                             return false;
@@ -1388,7 +1390,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
                 //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
                 TableColumn columna;
-                for (int i = 1; i <= 23; i++) {
+                for (int i = 1; i <= 25; i++) {
                     switch (i) {
                         case 1:
                             //Fecha de Factura
@@ -1502,6 +1504,16 @@ public class jfGlobal extends javax.swing.JFrame {
                             columna.setMinWidth(50);
                             break;
                         case 23:
+                            //Archivo XML
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 24:
+                            //Archivo XML
+                            columna = tablaCienIvaAcred.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 25:
                             //Archivo XML
                             columna = tablaCienIvaAcred.getColumn(titulos[i]);
                             columna.setMinWidth(150);
@@ -2377,7 +2389,7 @@ public class jfGlobal extends javax.swing.JFrame {
      * @return boolean
      */
     private boolean procesarDevolucionIva(String noEmpresa) {
-        //System.out.println("num empresa: " + noEmpresa);
+
         List<PolizaProcesada> datosProcesar = new ArrayList<>();
         ivaAcred = new IvaAcredController();
         for (int i = 0; i < tablaCienIvaAcred.getRowCount(); i++) {

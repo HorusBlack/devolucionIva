@@ -79,7 +79,7 @@ public class IvaAcredController {
             switch (listFicherosPolizaBase.get(p).getConXml()) {
                 case 1:
                     String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
-                    //System.out.println("Archivo xml :" + URL);
+                   
                     if (!URL.isEmpty() || !URL.equals("")) {
                         try {
                             //Tomando la ruta de la carpeta
@@ -406,6 +406,8 @@ public class IvaAcredController {
                                     infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
                                     infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
                                     infoXml.setIdDoctoDig(listFicherosPolizaBase.get(p).getIdDoctodig());
+                                    infoXml.setCuentaCoi(listFicherosPolizaBase.get(p).getNumCuentaCoi());
+                                    infoXml.setMontoMov(listFicherosPolizaBase.get(p).getMontoMov());
 
                                     datosXml.add(infoXml);
 
@@ -443,6 +445,8 @@ public class IvaAcredController {
                     infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
                     infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
                     infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
+                    infoXml.setCuentaCoi(listFicherosPolizaBase.get(p).getNumCuentaCoi());
+                    infoXml.setMontoMov(listFicherosPolizaBase.get(p).getMontoMov());
                     infoXml.setIdDoctoDig("");
                     datosXml.add(infoXml);
                     break;

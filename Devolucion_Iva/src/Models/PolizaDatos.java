@@ -14,7 +14,15 @@ package Models;
  */
 public class PolizaDatos {
 
-    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago, montoMov;
+    private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago, montoMov, numCuentaCoi;
+
+    public String getNumCuentaCoi() {
+        return numCuentaCoi;
+    }
+
+    public void setNumCuentaCoi(String numCuentaCoi) {
+        this.numCuentaCoi = numCuentaCoi;
+    }
     private int conXml;
 
     public String getMontoMov() {
