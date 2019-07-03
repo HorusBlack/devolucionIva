@@ -256,49 +256,6 @@ public class Consultas {
     }
 
     /**
-     * Funcion que consulta un no. de poliza existente segun una tabla, periodo
-     * y anio
-     *
-     * @param db
-     * @param coiDb
-     * @param tableCuenta
-     * @param tableSaldos
-     * @param tableAuxiliar
-     * @param numPeriodo
-     * @param numCuenta
-     * @return
-     */
-    private List<PolizaDatos> consultarPolizasUnicas(String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta) {
-        connection = new ConexionDB();
-        Connection conexion = null;
-        String relacion = "";
-        List<PolizaDatos> lpd = new ArrayList<>();
-
-        try {
-            conexion = connection.Entrar(db);
-            query = "SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A "
-                    + " JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA "
-                    + " AND PERIODO IN (" + numPeriodo + "))  WHERE A.NUM_CTA >= '" + numCuenta + "' AND A.NUM_CTA <= '" + numCuenta + "' AND C.MONTOMOV!=0";
-            stmt = conexion.createStatement();
-            resultSet = stmt.executeQuery(query);
-
-            while (resultSet.next()) {
-                polizaDatos = new PolizaDatos();
-                polizaDatos.setNumeroPoliza(resultSet.getString("NUM_POLIZ"));
-                polizaDatos.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
-                lpd.add(polizaDatos);
-            }
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConexionDB.Salir(conexion);
-        }
-        return lpd;
-    }
-
-    /**
      * Funcion que obtiene todos los datos de iva acreditable segun un periodo,
      * ejercicio y no. de cuenta
      *
@@ -495,48 +452,6 @@ public class Consultas {
     }
 
     /**
-     * Función para obtener el nombre de la cuenta
-     *
-     * @param dataBase
-     * @param coiDb
-     * @param auxDb
-     * @param ctaDb
-     * @param noCuenta
-     * @param periodo
-     * @param ejercicio
-     * @param tipoPoli
-     * @param numPoliza
-     * @return
-     */
-    private String consultaNombreCuenta(String dataBase, String coiDb, String auxDb, String ctaDb,
-            String noCuenta, String periodo, String ejercicio, String tipoPoli, String numPoliza) {
-        ConexionDB connection2 = new ConexionDB();
-        Connection conexion2 = null;
-        String nombreConexion = "";
-        try {
-            conexion2 = connection2.Entrar(dataBase);
-            subQuery = "SELECT AUX.[NUM_CTA] ,CTA.[NOMBRE]"
-                    + " FROM [" + coiDb + "].[dbo].[" + auxDb + "] AUX"
-                    + " INNER JOIN [" + coiDb + "].[dbo].[" + ctaDb + "] CTA ON AUX.[NUM_CTA]=CTA.[NUM_CTA]"
-                    + " WHERE AUX.[NUM_CTA]='" + noCuenta + "' AND AUX.[PERIODO]=" + periodo + " "
-                    + " AND AUX.[EJERCICIO]=" + ejercicio + " AND AUX.[TIPO_POLI]='" + tipoPoli + "' "
-                    + " AND AUX.NUM_POLIZ =" + numPoliza + " "
-                    + " GROUP BY AUX.[NUM_CTA], CTA.[NOMBRE]";
-            Statement stmt2 = conexion2.createStatement();
-            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
-            while (resultSet2.next()) {
-                nombreConexion = resultSet2.getString("NOMBRE");
-            }
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConexionDB.Salir(conexion2);
-        }
-        return nombreConexion;
-    }
-
-    /**
      * Metodo que consulta todos los conceptos Relación de actividades de la
      * Base de datos
      *
@@ -637,5 +552,167 @@ public class Consultas {
         }
         return relacion;
     }
-    //Falta arreglar que solo consulte las que no estan procesadas
+
+    /**
+     * Función para obtener el nombre de la cuenta
+     *
+     * @param dataBase
+     * @param coiDb
+     * @param auxDb
+     * @param ctaDb
+     * @param noCuenta
+     * @param periodo
+     * @param ejercicio
+     * @param tipoPoli
+     * @param numPoliza
+     * @return
+     */
+    private String consultaNombreCuenta(String dataBase, String coiDb, String auxDb, String ctaDb,
+            String noCuenta, String periodo, String ejercicio, String tipoPoli, String numPoliza) {
+        ConexionDB connection2 = new ConexionDB();
+        Connection conexion2 = null;
+        String nombreConexion = "";
+        try {
+            conexion2 = connection2.Entrar(dataBase);
+            subQuery = "SELECT AUX.[NUM_CTA] ,CTA.[NOMBRE]"
+                    + " FROM [" + coiDb + "].[dbo].[" + auxDb + "] AUX"
+                    + " INNER JOIN [" + coiDb + "].[dbo].[" + ctaDb + "] CTA ON AUX.[NUM_CTA]=CTA.[NUM_CTA]"
+                    + " WHERE AUX.[NUM_CTA]='" + noCuenta + "' AND AUX.[PERIODO]=" + periodo + " "
+                    + " AND AUX.[EJERCICIO]=" + ejercicio + " AND AUX.[TIPO_POLI]='" + tipoPoli + "' "
+                    + " AND AUX.NUM_POLIZ =" + numPoliza + " "
+                    + " GROUP BY AUX.[NUM_CTA], CTA.[NOMBRE]";
+            Statement stmt2 = conexion2.createStatement();
+            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
+            while (resultSet2.next()) {
+                nombreConexion = resultSet2.getString("NOMBRE");
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion2);
+        }
+        return nombreConexion;
+    }
+
+    /**
+     * Funcion que consulta un no. de poliza existente segun una tabla, periodo
+     * y anio
+     *
+     * @param db
+     * @param coiDb
+     * @param tableCuenta
+     * @param tableSaldos
+     * @param tableAuxiliar
+     * @param numPeriodo
+     * @param numCuenta
+     * @return
+     */
+    private List<PolizaDatos> consultarPolizasUnicas(String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        List<PolizaDatos> lpd = new ArrayList<>();
+
+        try {
+            conexion = connection.Entrar(db);
+            query = "SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A "
+                    + " JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA "
+                    + " AND PERIODO IN (" + numPeriodo + "))  WHERE A.NUM_CTA >= '" + numCuenta + "' AND A.NUM_CTA <= '" + numCuenta + "' AND C.MONTOMOV!=0";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+
+            while (resultSet.next()) {
+                polizaDatos = new PolizaDatos();
+                polizaDatos.setNumeroPoliza(resultSet.getString("NUM_POLIZ"));
+                polizaDatos.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                lpd.add(polizaDatos);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return lpd;
+    }
+
+    /**
+     *
+     * @param nombreRelacion
+     * @param claveRelacion
+     * @return
+     */
+    public boolean insertarNuevaRelacion(String nombreRelacion, String claveRelacion) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        String dbAsticsa = "COI80Empre1";
+        String dbAgro = "COI80Empre2";
+        boolean exito1 = false;
+        boolean exito2 = false;
+        PreparedStatement ps;
+        try {
+            conexion = connection.Entrar(dbAsticsa);
+            query = "INSERT INTO [" + dbAsticsa + "].[dbo].[CONCEPTOS_RELACION]([CLAVE_CONCEPTO],[DESCRIPCION]) VALUES (?,?)";
+            ps = conexion.prepareStatement(query);
+
+            ps.setString(1, claveRelacion);
+            ps.setString(2, nombreRelacion);
+            ps.executeUpdate();
+            exito1 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+
+        try {
+            conexion = connection.Entrar(dbAgro);
+            query = "INSERT INTO [" + dbAgro + "].[dbo].[CONCEPTOS_RELACION]([CLAVE_CONCEPTO],[DESCRIPCION]) VALUES (?,?)";
+            ps = conexion.prepareStatement(query);
+            ps.setString(1, claveRelacion);
+            ps.setString(2, nombreRelacion);
+            ps.executeUpdate();
+            exito2 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return exito1 && exito2;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private String ultimoRegistroRelacion() {
+
+        ConexionDB connection2 = new ConexionDB();
+        Connection conexion2 = null;
+        String baseCoi = "COI80Empre1";
+        String ultimoID = "";
+
+        try {
+            conexion2 = connection2.Entrar(baseCoi);
+            subQuery = "SELECT TOP(1)[ID],[CLAVE_CONCEPTO],[DESCRIPCION] FROM [" + baseCoi + "].[dbo].[CONCEPTOS_RELACION] ORDER BY ID DESC";
+            Statement stmt2 = conexion2.createStatement();
+            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
+            while (resultSet2.next()) {
+                ultimoID = resultSet2.getString("ID");
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion2);
+        }
+        return ultimoID;
+
+    }
+
 }

@@ -75,4 +75,10 @@ public class ControllerAction {
         }
         return ListRetencionIvaPagadaMeses;
     }
+
+    public boolean solicitarInsertNuevaRelacion(String nombreRelacion, String codigo) {
+        consultas = new Consultas();
+        boolean resultado = consultas.insertarNuevaRelacion(nombreRelacion, codigo);
+        return resultado;
+    }
 }
