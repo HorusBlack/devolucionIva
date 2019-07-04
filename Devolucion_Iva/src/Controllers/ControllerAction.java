@@ -6,6 +6,7 @@
 package Controllers;
 
 import Models.Consultas;
+import Models.RelacionActividades;
 import Models.RetencionIvaMes;
 import Models.RetencionIvaPagadaMes;
 import java.util.ArrayList;
@@ -21,10 +22,12 @@ public class ControllerAction {
     private Consultas consultas;
     private List<RetencionIvaMes> listRetencionIvaMes;
     private List<RetencionIvaPagadaMes> ListRetencionIvaPagadaMeses;
+    private RelacionActividades relacionActividades;
     private final static String NO_CUENTA = "115100100000000000002";
     private final String baseAgroecologia = "COI80Empre2";
     private final String baseAstixa = "COI80Empre1";
     private String dataBase;
+    
 
     /**
      * Funcion que solicita datos referente a las retenciones de iva del mes y
@@ -82,9 +85,15 @@ public class ControllerAction {
         return resultado;
     }
 
-    public List<String> procesarListaRelaciones() {
+    public List<RelacionActividades> procesarListaRelaciones() {
         consultas = new Consultas();
-        List<String> resultList = consultas.relaciones();
+        List<RelacionActividades> resultList = consultas.relaciones();
+        return resultList;
+    }
+    
+    public List<RelacionActividades> procesarListaRelacionesActividad() {
+        consultas = new Consultas();
+        List<RelacionActividades> resultList = consultas.relacionesRFC();
         return resultList;
     }
 }

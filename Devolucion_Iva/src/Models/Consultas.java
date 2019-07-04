@@ -31,6 +31,7 @@ public class Consultas {
     private AuxIvaAcred auxIvaAcred;
     private RetencionIvaMes retencionIvaMes;
     private RetencionIvaPagadaMes retencionIvaPagadaMes;
+    private RelacionActividades relacionActividades;
 
     /**
      * Función que consulta las polizas de un ejercicio y periodo espefico en la
@@ -714,29 +715,67 @@ public class Consultas {
         return ultimoID;
 
     }
-
-    public List<String> relaciones() {
-        List<String> listaRelaciones = new ArrayList<String>();
-        ConexionDB connection2 = new ConexionDB();
-        Connection conexion2 = null;
+    
+    /**
+     * Funcion que retorna una lista de RelacionActividadess
+     * @return 
+     */
+    public List<RelacionActividades> relaciones() {
+        List<RelacionActividades> listaRelaciones = new ArrayList<>();
+        connection = new ConexionDB();
+        Connection conexion = null;
         String baseCoi = "COI80Empre1";
         String ultimoID = "";
 
         try {
-            conexion2 = connection2.Entrar(baseCoi);
+            conexion = connection.Entrar(baseCoi);
             subQuery = "SELECT [ID] ,[CLAVE_CONCEPTO] ,[DESCRIPCION] FROM [COI80Empre1].[dbo].[CONCEPTOS_RELACION]";
-            Statement stmt2 = conexion2.createStatement();
-            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
-            while (resultSet2.next()) {
-                listaRelaciones.add(resultSet2.getString("ID"));
-                listaRelaciones.add(resultSet2.getString("CLAVE_CONCEPTO"));
-                listaRelaciones.add(resultSet2.getString("DESCRIPCION"));
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(subQuery);
+            while (resultSet.next()) {
+                relacionActividades = new RelacionActividades();
+                relacionActividades.setIdRelacion(resultSet.getString("ID"));
+                relacionActividades.setCodigoRelacion(resultSet.getString("CLAVE_CONCEPTO"));
+                relacionActividades.setDescripcionRelacion(resultSet.getString("DESCRIPCION"));
+                listaRelaciones.add(relacionActividades);
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            ConexionDB.Salir(conexion2);
+            ConexionDB.Salir(conexion);
+        }
+        return listaRelaciones;
+    }
+    
+      /**
+       * Funcion que obtiene los RFC que se encuentras asociados a alguna actividad
+       * @return 
+       */
+      public List<RelacionActividades> relacionesRFC() {
+        List<RelacionActividades> listaRelaciones = new ArrayList<>();
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String baseCoi = "COI80Empre1";
+        String ultimoID = "";
+
+        try {
+            conexion = connection.Entrar(baseCoi);
+            subQuery = "SELECT [ID] ,[RFC] ,[ID_RELACION_ACTIVIDAD] FROM [COI80Empre1].[dbo].[RELACION_RFC_REL_ACT]";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(subQuery);
+            while (resultSet.next()) {
+                relacionActividades = new RelacionActividades();
+                relacionActividades.setIdRfc(resultSet.getString("ID"));
+                relacionActividades.setRfcRelacion(resultSet.getString("RFC"));
+                relacionActividades.setIdAsociado(resultSet.getString("ID_RELACION_ACTIVIDAD"));
+                listaRelaciones.add(relacionActividades);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
         }
         return listaRelaciones;
     }

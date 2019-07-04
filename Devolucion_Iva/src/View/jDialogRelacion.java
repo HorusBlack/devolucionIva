@@ -6,6 +6,7 @@
 package View;
 
 import Controllers.ControllerAction;
+import Models.RelacionActividades;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -14,7 +15,10 @@ import javax.swing.JOptionPane;
  * @author Vigilancia
  */
 public class jDialogRelacion extends javax.swing.JDialog {
-private ControllerAction controllerAction;
+
+    private ControllerAction controllerAction;
+    private RelacionActividades relacionActividades;
+
     /**
      * Creates new form jDialogRelacion
      */
@@ -160,9 +164,6 @@ private ControllerAction controllerAction;
 
         jLabel2.setText("Actividad");
 
-        cmbActividad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cmbox_Rfc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbox_Rfc.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 cmbox_RfcFocusGained(evt);
@@ -333,7 +334,11 @@ private ControllerAction controllerAction;
                 btnGuardarRelacion.setEnabled(true);
                 btnCancelarNuevaActividad.setEnabled(true);
                 btnNuevoActividad.setEnabled(false);
-            }else{
+                cmbActividad.removeAllItems();
+                cmbox_Rfc.removeAllItems();
+                llenarComboBoxRelacion();
+
+            } else {
                 JOptionPane.showMessageDialog(rootPane, "Hubo un problema al guardar la información. \n Verifique los datos he intente de nuevo");
             }
         }
@@ -360,16 +365,26 @@ private ControllerAction controllerAction;
     }//GEN-LAST:event_btnCancelarNuevaActividadActionPerformed
 
     //FUNCIONES
-    private void llenarComboBoxRelacion(){
+    private void llenarComboBoxRelacion() {
         controllerAction = new ControllerAction();
-        List<String>relaciones=controllerAction.procesarListaRelaciones();
-        if(!relaciones.isEmpty()){
+        List<RelacionActividades> relaciones = controllerAction.procesarListaRelaciones();
+        if (!relaciones.isEmpty()) {
             for (int i = 0; i < relaciones.size(); i++) {
-                System.out.println("relaciones: "+relaciones.get(i));
+                cmbActividad.addItem(relaciones.get(i).getCodigoRelacion() + " " + relaciones.get(i).getDescripcionRelacion());
             }
+        } else {
+            cmbActividad.setEnabled(false);
+        }
+        relaciones = controllerAction.procesarListaRelacionesActividad();
+        if (!relaciones.isEmpty()) {
+            for (int i = 0; i < relaciones.size(); i++) {
+                cmbox_Rfc.addItem(relaciones.get(i).getRfcRelacion());
+            }
+        } else {
+            cmbox_Rfc.setEnabled(false);
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
