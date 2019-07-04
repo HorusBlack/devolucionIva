@@ -688,23 +688,25 @@ public class Consultas {
     }
 
     /**
+     * Funcion que retorna el ultimo registro de los rfc relacionados a las
+     * actividades
      *
-     * @return
+     * @return int
      */
-    private String ultimoRegistroRelacion() {
+    private int ultimoRegistroRelacionRfc() {
 
         ConexionDB connection2 = new ConexionDB();
         Connection conexion2 = null;
         String baseCoi = "COI80Empre1";
-        String ultimoID = "";
+        int ultimoID = 0;
 
         try {
             conexion2 = connection2.Entrar(baseCoi);
-            subQuery = "SELECT TOP(1)[ID],[CLAVE_CONCEPTO],[DESCRIPCION] FROM [" + baseCoi + "].[dbo].[CONCEPTOS_RELACION] ORDER BY ID DESC";
+            subQuery = "SELECT TOP (1) [ID] FROM [COI80Empre1].[dbo].[RELACION_RFC_REL_ACT] ORDER BY ID DESC";
             Statement stmt2 = conexion2.createStatement();
             ResultSet resultSet2 = stmt2.executeQuery(subQuery);
             while (resultSet2.next()) {
-                ultimoID = resultSet2.getString("ID");
+                ultimoID = resultSet2.getInt("ID");
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -715,10 +717,11 @@ public class Consultas {
         return ultimoID;
 
     }
-    
+
     /**
      * Funcion que retorna una lista de RelacionActividadess
-     * @return 
+     *
+     * @return
      */
     public List<RelacionActividades> relaciones() {
         List<RelacionActividades> listaRelaciones = new ArrayList<>();
@@ -747,12 +750,14 @@ public class Consultas {
         }
         return listaRelaciones;
     }
-    
-      /**
-       * Funcion que obtiene los RFC que se encuentras asociados a alguna actividad
-       * @return 
-       */
-      public List<RelacionActividades> relacionesRFC() {
+
+    /**
+     * Funcion que obtiene los RFC que se encuentras asociados a alguna
+     * actividad
+     *
+     * @return
+     */
+    public List<RelacionActividades> relacionesRFC() {
         List<RelacionActividades> listaRelaciones = new ArrayList<>();
         connection = new ConexionDB();
         Connection conexion = null;
@@ -778,5 +783,58 @@ public class Consultas {
             ConexionDB.Salir(conexion);
         }
         return listaRelaciones;
+    }
+    //int idRelacion, String descripcionRelacion, String nuevoRfc
+    
+    /**
+     * Funcion que inserta una nueva relacion entre un RFC y una Actividad en la BD
+     * @param clave
+     * @param nuevoRfc
+     * @return boolean
+     */
+    public boolean insertNuevoRfcActividad(String clave, String nuevoRfc) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        String dbAsticsa = "COI80Empre1";
+        String dbAgro = "COI80Empre2";
+        boolean exito1 = false;
+        boolean exito2 = false;
+        int ultimoID = this.ultimoRegistroRelacionRfc() + 1;
+
+        PreparedStatement ps;
+        try {
+            conexion = connection.Entrar(dbAsticsa);
+            query = "INSERT INTO [" + dbAsticsa + "].[dbo].[RELACION_RFC_REL_ACT] ([ID] ,[RFC] ,[ID_RELACION_ACTIVIDAD]) VALUES (?,?,?)";
+            ps = conexion.prepareStatement(query);
+
+            ps.setInt(1, ultimoID);
+            ps.setString(2, nuevoRfc);
+            ps.setString(3, clave);
+            ps.executeUpdate();
+            exito1 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+
+        try {
+            conexion = connection.Entrar(dbAgro);
+            query = "INSERT INTO [" + dbAgro + "].[dbo].[RELACION_RFC_REL_ACT] ([ID] ,[RFC] ,[ID_RELACION_ACTIVIDAD]) VALUES (?,?,?)";
+            ps = conexion.prepareStatement(query);
+            ps.setInt(1, ultimoID);
+            ps.setString(2, nuevoRfc);
+            ps.setString(3, clave);
+            ps.executeUpdate();
+            exito2 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return exito1 && exito2;
     }
 }

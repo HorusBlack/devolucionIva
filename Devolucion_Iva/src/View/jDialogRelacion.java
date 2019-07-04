@@ -183,6 +183,11 @@ public class jDialogRelacion extends javax.swing.JDialog {
 
         btnGuardarAsociar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/confirmacion32.png"))); // NOI18N
         btnGuardarAsociar.setEnabled(false);
+        btnGuardarAsociar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarAsociarActionPerformed(evt);
+            }
+        });
 
         btnCancelarAsociar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/cancelar.png"))); // NOI18N
         btnCancelarAsociar.setEnabled(false);
@@ -299,12 +304,7 @@ public class jDialogRelacion extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbox_RfcFocusGained
 
     private void btnCancelarAsociarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAsociarActionPerformed
-        txtNuevoRfc.setText("");
-        txtNuevoRfc.setEnabled(false);
-        btnNuevoRfc.setEnabled(true);
-        btnGuardarAsociar.setEnabled(false);
-        cmbox_Rfc.setEnabled(true);
-        btnCancelarAsociar.setEnabled(false);
+        cancelarAsociarRfcActividad();
     }//GEN-LAST:event_btnCancelarAsociarActionPerformed
 
     private void btnNuevoRfcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoRfcActionPerformed
@@ -364,6 +364,41 @@ public class jDialogRelacion extends javax.swing.JDialog {
         btnNuevoActividad.setEnabled(true);
     }//GEN-LAST:event_btnCancelarNuevaActividadActionPerformed
 
+    private void btnGuardarAsociarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAsociarActionPerformed
+        //update
+        controllerAction = new ControllerAction();
+        if (cmbox_Rfc.isEnabled()) {
+            //Nombre de la actividad
+            String sCadena = cmbActividad.getSelectedItem().toString();
+            String sSubCadena = sCadena.substring(10, sCadena.length());
+            //Por index para update
+            int rfc = cmbox_Rfc.getSelectedIndex() + 1;
+            String rfcDescripcion = cmbox_Rfc.getSelectedItem().toString();
+            //nombre actividad, rfc, id rfc
+
+        } //insert into
+        else if (txtNuevoRfc.isEnabled()) {
+            String rfcNuevo = txtNuevoRfc.getText();
+            if ((rfcNuevo.isEmpty()) || "".equals(rfcNuevo)) {
+                JOptionPane.showMessageDialog(rootPane, "RFC invalido. Verifique su registro");
+            } else {
+                String sCadena = cmbActividad.getSelectedItem().toString();
+                String sSubCadena = sCadena.substring(0, 2);
+                if (controllerAction.nuevoRfcAsociado(sSubCadena, rfcNuevo)) {
+                    JOptionPane.showMessageDialog(rootPane, "Exito al guardar");
+                    cancelarAsociarRfcActividad();
+                    llenarComboBoxRelacion();
+
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Hubo un problema al guardar. \n Verifique su conexión y vuelva a intentarlo");
+                }
+
+                //nombre relacion txtRfcNuevo, No autoincrementable
+            }
+        }
+
+    }//GEN-LAST:event_btnGuardarAsociarActionPerformed
+
     //FUNCIONES
     private void llenarComboBoxRelacion() {
         controllerAction = new ControllerAction();
@@ -378,11 +413,20 @@ public class jDialogRelacion extends javax.swing.JDialog {
         relaciones = controllerAction.procesarListaRelacionesActividad();
         if (!relaciones.isEmpty()) {
             for (int i = 0; i < relaciones.size(); i++) {
-                cmbox_Rfc.addItem(relaciones.get(i).getRfcRelacion());
+                cmbox_Rfc.addItem(relaciones.get(i).getRfcRelacion()+"   [R.Asociado: "+relaciones.get(i).getIdAsociado().replace(" ","")+" ]");
             }
         } else {
             cmbox_Rfc.setEnabled(false);
         }
+    }
+
+    private void cancelarAsociarRfcActividad() {
+        txtNuevoRfc.setText("");
+        txtNuevoRfc.setEnabled(false);
+        btnNuevoRfc.setEnabled(true);
+        btnGuardarAsociar.setEnabled(false);
+        cmbox_Rfc.setEnabled(true);
+        btnCancelarAsociar.setEnabled(false);
     }
 
     /**

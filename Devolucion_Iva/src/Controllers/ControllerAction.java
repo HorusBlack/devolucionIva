@@ -27,7 +27,6 @@ public class ControllerAction {
     private final String baseAgroecologia = "COI80Empre2";
     private final String baseAstixa = "COI80Empre1";
     private String dataBase;
-    
 
     /**
      * Funcion que solicita datos referente a las retenciones de iva del mes y
@@ -79,21 +78,56 @@ public class ControllerAction {
         return ListRetencionIvaPagadaMeses;
     }
 
+    /**
+     * Funcion que envia datos para un nuevo tipo de relacion de actividad y
+     * retorna un booleano segun el resultado
+     *
+     * @param nombreRelacion
+     * @param codigo
+     * @return boolean
+     */
     public boolean solicitarInsertNuevaRelacion(String nombreRelacion, String codigo) {
         consultas = new Consultas();
         boolean resultado = consultas.insertarNuevaRelacion(nombreRelacion, codigo);
         return resultado;
     }
 
+    /**
+     * Funcion que solicita una lista de RelacionActividades a la BD y retorna
+     * los datos
+     *
+     * @return List RelacionActividades
+     */
     public List<RelacionActividades> procesarListaRelaciones() {
         consultas = new Consultas();
         List<RelacionActividades> resultList = consultas.relaciones();
         return resultList;
     }
-    
+
+    /**
+     * Funcion que solicita una lista de RelacionActividades a la BD y retorna
+     * los datos
+     *
+     * @return List RelacionActividades
+     */
     public List<RelacionActividades> procesarListaRelacionesActividad() {
         consultas = new Consultas();
         List<RelacionActividades> resultList = consultas.relacionesRFC();
         return resultList;
+    }
+    
+    /**
+     * Funcion que obtiene y manda los datos requeridos para una nueva relacion entre un RFC y una actividad
+     * Retorna un booleano segun el resultado
+     * @param clave
+     * @param nuevoRfc
+     * @return boolean
+     */
+    public boolean nuevoRfcAsociado(String clave, String nuevoRfc) {
+        //nombre relacion txtRfcNuevo,
+        boolean exito;
+        consultas = new Consultas();
+        exito = consultas.insertNuevoRfcActividad(clave, nuevoRfc);
+        return exito;
     }
 }
