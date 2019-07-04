@@ -20,7 +20,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +36,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -51,7 +49,6 @@ public class jfGlobal extends javax.swing.JFrame {
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
     private int numAnio, numEmpresa;
-
     private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva,
             total_devIva, totalAuxCred;
     private ControllerAction controllerAction;
@@ -65,6 +62,9 @@ public class jfGlobal extends javax.swing.JFrame {
     private List<RetencionIvaPagadaMes> listRetencionIvaPagadaMes;
     private List<XmlDatos> xmlDatosList;
 
+    /*
+    Los apuntes estan enfocados a las tablas del sistema no de la hoja de trabajo
+     */
     /**
      * Creates new form jfGlobal
      */
@@ -97,7 +97,6 @@ public class jfGlobal extends javax.swing.JFrame {
         chbox_sinProcesar = new javax.swing.JCheckBox();
         panel_contenidoGlobal = new javax.swing.JPanel();
         tp_Secciones = new javax.swing.JTabbedPane();
-        panel_Det_Iva_Favor = new javax.swing.JPanel();
         panel_Cien_FIA = new javax.swing.JPanel();
         panelInfo = new javax.swing.JPanel();
         SpIva = new javax.swing.JScrollPane();
@@ -147,6 +146,11 @@ public class jfGlobal extends javax.swing.JFrame {
         btnExcelRIMP = new javax.swing.JButton();
         panel_AT_16 = new javax.swing.JPanel();
         panel_AT_Cero = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        act0 = new javax.swing.JScrollPane();
+        tableAct0 = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
         panel_RelacionDep = new javax.swing.JPanel();
         panel_AuxDep = new javax.swing.JPanel();
         panel_AuxDepositos = new javax.swing.JPanel();
@@ -273,19 +277,6 @@ public class jfGlobal extends javax.swing.JFrame {
 
         panel_contenidoGlobal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panel_contenidoGlobal.setAutoscrolls(true);
-
-        javax.swing.GroupLayout panel_Det_Iva_FavorLayout = new javax.swing.GroupLayout(panel_Det_Iva_Favor);
-        panel_Det_Iva_Favor.setLayout(panel_Det_Iva_FavorLayout);
-        panel_Det_Iva_FavorLayout.setHorizontalGroup(
-            panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 866, Short.MAX_VALUE)
-        );
-        panel_Det_Iva_FavorLayout.setVerticalGroup(
-            panel_Det_Iva_FavorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 729, Short.MAX_VALUE)
-        );
-
-        tp_Secciones.addTab("DETERMINACION DE  IVA A FAVOR", panel_Det_Iva_Favor);
 
         panel_Cien_FIA.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -870,20 +861,89 @@ public class jfGlobal extends javax.swing.JFrame {
             .addGap(0, 729, Short.MAX_VALUE)
         );
 
-        tp_Secciones.addTab("ACTOS TASA 16%", panel_AT_16);
+        tp_Secciones.addTab("INTEGRACION DE VALOR DE ACT 16%", panel_AT_16);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        act0.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        tableAct0.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tableAct0.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tableAct0.setToolTipText("");
+        tableAct0.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tableAct0.setEnabled(false);
+        act0.setViewportView(tableAct0);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 818, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(act0, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 340, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(act0, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+
+        jLabel5.setText(" INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 0% ");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(7, 7, 7)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(349, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout panel_AT_CeroLayout = new javax.swing.GroupLayout(panel_AT_Cero);
         panel_AT_Cero.setLayout(panel_AT_CeroLayout);
         panel_AT_CeroLayout.setHorizontalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 866, Short.MAX_VALUE)
+            .addGroup(panel_AT_CeroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panel_AT_CeroLayout.setVerticalGroup(
             panel_AT_CeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 729, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        tp_Secciones.addTab("ACTOS TASA 0%", panel_AT_Cero);
+        tp_Secciones.addTab("INTEGRACION DE VALOR DE ACT 0%", panel_AT_Cero);
 
         javax.swing.GroupLayout panel_RelacionDepLayout = new javax.swing.GroupLayout(panel_RelacionDep);
         panel_RelacionDep.setLayout(panel_RelacionDepLayout);
@@ -985,80 +1045,6 @@ public class jfGlobal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAIAActionPerformed
-        if (tabla_ivaAuxAcred.getRowCount() > 0) {
-            generadorExcel = new GeneradorExcel();
-            generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
-        }
-
-    }//GEN-LAST:event_btnAIAActionPerformed
-
-    private void btnExcelCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelCienAcredActionPerformed
-        boolean resultadoExportacion = false;
-        boolean resultadoFinal;
-        generadorExcel = new GeneradorExcel();
-        if (tablaCienIvaAcred.getRowCount() > 0) {
-            if (chbox_ExportarProcesar.isSelected()) {
-
-                resultadoExportacion = procesarDevolucionIva(String.valueOf(numEmpresa + 1));
-
-                if (periodo != null && String.valueOf(numAnio) != null) {
-                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
-                            tablaCienIvaAcred,
-                            tablaTotalIva,
-                            "100% FACTURAS DE IVA ACRED",
-                            periodo.toUpperCase(),
-                            String.valueOf(numAnio), resultadoExportacion);
-                } else {
-                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
-                            tablaCienIvaAcred,
-                            tablaTotalIva,
-                            "100% FACTURAS DE IVA ACRED",
-                            "(PERIODO: )",
-                            "(AÑO: )", resultadoExportacion);
-                }
-                if (resultadoFinal) {
-                    JOptionPane.showMessageDialog(this, "Proceso completado con exito");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Hubo un problema al procesar la información. \n No obstante se exportarón los"
-                            + " datos con exito");
-                }
-            }
-            if (chbox_ExportarSoloRegistros.isSelected()) {
-                generadorExcel.generarSoloExcelCienIva(tablaCienIvaAcred,
-                        tablaTotalIva,
-                        "100% FACTURAS DE IVA ACRED",
-                        periodo.toUpperCase(),
-                        String.valueOf(numAnio));
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
-        }
-
-    }//GEN-LAST:event_btnExcelCienAcredActionPerformed
-
-    private void btnExcelRIMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMActionPerformed
-        if (tabla_RIM.getRowCount() > 0) {
-            generadorExcel = new GeneradorExcel();
-            generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
-        }
-    }//GEN-LAST:event_btnExcelRIMActionPerformed
-
-    private void btnExcelRIMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMPActionPerformed
-        if (tabla_RetIvaMesPagada.getRowCount() > 0) {
-            generadorExcel = new GeneradorExcel();
-            generadorExcel.generarExcelIvaRetenidoMesPagado(tabla_RetIvaMesPagada, "RET DE IVA PAGADAS EN EL MES", periodo.toUpperCase(), String.valueOf(numAnio));
-        } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
-        }
-
-    }//GEN-LAST:event_btnExcelRIMPActionPerformed
-
     private void btnProcesarIvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarIvaActionPerformed
         //XML DATOS
         numEmpresa = combo_Empresa.getSelectedIndex();
@@ -1108,6 +1094,67 @@ public class jfGlobal extends javax.swing.JFrame {
 //            }
 //        }
     }//GEN-LAST:event_btnXmlCargarActionPerformed
+
+    private void chbox_TodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_TodosActionPerformed
+        if (chbox_Todos.isSelected()) {
+            chbox_sinProcesar.setSelected(false);
+        }
+    }//GEN-LAST:event_chbox_TodosActionPerformed
+
+    private void chbox_sinProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_sinProcesarActionPerformed
+        if (chbox_sinProcesar.isSelected()) {
+            chbox_Todos.setSelected(false);
+        }
+    }//GEN-LAST:event_chbox_sinProcesarActionPerformed
+
+    private void btnNuevaRelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaRelacionActionPerformed
+        jDialogRelacion jRel = new jDialogRelacion(this, rootPaneCheckingEnabled);
+        jRel.setVisible(true);
+    }//GEN-LAST:event_btnNuevaRelacionActionPerformed
+
+    private void btnExcelRIMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMPActionPerformed
+        if (tabla_RetIvaMesPagada.getRowCount() > 0) {
+            generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcelIvaRetenidoMesPagado(tabla_RetIvaMesPagada, "RET DE IVA PAGADAS EN EL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+    }//GEN-LAST:event_btnExcelRIMPActionPerformed
+
+    private void btnExcelRIMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelRIMActionPerformed
+        if (tabla_RIM.getRowCount() > 0) {
+            generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcelIvaRetenidoMesDetalle(tabla_RIM, "RENTENCIONES DE IVA DEL MES", periodo.toUpperCase(), String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+    }//GEN-LAST:event_btnExcelRIMActionPerformed
+
+    private void btnAIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAIAActionPerformed
+        if (tabla_ivaAuxAcred.getRowCount() > 0) {
+            generadorExcel = new GeneradorExcel();
+            generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+    }//GEN-LAST:event_btnAIAActionPerformed
+
+    private void chbox_ExportarSoloRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_ExportarSoloRegistrosActionPerformed
+        if (chbox_ExportarSoloRegistros.isSelected()) {
+            chbox_ExportarProcesar.setSelected(false);
+        }
+    }//GEN-LAST:event_chbox_ExportarSoloRegistrosActionPerformed
+
+    private void chbox_ExportarProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_ExportarProcesarActionPerformed
+        if (chbox_ExportarProcesar.isSelected()) {
+            chbox_ExportarSoloRegistros.setSelected(false);
+        }
+    }//GEN-LAST:event_chbox_ExportarProcesarActionPerformed
+
+    private void btnExitPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitPanelActionPerformed
+        tabla_ManualCarga.removeAll();
+        panelBusquedaManual.setVisible(false);
+    }//GEN-LAST:event_btnExitPanelActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         int numFilas = tabla_ManualCarga.getModel().getColumnCount();
@@ -1168,42 +1215,51 @@ public class jfGlobal extends javax.swing.JFrame {
             //Si no se pueden sacar los datos, traer la tabla aqui
         }
         inicializarTablaCienIvaAcredDesdeSeleccion_nueva(xmlDatosList);
-
     }//GEN-LAST:event_btnOkActionPerformed
 
-    private void btnExitPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitPanelActionPerformed
-        tabla_ManualCarga.removeAll();
-        panelBusquedaManual.setVisible(false);
-    }//GEN-LAST:event_btnExitPanelActionPerformed
+    private void btnExcelCienAcredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelCienAcredActionPerformed
+        boolean resultadoExportacion = false;
+        boolean resultadoFinal;
+        generadorExcel = new GeneradorExcel();
+        if (tablaCienIvaAcred.getRowCount() > 0) {
+            if (chbox_ExportarProcesar.isSelected()) {
 
-    private void chbox_TodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_TodosActionPerformed
-        if (chbox_Todos.isSelected()) {
-            chbox_sinProcesar.setSelected(false);
+                resultadoExportacion = procesarDevolucionIva(String.valueOf(numEmpresa + 1));
+
+                if (periodo != null && String.valueOf(numAnio) != null) {
+                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
+                            tablaCienIvaAcred,
+                            tablaTotalIva,
+                            "100% FACTURAS DE IVA ACRED",
+                            periodo.toUpperCase(),
+                            String.valueOf(numAnio), resultadoExportacion);
+                } else {
+                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
+                            tablaCienIvaAcred,
+                            tablaTotalIva,
+                            "100% FACTURAS DE IVA ACRED",
+                            "(PERIODO: )",
+                            "(AÑO: )", resultadoExportacion);
+                }
+                if (resultadoFinal) {
+                    JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Hubo un problema al procesar la información. \n No obstante se exportarón los"
+                            + " datos con exito");
+                }
+            }
+            if (chbox_ExportarSoloRegistros.isSelected()) {
+                generadorExcel.generarSoloExcelCienIva(tablaCienIvaAcred,
+                        tablaTotalIva,
+                        "100% FACTURAS DE IVA ACRED",
+                        periodo.toUpperCase(),
+                        String.valueOf(numAnio));
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
         }
-    }//GEN-LAST:event_chbox_TodosActionPerformed
-
-    private void chbox_sinProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_sinProcesarActionPerformed
-        if (chbox_sinProcesar.isSelected()) {
-            chbox_Todos.setSelected(false);
-        }
-    }//GEN-LAST:event_chbox_sinProcesarActionPerformed
-
-    private void chbox_ExportarSoloRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_ExportarSoloRegistrosActionPerformed
-        if (chbox_ExportarSoloRegistros.isSelected()) {
-            chbox_ExportarProcesar.setSelected(false);
-        }
-    }//GEN-LAST:event_chbox_ExportarSoloRegistrosActionPerformed
-
-    private void chbox_ExportarProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_ExportarProcesarActionPerformed
-        if (chbox_ExportarProcesar.isSelected()) {
-            chbox_ExportarSoloRegistros.setSelected(false);
-        }
-    }//GEN-LAST:event_chbox_ExportarProcesarActionPerformed
-
-    private void btnNuevaRelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaRelacionActionPerformed
-        jDialogRelacion jRel=new jDialogRelacion(this, rootPaneCheckingEnabled);
-        jRel.setVisible(true);
-    }//GEN-LAST:event_btnNuevaRelacionActionPerformed
+    }//GEN-LAST:event_btnExcelCienAcredActionPerformed
 
     /*
     ################INICIA###################
@@ -1234,8 +1290,8 @@ public class jfGlobal extends javax.swing.JFrame {
             //Titulos para la tabla
             String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
                 "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
-                "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza","Relación con Actividad", "Cruce Edo. Cuenta",
-                "Id Doc", "Archivo","Cuenta Coi","MontoMov"};
+                "Cuenta de Banco", "Forma de Pago", "Tipo Poliza", "No. Poliza", "Relación con Actividad", "Cruce Edo. Cuenta",
+                "Id Doc", "Archivo", "Cuenta Coi", "MontoMov"};
             //Clase que obtiene los datos xml
             //correguir sintaxis de ruta, la conexion sql es estable
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
@@ -1542,6 +1598,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
                 lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
                 inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
+                inicializarTablaValor_Cero(llenarDatosTabla);
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
             }
@@ -2397,6 +2454,117 @@ public class jfGlobal extends javax.swing.JFrame {
         }
     }
 
+    //INICIALIZAR DENTRO DE 100% ACRED PARA TOMAR LA MISMA LISTA DE VALORES
+    private void inicializarTablaValor_Cero(List<XmlDatos> listaDatosXml) {
+        tablaIva = new DefaultTableModel();
+        //Titulos para la tabla
+        String[] titulos = {"Num. Factura", "Fecha de Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 0%", "Documento de cobro", "Fecha de Cobro",
+            "Cuenta de banco", "Forma de Pago", "Cruce Bancario"};
+        totalAuxCred = 0;
+        //Ingresando titulos
+        tablaIva.setColumnIdentifiers(titulos);
+        //Clase que obtiene los datos xml
+
+        DecimalFormat formateador = new DecimalFormat("####.##");
+        listAuxIvaAcreds = auxController.solicitudAuxIvaAcred(mes, anio, numEmpresa);
+        if (!listAuxIvaAcreds.isEmpty()) {
+            for (int i = 0; i < listAuxIvaAcreds.size(); i++) {
+                String stringDate = listAuxIvaAcreds.get(i).getFecha();
+                String newDate = "";
+                if (stringDate != null) {
+                    try {
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+                        newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                    } catch (ParseException ex) {
+                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                    }
+                }
+
+                tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate, listAuxIvaAcreds.get(i).getConcepto(),
+                    formateador.format(listAuxIvaAcreds.get(i).getDebe()), formateador.format(listAuxIvaAcreds.get(i).getHaber())});
+                totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
+
+            }
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+            tabla_ivaAuxAcred.setModel(tablaIva);
+            tabla_ivaAuxAcred.setRowSorter(ordenTabla);
+            //"Cuenta de banco","Forma de Pago","Cruce Bancario"};
+            TableColumn columna;
+            for (int i = 0; i < 12; i++) {
+                switch (i) {
+                    case 0:
+                        //Num. Factura
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(90);
+                        break;
+                    case 1:
+                        //Fecha de Factura
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 2:
+                        //UUID
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 3:
+                        //Cliente
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(800);
+                        break;
+                    case 4:
+                        //RFC
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 5:
+                        //Concepto
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 6:
+                        //Base 0%
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 7:
+                        //Documento de cobro
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 8:
+                        //Fecha de Cobro
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 9:
+                        //Cuenta de banco
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 10:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 11:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+            //lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
+        }
+    }
+
     /**
      * Funcion que obtiene los registros de una tabla y los manda para registar
      * en una base de datos
@@ -2531,6 +2699,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JScrollPane SpIva1;
     private javax.swing.JScrollPane SpIva3;
     private javax.swing.JScrollPane SpIva4;
+    private javax.swing.JScrollPane act0;
     private javax.swing.JButton btnAIA;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExcelCienAcred;
@@ -2552,7 +2721,10 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -2574,7 +2746,6 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_Aux_IA;
     private javax.swing.JPanel panel_CabecerAuxIva;
     private javax.swing.JPanel panel_Cien_FIA;
-    private javax.swing.JPanel panel_Det_Iva_Favor;
     private javax.swing.JPanel panel_Filtro;
     private javax.swing.JPanel panel_RIM;
     private javax.swing.JPanel panel_RIPM;
@@ -2592,6 +2763,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JTable tabla_RIM;
     private javax.swing.JTable tabla_RetIvaMesPagada;
     private javax.swing.JTable tabla_ivaAuxAcred;
+    private javax.swing.JTable tableAct0;
     private javax.swing.JTable table_totalAuxIvaAcred;
     private javax.swing.JTabbedPane tp_Secciones;
     // End of variables declaration//GEN-END:variables
