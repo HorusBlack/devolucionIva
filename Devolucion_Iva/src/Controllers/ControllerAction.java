@@ -81,4 +81,10 @@ public class ControllerAction {
         boolean resultado = consultas.insertarNuevaRelacion(nombreRelacion, codigo);
         return resultado;
     }
+
+    public List<String> procesarListaRelaciones() {
+        consultas = new Consultas();
+        List<String> resultList = consultas.relaciones();
+        return resultList;
+    }
 }

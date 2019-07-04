@@ -6,6 +6,7 @@
 package View;
 
 import Controllers.ControllerAction;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,7 +14,7 @@ import javax.swing.JOptionPane;
  * @author Vigilancia
  */
 public class jDialogRelacion extends javax.swing.JDialog {
-
+private ControllerAction controllerAction;
     /**
      * Creates new form jDialogRelacion
      */
@@ -21,7 +22,7 @@ public class jDialogRelacion extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-
+        llenarComboBoxRelacion();
     }
 
     /**
@@ -68,7 +69,7 @@ public class jDialogRelacion extends javax.swing.JDialog {
             }
         });
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Nuevo / Guardar"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Nuevo / Guardar / Cancelar"));
 
         btnNuevoActividad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/add-file.png"))); // NOI18N
         btnNuevoActividad.addActionListener(new java.awt.event.ActionListener() {
@@ -278,7 +279,7 @@ public class jDialogRelacion extends javax.swing.JDialog {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -321,7 +322,7 @@ public class jDialogRelacion extends javax.swing.JDialog {
         if ("".equals(nuevaRelAct) || "".equals(clave)) {
             JOptionPane.showMessageDialog(rootPane, "Existen datos vacios. \n Verifique por favor");
         } else {
-            ControllerAction controllerAction = new ControllerAction();
+            controllerAction = new ControllerAction();
             boolean resultado = controllerAction.solicitarInsertNuevaRelacion(nuevaRelAct, clave);
             if (resultado) {
                 JOptionPane.showMessageDialog(rootPane, "Exito al guardar");
@@ -358,6 +359,17 @@ public class jDialogRelacion extends javax.swing.JDialog {
         btnNuevoActividad.setEnabled(true);
     }//GEN-LAST:event_btnCancelarNuevaActividadActionPerformed
 
+    //FUNCIONES
+    private void llenarComboBoxRelacion(){
+        controllerAction = new ControllerAction();
+        List<String>relaciones=controllerAction.procesarListaRelaciones();
+        if(!relaciones.isEmpty()){
+            for (int i = 0; i < relaciones.size(); i++) {
+                System.out.println("relaciones: "+relaciones.get(i));
+            }
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

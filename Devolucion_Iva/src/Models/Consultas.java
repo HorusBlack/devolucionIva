@@ -715,4 +715,29 @@ public class Consultas {
 
     }
 
+    public List<String> relaciones() {
+        List<String> listaRelaciones = new ArrayList<String>();
+        ConexionDB connection2 = new ConexionDB();
+        Connection conexion2 = null;
+        String baseCoi = "COI80Empre1";
+        String ultimoID = "";
+
+        try {
+            conexion2 = connection2.Entrar(baseCoi);
+            subQuery = "SELECT [ID] ,[CLAVE_CONCEPTO] ,[DESCRIPCION] FROM [COI80Empre1].[dbo].[CONCEPTOS_RELACION]";
+            Statement stmt2 = conexion2.createStatement();
+            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
+            while (resultSet2.next()) {
+                listaRelaciones.add(resultSet2.getString("ID"));
+                listaRelaciones.add(resultSet2.getString("CLAVE_CONCEPTO"));
+                listaRelaciones.add(resultSet2.getString("DESCRIPCION"));
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion2);
+        }
+        return listaRelaciones;
+    }
 }
