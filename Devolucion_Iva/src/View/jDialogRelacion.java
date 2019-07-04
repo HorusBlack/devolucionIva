@@ -370,11 +370,19 @@ public class jDialogRelacion extends javax.swing.JDialog {
         if (cmbox_Rfc.isEnabled()) {
             //Nombre de la actividad
             String sCadena = cmbActividad.getSelectedItem().toString();
-            String sSubCadena = sCadena.substring(10, sCadena.length());
+            String sSubCadena = sCadena.substring(0, 2);
             //Por index para update
             int rfc = cmbox_Rfc.getSelectedIndex() + 1;
-            String rfcDescripcion = cmbox_Rfc.getSelectedItem().toString();
-            //nombre actividad, rfc, id rfc
+
+            if (controllerAction.actualizarRfcAsociado(sSubCadena, rfc)) {
+                JOptionPane.showMessageDialog(rootPane, "Valores actualizados correctamente");
+                cancelarAsociarRfcActividad();
+                cmbActividad.removeAllItems();
+                cmbox_Rfc.removeAllItems();
+                llenarComboBoxRelacion();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Hubo un problema al guardar. \n Verifique su conexión y vuelva a intentarlo");
+            }
 
         } //insert into
         else if (txtNuevoRfc.isEnabled()) {
@@ -413,7 +421,7 @@ public class jDialogRelacion extends javax.swing.JDialog {
         relaciones = controllerAction.procesarListaRelacionesActividad();
         if (!relaciones.isEmpty()) {
             for (int i = 0; i < relaciones.size(); i++) {
-                cmbox_Rfc.addItem(relaciones.get(i).getRfcRelacion()+"   [R.Asociado: "+relaciones.get(i).getIdAsociado().replace(" ","")+" ]");
+                cmbox_Rfc.addItem(relaciones.get(i).getRfcRelacion() + "   [R.Asociado: " + relaciones.get(i).getIdAsociado().replace(" ", "") + " ]");
             }
         } else {
             cmbox_Rfc.setEnabled(false);

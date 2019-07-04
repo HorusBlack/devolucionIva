@@ -486,45 +486,6 @@ public class Consultas {
     }
 
     /**
-     * Funcion que recibe una lisa de PolizaProcesada y realiza la inserción a
-     * la BD
-     *
-     * @param datosPolizaProcesada
-     * @param numEmpresa
-     * @return boolean
-     */
-    //Cambiar para los que no tienen no de poliza
-    public boolean insertarPolizasProcesadas(List<PolizaProcesada> datosPolizaProcesada, int numEmpresa) {
-        boolean resultInsert = false;
-        String dataBase = "DOCUMENTOS_COI";
-        connection = new ConexionDB();
-        Connection conexion = null;
-        try {
-            conexion = connection.Entrar(dataBase);
-            PreparedStatement ps;
-            for (int i = 0; i < datosPolizaProcesada.size(); i++) {
-                String queryPrepare = "INSERT INTO [dbo].[POLIZA_PROCESADA]"
-                        + " (ID_DOCTODIG ,ARCHIVO ,CLAVE_POLIZA ,TIPO ,EMPRESA ,PROCESADO) VALUES (?,?,?,?,?,?)";
-
-                ps = conexion.prepareStatement(queryPrepare);
-                ps.setInt(1, Integer.parseInt(datosPolizaProcesada.get(i).getIdDoctoDig()));
-                ps.setString(2, datosPolizaProcesada.get(i).getNombreArchivo());
-                ps.setInt(3, Integer.parseInt(datosPolizaProcesada.get(i).getClavePoliza()));
-                ps.setString(4, datosPolizaProcesada.get(i).getTipoPoliza());
-                ps.setInt(5, numEmpresa);
-                ps.setInt(6, 2);
-                ps.executeUpdate();
-            }
-            resultInsert = true;
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConexionDB.Salir(conexion);
-        }
-        return resultInsert;
-    }
-
-    /**
      * Funcion qu consulta y obtiene la relacion con actividad de la BD
      *
      * @param dataBase
@@ -640,54 +601,6 @@ public class Consultas {
     }
 
     /**
-     *
-     * @param nombreRelacion
-     * @param claveRelacion
-     * @return
-     */
-    public boolean insertarNuevaRelacion(String nombreRelacion, String claveRelacion) {
-        connection = new ConexionDB();
-        Connection conexion = null;
-        String relacion = "";
-        String dbAsticsa = "COI80Empre1";
-        String dbAgro = "COI80Empre2";
-        boolean exito1 = false;
-        boolean exito2 = false;
-        PreparedStatement ps;
-        try {
-            conexion = connection.Entrar(dbAsticsa);
-            query = "INSERT INTO [" + dbAsticsa + "].[dbo].[CONCEPTOS_RELACION]([CLAVE_CONCEPTO],[DESCRIPCION]) VALUES (?,?)";
-            ps = conexion.prepareStatement(query);
-
-            ps.setString(1, claveRelacion);
-            ps.setString(2, nombreRelacion);
-            ps.executeUpdate();
-            exito1 = true;
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConexionDB.Salir(conexion);
-        }
-
-        try {
-            conexion = connection.Entrar(dbAgro);
-            query = "INSERT INTO [" + dbAgro + "].[dbo].[CONCEPTOS_RELACION]([CLAVE_CONCEPTO],[DESCRIPCION]) VALUES (?,?)";
-            ps = conexion.prepareStatement(query);
-            ps.setString(1, claveRelacion);
-            ps.setString(2, nombreRelacion);
-            ps.executeUpdate();
-            exito2 = true;
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConexionDB.Salir(conexion);
-        }
-        return exito1 && exito2;
-    }
-
-    /**
      * Funcion que retorna el ultimo registro de los rfc relacionados a las
      * actividades
      *
@@ -784,10 +697,98 @@ public class Consultas {
         }
         return listaRelaciones;
     }
-    //int idRelacion, String descripcionRelacion, String nuevoRfc
-    
+
     /**
-     * Funcion que inserta una nueva relacion entre un RFC y una Actividad en la BD
+     * Funcion que recibe una lisa de PolizaProcesada y realiza la inserción a
+     * la BD
+     *
+     * @param datosPolizaProcesada
+     * @param numEmpresa
+     * @return boolean
+     */
+    //Cambiar para los que no tienen no de poliza
+    public boolean insertarPolizasProcesadas(List<PolizaProcesada> datosPolizaProcesada, int numEmpresa) {
+        boolean resultInsert = false;
+        String dataBase = "DOCUMENTOS_COI";
+        connection = new ConexionDB();
+        Connection conexion = null;
+        try {
+            conexion = connection.Entrar(dataBase);
+            PreparedStatement ps;
+            for (int i = 0; i < datosPolizaProcesada.size(); i++) {
+                String queryPrepare = "INSERT INTO [dbo].[POLIZA_PROCESADA]"
+                        + " (ID_DOCTODIG ,ARCHIVO ,CLAVE_POLIZA ,TIPO ,EMPRESA ,PROCESADO) VALUES (?,?,?,?,?,?)";
+
+                ps = conexion.prepareStatement(queryPrepare);
+                ps.setInt(1, Integer.parseInt(datosPolizaProcesada.get(i).getIdDoctoDig()));
+                ps.setString(2, datosPolizaProcesada.get(i).getNombreArchivo());
+                ps.setInt(3, Integer.parseInt(datosPolizaProcesada.get(i).getClavePoliza()));
+                ps.setString(4, datosPolizaProcesada.get(i).getTipoPoliza());
+                ps.setInt(5, numEmpresa);
+                ps.setInt(6, 2);
+                ps.executeUpdate();
+            }
+            resultInsert = true;
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return resultInsert;
+    }
+
+    /**
+     *
+     * @param nombreRelacion
+     * @param claveRelacion
+     * @return
+     */
+    public boolean insertarNuevaRelacion(String nombreRelacion, String claveRelacion) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        String dbAsticsa = "COI80Empre1";
+        String dbAgro = "COI80Empre2";
+        boolean exito1 = false;
+        boolean exito2 = false;
+        PreparedStatement ps;
+        try {
+            conexion = connection.Entrar(dbAsticsa);
+            query = "INSERT INTO [" + dbAsticsa + "].[dbo].[CONCEPTOS_RELACION]([CLAVE_CONCEPTO],[DESCRIPCION]) VALUES (?,?)";
+            ps = conexion.prepareStatement(query);
+
+            ps.setString(1, claveRelacion);
+            ps.setString(2, nombreRelacion);
+            ps.executeUpdate();
+            exito1 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+
+        try {
+            conexion = connection.Entrar(dbAgro);
+            query = "INSERT INTO [" + dbAgro + "].[dbo].[CONCEPTOS_RELACION]([CLAVE_CONCEPTO],[DESCRIPCION]) VALUES (?,?)";
+            ps = conexion.prepareStatement(query);
+            ps.setString(1, claveRelacion);
+            ps.setString(2, nombreRelacion);
+            ps.executeUpdate();
+            exito2 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return exito1 && exito2;
+    }
+
+    /**
+     * Funcion que inserta una nueva relacion entre un RFC y una Actividad en la
+     * BD
+     *
      * @param clave
      * @param nuevoRfc
      * @return boolean
@@ -837,4 +838,56 @@ public class Consultas {
         }
         return exito1 && exito2;
     }
+
+    /**
+     * Funcion que actualiza la relacion entre un RFC y su Actividad
+     *
+     * @param clave
+     * @param idRfcAsociado
+     * @return boolean
+     */
+    public boolean actualizarRelacionActividad(String clave, int idRfcAsociado) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String dbAsticsa = "COI80Empre1";
+        String dbAgro = "COI80Empre2";
+        boolean exito1 = false;
+        boolean exito2 = false;
+        PreparedStatement ps;
+
+        try {
+            conexion = connection.Entrar(dbAsticsa);
+            query = "UPDATE [" + dbAsticsa + "].[dbo].[RELACION_RFC_REL_ACT] SET [ID_RELACION_ACTIVIDAD] = ? "
+                    + "WHERE [ID]=?";
+            ps = conexion.prepareStatement(query);
+            ps.setString(1, clave);
+            ps.setInt(2, idRfcAsociado);
+            ps.executeUpdate();
+            exito1 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+
+        try {
+            conexion = connection.Entrar(dbAgro);
+            query = "UPDATE [" + dbAgro + "].[dbo].[RELACION_RFC_REL_ACT] SET [ID_RELACION_ACTIVIDAD] = ? "
+                    + "WHERE [ID]=?";
+            ps = conexion.prepareStatement(query);
+            ps.setString(1, clave);
+            ps.setInt(2, idRfcAsociado);
+            ps.executeUpdate();
+            exito2 = true;
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return exito1 && exito2;
+    }
+
+    //String clave, int idRfcAsociado
 }

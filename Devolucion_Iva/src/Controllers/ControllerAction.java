@@ -117,8 +117,24 @@ public class ControllerAction {
     }
     
     /**
-     * Funcion que obtiene y manda los datos requeridos para una nueva relacion entre un RFC y una actividad
-     * Retorna un booleano segun el resultado
+     * Funcion que obtiene manda y retorna el resultado de una actualizacion entre RFC y Actividad
+     * @param clave
+     * @param idRfcAsociado
+     * @return boolean
+     */
+    public boolean actualizarRfcAsociado(String clave, int idRfcAsociado) {
+        System.out.println("clave: "+clave);
+        System.out.println("rfc: "+idRfcAsociado);
+        boolean exito;
+        consultas = new Consultas();
+        exito = consultas.actualizarRelacionActividad(clave, idRfcAsociado);
+        return exito;
+    }
+
+    /**
+     * Funcion que obtiene y manda los datos requeridos para una nueva relacion
+     * entre un RFC y una actividad Retorna un booleano segun el resultado
+     *
      * @param clave
      * @param nuevoRfc
      * @return boolean
