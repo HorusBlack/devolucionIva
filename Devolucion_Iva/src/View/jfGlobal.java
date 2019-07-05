@@ -145,6 +145,11 @@ public class jfGlobal extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         btnExcelRIMP = new javax.swing.JButton();
         panel_AT_16 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        act1 = new javax.swing.JScrollPane();
+        tableAct16 = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
         panel_AT_Cero = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -850,15 +855,84 @@ public class jfGlobal extends javax.swing.JFrame {
 
         tp_Secciones.addTab("RET DE IVA PAGADAS EN EL MES", panel_RIPM);
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        act1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        tableAct16.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tableAct16.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tableAct16.setToolTipText("");
+        tableAct16.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tableAct16.setEnabled(false);
+        act1.setViewportView(tableAct16);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 818, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel8Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(act1, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 340, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel8Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(act1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+
+        jLabel6.setText(" INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 16% ");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addGap(7, 7, 7)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(349, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panel_AT_16Layout = new javax.swing.GroupLayout(panel_AT_16);
         panel_AT_16.setLayout(panel_AT_16Layout);
         panel_AT_16Layout.setHorizontalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 866, Short.MAX_VALUE)
+            .addGroup(panel_AT_16Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panel_AT_16Layout.setVerticalGroup(
             panel_AT_16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 729, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         tp_Secciones.addTab("INTEGRACION DE VALOR DE ACT 16%", panel_AT_16);
@@ -1172,9 +1246,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         //PENDIENTE OBTENER TODOS LOS DATOS Y PASARLOS A OTRA VISTA
-
         xmlDatosList = new ArrayList<>();
-
         for (int i = 0; i < tabla_ManualCarga.getRowCount(); i++) {
             /*
             "Marcar", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto",
@@ -1283,7 +1355,6 @@ public class jfGlobal extends javax.swing.JFrame {
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
         String ultimaRuta = "";
         String op[] = {"Masculino", "Femenino"};
-
         JComboBox sexo = new JComboBox(op);
 
         if (!listPolizaDatos.isEmpty()) {
@@ -1314,7 +1385,6 @@ public class jfGlobal extends javax.swing.JFrame {
             double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
 
             //Solicitud datos BD
-            //checar esta validacion
             if (!llenarDatosTabla.isEmpty()) {
                 //llenando la tabla de la info
                 for (int i = 0; i < llenarDatosTabla.size(); i++) {
@@ -1332,7 +1402,6 @@ public class jfGlobal extends javax.swing.JFrame {
                         } catch (ParseException ex) {
                             Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
                     }
                     try {
                         //la fecha puede tener un problema
@@ -1346,10 +1415,6 @@ public class jfGlobal extends javax.swing.JFrame {
 
                     }
 
-                    /*
-                String[] titulos = {" "Relación con Actividad","Cruce Edo. Cuenta"};
-                     */
-//            
                     myData[i][0] = true;
                     myData[i][1] = dateFormat;
                     myData[i][2] = llenarDatosTabla.get(i).getFolioInterno();
@@ -1376,9 +1441,6 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][23] = llenarDatosTabla.get(i).getNombreArchivoXml();
                     myData[i][24] = llenarDatosTabla.get(i).getCuentaCoi();
                     myData[i][25] = llenarDatosTabla.get(i).getMontoMov();
-
-                    //Para el total
-                    //0.00, null, ""
                     try {
                         do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
 
@@ -1590,11 +1652,9 @@ public class jfGlobal extends javax.swing.JFrame {
                             columna = tablaCienIvaAcred.getColumn(titulos[i]);
                             columna.setMinWidth(150);
                             break;
-
                         default:
                             break;
                     }
-
                 }
                 lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
                 inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
@@ -1605,7 +1665,6 @@ public class jfGlobal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
         }
-
     }
 
     /**
@@ -1863,11 +1922,11 @@ public class jfGlobal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-
             }
             //llamar el llenado de tabla
             lb_100.setText("100% FACTURAS DE IVA ACREDITABLE");
-            inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
+            inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva,
+                    total_devIva);
         }
     }
 
@@ -1883,7 +1942,8 @@ public class jfGlobal extends javax.swing.JFrame {
      * @param ivaT
      * @param totalDev
      */
-    private void inicializarTablaTotalIva(double base0, double base16, double retencion4, double retencion10, double retencion1016, double cuotaCom, double ivaT, double totalDev) {
+    private void inicializarTablaTotalIva(double base0, double base16, double retencion4, double retencion10, double retencion1016,
+            double cuotaCom, double ivaT, double totalDev) {
         defaultTableIva = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -1898,37 +1958,6 @@ public class jfGlobal extends javax.swing.JFrame {
             String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev))};
         defaultTableIva.setColumnIdentifiers(titulos);
         defaultTableIva.addRow(valores);
-
-//        TableColumn columna;
-        tablaTotalIva.setModel(defaultTableIva);
-//        for (int i = 0; i <= 3; i++) {
-//            switch (i) {
-//                case 0:
-//                    //factura
-//                    columna = tablaTotalIva.getColumn(titulos[i]);
-//                    columna.setMinWidth(90);
-//                    break;
-//                case 1:
-//                    //Fecha Factura
-//                    columna = tablaTotalIva.getColumn(titulos[i]);
-//                    columna.setMinWidth(90);
-//                    break;
-//                case 2:
-//                    //#poliza
-//                    columna = tablaTotalIva.getColumn(titulos[i]);
-//                    columna.setMinWidth(40);
-//                    break;
-//                case 3:
-//                    //Fecha Poliza
-//                    columna = tablaTotalIva.getColumn(titulos[i]);
-//                    columna.setMinWidth(50);
-//                    break;
-//                default:
-//                    break;
-//            }
-//
-//        }
-
     }
 
     /**
@@ -2380,7 +2409,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-            tabla_RetIvaMesPagada.setModel(tablaIva);
+            tableAct0.setModel(tablaIva);
             tabla_RetIvaMesPagada.setRowSorter(ordenTabla);
             TableColumn columna;
             for (int i = 0; i < 12; i++) {
@@ -2458,18 +2487,18 @@ public class jfGlobal extends javax.swing.JFrame {
     private void inicializarTablaValor_Cero(List<XmlDatos> listaDatosXml) {
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
-        String[] titulos = {"Num. Factura", "Fecha de Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 0%", "Documento de cobro", "Fecha de Cobro",
-            "Cuenta de banco", "Forma de Pago", "Cruce Bancario"};
+        String[] titulos = {"Num. Factura", "Fecha de Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 0%", "Documento de cobro",
+            "Fecha de Cobro", "Cuenta de banco", "Forma de Pago", "Cruce Bancario"};
         totalAuxCred = 0;
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
         //Clase que obtiene los datos xml
 
         DecimalFormat formateador = new DecimalFormat("####.##");
-        listAuxIvaAcreds = auxController.solicitudAuxIvaAcred(mes, anio, numEmpresa);
-        if (!listAuxIvaAcreds.isEmpty()) {
-            for (int i = 0; i < listAuxIvaAcreds.size(); i++) {
-                String stringDate = listAuxIvaAcreds.get(i).getFecha();
+
+        if (!listaDatosXml.isEmpty()) {
+            for (int i = 0; i < listaDatosXml.size(); i++) {
+                String stringDate = listaDatosXml.get(i).getFechaFactura();
                 String newDate = "";
                 if (stringDate != null) {
                     try {
@@ -2477,82 +2506,210 @@ public class jfGlobal extends javax.swing.JFrame {
                         newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                     } catch (ParseException ex) {
-                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                        stringDate = "";
                     }
                 }
 
-                tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate, listAuxIvaAcreds.get(i).getConcepto(),
-                    formateador.format(listAuxIvaAcreds.get(i).getDebe()), formateador.format(listAuxIvaAcreds.get(i).getHaber())});
-                totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
-
+                tablaIva.addRow(new Object[]{"Num. Factura", listaDatosXml.get(i).getFechaFactura(), listaDatosXml.get(i).getFolioFiscal(),
+                    "Cliente", listaDatosXml.get(i).getRfc(), listaDatosXml.get(i).getConceptoXml(), listaDatosXml.get(i).getBaseCero(),
+                    "Documento de cobro", "Fecha de Cobro", listaDatosXml.get(i).getCuenta(), listaDatosXml.get(i).getFormaPago(), "Cruce"});
+                //totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-            tabla_ivaAuxAcred.setModel(tablaIva);
-            tabla_ivaAuxAcred.setRowSorter(ordenTabla);
+            tableAct0.setModel(tablaIva);
+            tableAct0.setRowSorter(ordenTabla);
             //"Cuenta de banco","Forma de Pago","Cruce Bancario"};
             TableColumn columna;
             for (int i = 0; i < 12; i++) {
                 switch (i) {
                     case 0:
                         //Num. Factura
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(90);
                         break;
                     case 1:
                         //Fecha de Factura
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 2:
                         //UUID
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 3:
                         //Cliente
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(800);
                         break;
                     case 4:
                         //RFC
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 5:
                         //Concepto
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 6:
                         //Base 0%
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 7:
                         //Documento de cobro
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 8:
                         //Fecha de Cobro
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 9:
                         //Cuenta de banco
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 10:
                         // Cruce Bancario
                         //Forma de Pago
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
                     case 11:
                         // Cruce Bancario
                         //Forma de Pago
-                        columna = tabla_ivaAuxAcred.getColumn(titulos[i]);
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+            //lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
+        }
+    }
+
+    private void inicializarTablaValor_16(List<XmlDatos> listaDatosXml) {
+        tablaIva = new DefaultTableModel();
+        //Titulos para la tabla
+        String[] titulos = {"Num. Factura", "Fecha de Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 16%", "Iva Causado",
+            "Total", "Total Cobrado", "Documento de cobro", "Fecha de Cobro", "Cuenta de Banco", "Forma de Cobro", "Cruce Bancario"};
+        totalAuxCred = 0;
+        //Ingresando titulos
+        tablaIva.setColumnIdentifiers(titulos);
+        //Clase que obtiene los datos xml
+
+        DecimalFormat formateador = new DecimalFormat("####.##");
+
+        if (!listaDatosXml.isEmpty()) {
+            for (int i = 0; i < listaDatosXml.size(); i++) {
+                String stringDate = listaDatosXml.get(i).getFechaFactura();
+                String newDate = "";
+                if (stringDate != null) {
+                    try {
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+                        newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                    } catch (ParseException ex) {
+                        stringDate = "";
+                    }
+                }
+                tablaIva.addRow(new Object[]{"Num. Factura", listaDatosXml.get(i).getFechaFactura(),
+                    listaDatosXml.get(i).getFolioFiscal(), "Cliente", listaDatosXml.get(i).getRfc(),
+                    listaDatosXml.get(i).getConceptoXml(), listaDatosXml.get(i).getBaseCero(), "Documento de cobro", "Fecha de Cobro",
+                    listaDatosXml.get(i).getCuenta(), listaDatosXml.get(i).getFormaPago(), "Cruce"});
+                //totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
+            }
+            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+            tableAct0.setModel(tablaIva);
+            tableAct0.setRowSorter(ordenTabla);
+            //"Cuenta de banco","Forma de Pago","Cruce Bancario"};
+            TableColumn columna;
+            for (int i = 0; i < 15; i++) {
+                switch (i) {
+                    case 0:
+                        //Num. Factura
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(90);
+                        break;
+                    case 1:
+                        //Fecha de Factura
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 2:
+                        //UUID
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 3:
+                        //Cliente
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(800);
+                        break;
+                    case 4:
+                        //RFC
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 5:
+                        //Concepto
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 6:
+                        //Base 0%
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 7:
+                        //Documento de cobro
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 8:
+                        //Fecha de Cobro
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 9:
+                        //Cuenta de banco
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 10:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 11:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 12:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 13:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tableAct0.getColumn(titulos[i]);
+                        columna.setMinWidth(100);
+                        break;
+                    case 14:
+                        // Cruce Bancario
+                        //Forma de Pago
+                        columna = tableAct0.getColumn(titulos[i]);
                         columna.setMinWidth(100);
                         break;
 
@@ -2700,6 +2857,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JScrollPane SpIva3;
     private javax.swing.JScrollPane SpIva4;
     private javax.swing.JScrollPane act0;
+    private javax.swing.JScrollPane act1;
     private javax.swing.JButton btnAIA;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExcelCienAcred;
@@ -2722,12 +2880,15 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -2764,6 +2925,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JTable tabla_RetIvaMesPagada;
     private javax.swing.JTable tabla_ivaAuxAcred;
     private javax.swing.JTable tableAct0;
+    private javax.swing.JTable tableAct16;
     private javax.swing.JTable table_totalAuxIvaAcred;
     private javax.swing.JTabbedPane tp_Secciones;
     // End of variables declaration//GEN-END:variables
