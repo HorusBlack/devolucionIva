@@ -2516,7 +2516,8 @@ public class jfGlobal extends javax.swing.JFrame {
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
 
                 if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (!"".equals(llenarDatosTabla.get(i).getBaseCero()))) {
-
+                    System.out.println("Valor con xml: "+ llenarDatosTabla.get(i).getConXml());
+                    System.out.println("Valor Cero: "+ llenarDatosTabla.get(i).getBaseCero());
                     String string = llenarDatosTabla.get(i).getFechaFactura();
                     if (!"".equals(string)) {
                         String[] parts = string.split("T");
@@ -2675,6 +2676,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
             }
             int registros=tableAct0.getRowCount();
+            System.out.println("Numero registros: "+registros);
+            //retorna Numero registros: 211
             if(registros==0){
                lbSinRegistros_0.setVisible(true);
             }
