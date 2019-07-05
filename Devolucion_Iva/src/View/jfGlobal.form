@@ -1414,6 +1414,8 @@
                                   <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="lbSinRegistros_0" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -1425,7 +1427,10 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbSinRegistros_0" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="349" max="32767" attributes="0"/>
@@ -1506,6 +1511,11 @@
                     <Component class="javax.swing.JLabel" name="jLabel5">
                       <Properties>
                         <Property name="text" type="java.lang.String" value=" INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 0% "/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="lbSinRegistros_0">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="(Sin Registros)"/>
                       </Properties>
                     </Component>
                   </SubComponents>

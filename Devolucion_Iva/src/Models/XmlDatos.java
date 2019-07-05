@@ -12,7 +12,15 @@ package Models;
 public class XmlDatos {
 
     private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
-            folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria;
+            folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria, conXml, numeroFactura;
+
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
+    }
     private String idDoctoDig, numeroPoliza, tipoPoliza, nombreArchivoXml, codigoEmpresa, cuenta, fechaPago, relacion, cuentaCoi, montoMov;
 
     public String getMontoMov() {
@@ -21,6 +29,14 @@ public class XmlDatos {
 
     public void setMontoMov(String montoMov) {
         this.montoMov = montoMov;
+    }
+
+    public String getConXml() {
+        return conXml;
+    }
+
+    public void setConXml(String conXml) {
+        this.conXml = conXml;
     }
 
     public String getCuentaCoi() {

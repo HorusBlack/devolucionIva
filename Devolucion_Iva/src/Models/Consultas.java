@@ -210,7 +210,7 @@ public class Consultas {
                             subResultset = stmt.executeQuery(subQuery);
                             if (subResultset.next()) {
                                 do {
-                                    System.out.println("No Tiene xml");
+                                    
                                     polizaDatos = new PolizaDatos();
                                     polizaDatos.setTipoPoliza(subResultset.getString("TIPO_POLI"));
                                     polizaDatos.setNumeroPoliza(subResultset.getString("NUM_POLIZ"));
@@ -226,7 +226,7 @@ public class Consultas {
                             }
                         } else {
                             do {
-                                System.out.println("Tiene xml");
+                                
                                 polizaDatos = new PolizaDatos();
                                 polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
                                 polizaDatos.setRutaXml(resultSet.getString("RUTA"));

@@ -30,9 +30,9 @@ public class IvaAcredController {
 
     private Consultas consultas;
     private Tag raizXml, et_Concepto;
-    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo;
-    private String fechaFactura, folioFiscal, folioInterno, baseCero, total, base16, rfc, proveedor, formaPago, iva,
-            retencionCuatro, retencionDiez, retencion1016, nombreArchivo, cuotaC;
+    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo, cfdi_folioSerie;
+    private String fechaFactura, folioFiscal, folioInterno, total, base16, rfc, proveedor, formaPago, iva,
+            retencionCuatro, retencionDiez, retencion1016, cuotaC, folioSerie;
     private double baseCeroSuma = 0;
     private double base_16 = 0;
     private String traslado = "";
@@ -101,7 +101,8 @@ public class IvaAcredController {
 
                                     //Atributos de la raiz
                                     String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
-
+                                    folioSerie=raizXml.getValorDeAtributo("Folio");
+                                    infoXml.setNumeroFactura(folioSerie);
                                     fechaFactura = raizXml.getValorDeAtributo("Fecha");
                                     infoXml.setFechaFactura(fechaFactura);
                                     try {
@@ -408,6 +409,7 @@ public class IvaAcredController {
                                     infoXml.setIdDoctoDig(listFicherosPolizaBase.get(p).getIdDoctodig());
                                     infoXml.setCuentaCoi(listFicherosPolizaBase.get(p).getNumCuentaCoi());
                                     infoXml.setMontoMov(listFicherosPolizaBase.get(p).getMontoMov());
+                                    infoXml.setConXml("1");
 
                                     datosXml.add(infoXml);
 
@@ -448,6 +450,7 @@ public class IvaAcredController {
                     infoXml.setCuentaCoi(listFicherosPolizaBase.get(p).getNumCuentaCoi());
                     infoXml.setMontoMov(listFicherosPolizaBase.get(p).getMontoMov());
                     infoXml.setIdDoctoDig("");
+                    infoXml.setConXml("0");
                     datosXml.add(infoXml);
                     break;
                 default:
