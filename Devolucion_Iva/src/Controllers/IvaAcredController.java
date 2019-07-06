@@ -57,7 +57,6 @@ public class IvaAcredController {
      * @param URL
      * @return List XmlDatos
      */
-
     /**
      * Funcion que obtiene una lista de poliza de datos, para poder obtener la
      * ruta de los archivos xml y terminar de llenar los datos de un objeto
@@ -79,7 +78,7 @@ public class IvaAcredController {
             switch (listFicherosPolizaBase.get(p).getConXml()) {
                 case 1:
                     String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
-                   
+
                     if (!URL.isEmpty() || !URL.equals("")) {
                         try {
                             //Tomando la ruta de la carpeta
@@ -101,7 +100,7 @@ public class IvaAcredController {
 
                                     //Atributos de la raiz
                                     String numCertificado = raizXml.getValorDeAtributo("NoCertificado");
-                                    folioSerie=raizXml.getValorDeAtributo("Folio");
+                                    folioSerie = raizXml.getValorDeAtributo("Folio");
                                     infoXml.setNumeroFactura(folioSerie);
                                     fechaFactura = raizXml.getValorDeAtributo("Fecha");
                                     infoXml.setFechaFactura(fechaFactura);
@@ -308,7 +307,11 @@ public class IvaAcredController {
                                                             }
                                                         }
                                                     } catch (TagHijoNotFoundException | NullPointerException | AtributoNotFoundException e) {
+                                                        retencionCuatro = "0";
+                                                        retencionDiez = "0";
+                                                        retencion1016 = "0";
                                                         Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
+
                                                     }
 
                                                 }
@@ -355,9 +358,9 @@ public class IvaAcredController {
                                                         case "0.000000":
                                                             //verificar los valores
                                                             infoXml.setBaseCero(String.valueOf(baseCeroSuma));
-                                                            infoXml.setIva("");
-                                                            infoXml.setBase16("");
-                                                            infoXml.setCuotaCompensatoria("");
+                                                            infoXml.setIva("0");
+                                                            infoXml.setBase16("0");
+                                                            infoXml.setCuotaCompensatoria("0");
                                                             baseCeroSuma = 0;
                                                             traslado = "";
                                                             break;
@@ -369,29 +372,35 @@ public class IvaAcredController {
                                                             iva = String.valueOf(calIva);
                                                             infoXml.setIva(iva);
                                                             infoXml.setBase16(base16);
-                                                            infoXml.setBaseCero("");
-                                                            infoXml.setCuotaCompensatoria("");
+                                                            infoXml.setBaseCero("0");
+                                                            infoXml.setCuotaCompensatoria("0");
 
                                                             calIva = base_16 * 0.16;
                                                             iva = String.valueOf(calIva);
                                                             infoXml.setIva(iva);
                                                             infoXml.setBase16(String.valueOf(base_16));
-                                                            infoXml.setBaseCero("");
+                                                            infoXml.setBaseCero("0");
                                                             base_16 = 0;
                                                             traslado = "";
                                                             break;
                                                         case "0.090000":
                                                             cuotaC = cfdi_traslado_hijo.getValorDeAtributo("importe");
                                                             infoXml.setCuotaCompensatoria(cuotaC);
-                                                            infoXml.setIva("");
-                                                            infoXml.setBase16("");
-                                                            infoXml.setBaseCero("");
+                                                            infoXml.setIva("0");
+                                                            infoXml.setBase16("0");
+                                                            infoXml.setBaseCero("0");
+                                                            
                                                             break;
                                                         //las retenciones estan dentro de impuestos, pero no dentro de traslado
                                                         //iva=base16*0.16
                                                     }
                                                 } catch (AtributoNotFoundException e) {
+                                                    infoXml.setIva("0");
+                                                    infoXml.setBase16("0");
+                                                    infoXml.setBaseCero("0");
+                                                    infoXml.setCuotaCompensatoria("0");
                                                     Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
+                                                    
                                                 }
 
                                                 break;
@@ -427,22 +436,22 @@ public class IvaAcredController {
                     XmlDatos infoXml = new XmlDatos();
                     infoXml.setFechaFactura("");
                     infoXml.setFolioInterno("");
-                    infoXml.setTotal("");
+                    infoXml.setTotal("0");
                     infoXml.setFormaPago("");
                     infoXml.setRfc("");
                     infoXml.setRelacion("");
                     infoXml.setProveedor("");
                     infoXml.setConceptoXml("");
-                    infoXml.setRetencionCuatro("");
-                    infoXml.setRetencionDiez("");
-                    infoXml.setRetencion1016("");
+                    infoXml.setRetencionCuatro("0");
+                    infoXml.setRetencionDiez("0");
+                    infoXml.setRetencion1016("0");
                     infoXml.setFolioFiscal("");
                     infoXml.setCodigoEmpresa("");
                     infoXml.setNombreArchivoXml("");
                     infoXml.setCuotaCompensatoria("");
-                    infoXml.setIva("");
-                    infoXml.setBase16("");
-                    infoXml.setBaseCero("");
+                    infoXml.setIva("0");
+                    infoXml.setBase16("0");
+                    infoXml.setBaseCero("0");
                     infoXml.setNumeroPoliza(listFicherosPolizaBase.get(p).getNumeroPoliza());
                     infoXml.setTipoPoliza(listFicherosPolizaBase.get(p).getTipoPoliza());
                     infoXml.setCuenta(listFicherosPolizaBase.get(p).getCuenta());
@@ -568,7 +577,7 @@ public class IvaAcredController {
         }
         return exito;
     }
-    
+
     //    public List<XmlDatos> listDatosXmlCienAcred(String URL) {
 //        String nameArchivo;
 //        //Falta checar que los xml esten separados por fecha, y filtrar solo los que se necesitan realmente
@@ -868,7 +877,6 @@ public class IvaAcredController {
 //    }
 //Cambiar contraseñas rocketo fermin
     //106931
-
     //alta de usuarios
     /*
     

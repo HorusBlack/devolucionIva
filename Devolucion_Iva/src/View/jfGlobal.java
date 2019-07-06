@@ -2514,10 +2514,15 @@ public class jfGlobal extends javax.swing.JFrame {
 
         if (!llenarDatosTabla.isEmpty()) {
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-
-                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (!"".equals(llenarDatosTabla.get(i).getBaseCero()))) {
-                    System.out.println("Valor con xml: "+ llenarDatosTabla.get(i).getConXml());
-                    System.out.println("Valor Cero: "+ llenarDatosTabla.get(i).getBaseCero());
+                double valorBase=0;
+                if(!llenarDatosTabla.get(i).getBaseCero().isEmpty() && llenarDatosTabla.get(i).getBaseCero()!=null && !"".equals(llenarDatosTabla.get(i).getBaseCero())){
+                    valorBase=Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+                }
+                //double valorBase=Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+                
+                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (valorBase>0)) {
+                    System.out.println("Valor con xml: " + llenarDatosTabla.get(i).getConXml());
+                    System.out.println("Valor Cero: " + llenarDatosTabla.get(i).getBaseCero());
                     String string = llenarDatosTabla.get(i).getFechaFactura();
                     if (!"".equals(string)) {
                         String[] parts = string.split("T");
@@ -2577,109 +2582,113 @@ public class jfGlobal extends javax.swing.JFrame {
                         }
                         total_devIva += do_text8;
                     }
+                }else{
+                    System.out.println("Registro no valido");
                 }
                 //FIN IF
             }
-            //checkbox para columna
-            tablaIva = new DefaultTableModel(myData, titulos) {
-                //celdas editables
-                @Override
-                public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
-                    if (column == 12) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
-                        return true;
-                    } else {
-                        return false;
+            if (myData.length > 0) {
+                //checkbox para columna
+                tablaIva = new DefaultTableModel(myData, titulos) {
+                    //celdas editables
+                    @Override
+                    public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
+                        if (column == 12) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }
-                }
-            };
+                };
 
-            //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
-            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+                //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
+                TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
 
-            tableAct0.setModel(tablaIva);
-            //ComboRelacion
-            tableAct0.setRowSorter(ordenTabla);
+                tableAct0.setModel(tablaIva);
+                //ComboRelacion
+                tableAct0.setRowSorter(ordenTabla);
 //                comboBoxColuma_relacion(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(20),
 //                        numEmpresa);
-            //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
-            //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
-            TableColumn columna;
-            for (int i = 1; i < 13; i++) {
-                switch (i) {
-                    case 1:
-                        //Fecha de Factura
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(130);
-                        break;
-                    case 2:
-                        //Folio Factura
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
-                        break;
-                    case 3:
-                        //Folio UUID
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(250);
-                        break;
-                    case 4:
-                        //Proveedor
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(400);
-                        break;
-                    case 5:
-                        //RFC
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(120);
-                        break;
-                    case 6:
-                        //Conceptos
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(500);
-                        break;
-                    case 7:
-                        //Base 0%
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(60);
-                        break;
-                    case 8:
-                        //BASE 16
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 9:
-                        //Retencion 4%
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 10:
-                        //Retencion 10%
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(70);
-                        break;
-                    case 11:
-                        //Retencion 10.67%
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    case 12:
-                        //CP
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(200);
-                        break;
-                    case 13:
-                        //IVA
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(150);
-                        break;
-                    default:
-                        break;
+                //comboBoxColumaCruceCta(tablaCienIvaAcred, tablaCienIvaAcred.getColumnModel().getColumn(21));
+                //Codigo que permite cambiar el tamaño de las columnas de una tabla según se requiera
+                TableColumn columna;
+                for (int i = 1; i < 13; i++) {
+                    switch (i) {
+                        case 1:
+                            //Fecha de Factura
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(130);
+                            break;
+                        case 2:
+                            //Folio Factura
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(90);
+                            break;
+                        case 3:
+                            //Folio UUID
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(250);
+                            break;
+                        case 4:
+                            //Proveedor
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(400);
+                            break;
+                        case 5:
+                            //RFC
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(120);
+                            break;
+                        case 6:
+                            //Conceptos
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(500);
+                            break;
+                        case 7:
+                            //Base 0%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(60);
+                            break;
+                        case 8:
+                            //BASE 16
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 9:
+                            //Retencion 4%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 10:
+                            //Retencion 10%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 11:
+                            //Retencion 10.67%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 12:
+                            //CP
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(200);
+                            break;
+                        case 13:
+                            //IVA
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            int registros=tableAct0.getRowCount();
-            System.out.println("Numero registros: "+registros);
+            int registros = tableAct0.getRowCount();
+            System.out.println("Numero registros: " + registros);
             //retorna Numero registros: 211
-            if(registros==0){
-               lbSinRegistros_0.setVisible(true);
+            if (registros == 0) {
+                lbSinRegistros_0.setVisible(true);
             }
         }
     }

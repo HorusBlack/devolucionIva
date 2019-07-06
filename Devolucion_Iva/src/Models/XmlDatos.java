@@ -13,6 +13,23 @@ public class XmlDatos {
 
     private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
             folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria, conXml, numeroFactura;
+    private int dato0, dato16;
+
+    public int getDato0() {
+        return dato0;
+    }
+
+    public void setDato0(int dato0) {
+        this.dato0 = dato0;
+    }
+
+    public int getDato16() {
+        return dato16;
+    }
+
+    public void setDato16(int dato16) {
+        this.dato16 = dato16;
+    }
 
     public String getNumeroFactura() {
         return numeroFactura;
