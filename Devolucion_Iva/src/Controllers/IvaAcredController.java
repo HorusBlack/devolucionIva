@@ -361,8 +361,11 @@ public class IvaAcredController {
                                                             infoXml.setIva("0");
                                                             infoXml.setBase16("0");
                                                             infoXml.setCuotaCompensatoria("0");
+                                                            infoXml.setDato0(1);
+                                                            infoXml.setDato16(0);
                                                             baseCeroSuma = 0;
                                                             traslado = "";
+                                                            
                                                             break;
                                                         case "0.160000":
                                                             //Pendiente ajustar esto
@@ -380,6 +383,8 @@ public class IvaAcredController {
                                                             infoXml.setIva(iva);
                                                             infoXml.setBase16(String.valueOf(base_16));
                                                             infoXml.setBaseCero("0");
+                                                            infoXml.setDato0(0);
+                                                            infoXml.setDato16(1);
                                                             base_16 = 0;
                                                             traslado = "";
                                                             break;
@@ -389,6 +394,8 @@ public class IvaAcredController {
                                                             infoXml.setIva("0");
                                                             infoXml.setBase16("0");
                                                             infoXml.setBaseCero("0");
+                                                            infoXml.setDato0(0);
+                                                            infoXml.setDato16(0);
                                                             
                                                             break;
                                                         //las retenciones estan dentro de impuestos, pero no dentro de traslado

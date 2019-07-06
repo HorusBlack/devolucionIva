@@ -2514,15 +2514,9 @@ public class jfGlobal extends javax.swing.JFrame {
 
         if (!llenarDatosTabla.isEmpty()) {
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-                double valorBase=0;
-                if(!llenarDatosTabla.get(i).getBaseCero().isEmpty() && llenarDatosTabla.get(i).getBaseCero()!=null && !"".equals(llenarDatosTabla.get(i).getBaseCero())){
-                    valorBase=Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
-                }
-                //double valorBase=Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
-                
-                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (valorBase>0)) {
-                    System.out.println("Valor con xml: " + llenarDatosTabla.get(i).getConXml());
-                    System.out.println("Valor Cero: " + llenarDatosTabla.get(i).getBaseCero());
+                //Pasarse directo a base 16
+                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (llenarDatosTabla.get(i).getDato0()==1)) {
+                        
                     String string = llenarDatosTabla.get(i).getFechaFactura();
                     if (!"".equals(string)) {
                         String[] parts = string.split("T");
@@ -2582,7 +2576,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         }
                         total_devIva += do_text8;
                     }
-                }else{
+                } else {
                     System.out.println("Registro no valido");
                 }
                 //FIN IF
@@ -2683,141 +2677,195 @@ public class jfGlobal extends javax.swing.JFrame {
                             break;
                     }
                 }
+                int registros = tableAct0.getRowCount();
+                System.out.println("Numero registros: " + registros);
+                //retorna Numero registros: 211
+                if (registros == 0) {
+                    lbSinRegistros_0.setVisible(true);
+                }
             }
-            int registros = tableAct0.getRowCount();
-            System.out.println("Numero registros: " + registros);
-            //retorna Numero registros: 211
-            if (registros == 0) {
-                lbSinRegistros_0.setVisible(true);
-            }
+
         }
     }
 
     private void inicializarTablaValor_16(List<XmlDatos> listaDatosXml) {
-        tablaIva = new DefaultTableModel();
-        //Titulos para la tabla
-        String[] titulos = {"Num. Factura", "Fecha de Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 16%", "Iva Causado",
-            "Total", "Total Cobrado", "Documento de cobro", "Fecha de Cobro", "Cuenta de Banco", "Forma de Cobro", "Cruce Bancario"};
-        totalAuxCred = 0;
-        //Ingresando titulos
-        tablaIva.setColumnIdentifiers(titulos);
-        //Clase que obtiene los datos xml
+        lbSinRegistros_0.setVisible(false);
+        tableAct0.removeAll();
+        base_0 = 0;
+        total_devIva = 0;
+        double do_text1, do_text8;
+        String dateFormat = "";
+        String fechaPago = "";
 
-        DecimalFormat formateador = new DecimalFormat("####.##");
+        String[] titulos = {"Num. Factura","Fecha Factura","UUID","Cliente","RFC","Concepto","Base 16%","Iva Causado","Total",""};
 
-        if (!listaDatosXml.isEmpty()) {
-            for (int i = 0; i < listaDatosXml.size(); i++) {
-                String stringDate = listaDatosXml.get(i).getFechaFactura();
-                String newDate = "";
-                if (stringDate != null) {
+        List<XmlDatos> llenarDatosTabla = listaDatosXml;
+        Object[][] myData = new Object[llenarDatosTabla.size()][13];
+        //Solicitud datos BD
+
+        if (!llenarDatosTabla.isEmpty()) {
+            for (int i = 0; i < llenarDatosTabla.size(); i++) {
+                //Pasarse directo a base 16
+                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (llenarDatosTabla.get(i).getDato0()==1)) {
+                        
+                    String string = llenarDatosTabla.get(i).getFechaFactura();
+                    if (!"".equals(string)) {
+                        String[] parts = string.split("T");
+                        String part1 = parts[0];
+
+                        //No se estan cargando todos los datos
+                        try {
+                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                            dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                        } catch (ParseException ex) {
+                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     try {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
-                        newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                        //la fecha puede tener un problema
+                        if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
+                            Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
+                            fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
+                        }
 
                     } catch (ParseException ex) {
-                        stringDate = "";
+                        Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+
+                    }
+
+                    myData[i][0] = llenarDatosTabla.get(i).getNumeroFactura();
+                    myData[i][1] = dateFormat;
+                    myData[i][2] = llenarDatosTabla.get(i).getFolioFiscal();
+                    //Verificar info
+                    myData[i][3] = llenarDatosTabla.get(i).getProveedor();
+                    myData[i][4] = llenarDatosTabla.get(i).getRfc();
+                    myData[i][5] = llenarDatosTabla.get(i).getConceptoXml();
+                    //Arriba ok
+                    myData[i][6] = llenarDatosTabla.get(i).getBaseCero();
+                    myData[i][7] = llenarDatosTabla.get(i).getTotal();
+                    myData[i][8] = llenarDatosTabla.get(i).getNumeroFactura();
+                    myData[i][9] = "Fecha de Cobro";
+                    myData[i][10] = llenarDatosTabla.get(i).getCuenta();
+                    myData[i][11] = llenarDatosTabla.get(i).getFormaPago();
+                    myData[i][12] = "";
+
+                    if (i != 0) {
+
+                        try {
+                            do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+
+                        } catch (NullPointerException e) {
+                            do_text1 = 0;
+                        }
+                        base_0 += do_text1;
+
+                        try {
+                            do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
+                        } catch (NullPointerException e) {
+                            do_text8 = 0;
+                        }
+                        total_devIva += do_text8;
+                    }
+                } else {
+                    System.out.println("Registro no valido");
+                }
+                //FIN IF
+            }
+            if (myData.length > 0) {
+                //checkbox para columna
+                tablaIva = new DefaultTableModel(myData, titulos) {
+                    //celdas editables
+                    @Override
+                    public boolean isCellEditable(int row, int column) { //DETERMINA SI LA COLUMNA SE PODRÁ EDITAR
+                        if (column == 12) { //NUMEROS DE COLUMNAS EMPEZANDO DESDE 0 QUE PODRÁN SER EDITADAS
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                };
+
+                //Codigo que da la habilidad de ordenar los datos filtrados por orden según lo quiera el cliente
+                TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
+
+                tableAct0.setModel(tablaIva);
+                //ComboRelacion
+                tableAct0.setRowSorter(ordenTabla);
+
+                TableColumn columna;
+                for (int i = 1; i < 13; i++) {
+                    switch (i) {
+                        case 1:
+                            //Fecha de Factura
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(130);
+                            break;
+                        case 2:
+                            //Folio Factura
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(90);
+                            break;
+                        case 3:
+                            //Folio UUID
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(250);
+                            break;
+                        case 4:
+                            //Proveedor
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(400);
+                            break;
+                        case 5:
+                            //RFC
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(120);
+                            break;
+                        case 6:
+                            //Conceptos
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(500);
+                            break;
+                        case 7:
+                            //Base 0%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(60);
+                            break;
+                        case 8:
+                            //BASE 16
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 9:
+                            //Retencion 4%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 10:
+                            //Retencion 10%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(70);
+                            break;
+                        case 11:
+                            //Retencion 10.67%
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        case 12:
+                            //CP
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(200);
+                            break;
+                        case 13:
+                            //IVA
+                            columna = tableAct0.getColumn(titulos[i]);
+                            columna.setMinWidth(150);
+                            break;
+                        default:
+                            break;
                     }
                 }
-                tablaIva.addRow(new Object[]{"Num. Factura", listaDatosXml.get(i).getFechaFactura(),
-                    listaDatosXml.get(i).getFolioFiscal(), "Cliente", listaDatosXml.get(i).getRfc(),
-                    listaDatosXml.get(i).getConceptoXml(), listaDatosXml.get(i).getBaseCero(), "Documento de cobro", "Fecha de Cobro",
-                    listaDatosXml.get(i).getCuenta(), listaDatosXml.get(i).getFormaPago(), "Cruce"});
-                //totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
             }
-            TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
-            tableAct0.setModel(tablaIva);
-            tableAct0.setRowSorter(ordenTabla);
-            //"Cuenta de banco","Forma de Pago","Cruce Bancario"};
-            TableColumn columna;
-            for (int i = 0; i < 15; i++) {
-                switch (i) {
-                    case 0:
-                        //Num. Factura
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(90);
-                        break;
-                    case 1:
-                        //Fecha de Factura
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 2:
-                        //UUID
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 3:
-                        //Cliente
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(800);
-                        break;
-                    case 4:
-                        //RFC
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 5:
-                        //Concepto
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 6:
-                        //Base 0%
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 7:
-                        //Documento de cobro
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 8:
-                        //Fecha de Cobro
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 9:
-                        //Cuenta de banco
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 10:
-                        // Cruce Bancario
-                        //Forma de Pago
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 11:
-                        // Cruce Bancario
-                        //Forma de Pago
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 12:
-                        // Cruce Bancario
-                        //Forma de Pago
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 13:
-                        // Cruce Bancario
-                        //Forma de Pago
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-                    case 14:
-                        // Cruce Bancario
-                        //Forma de Pago
-                        columna = tableAct0.getColumn(titulos[i]);
-                        columna.setMinWidth(100);
-                        break;
-
-                    default:
-                        break;
-                }
-
-            }
-            //lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
         }
     }
 
