@@ -75,21 +75,19 @@ public class Consultas {
             if (!lpd.isEmpty()) {
                 for (int x = 0; x < lpd.size(); x++) {
                     query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
-                            + " aux.MONTOMOV,reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON"
+                            + " aux.MONTOMOV, aux.DEBE_HABER, reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON"
                             + " d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON rel.ID_REGISTRO = reg.ID_REGISTRO "
                             + " INNER JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
                             + " WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA= " + numeroEmpresa + " AND "
-                            + "aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
-                            + "AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
+                            + "aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
                             + "AND reg.CVEENTIDAD1=" + lpd.get(x).getNumeroPoliza() + " AND reg.CVEENTIDAD2='" + lpd.get(x).getTipoPoliza() + "'";
                     stmt = conexion.createStatement();
                     resultSet = stmt.executeQuery(query);
                     if (resultSet.next() == false) {
                         subQuery = "SELECT aux.NUM_CTA,aux.FECHA_POL, aux.TIPO_POLI,aux.NUM_POLIZ ,CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
-                                + "aux.MONTOMOV "
+                                + "aux.MONTOMOV ,aux.DEBE_HABER "
                                 + "FROM [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
-                                + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
-                                + "AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND "
+                                + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND "
                                 + "aux.TIPO_POLI='" + lpd.get(x).getTipoPoliza() + "'";
                         stmt = conexion.createStatement();
                         subResultset = stmt.executeQuery(subQuery);
@@ -105,6 +103,11 @@ public class Consultas {
                                 polizaDatos.setConXml(2);
                                 polizaDatos.setNumCuentaCoi(numeroCuenta);
                                 polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
+                                if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ",""))) {
+                                    polizaDatos.setDebe_haber(1);
+                                } else {
+                                    polizaDatos.setDebe_haber(0);
+                                }
                                 polizaDatosList.add(polizaDatos);
 
                             } while (subResultset.next());
@@ -125,6 +128,11 @@ public class Consultas {
                             polizaDatos.setConXml(1);
                             polizaDatos.setNumCuentaCoi(numeroCuenta);
                             polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                            if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ",""))) {
+                                polizaDatos.setDebe_haber(1);
+                            } else {
+                                polizaDatos.setDebe_haber(0);
+                            }
                             polizaDatosList.add(polizaDatos);
                         } while (resultSet.next());
                     }
@@ -186,31 +194,29 @@ public class Consultas {
 
                     for (int x = 0; x < lpd.size(); x++) {
                         query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',"
-                                + "CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', aux.MONTOMOV,reg.EMPRESA FROM "
+                                + "CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', aux.MONTOMOV, aux.DEBE_HABER "
+                                + ",reg.EMPRESA FROM "
                                 + "[DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel "
                                 + "ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg "
                                 + "ON rel.ID_REGISTRO = reg.ID_REGISTRO INNER JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
                                 + "ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
                                 + " WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA= " + numeroEmpresa + ""
-                                + " AND aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
-                                + "AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
+                                + " AND aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') "
                                 + "AND reg.CVEENTIDAD1=" + lpd.get(x).getNumeroPoliza() + " AND reg.CVEENTIDAD2='" + lpd.get(x).getTipoPoliza() + "'";
                         //erro sql aqui
                         stmt = conexion.createStatement();
                         resultSet = stmt.executeQuery(query);
                         //No me devuelve nada por que no estan asociados
                         if (resultSet.next() == false) {
-                            subQuery = "SELECT aux.NUM_CTA,aux.FECHA_POL, aux.TIPO_POLI,aux.NUM_POLIZ ,CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
-                                    + "aux.MONTOMOV "
+                            subQuery = "SELECT aux.NUM_CTA,aux.FECHA_POL, aux.TIPO_POLI,aux.NUM_POLIZ ,CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', aux.MONTOMOV, aux.DEBE_HABER "
                                     + "FROM [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
-                                    + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.DEBE_HABER='H' "
-                                    + "AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND "
+                                    + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND "
                                     + "aux.TIPO_POLI='" + lpd.get(x).getTipoPoliza() + "'";
                             stmt = conexion.createStatement();
                             subResultset = stmt.executeQuery(subQuery);
                             if (subResultset.next()) {
                                 do {
-                                    
+
                                     polizaDatos = new PolizaDatos();
                                     polizaDatos.setTipoPoliza(subResultset.getString("TIPO_POLI"));
                                     polizaDatos.setNumeroPoliza(subResultset.getString("NUM_POLIZ"));
@@ -221,12 +227,17 @@ public class Consultas {
                                     polizaDatos.setConXml(2);
                                     polizaDatos.setNumCuentaCoi(numeroCuentas[i]);
                                     polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
+                                    if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ",""))) {
+                                        polizaDatos.setDebe_haber(1);
+                                    } else {
+                                        polizaDatos.setDebe_haber(0);
+                                    }
                                     polizaDatosList.add(polizaDatos);
                                 } while (subResultset.next());
                             }
                         } else {
                             do {
-                                
+
                                 polizaDatos = new PolizaDatos();
                                 polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
                                 polizaDatos.setRutaXml(resultSet.getString("RUTA"));
@@ -241,6 +252,11 @@ public class Consultas {
                                 polizaDatos.setNumCuentaCoi(numeroCuentas[i]);
                                 polizaDatos.setConXml(1);
                                 polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                                if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ",""))) {
+                                    polizaDatos.setDebe_haber(1);
+                                } else {
+                                    polizaDatos.setDebe_haber(0);
+                                }
                                 polizaDatosList.add(polizaDatos);
                             } while (resultSet.next());
                         }

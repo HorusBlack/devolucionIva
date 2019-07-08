@@ -174,7 +174,7 @@ public class GeneradorExcel {
             celdasCabeceraTabla.setFont(font);
 //            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
-
+            //Titulo de las cabeceras de excel
             for (int i = 1; i < cabecera.length; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
@@ -183,8 +183,10 @@ public class GeneradorExcel {
             }
 
             //INICIA PARTE DATOS
+            //Numero filas
             numFilasTabla = tablaCienPorciento.getRowCount();
-            numColumnasTabla = (tablaCienPorciento.getColumnCount() - 2);
+            //Numero columnas
+            numColumnasTabla = (tablaCienPorciento.getColumnCount() - 4);
             //No.filas de cabecera+inicio de datos+1
             ultimaFilaRegistros = (tablaCienPorciento.getRowCount()) + 10;
             empezarLlenadoDesdeFila = 8;

@@ -365,7 +365,7 @@ public class IvaAcredController {
                                                             infoXml.setDato16(0);
                                                             baseCeroSuma = 0;
                                                             traslado = "";
-                                                            
+
                                                             break;
                                                         case "0.160000":
                                                             //Pendiente ajustar esto
@@ -396,7 +396,7 @@ public class IvaAcredController {
                                                             infoXml.setBaseCero("0");
                                                             infoXml.setDato0(0);
                                                             infoXml.setDato16(0);
-                                                            
+
                                                             break;
                                                         //las retenciones estan dentro de impuestos, pero no dentro de traslado
                                                         //iva=base16*0.16
@@ -407,7 +407,7 @@ public class IvaAcredController {
                                                     infoXml.setBaseCero("0");
                                                     infoXml.setCuotaCompensatoria("0");
                                                     Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, e);
-                                                    
+
                                                 }
 
                                                 break;
@@ -425,6 +425,7 @@ public class IvaAcredController {
                                     infoXml.setIdDoctoDig(listFicherosPolizaBase.get(p).getIdDoctodig());
                                     infoXml.setCuentaCoi(listFicherosPolizaBase.get(p).getNumCuentaCoi());
                                     infoXml.setMontoMov(listFicherosPolizaBase.get(p).getMontoMov());
+                                    infoXml.setDebe_haber(listFicherosPolizaBase.get(p).getDebe_haber());
                                     infoXml.setConXml("1");
 
                                     datosXml.add(infoXml);
@@ -465,6 +466,7 @@ public class IvaAcredController {
                     infoXml.setFechaPago(listFicherosPolizaBase.get(p).getFechaPago());
                     infoXml.setCuentaCoi(listFicherosPolizaBase.get(p).getNumCuentaCoi());
                     infoXml.setMontoMov(listFicherosPolizaBase.get(p).getMontoMov());
+                    infoXml.setDebe_haber(listFicherosPolizaBase.get(p).getDebe_haber());
                     infoXml.setIdDoctoDig("");
                     infoXml.setConXml("0");
                     datosXml.add(infoXml);

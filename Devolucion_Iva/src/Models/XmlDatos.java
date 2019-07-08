@@ -13,7 +13,7 @@ public class XmlDatos {
 
     private String fechaFactura, baseCero, Total, conceptoXml, folioFiscal, base16, retencionCuatro, retencionDiez, retencion1016,
             folioInterno, rfc, proveedor, formaPago, iva, cuotaCompensatoria, conXml, numeroFactura;
-    private int dato0, dato16;
+    private int dato0, dato16, debe_haber;
 
     public int getDato0() {
         return dato0;
@@ -247,5 +247,15 @@ public class XmlDatos {
     public void setIva(String iva) {
         this.iva = iva;
     }
+
+    public int getDebe_haber() {
+        return debe_haber;
+    }
+
+    public void setDebe_haber(int debe_haber) {
+        this.debe_haber = debe_haber;
+    }
+    
+    
 
 }

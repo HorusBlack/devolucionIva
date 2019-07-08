@@ -15,6 +15,7 @@ package Models;
 public class PolizaDatos {
 
     private String idDoctodig, numeroPoliza, empresa, rutaXml, nombreXml, tipoPoliza, cuenta, fechaPago, montoMov, numCuentaCoi;
+    private int debe_haber;
 
     public String getNumCuentaCoi() {
         return numCuentaCoi;
@@ -104,5 +105,14 @@ public class PolizaDatos {
     public void setTipoPoliza(String tipoPoliza) {
         this.tipoPoliza = tipoPoliza;
     }
+
+    public int getDebe_haber() {
+        return debe_haber;
+    }
+
+    public void setDebe_haber(int debe_haber) {
+        this.debe_haber = debe_haber;
+    }
+    
 
 }
