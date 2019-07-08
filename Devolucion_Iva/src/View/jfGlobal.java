@@ -135,10 +135,10 @@ public class jfGlobal extends javax.swing.JFrame {
         act1 = new javax.swing.JScrollPane();
         tableAct16 = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        btnExcelAct16 = new javax.swing.JButton();
         ScrollTotalIva3 = new javax.swing.JScrollPane();
         totalAct16 = new javax.swing.JTable();
+        jPanel9 = new javax.swing.JPanel();
+        btnExcelAct16 = new javax.swing.JButton();
         panel_AT_Cero = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -736,6 +736,20 @@ public class jfGlobal extends javax.swing.JFrame {
 
         jLabel6.setText(" INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 16% ");
 
+        ScrollTotalIva3.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
+
+        totalAct16.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        totalAct16.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        totalAct16.setOpaque(false);
+        ScrollTotalIva3.setViewportView(totalAct16);
+
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
 
         btnExcelAct16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
@@ -760,20 +774,6 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        ScrollTotalIva3.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
-
-        totalAct16.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        totalAct16.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        totalAct16.setOpaque(false);
-        ScrollTotalIva3.setViewportView(totalAct16);
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -784,7 +784,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 457, Short.MAX_VALUE))
+                        .addGap(0, 506, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -803,7 +803,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ScrollTotalIva3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_AT_16Layout = new javax.swing.GroupLayout(panel_AT_16);
@@ -917,7 +917,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbSinRegistros_0)
-                        .addGap(0, 375, Short.MAX_VALUE))
+                        .addGap(0, 436, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -938,7 +938,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ScrollTotalIva2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_AT_CeroLayout = new javax.swing.GroupLayout(panel_AT_Cero);
@@ -1419,6 +1419,7 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcelCienAcredActionPerformed
 
     private void btnExcelOtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelOtrosActionPerformed
+        generadorExcel = new GeneradorExcel();
         if (chbox_ExportarSoloRegistros1.isSelected()) {
             generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos,
                     tablaTotalOtros,
@@ -1452,19 +1453,21 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_chbox_ExportarSoloRegistros1ActionPerformed
 
     private void btnExcelActCeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActCeroActionPerformed
+        generadorExcel = new GeneradorExcel();
         generadorExcel.generarSoloExcelActCero(tableAct0,
-                    totalActCero,
-                    "INTEGRACION DE VALOR DE ACT 0%",
-                    periodo.toUpperCase(),
-                    String.valueOf(numAnio));
+                totalActCero,
+                "INTEGRACION DE VALOR DE ACT 0%",
+                periodo.toUpperCase(),
+                String.valueOf(numAnio));
     }//GEN-LAST:event_btnExcelActCeroActionPerformed
 
     private void btnExcelAct16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelAct16ActionPerformed
+        generadorExcel = new GeneradorExcel();
         generadorExcel.generarSoloExcelAct16(tableAct16,
-                    totalAct16,
-                    "INTEGRACION DE VALOR DE ACT 16%",
-                    periodo.toUpperCase(),
-                    String.valueOf(numAnio));
+                totalAct16,
+                "INTEGRACION DE VALOR DE ACT 16%",
+                periodo.toUpperCase(),
+                String.valueOf(numAnio));
     }//GEN-LAST:event_btnExcelAct16ActionPerformed
 
     /*
@@ -1487,9 +1490,6 @@ public class jfGlobal extends javax.swing.JFrame {
         String bd = (numEmpresa == 0) ? "COI80Empre1" : "COI80Empre2";
         //retornando una lista de poliza de datos
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
-        String ultimaRuta = "";
-        String op[] = {"Masculino", "Femenino"};
-        JComboBox sexo = new JComboBox(op);
 
         if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
@@ -1500,7 +1500,7 @@ public class jfGlobal extends javax.swing.JFrame {
             //Clase que obtiene los datos xml
             //correguir sintaxis de ruta, la conexion sql es estable
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
-            String urlDac = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + ultimaRuta;
+
             //Lista de objetos xmlDatos 
             llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos, bd);
             Object[][] myData = new Object[llenarDatosTabla.size()][26];
@@ -1865,15 +1865,30 @@ public class jfGlobal extends javax.swing.JFrame {
                     double val_16 = 0;
                     double val_iva = 0;
                     double val_cero = 0;
-                    if ((!"".equals(llenarDatosTabla.get(i).getBase16()))) {
-                        val_16 = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    try {
+                        if ((!"".equals(llenarDatosTabla.get(i).getBase16())) || (!llenarDatosTabla.get(i).getBase16().isEmpty())) {
+                            //null ponter
+                            val_16 = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                        }
+                    } catch (NullPointerException e) {
+                        val_16 = 0;
                     }
-                    if ((!"".equals(llenarDatosTabla.get(i).getBaseCero()))) {
-                        val_cero = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    try {
+                        if ((!"".equals(llenarDatosTabla.get(i).getBaseCero()))) {
+                            val_cero = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                        }
+                    } catch (NullPointerException e) {
+                        val_cero = 0;
                     }
-                    if ((!"".equals(llenarDatosTabla.get(i).getIva()))) {
-                        val_iva = Double.parseDouble(llenarDatosTabla.get(i).getIva());
+
+                    try {
+                        if ((!"".equals(llenarDatosTabla.get(i).getIva()))) {
+                            val_iva = Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                        }
+                    } catch (NullPointerException e) {
+                        val_iva = 0;
                     }
+
                     totalCobrado = val_16 + val_cero + val_iva;
 
                     myData[i][0] = true;
@@ -2370,7 +2385,7 @@ public class jfGlobal extends javax.swing.JFrame {
             String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev))};
         defaultTableIva.setColumnIdentifiers(titulos);
         defaultTableIva.addRow(valores);
-        tablaTotalIva.setModel(defaultTableIva);
+        tablaTotalOtros.setModel(defaultTableIva);
 
     }
 
@@ -2402,7 +2417,7 @@ public class jfGlobal extends javax.swing.JFrame {
             String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev)), String.valueOf(formateador.format(totalCobrado))};
         defaultTableIva.setColumnIdentifiers(titulos);
         defaultTableIva.addRow(valores);
-        tableAct16.setModel(defaultTableIva);
+        totalAct16.setModel(defaultTableIva);
 
     }
 
@@ -3340,7 +3355,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     }
                 }
             }
-            inicializarTablaTotal16(base_16,totalIva, total_devIva, totalGlobal);
+            inicializarTablaTotal16(base_16, totalIva, total_devIva, totalGlobal);
         }
     }
 
