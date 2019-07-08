@@ -548,7 +548,7 @@ public class GeneradorExcel {
 
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-                JOptionPane.showMessageDialog(tablaTotalCien, "Exportacion Exitosa");
+                JOptionPane.showMessageDialog(null, "Exportacion Exitosa");
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -790,7 +790,7 @@ public class GeneradorExcel {
 
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-                JOptionPane.showMessageDialog(tablaTotalCien, "Exportacion Exitosa");
+                JOptionPane.showMessageDialog(null, "Exportacion Exitosa");
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1120,6 +1120,7 @@ public class GeneradorExcel {
             //Creando el archivo fisico
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
+                JOptionPane.showMessageDialog(null, "Exportacion Exitosa");
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1481,7 +1482,7 @@ public class GeneradorExcel {
             Cell cs3 = fs3.createCell(1);
             cs3.setCellStyle(sbt3);
             cs3.setCellValue(" INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 0% ");
-            hoja.addMergedRegion(new CellRangeAddress(5, 5, 1, 4));
+            hoja.addMergedRegion(new CellRangeAddress(5, 5, 1, 8));
 
             sbt4.setFont(fuenteSubtituloDos);
             Row fs4 = hoja.createRow(6);
@@ -1490,7 +1491,7 @@ public class GeneradorExcel {
             cs4.setCellValue(" " + periodo.toUpperCase() + " " + anio);
             hoja.addMergedRegion(new CellRangeAddress(6, 6, 1, 4));
 
-            String[] cabecera = new String[]{"", "Num.Factura", "Fecha Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 0%", "Total Cobrado", "Documento de Cobro", "Fecha de cobro",
+            String[] cabecera = new String[]{"Num.Factura", "Fecha Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 0%", "Total Cobrado", "Documento de Cobro", "Fecha de cobro",
                 "Cuenta De Banco", "Forma de Cobro", "Cruce Bancario"};
 
             //Bordes de las celdas
@@ -1514,7 +1515,7 @@ public class GeneradorExcel {
 //            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
 
-            for (int i = 1; i < cabecera.length; i++) {
+            for (int i = 0; i < cabecera.length; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
@@ -1541,7 +1542,7 @@ public class GeneradorExcel {
                 Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
                 //Obteniendo información de las columnas
 
-                for (int a = 1; a < numColumnasTabla; a++) {
+                for (int a = 0; a < numColumnasTabla; a++) {
                     Cell celda;
                     celda = fila.createCell(a);
                     celda.setCellStyle(datosEstilo);
@@ -1623,7 +1624,7 @@ public class GeneradorExcel {
 
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-                JOptionPane.showMessageDialog(tablaTotalCien, "Exportacion Exitosa");
+                JOptionPane.showMessageDialog(null, "Exportacion Exitosa");
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1719,7 +1720,7 @@ public class GeneradorExcel {
             Cell cs3 = fs3.createCell(1);
             cs3.setCellStyle(sbt3);
             cs3.setCellValue("  INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 16%  ");
-            hoja.addMergedRegion(new CellRangeAddress(5, 5, 1, 4));
+            hoja.addMergedRegion(new CellRangeAddress(5, 5, 1, 9));
 
             sbt4.setFont(fuenteSubtituloDos);
             Row fs4 = hoja.createRow(6);
@@ -1728,7 +1729,7 @@ public class GeneradorExcel {
             cs4.setCellValue(" " + periodo.toUpperCase() + " " + anio);
             hoja.addMergedRegion(new CellRangeAddress(6, 6, 1, 4));
 
-            String[] cabecera = new String[]{"", "Num.Factura", "Fecha Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 16%", "Iva causado", "Total", "Total Cobrado", "Documento de Cobro", "Fecha de cobro",
+            String[] cabecera = new String[]{"Num.Factura", "Fecha Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 16%", "Iva causado", "Total", "Total Cobrado", "Documento de Cobro", "Fecha de cobro",
                 "Cuenta De Banco", "Forma de Cobro", "Cruce Bancario"};
 
             //Bordes de las celdas
@@ -1752,7 +1753,7 @@ public class GeneradorExcel {
 //            //CABECERAS
             Row filaEncabezado_1 = hoja.createRow(7);
 
-            for (int i = 1; i < cabecera.length; i++) {
+            for (int i = 0; i < cabecera.length; i++) {
 
                 Cell celdaEncabezado = filaEncabezado_1.createCell(i);
                 celdaEncabezado.setCellStyle(celdasCabeceraTabla);
@@ -1779,7 +1780,7 @@ public class GeneradorExcel {
                 Row fila = hoja.createRow(i + empezarLlenadoDesdeFila);
                 //Obteniendo información de las columnas
 
-                for (int a = 1; a < numColumnasTabla; a++) {
+                for (int a = 0; a < numColumnasTabla; a++) {
                     Cell celda;
                     celda = fila.createCell(a);
                     celda.setCellStyle(datosEstilo);
@@ -1867,7 +1868,7 @@ public class GeneradorExcel {
 
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-                JOptionPane.showMessageDialog(tablaTotalCien, "Exportacion Exitosa");
+                JOptionPane.showMessageDialog(null, "Exportacion Exitosa");
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }

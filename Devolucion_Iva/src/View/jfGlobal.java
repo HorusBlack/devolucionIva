@@ -1238,7 +1238,7 @@ public class jfGlobal extends javax.swing.JFrame {
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
         //Inicializar Tabla 100 Iva Acred
-        JOptionPane.showMessageDialog(this, "El proceso puede tardar unos momentos. \n Por favor espere...");
+        JOptionPane.showMessageDialog(null, "El proceso puede tardar unos momentos. \n Por favor espere...");
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
@@ -1247,7 +1247,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //inicializarTablaRetencionIvaMes(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         //Inicializar Tabla RetencionIvaMesPagadas
         //inicializarTablaRetencionIvaMesPagadas(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
-        JOptionPane.showMessageDialog(this, "Proceso terminado");
+        JOptionPane.showMessageDialog(null, "Proceso terminado");
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
@@ -1294,7 +1294,7 @@ public class jfGlobal extends javax.swing.JFrame {
             generadorExcel = new GeneradorExcel();
             generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
         } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+            JOptionPane.showMessageDialog(null, "No existen registros para exportar");
         }
     }//GEN-LAST:event_btnAIAActionPerformed
 
@@ -1414,7 +1414,7 @@ public class jfGlobal extends javax.swing.JFrame {
             }
 
         } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+            JOptionPane.showMessageDialog(null, "No existen registros para exportar");
         }
     }//GEN-LAST:event_btnExcelCienAcredActionPerformed
 
@@ -1427,7 +1427,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     periodo.toUpperCase(),
                     String.valueOf(numAnio));
         } else {
-            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+            JOptionPane.showMessageDialog(null, "No existen registros para exportar");
         }
 
     }//GEN-LAST:event_btnExcelOtrosActionPerformed
@@ -1523,7 +1523,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 //llenando la tabla de la info
                 for (int i = 0; i < llenarDatosTabla.size(); i++) {
                     if (llenarDatosTabla.get(i).getDebe_haber() == 1) {
-
+                         System.out.println("Valor registro Acred: "+llenarDatosTabla.get(i).getDebe_haber());
                         String string = llenarDatosTabla.get(i).getFechaFactura();
                         if (!"".equals(string)) {
                             String[] parts = string.split("T");
@@ -1799,10 +1799,10 @@ public class jfGlobal extends javax.swing.JFrame {
                 inicializarTablaValor_Cero(llenarDatosTabla);
 
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
+                JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
+            JOptionPane.showMessageDialog(null, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
         }
     }
 
@@ -1825,6 +1825,7 @@ public class jfGlobal extends javax.swing.JFrame {
         cuotaCompensatoria = 0;
         totalIva = 0;
         total_devIva = 0;
+        double totalC = 0;
         String fechaFactura = "";
         String fechaPago = "";
 
@@ -1835,7 +1836,7 @@ public class jfGlobal extends javax.swing.JFrame {
             //llenando la tabla de la info
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
                 if (llenarDatosTabla.get(i).getDebe_haber() == 0) {
-
+                    System.out.println("Valor registro otros: "+llenarDatosTabla.get(i).getDebe_haber());
                     String string = llenarDatosTabla.get(i).getFechaFactura();
                     if (!"".equals(string)) {
                         String[] parts = string.split("T");
@@ -1865,6 +1866,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     double val_16 = 0;
                     double val_iva = 0;
                     double val_cero = 0;
+                    
                     try {
                         if ((!"".equals(llenarDatosTabla.get(i).getBase16())) || (!llenarDatosTabla.get(i).getBase16().isEmpty())) {
                             //null ponter
@@ -1889,6 +1891,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         val_iva = 0;
                     }
 
+                    
                     totalCobrado = val_16 + val_cero + val_iva;
 
                     myData[i][0] = true;
@@ -1969,6 +1972,9 @@ public class jfGlobal extends javax.swing.JFrame {
                         do_text8 = 0;
                     }
                     total_devIva += do_text8;
+
+                    //SUMA
+                    totalC += base_0 + base_16 +  totalIva;
                 }
             }
             //checkbox para columna
@@ -2070,10 +2076,11 @@ public class jfGlobal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-            }
-            inicializarTablaTotalOtros(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
+            } 
+            //double base0, double base16, double ivaT, double totalDev, double totalC
+            inicializarTablaTotalOtros(base_0, base_16, totalIva, total_devIva, totalC);
         } else {
-            JOptionPane.showMessageDialog(this, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
+            JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
         }
     }
 
@@ -2371,8 +2378,7 @@ public class jfGlobal extends javax.swing.JFrame {
         tablaTotalIva.setModel(defaultTableIva);
     }
 
-    private void inicializarTablaTotalOtros(double base0, double base16, double retencion4, double retencion10, double retencion1016,
-            double cuotaCom, double ivaT, double totalDev) {
+    private void inicializarTablaTotalOtros(double base0, double base16, double ivaT, double totalDev, double totalC) {
         defaultTableIva = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -2380,9 +2386,9 @@ public class jfGlobal extends javax.swing.JFrame {
             }
         };
         DecimalFormat formateador = new DecimalFormat("0.00");
-        String[] titulos = {"Base 0%", "Base 16%", "IVA", "Total"};
+        String[] titulos = {"Base 0%", "Base 16%", "IVA", "Total", "Total Cobrado"};
         String[] valores = {String.valueOf(formateador.format(base0)), String.valueOf(formateador.format(base16)),
-            String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev))};
+            String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev)), String.valueOf(formateador.format(totalDev))};
         defaultTableIva.setColumnIdentifiers(titulos);
         defaultTableIva.addRow(valores);
         tablaTotalOtros.setModel(defaultTableIva);
@@ -2489,7 +2495,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
             } catch (ParseException ex) {
-                JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                JOptionPane.showMessageDialog(null, "Hubo un problema al cargar la fecha: " + ex);
             }
             //HACER QUE SI SON NULOS, OBTENGAN UN NUEVO VALOR
             String folioInterno, folioFiscal, proveedor, rfc, concepto, b0, b16, r4, r10, r1016, cuota, iva, total, formaPago;
@@ -2641,7 +2647,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         newDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                     } catch (ParseException ex) {
-                        JOptionPane.showMessageDialog(this, "Hubo un problema al cargar la fecha: " + ex);
+                        JOptionPane.showMessageDialog(null, "Hubo un problema al cargar la fecha: " + ex);
                     }
                 }
 
@@ -3016,13 +3022,6 @@ public class jfGlobal extends javax.swing.JFrame {
                             do_text1 = 0;
                         }
                         base_0 += do_text1;
-
-                        try {
-                            do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
-                        } catch (NullPointerException e) {
-                            do_text8 = 0;
-                        }
-                        total_devIva += do_text8;
                     }
                 }
                 //FIN IF
@@ -3125,7 +3124,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
 
             }
-            inicializarTablaTotalActCero(base_0, totalIva);
+            inicializarTablaTotalActCero(base_0, base_0);
         }
     }
 
