@@ -135,6 +135,10 @@ public class jfGlobal extends javax.swing.JFrame {
         act1 = new javax.swing.JScrollPane();
         tableAct16 = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        btnExcelAct16 = new javax.swing.JButton();
+        ScrollTotalIva3 = new javax.swing.JScrollPane();
+        totalAct16 = new javax.swing.JTable();
         panel_AT_Cero = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -142,6 +146,10 @@ public class jfGlobal extends javax.swing.JFrame {
         tableAct0 = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         lbSinRegistros_0 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        btnExcelActCero = new javax.swing.JButton();
+        ScrollTotalIva2 = new javax.swing.JScrollPane();
+        totalActCero = new javax.swing.JTable();
         panel_OtrosDepositos = new javax.swing.JPanel();
         panelInfo1 = new javax.swing.JPanel();
         SpIva2 = new javax.swing.JScrollPane();
@@ -728,6 +736,44 @@ public class jfGlobal extends javax.swing.JFrame {
 
         jLabel6.setText(" INTEGRACION DE LOS ACTOS O ACTIVIDADES GRAVADOS A TASA 16% ");
 
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
+
+        btnExcelAct16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
+        btnExcelAct16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcelAct16ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addComponent(btnExcelAct16)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(btnExcelAct16)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        ScrollTotalIva3.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
+
+        totalAct16.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        totalAct16.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        totalAct16.setOpaque(false);
+        ScrollTotalIva3.setViewportView(totalAct16);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -738,7 +784,12 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 457, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ScrollTotalIva3, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -748,7 +799,11 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addGap(7, 7, 7)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(349, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ScrollTotalIva3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(237, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_AT_16Layout = new javax.swing.GroupLayout(panel_AT_16);
@@ -812,6 +867,44 @@ public class jfGlobal extends javax.swing.JFrame {
 
         lbSinRegistros_0.setText("(Sin Registros)");
 
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Exportar"));
+
+        btnExcelActCero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/excel32.png"))); // NOI18N
+        btnExcelActCero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcelActCeroActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addComponent(btnExcelActCero)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(btnExcelActCero)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        ScrollTotalIva2.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
+
+        totalActCero.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        totalActCero.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        totalActCero.setOpaque(false);
+        ScrollTotalIva2.setViewportView(totalActCero);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -824,7 +917,12 @@ public class jfGlobal extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbSinRegistros_0)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 375, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ScrollTotalIva2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -836,7 +934,11 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(lbSinRegistros_0))
                 .addGap(7, 7, 7)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(349, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ScrollTotalIva2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(237, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_AT_CeroLayout = new javax.swing.GroupLayout(panel_AT_Cero);
@@ -1277,32 +1379,32 @@ public class jfGlobal extends javax.swing.JFrame {
         boolean resultadoFinal;
         generadorExcel = new GeneradorExcel();
         if (tablaCienIvaAcred.getRowCount() > 0) {
-            if (chbox_ExportarProcesar.isSelected()) {
-
-                resultadoExportacion = procesarDevolucionIva(String.valueOf(numEmpresa + 1));
-
-                if (periodo != null && String.valueOf(numAnio) != null) {
-                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
-                            tablaCienIvaAcred,
-                            tablaTotalIva,
-                            "100% FACTURAS DE IVA ACRED",
-                            periodo.toUpperCase(),
-                            String.valueOf(numAnio), resultadoExportacion);
-                } else {
-                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
-                            tablaCienIvaAcred,
-                            tablaTotalIva,
-                            "100% FACTURAS DE IVA ACRED",
-                            "(PERIODO: )",
-                            "(AÑO: )", resultadoExportacion);
-                }
-                if (resultadoFinal) {
-                    JOptionPane.showMessageDialog(this, "Proceso completado con exito");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Hubo un problema al procesar la información. \n No obstante se exportarón los"
-                            + " datos con exito");
-                }
-            }
+//            if (chbox_ExportarProcesar.isSelected()) {
+//
+//                resultadoExportacion = procesarDevolucionIva(String.valueOf(numEmpresa + 1));
+//
+//                if (periodo != null && String.valueOf(numAnio) != null) {
+//                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
+//                            tablaCienIvaAcred,
+//                            tablaTotalIva,
+//                            "100% FACTURAS DE IVA ACRED",
+//                            periodo.toUpperCase(),
+//                            String.valueOf(numAnio), resultadoExportacion);
+//                } else {
+//                    resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
+//                            tablaCienIvaAcred,
+//                            tablaTotalIva,
+//                            "100% FACTURAS DE IVA ACRED",
+//                            "(PERIODO: )",
+//                            "(AÑO: )", resultadoExportacion);
+//                }
+//                if (resultadoFinal) {
+//                    JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "Hubo un problema al procesar la información. \n No obstante se exportarón los"
+//                            + " datos con exito");
+//                }
+//            }
             if (chbox_ExportarSoloRegistros.isSelected()) {
                 generadorExcel.generarSoloExcelCienIva(tablaCienIvaAcred,
                         tablaTotalIva,
@@ -1317,7 +1419,16 @@ public class jfGlobal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcelCienAcredActionPerformed
 
     private void btnExcelOtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelOtrosActionPerformed
-        // TODO add your handling code here:
+        if (chbox_ExportarSoloRegistros1.isSelected()) {
+            generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos,
+                    tablaTotalOtros,
+                    "OTROS DEPOSITOS",
+                    periodo.toUpperCase(),
+                    String.valueOf(numAnio));
+        } else {
+            JOptionPane.showMessageDialog(this, "No existen registros para exportar");
+        }
+
     }//GEN-LAST:event_btnExcelOtrosActionPerformed
 
     private void btnOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk1ActionPerformed
@@ -1339,6 +1450,22 @@ public class jfGlobal extends javax.swing.JFrame {
     private void chbox_ExportarSoloRegistros1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_ExportarSoloRegistros1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chbox_ExportarSoloRegistros1ActionPerformed
+
+    private void btnExcelActCeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActCeroActionPerformed
+        generadorExcel.generarSoloExcelActCero(tableAct0,
+                    totalActCero,
+                    "INTEGRACION DE VALOR DE ACT 0%",
+                    periodo.toUpperCase(),
+                    String.valueOf(numAnio));
+    }//GEN-LAST:event_btnExcelActCeroActionPerformed
+
+    private void btnExcelAct16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelAct16ActionPerformed
+        generadorExcel.generarSoloExcelAct16(tableAct16,
+                    totalAct16,
+                    "INTEGRACION DE VALOR DE ACT 16%",
+                    periodo.toUpperCase(),
+                    String.valueOf(numAnio));
+    }//GEN-LAST:event_btnExcelAct16ActionPerformed
 
     /*
     ################INICIA###################
@@ -1684,7 +1811,7 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
 
         //Titulos para la tabla
-        String[] titulos = {"Tipo Deposito", "RFC", "Nombre cliente o Tercero", "Concepto", "Factura", "Fecha de Factura", "UUID", "Base 0%", "Base 16%",
+        String[] titulos = {"", "Tipo Deposito", "RFC", "Nombre cliente o Tercero", "Concepto", "Factura", "Fecha de Factura", "UUID", "Base 0%", "Base 16%",
             "IVA", "Total", "Fecha del Deposito", "Cuenta de Banco", "Numero de Documento", "Total Cobrado", "Cruce Edo. Cuenta"};
 
         llenarDatosTabla = ListaDatosXml;
@@ -1707,66 +1834,65 @@ public class jfGlobal extends javax.swing.JFrame {
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-                if(llenarDatosTabla.get(i).getDebe_haber()==0){
-                    
+                if (llenarDatosTabla.get(i).getDebe_haber() == 0) {
 
-                String string = llenarDatosTabla.get(i).getFechaFactura();
-                if (!"".equals(string)) {
-                    String[] parts = string.split("T");
-                    String part1 = parts[0];
+                    String string = llenarDatosTabla.get(i).getFechaFactura();
+                    if (!"".equals(string)) {
+                        String[] parts = string.split("T");
+                        String part1 = parts[0];
 
-                    //No se estan cargando todos los datos
+                        //No se estan cargando todos los datos
+                        try {
+                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                            fechaFactura = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+                        } catch (ParseException ex) {
+                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     try {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                        fechaFactura = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                        //la fecha puede tener un problema
+                        if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
+                            Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
+                            fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
+                        }
 
                     } catch (ParseException ex) {
                         Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                try {
-                    //la fecha puede tener un problema
-                    if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
-                        Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
-                        fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
+
+                    double totalCobrado;
+                    double val_16 = 0;
+                    double val_iva = 0;
+                    double val_cero = 0;
+                    if ((!"".equals(llenarDatosTabla.get(i).getBase16()))) {
+                        val_16 = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
                     }
+                    if ((!"".equals(llenarDatosTabla.get(i).getBaseCero()))) {
+                        val_cero = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    }
+                    if ((!"".equals(llenarDatosTabla.get(i).getIva()))) {
+                        val_iva = Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                    }
+                    totalCobrado = val_16 + val_cero + val_iva;
 
-                } catch (ParseException ex) {
-                    Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                double totalCobrado;
-                double val_16 = 0;
-                double val_iva = 0;
-                double val_cero = 0;
-                if ((!"".equals(llenarDatosTabla.get(i).getBase16()))) {
-                    val_16 = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
-                }
-                if ((!"".equals(llenarDatosTabla.get(i).getBaseCero()))) {
-                    val_cero = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
-                }
-                if ((!"".equals(llenarDatosTabla.get(i).getIva()))) {
-                    val_iva = Double.parseDouble(llenarDatosTabla.get(i).getIva());
-                }
-                totalCobrado=val_16+val_cero+val_iva;
-
-                myData[i][0] = true;
-                myData[i][1] = llenarDatosTabla.get(i).getFormaPago();
-                myData[i][2] = llenarDatosTabla.get(i).getRfc();
-                myData[i][3] = llenarDatosTabla.get(i).getProveedor();
-                myData[i][4] = llenarDatosTabla.get(i).getConceptoXml();
-                myData[i][5] = llenarDatosTabla.get(i).getFolioInterno();
-                myData[i][6] = fechaFactura;
-                myData[i][7] = llenarDatosTabla.get(i).getFolioFiscal();
-                myData[i][8] = llenarDatosTabla.get(i).getBaseCero();
-                myData[i][9] = llenarDatosTabla.get(i).getBase16();
-                myData[i][10] = llenarDatosTabla.get(i).getIva();
-                myData[i][11] = llenarDatosTabla.get(i).getTotal();
-                myData[i][12] = fechaPago;
-                myData[i][13] = llenarDatosTabla.get(i).getCuenta();
-                myData[i][14] = llenarDatosTabla.get(i).getFolioInterno();
-                myData[i][15] = totalCobrado;
-                myData[i][16] = "";
+                    myData[i][0] = true;
+                    myData[i][1] = llenarDatosTabla.get(i).getFormaPago();
+                    myData[i][2] = llenarDatosTabla.get(i).getRfc();
+                    myData[i][3] = llenarDatosTabla.get(i).getProveedor();
+                    myData[i][4] = llenarDatosTabla.get(i).getConceptoXml();
+                    myData[i][5] = llenarDatosTabla.get(i).getFolioInterno();
+                    myData[i][6] = fechaFactura;
+                    myData[i][7] = llenarDatosTabla.get(i).getFolioFiscal();
+                    myData[i][8] = llenarDatosTabla.get(i).getBaseCero();
+                    myData[i][9] = llenarDatosTabla.get(i).getBase16();
+                    myData[i][10] = llenarDatosTabla.get(i).getIva();
+                    myData[i][11] = llenarDatosTabla.get(i).getTotal();
+                    myData[i][12] = fechaPago;
+                    myData[i][13] = llenarDatosTabla.get(i).getCuenta();
+                    myData[i][14] = llenarDatosTabla.get(i).getFolioInterno();
+                    myData[i][15] = totalCobrado;
+                    myData[i][16] = "";
 
 //                myData[i][9] = llenarDatosTabla.get(i).getRetencionCuatro();
 //                myData[i][10] = llenarDatosTabla.get(i).getRetencionDiez();
@@ -1779,55 +1905,55 @@ public class jfGlobal extends javax.swing.JFrame {
 //                myData[i][23] = llenarDatosTabla.get(i).getNombreArchivoXml();
 //                myData[i][24] = llenarDatosTabla.get(i).getCuentaCoi();
 //                myData[i][25] = llenarDatosTabla.get(i).getMontoMov();
-                try {
-                    do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+                    try {
+                        do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
 
-                } catch (NullPointerException e) {
-                    do_text1 = 0;
-                }
-                base_0 += do_text1;
-                try {
-                    do_text2 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
-                } catch (NullPointerException e) {
-                    do_text2 = 0;
-                }
-                base_16 += do_text2;
-                try {
-                    do_text3 = (llenarDatosTabla.get(i).getRetencionCuatro().equals("") || llenarDatosTabla.get(i).getRetencionCuatro().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionCuatro());
-                } catch (NullPointerException e) {
-                    do_text3 = 0;
-                }
-                retencion_4 += do_text3;
-                try {
-                    do_text4 = (llenarDatosTabla.get(i).getRetencionDiez().equals("") || llenarDatosTabla.get(i).getRetencionDiez().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionDiez());
-                } catch (NullPointerException e) {
-                    do_text4 = 0;
-                }
-                retencion_10 += do_text4;
-                try {
-                    do_text5 = (llenarDatosTabla.get(i).getRetencion1016().equals("") || llenarDatosTabla.get(i).getRetencion1016().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencion1016());
-                } catch (NullPointerException e) {
-                    do_text5 = 0;
-                }
-                retencion_1067 += do_text5;
-                try {
-                    do_text6 = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
-                } catch (NullPointerException e) {
-                    do_text6 = 0;
-                }
-                totalIva += do_text6;
-                try {
-                    do_text7 = (llenarDatosTabla.get(i).getCuotaCompensatoria().equals("") || llenarDatosTabla.get(i).getCuotaCompensatoria().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getCuotaCompensatoria());
-                } catch (NullPointerException e) {
-                    do_text7 = 0;
-                }
-                cuotaCompensatoria += do_text7;
-                try {
-                    do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
-                } catch (NullPointerException e) {
-                    do_text8 = 0;
-                }
-                total_devIva += do_text8;
+                    } catch (NullPointerException e) {
+                        do_text1 = 0;
+                    }
+                    base_0 += do_text1;
+                    try {
+                        do_text2 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    } catch (NullPointerException e) {
+                        do_text2 = 0;
+                    }
+                    base_16 += do_text2;
+                    try {
+                        do_text3 = (llenarDatosTabla.get(i).getRetencionCuatro().equals("") || llenarDatosTabla.get(i).getRetencionCuatro().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionCuatro());
+                    } catch (NullPointerException e) {
+                        do_text3 = 0;
+                    }
+                    retencion_4 += do_text3;
+                    try {
+                        do_text4 = (llenarDatosTabla.get(i).getRetencionDiez().equals("") || llenarDatosTabla.get(i).getRetencionDiez().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencionDiez());
+                    } catch (NullPointerException e) {
+                        do_text4 = 0;
+                    }
+                    retencion_10 += do_text4;
+                    try {
+                        do_text5 = (llenarDatosTabla.get(i).getRetencion1016().equals("") || llenarDatosTabla.get(i).getRetencion1016().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getRetencion1016());
+                    } catch (NullPointerException e) {
+                        do_text5 = 0;
+                    }
+                    retencion_1067 += do_text5;
+                    try {
+                        do_text6 = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                    } catch (NullPointerException e) {
+                        do_text6 = 0;
+                    }
+                    totalIva += do_text6;
+                    try {
+                        do_text7 = (llenarDatosTabla.get(i).getCuotaCompensatoria().equals("") || llenarDatosTabla.get(i).getCuotaCompensatoria().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getCuotaCompensatoria());
+                    } catch (NullPointerException e) {
+                        do_text7 = 0;
+                    }
+                    cuotaCompensatoria += do_text7;
+                    try {
+                        do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
+                    } catch (NullPointerException e) {
+                        do_text8 = 0;
+                    }
+                    total_devIva += do_text8;
                 }
             }
             //checkbox para columna
@@ -2230,7 +2356,7 @@ public class jfGlobal extends javax.swing.JFrame {
         tablaTotalIva.setModel(defaultTableIva);
     }
 
-       private void inicializarTablaTotalOtros(double base0, double base16, double retencion4, double retencion10, double retencion1016,
+    private void inicializarTablaTotalOtros(double base0, double base16, double retencion4, double retencion10, double retencion1016,
             double cuotaCom, double ivaT, double totalDev) {
         defaultTableIva = new DefaultTableModel() {
             @Override
@@ -2245,11 +2371,41 @@ public class jfGlobal extends javax.swing.JFrame {
         defaultTableIva.setColumnIdentifiers(titulos);
         defaultTableIva.addRow(valores);
         tablaTotalIva.setModel(defaultTableIva);
-       
+
     }
 
-    
-    
+    private void inicializarTablaTotalActCero(double base0, double totalDev) {
+        defaultTableIva = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        DecimalFormat formateador = new DecimalFormat("0.00");
+        String[] titulos = {"Base 0%", "Total"};
+        String[] valores = {String.valueOf(formateador.format(base0)), String.valueOf(formateador.format(totalDev))};
+        defaultTableIva.setColumnIdentifiers(titulos);
+        defaultTableIva.addRow(valores);
+        totalActCero.setModel(defaultTableIva);
+    }
+
+    private void inicializarTablaTotal16(double base16, double ivaT, double totalDev, double totalCobrado) {
+        defaultTableIva = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        DecimalFormat formateador = new DecimalFormat("0.00");
+        String[] titulos = {"Base 16%", "IVA", "Total", "Total Cobrado"};
+        String[] valores = {String.valueOf(formateador.format(base16)),
+            String.valueOf(formateador.format(ivaT)), String.valueOf(formateador.format(totalDev)), String.valueOf(formateador.format(totalCobrado))};
+        defaultTableIva.setColumnIdentifiers(titulos);
+        defaultTableIva.addRow(valores);
+        tableAct16.setModel(defaultTableIva);
+
+    }
+
     /**
      * Funcion que permite solicitar y dibujar los datos de una carpeta xml de
      * manera manual y poder eliminar los que sean necesarios
@@ -2952,18 +3108,21 @@ public class jfGlobal extends javax.swing.JFrame {
                             break;
                     }
                 }
-                
-            }
 
+            }
+            inicializarTablaTotalActCero(base_0, totalIva);
         }
     }
 
     private void inicializarTablaValor_16(List<XmlDatos> listaDatosXml) {
         lbSinRegistros_0.setVisible(false);
         tableAct0.removeAll();
-        base_0 = 0;
+        base_16 = 0;
         total_devIva = 0;
-        double do_text1, do_text8;
+        totalIva = 0;
+        double totalGlobal = 0;
+
+        double do_text1, do_text8, txtIva, txtTotalGlobal;
         String dateFormat = "";
         String fechaPago = "";
 
@@ -3050,14 +3209,21 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][14] = "";
 
                     if (i != 0) {
-
                         try {
-                            do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+                            do_text1 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
 
                         } catch (NullPointerException e) {
                             do_text1 = 0;
                         }
-                        base_0 += do_text1;
+                        base_16 += do_text1;
+
+                        try {
+                            txtIva = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
+
+                        } catch (NullPointerException e) {
+                            txtIva = 0;
+                        }
+                        totalIva += txtIva;
 
                         try {
                             do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
@@ -3065,6 +3231,8 @@ public class jfGlobal extends javax.swing.JFrame {
                             do_text8 = 0;
                         }
                         total_devIva += do_text8;
+
+                        totalGlobal += base_16 + totalIva + total_devIva;
                     }
                 }
                 //FIN IF
@@ -3171,9 +3339,8 @@ public class jfGlobal extends javax.swing.JFrame {
                             break;
                     }
                 }
-
             }
-
+            inicializarTablaTotal16(base_16,totalIva, total_devIva, totalGlobal);
         }
     }
 
@@ -3311,6 +3478,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel PanelTabla1;
     private javax.swing.JScrollPane ScrollTotalIva;
     private javax.swing.JScrollPane ScrollTotalIva1;
+    private javax.swing.JScrollPane ScrollTotalIva2;
+    private javax.swing.JScrollPane ScrollTotalIva3;
     private javax.swing.JScrollPane SpIva;
     private javax.swing.JScrollPane SpIva1;
     private javax.swing.JScrollPane SpIva2;
@@ -3319,6 +3488,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JButton btnAIA;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDelete1;
+    private javax.swing.JButton btnExcelAct16;
+    private javax.swing.JButton btnExcelActCero;
     private javax.swing.JButton btnExcelCienAcred;
     private javax.swing.JButton btnExcelOtros;
     private javax.swing.JButton btnExitPanel;
@@ -3350,7 +3521,9 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -3384,6 +3557,8 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JTable tableAct0;
     private javax.swing.JTable tableAct16;
     private javax.swing.JTable table_totalAuxIvaAcred;
+    private javax.swing.JTable totalAct16;
+    private javax.swing.JTable totalActCero;
     private javax.swing.JTabbedPane tp_Secciones;
     // End of variables declaration//GEN-END:variables
 }
