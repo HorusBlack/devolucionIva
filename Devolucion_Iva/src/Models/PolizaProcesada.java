@@ -10,41 +10,14 @@ package Models;
  * @author horusblack
  */
 public class PolizaProcesada {
+    private String numeroPoliza, tipoPoliza,montoMov,dh,periodo,ejercicio, numeroCuenta;
 
-    /*
-    INSERT INTO [dbo].[POLIZA_PROCESADA]
-           ([ID_DOCTODIG]
-           ,[ARCHIVO]
-           ,[CLAVE_POLIZA]
-           ,[TIPO]
-           ,[EMPRESA]
-           ,[PROCESADO])
-     
-     */
-    private String idDoctoDig, nombreArchivo, clavePoliza, tipoPoliza, numeroEmpresa, estatusProcesado;
-
-    public String getIdDoctoDig() {
-        return idDoctoDig;
+    public String getNumeroPoliza() {
+        return numeroPoliza;
     }
 
-    public void setIdDoctoDig(String idDoctoDig) {
-        this.idDoctoDig = idDoctoDig;
-    }
-
-    public String getNombreArchivo() {
-        return nombreArchivo;
-    }
-
-    public void setNombreArchivo(String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
-    }
-
-    public String getClavePoliza() {
-        return clavePoliza;
-    }
-
-    public void setClavePoliza(String clavePoliza) {
-        this.clavePoliza = clavePoliza;
+    public void setNumeroPoliza(String numeroPoliza) {
+        this.numeroPoliza = numeroPoliza;
     }
 
     public String getTipoPoliza() {
@@ -55,20 +28,45 @@ public class PolizaProcesada {
         this.tipoPoliza = tipoPoliza;
     }
 
-    public String getNumeroEmpresa() {
-        return numeroEmpresa;
+    public String getMontoMov() {
+        return montoMov;
     }
 
-    public void setNumeroEmpresa(String numeroEmpresa) {
-        this.numeroEmpresa = numeroEmpresa;
+    public void setMontoMov(String montoMov) {
+        this.montoMov = montoMov;
     }
 
-    public String getEstatusProcesado() {
-        return estatusProcesado;
+    public String getDh() {
+        return dh;
     }
 
-    public void setEstatusProcesado(String estatusProcesado) {
-        this.estatusProcesado = estatusProcesado;
+    public void setDh(String dh) {
+        this.dh = dh;
+    }
+
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
+    }
+
+    public String getEjercicio() {
+        return ejercicio;
+    }
+
+    public void setEjercicio(String ejercicio) {
+        this.ejercicio = ejercicio;
+    }
+
+    public String getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
     }
     
+   
 }

@@ -578,11 +578,7 @@ public class IvaAcredController {
         boolean exito = false;
         consultas = new Consultas();
         if (!datosPolizaProcesada.isEmpty()) {
-            if (ne == 1) {
                 exito = consultas.insertarPolizasProcesadas(datosPolizaProcesada, ne);
-            } else if (ne == 2) {
-                exito = consultas.insertarPolizasProcesadas(datosPolizaProcesada, ne);
-            }
         }
         return exito;
     }

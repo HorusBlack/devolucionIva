@@ -103,7 +103,7 @@ public class Consultas {
                                 polizaDatos.setConXml(2);
                                 polizaDatos.setNumCuentaCoi(numeroCuenta);
                                 polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
-                                if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ",""))) {
+                                if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ", ""))) {
                                     polizaDatos.setDebe_haber(1);
                                 } else {
                                     polizaDatos.setDebe_haber(0);
@@ -128,7 +128,7 @@ public class Consultas {
                             polizaDatos.setConXml(1);
                             polizaDatos.setNumCuentaCoi(numeroCuenta);
                             polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
-                            if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ",""))) {
+                            if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ", ""))) {
                                 polizaDatos.setDebe_haber(1);
                             } else {
                                 polizaDatos.setDebe_haber(0);
@@ -227,7 +227,7 @@ public class Consultas {
                                     polizaDatos.setConXml(2);
                                     polizaDatos.setNumCuentaCoi(numeroCuentas[i]);
                                     polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
-                                    if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ",""))) {
+                                    if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ", ""))) {
                                         polizaDatos.setDebe_haber(1);
                                     } else {
                                         polizaDatos.setDebe_haber(0);
@@ -252,7 +252,7 @@ public class Consultas {
                                 polizaDatos.setNumCuentaCoi(numeroCuentas[i]);
                                 polizaDatos.setConXml(1);
                                 polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
-                                if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ",""))) {
+                                if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ", ""))) {
                                     polizaDatos.setDebe_haber(1);
                                 } else {
                                     polizaDatos.setDebe_haber(0);
@@ -732,16 +732,28 @@ public class Consultas {
             conexion = connection.Entrar(dataBase);
             PreparedStatement ps;
             for (int i = 0; i < datosPolizaProcesada.size(); i++) {
-                String queryPrepare = "INSERT INTO [dbo].[POLIZA_PROCESADA]"
-                        + " (ID_DOCTODIG ,ARCHIVO ,CLAVE_POLIZA ,TIPO ,EMPRESA ,PROCESADO) VALUES (?,?,?,?,?,?)";
+                String queryPrepare = "INSERT INTO [dbo].[PARTIDAS_PROCESADAS] ([NUM_POLIZ], [TIPO_POLI] ,[MONTO_MOV], [DEBE_HABER] ,[EMPRESA] ,[PERIODO]"
+                        + " ,[EJERCICIO], [CUENTA] ,[PROCESADA]) VALUES (? ,? ,? ,? ,? ,? ,? ,?)";
 
                 ps = conexion.prepareStatement(queryPrepare);
-                ps.setInt(1, Integer.parseInt(datosPolizaProcesada.get(i).getIdDoctoDig()));
-                ps.setString(2, datosPolizaProcesada.get(i).getNombreArchivo());
-                ps.setInt(3, Integer.parseInt(datosPolizaProcesada.get(i).getClavePoliza()));
-                ps.setString(4, datosPolizaProcesada.get(i).getTipoPoliza());
-                ps.setInt(5, numEmpresa);
-                ps.setInt(6, 2);
+                /*
+                  polizaProcesada.setTipoPoliza(tablaCienIvaAcred.getValueAt(i, 18).toString());
+                polizaProcesada.setNumeroPoliza(tablaCienIvaAcred.getValueAt(i, 19).toString());
+                polizaProcesada.setMontoMov(tablaCienIvaAcred.getValueAt(i, 25).toString());
+                polizaProcesada.setDh("H");
+                polizaProcesada.setPeriodo(periodoConstante);
+                polizaProcesada.setEjercicio(anioConstante);
+                 */
+
+                ps.setString(1, datosPolizaProcesada.get(i).getNumeroPoliza());
+                ps.setString(2, datosPolizaProcesada.get(i).getTipoPoliza());
+                ps.setString(3, datosPolizaProcesada.get(i).getMontoMov());
+                ps.setString(4, datosPolizaProcesada.get(i).getDh());
+                ps.setString(5, String.valueOf(numEmpresa));
+                ps.setString(6, datosPolizaProcesada.get(i).getPeriodo());
+                ps.setString(7, datosPolizaProcesada.get(i).getEjercicio());
+                ps.setString(8, datosPolizaProcesada.get(i).getNumeroCuenta());
+                ps.setInt(9, 1);
                 ps.executeUpdate();
             }
             resultInsert = true;

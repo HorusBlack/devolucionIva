@@ -555,9 +555,10 @@ public class GeneradorExcel {
         }
     }
 
-    public void generarSoloExcelOtros(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+    public boolean generarSoloExcelOtros(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
         seleccionar = new JFileChooser();
         File archivo;
+        boolean exito1 = false, exito2, exito3 = false;
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
@@ -711,7 +712,7 @@ public class GeneradorExcel {
                     if (tablaCienPorciento.getValueAt(i, a) == null) {
                         celda.setCellValue("");
                     } else {
-                        if (a < 22) {
+                        if (a < 16) {
                             celda.setCellValue(String.valueOf(tablaCienPorciento.getValueAt(i, a)));
                         }
 
@@ -788,13 +789,17 @@ public class GeneradorExcel {
                 hoja.autoSizeColumn(i);
             }
 
-            try {
+              try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
-                JOptionPane.showMessageDialog(null, "Exportacion Exitosa");
+                exito2 = true;
+                exito3 = (exito1 && exito2);
+
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
+        return exito3;
     }
 
     /**
