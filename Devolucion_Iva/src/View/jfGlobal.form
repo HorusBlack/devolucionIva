@@ -223,6 +223,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="chbox_sinProcesar">
           <Properties>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Buscar sin procesar"/>
           </Properties>
           <Events>

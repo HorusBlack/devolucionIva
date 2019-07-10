@@ -646,7 +646,16 @@ public class Consultas {
         return ultimoID;
 
     }
-
+    
+    /*
+    *Generar 2 listas una con todas las partidas procesadas y otra con las polizas disponibles (con o sin xml)
+    *Despues generar una nueva lista <PolizaDatos>, la cual se llanara UNICAMENTE con los registros que pasen de una comparacion
+    entre todos los campos de existentes en PolizasProcesadas y Las PolizasDisponibles
+    *Pasar solo los registros que que sean DIFERENTES
+    *Crear Modelo para PolizasProcesadas
+    */
+    
+    
     /**
      * Funcion que retorna una lista de RelacionActividadess
      *
