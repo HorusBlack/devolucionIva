@@ -56,18 +56,18 @@ public class GeneradorExcel {
         seleccionar = new JFileChooser();
         boolean exito1, exito2, exito3 = false;
         exito1 = exitoExport;
-        int valorEmpresa=Integer.parseInt(empresa);
-        if(valorEmpresa==1){
-            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
-            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
-            rfc="";
-            
-        }else if(valorEmpresa==2){
-            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
-            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
-            rfc="R.F.C    AIC171129UAA";
+        int valorEmpresa = Integer.parseInt(empresa);
+        if (valorEmpresa == 1) {
+            nombreEmpresa = "ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion = "PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc = "";
+
+        } else if (valorEmpresa == 2) {
+            nombreEmpresa = "AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion = "CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc = "R.F.C    AIC171129UAA";
         }
-        
+
         File archivo;
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
@@ -329,16 +329,16 @@ public class GeneradorExcel {
     public void generarSoloExcelCienIva(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String Empresa) {
         seleccionar = new JFileChooser();
         File archivo;
-          int valorEmpresa=Integer.parseInt(Empresa);
-        if(valorEmpresa==1){
-            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
-            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
-            rfc="";
-            
-        }else if(valorEmpresa==2){
-            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
-            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
-            rfc="R.F.C    AIC171129UAA";
+        int valorEmpresa = Integer.parseInt(Empresa);
+        if (valorEmpresa == 1) {
+            nombreEmpresa = "ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion = "PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc = "";
+
+        } else if (valorEmpresa == 2) {
+            nombreEmpresa = "AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion = "CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc = "R.F.C    AIC171129UAA";
         }
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
@@ -594,18 +594,18 @@ public class GeneradorExcel {
     public boolean generarSoloExcelOtros(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String empresa) {
         seleccionar = new JFileChooser();
         File archivo;
-          int valorEmpresa=Integer.parseInt(empresa);
-        if(valorEmpresa==1){
-            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
-            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
-            rfc="";
-            
-        }else if(valorEmpresa==2){
-            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
-            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
-            rfc="R.F.C    AIC171129UAA";
+        int valorEmpresa = Integer.parseInt(empresa);
+        if (valorEmpresa == 1) {
+            nombreEmpresa = "ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion = "PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc = "";
+
+        } else if (valorEmpresa == 2) {
+            nombreEmpresa = "AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion = "CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc = "R.F.C    AIC171129UAA";
         }
-        boolean exito1 = false, exito2, exito3 = false;
+        boolean exito2=false;
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
@@ -841,14 +841,16 @@ public class GeneradorExcel {
             try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
                 exito2 = true;
-                exito3 = (exito1 && exito2);
+                
 
             } catch (IOException ex) {
+                
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
+                
             }
 
         }
-        return exito3;
+        return exito2;
     }
 
     /**
@@ -866,6 +868,17 @@ public class GeneradorExcel {
 
         seleccionar = new JFileChooser();
         File archivo;
+        int valorEmpresa = Integer.parseInt(empresa);
+        if (valorEmpresa == 1) {
+            nombreEmpresa = "ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion = "PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc = "";
+
+        } else if (valorEmpresa == 2) {
+            nombreEmpresa = "AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion = "CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc = "R.F.C    AIC171129UAA";
+        }
         if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
@@ -927,7 +940,7 @@ public class GeneradorExcel {
             Cell celdaTitulo = filaTitulo.createCell(2);
             celdaTitulo.setCellStyle(tituloEstilo);
             //Titulo de la cabecera en Hoja de trabajo
-            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+            celdaTitulo.setCellValue(nombreEmpresa);
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
@@ -937,14 +950,14 @@ public class GeneradorExcel {
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
-            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            celdaSubTitulo.setCellValue(rfc);
             hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
-            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            celdaSubTituloDos.setCellValue(direccion);
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
 
             sbt3.setFont(fuenteSubtituloDos);
@@ -1451,16 +1464,16 @@ public class GeneradorExcel {
     public void generarSoloExcelActCero(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String numEmpresa) {
         seleccionar = new JFileChooser();
         File archivo;
-          int valorEmpresa=Integer.parseInt(numEmpresa);
-        if(valorEmpresa==1){
-            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
-            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
-            rfc="";
-            
-        }else if(valorEmpresa==2){
-            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
-            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
-            rfc="R.F.C    AIC171129UAA";
+        int valorEmpresa = Integer.parseInt(numEmpresa);
+        if (valorEmpresa == 1) {
+            nombreEmpresa = "ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion = "PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc = "";
+
+        } else if (valorEmpresa == 2) {
+            nombreEmpresa = "AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion = "CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc = "R.F.C    AIC171129UAA";
         }
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
@@ -1700,16 +1713,16 @@ public class GeneradorExcel {
     public void generarSoloExcelAct16(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String numEmpresa) {
         seleccionar = new JFileChooser();
         File archivo;
-          int valorEmpresa=Integer.parseInt(numEmpresa);
-        if(valorEmpresa==1){
-            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
-            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
-            rfc="";
-            
-        }else if(valorEmpresa==2){
-            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
-            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
-            rfc="R.F.C    AIC171129UAA";
+        int valorEmpresa = Integer.parseInt(numEmpresa);
+        if (valorEmpresa == 1) {
+            nombreEmpresa = "ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion = "PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc = "";
+
+        } else if (valorEmpresa == 2) {
+            nombreEmpresa = "AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion = "CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc = "R.F.C    AIC171129UAA";
         }
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();

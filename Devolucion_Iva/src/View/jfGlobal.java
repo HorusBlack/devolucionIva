@@ -1302,26 +1302,29 @@ public class jfGlobal extends javax.swing.JFrame {
         //El excel no se esta generando bien
         //El insert parece funcionar
         boolean resultadoExportacion = false;
-        boolean resultadoFinal = false;
+
         generadorExcel = new GeneradorExcel();
         //procesarDevolucionIvaAcred
+        //Cuenta en BD, y mensaje de confirmacion aqui
         if (tablaOtrosDepositos.getRowCount() > 0) {
             if (chbox_ExportarProcesarOtros.isSelected()) {
-
+                //boleano
                 resultadoExportacion = procesarDevolucionOtros(tablaOtrosDepositos, String.valueOf(empresaConstante));
                 if (resultadoExportacion) {
                     if (periodo != null && String.valueOf(numAnio) != null) {
 
-                        resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
+                        boolean resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
+                        if (resultadoFinal) {
+                            JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+                        }
                     }
 
-                    if (resultadoFinal) {
-                        JOptionPane.showMessageDialog(this, "Proceso completado con exito");
-                    }
                 }
 
-            } else if (chbox_excel.isSelected()) {
-                resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
+            }
+
+            if (chbox_excel.isSelected()) {
+                boolean resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
                 if (resultadoFinal) {
                     JOptionPane.showMessageDialog(this, "Proceso completado con exito");
                 }
@@ -1395,13 +1398,15 @@ public class jfGlobal extends javax.swing.JFrame {
         ivaAcred = new IvaAcredController();
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
+        //SI pasa
         String bd = (numEmpresa == 0) ? "COI80Empre1" : "COI80Empre2";
+
         periodoConstante = String.valueOf(mes);
         anioConstante = String.valueOf(anio);
         empresaConstante = numEmpresa + 1;
 
         //retornando una lista de poliza de datos
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, empresaConstante);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
 
         if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
@@ -3194,13 +3199,13 @@ public class jfGlobal extends javax.swing.JFrame {
             try {
                 if (tablaProcesar.getValueAt(i, 0).toString().equals("true")) {
                     polizaProcesada = new PolizaProcesada();
-                    polizaProcesada.setTipoPoliza(tablaCienIvaAcred.getValueAt(i, 18).toString());
-                    polizaProcesada.setNumeroPoliza(tablaCienIvaAcred.getValueAt(i, 19).toString());
-                    polizaProcesada.setMontoMov(tablaCienIvaAcred.getValueAt(i, 25).toString());
+                    polizaProcesada.setTipoPoliza(tablaProcesar.getValueAt(i, 18).toString());
+                    polizaProcesada.setNumeroPoliza(tablaProcesar.getValueAt(i, 19).toString());
+                    polizaProcesada.setMontoMov(tablaProcesar.getValueAt(i, 25).toString());
                     polizaProcesada.setDh("H");
                     polizaProcesada.setPeriodo(String.valueOf(per));
                     polizaProcesada.setEjercicio(anioConstante);
-                    polizaProcesada.setNumeroCuenta(tablaCienIvaAcred.getValueAt(i, 24).toString());
+                    polizaProcesada.setNumeroCuenta(tablaProcesar.getValueAt(i, 24).toString());
                     listaDatosProcesar.add(polizaProcesada);
                 }
             } catch (NullPointerException e) {
@@ -3231,10 +3236,10 @@ public class jfGlobal extends javax.swing.JFrame {
                 if (tablaProcesar.getValueAt(i, 0).toString().equals("true")) {
                     polizaProcesada = new PolizaProcesada();
 
-                    polizaProcesada.setNumeroCuenta(tablaCienIvaAcred.getValueAt(i, 17).toString());
-                    polizaProcesada.setNumeroPoliza(tablaCienIvaAcred.getValueAt(i, 18).toString());
-                    polizaProcesada.setTipoPoliza(tablaCienIvaAcred.getValueAt(i, 19).toString());
-                    polizaProcesada.setMontoMov(tablaCienIvaAcred.getValueAt(i, 20).toString());
+                    polizaProcesada.setNumeroCuenta(tablaProcesar.getValueAt(i, 17).toString());
+                    polizaProcesada.setNumeroPoliza(tablaProcesar.getValueAt(i, 18).toString());
+                    polizaProcesada.setTipoPoliza(tablaProcesar.getValueAt(i, 19).toString());
+                    polizaProcesada.setMontoMov(tablaProcesar.getValueAt(i, 20).toString());
                     polizaProcesada.setDh("D");
                     polizaProcesada.setPeriodo(String.valueOf(per));
                     polizaProcesada.setEjercicio(anioConstante);
