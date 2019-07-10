@@ -1299,6 +1299,8 @@ public class jfGlobal extends javax.swing.JFrame {
 
 
     private void btnExcelOtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelOtrosActionPerformed
+        //El excel no se esta generando bien
+        //El insert parece funcionar
         boolean resultadoExportacion = false;
         boolean resultadoFinal = false;
         generadorExcel = new GeneradorExcel();
@@ -3073,6 +3075,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         List<PolizaProcesada> listaDatosProcesar = new ArrayList<>();
         ivaAcred = new IvaAcredController();
+        int per = Integer.parseInt(periodoConstante) + 1;
         for (int i = 0; i < tablaProcesar.getRowCount(); i++) {
 //  
             //Debajo de la mesa pasar una lista con el ID_DOCTODIG y el Nombre del archivo
@@ -3084,7 +3087,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     polizaProcesada.setNumeroPoliza(tablaCienIvaAcred.getValueAt(i, 19).toString());
                     polizaProcesada.setMontoMov(tablaCienIvaAcred.getValueAt(i, 25).toString());
                     polizaProcesada.setDh("H");
-                    polizaProcesada.setPeriodo(periodoConstante);
+                    polizaProcesada.setPeriodo(String.valueOf(per));
                     polizaProcesada.setEjercicio(anioConstante);
                     polizaProcesada.setNumeroCuenta(tablaCienIvaAcred.getValueAt(i, 24).toString());
                     listaDatosProcesar.add(polizaProcesada);
@@ -3103,6 +3106,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
         List<PolizaProcesada> listaDatosProcesar = new ArrayList<>();
         ivaAcred = new IvaAcredController();
+        int per = Integer.parseInt(periodoConstante) + 1;
         for (int i = 0; i < tablaProcesar.getRowCount(); i++) {
             try {
                 if (tablaProcesar.getValueAt(i, 0).toString().equals("true")) {
@@ -3113,7 +3117,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     polizaProcesada.setTipoPoliza(tablaCienIvaAcred.getValueAt(i, 19).toString());
                     polizaProcesada.setMontoMov(tablaCienIvaAcred.getValueAt(i, 20).toString());
                     polizaProcesada.setDh("D");
-                    polizaProcesada.setPeriodo(periodoConstante);
+                    polizaProcesada.setPeriodo(String.valueOf(per));
                     polizaProcesada.setEjercicio(anioConstante);
 
                     listaDatosProcesar.add(polizaProcesada);

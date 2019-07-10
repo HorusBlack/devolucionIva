@@ -733,7 +733,7 @@ public class Consultas {
             PreparedStatement ps;
             for (int i = 0; i < datosPolizaProcesada.size(); i++) {
                 String queryPrepare = "INSERT INTO [dbo].[PARTIDAS_PROCESADAS] ([NUM_POLIZ], [TIPO_POLI] ,[MONTO_MOV], [DEBE_HABER] ,[EMPRESA] ,[PERIODO]"
-                        + " ,[EJERCICIO], [CUENTA] ,[PROCESADA]) VALUES (? ,? ,? ,? ,? ,? ,? ,?)";
+                        + " ,[EJERCICIO], [CUENTA] ,[PROCESADO]) VALUES (? ,? ,? ,? ,? ,? ,? ,?,?)";
 
                 ps = conexion.prepareStatement(queryPrepare);
                 /*
@@ -744,7 +744,7 @@ public class Consultas {
                 polizaProcesada.setPeriodo(periodoConstante);
                 polizaProcesada.setEjercicio(anioConstante);
                  */
-
+                //El periodo sale en 0 
                 ps.setString(1, datosPolizaProcesada.get(i).getNumeroPoliza());
                 ps.setString(2, datosPolizaProcesada.get(i).getTipoPoliza());
                 ps.setString(3, datosPolizaProcesada.get(i).getMontoMov());
