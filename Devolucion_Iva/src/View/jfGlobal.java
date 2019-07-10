@@ -49,7 +49,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private DefaultTableModel defaultTableIva;
     private String periodo, asunto, empresa;
     private String periodoConstante, anioConstante;
-    private int numAnio, numEmpresa, empresaConstante;
+    private int numAnio, numEmpresa, empresaConstante, numEmpresaConstante;
     private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva,
             total_devIva, totalAuxCred;
     private ControllerAction controllerAction;
@@ -1184,7 +1184,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private void btnAIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAIAActionPerformed
         if (tabla_ivaAuxAcred.getRowCount() > 0) {
             generadorExcel = new GeneradorExcel();
-            generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio));
+            generadorExcel.generarExcelAuxiliarIvaAcred(tabla_ivaAuxAcred, table_totalAuxIvaAcred, "AUXILIAR IVA A CRED", periodo.toUpperCase(), String.valueOf(numAnio), String.valueOf(empresaConstante));
         } else {
             JOptionPane.showMessageDialog(null, "No existen registros para exportar");
         }
@@ -1270,14 +1270,14 @@ public class jfGlobal extends javax.swing.JFrame {
                                 tablaTotalIva,
                                 "100% FACTURAS DE IVA ACRED",
                                 periodo.toUpperCase(),
-                                String.valueOf(numAnio), resultadoExportacion);
+                                String.valueOf(numAnio), resultadoExportacion, String.valueOf(empresaConstante));
                     } else {
                         resultadoFinal = generadorExcel.generarExcelCienIvaAcred(
                                 tablaCienIvaAcred,
                                 tablaTotalIva,
                                 "100% FACTURAS DE IVA ACRED",
                                 "(PERIODO: )",
-                                "(AÑO: )", resultadoExportacion);
+                                "(AÑO: )", resultadoExportacion, String.valueOf(empresaConstante));
                     }
                     if (resultadoFinal) {
                         JOptionPane.showMessageDialog(this, "Proceso completado con exito");
@@ -1289,7 +1289,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         tablaTotalIva,
                         "100% FACTURAS DE IVA ACRED",
                         periodo.toUpperCase(),
-                        String.valueOf(numAnio));
+                        String.valueOf(numAnio), String.valueOf(empresaConstante));
             }
 
         } else {
@@ -1312,7 +1312,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 if (resultadoExportacion) {
                     if (periodo != null && String.valueOf(numAnio) != null) {
 
-                        resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaTotalOtros, tablaTotalOtros, "OTROS DEPOSITOS", periodo, asunto);
+                        resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
                     }
 
                     if (resultadoFinal) {
@@ -1321,7 +1321,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
 
             } else if (chbox_excel.isSelected()) {
-                resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaTotalOtros, tablaTotalOtros, "OTROS DEPOSITOS", periodo, asunto);
+                resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
                 if (resultadoFinal) {
                     JOptionPane.showMessageDialog(this, "Proceso completado con exito");
                 }
@@ -1339,7 +1339,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 totalActCero,
                 "INTEGRACION DE VALOR DE ACT 0%",
                 periodo.toUpperCase(),
-                String.valueOf(numAnio));
+                String.valueOf(numAnio), String.valueOf(empresaConstante));
     }//GEN-LAST:event_btnExcelActCeroActionPerformed
 
     private void btnExcelAct16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelAct16ActionPerformed
@@ -1348,7 +1348,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 totalAct16,
                 "INTEGRACION DE VALOR DE ACT 16%",
                 periodo.toUpperCase(),
-                String.valueOf(numAnio));
+                String.valueOf(numAnio), String.valueOf(empresaConstante));
     }//GEN-LAST:event_btnExcelAct16ActionPerformed
 
     private void chbox_ExportarProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbox_ExportarProcesarActionPerformed
@@ -1393,14 +1393,15 @@ public class jfGlobal extends javax.swing.JFrame {
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa) {
         ivaAcred = new IvaAcredController();
-        List<XmlDatos> llenarDatosTabla;
+        List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
         String bd = (numEmpresa == 0) ? "COI80Empre1" : "COI80Empre2";
         periodoConstante = String.valueOf(mes);
         anioConstante = String.valueOf(anio);
-        empresaConstante = numEmpresa;
+        empresaConstante = numEmpresa + 1;
+
         //retornando una lista de poliza de datos
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, empresaConstante);
 
         if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
@@ -1411,9 +1412,45 @@ public class jfGlobal extends javax.swing.JFrame {
             //Clase que obtiene los datos xml
             //correguir sintaxis de ruta, la conexion sql es estable
             String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
-
+//llenarDatosTabla
             //Lista de objetos xmlDatos 
-            llenarDatosTabla = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos, bd);
+
+            List<XmlDatos> xmlFiltro = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos, bd);
+            for (int i = 0; i < xmlFiltro.size(); i++) {
+                if (xmlFiltro.get(i).getDebe_haber() == 1) {
+                    XmlDatos separadorXml = new XmlDatos();
+                    separadorXml.setFolioInterno(xmlFiltro.get(i).getFolioInterno());
+                    separadorXml.setFolioFiscal(xmlFiltro.get(i).getFolioFiscal());
+                    separadorXml.setProveedor(xmlFiltro.get(i).getProveedor());
+                    separadorXml.setRfc(xmlFiltro.get(i).getRfc());
+                    separadorXml.setConceptoXml(xmlFiltro.get(i).getConceptoXml());
+                    separadorXml.setBaseCero(xmlFiltro.get(i).getBaseCero());
+                    separadorXml.setBase16(xmlFiltro.get(i).getBase16());
+                    separadorXml.setRetencionCuatro(xmlFiltro.get(i).getRetencionCuatro());
+                    separadorXml.setRetencionDiez(xmlFiltro.get(i).getRetencionDiez());
+                    separadorXml.setRetencion1016(xmlFiltro.get(i).getRetencion1016());
+                    separadorXml.setCuotaCompensatoria(xmlFiltro.get(i).getCuotaCompensatoria());
+                    separadorXml.setIva(xmlFiltro.get(i).getIva());
+                    separadorXml.setTotal(xmlFiltro.get(i).getTotal());
+                    separadorXml.setCuenta(xmlFiltro.get(i).getCuenta());
+                    separadorXml.setFechaPago(xmlFiltro.get(i).getFechaPago());
+                    separadorXml.setFechaFactura(xmlFiltro.get(i).getFechaFactura());
+                    separadorXml.setFormaPago(xmlFiltro.get(i).getFormaPago());
+                    separadorXml.setTipoPoliza(xmlFiltro.get(i).getTipoPoliza());
+                    separadorXml.setNumeroPoliza(xmlFiltro.get(i).getNumeroPoliza());
+                    separadorXml.setRelacion(xmlFiltro.get(i).getRelacion());
+                    separadorXml.setIdDoctoDig(xmlFiltro.get(i).getIdDoctoDig());
+                    separadorXml.setNombreArchivoXml(xmlFiltro.get(i).getNombreArchivoXml());
+                    separadorXml.setCuentaCoi(xmlFiltro.get(i).getCuentaCoi());
+                    separadorXml.setMontoMov(xmlFiltro.get(i).getMontoMov());
+                    separadorXml.setDato0(xmlFiltro.get(i).getDato0());
+                    separadorXml.setDato16(xmlFiltro.get(i).getDato16());
+                    separadorXml.setConXml(xmlFiltro.get(i).getConXml());
+                    separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
+                    llenarDatosTabla.add(separadorXml);
+                }
+            }
+
             Object[][] myData = new Object[llenarDatosTabla.size()][26];
             //Datos para los totales
             base_0 = 0;
@@ -1433,9 +1470,6 @@ public class jfGlobal extends javax.swing.JFrame {
             if (!llenarDatosTabla.isEmpty()) {
                 //llenando la tabla de la info
                 for (int i = 0; i < llenarDatosTabla.size(); i++) {
-                    if (llenarDatosTabla.get(i).getDebe_haber() != 1) {
-                        continue;
-                    }
 
                     String string = llenarDatosTabla.get(i).getFechaFactura();
                     if (!"".equals(string)) {
@@ -1489,6 +1523,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     myData[i][23] = llenarDatosTabla.get(i).getNombreArchivoXml();
                     myData[i][24] = llenarDatosTabla.get(i).getCuentaCoi();
                     myData[i][25] = llenarDatosTabla.get(i).getMontoMov();
+
                     try {
                         do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
 
@@ -1708,6 +1743,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
                 lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
                 inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
+
                 inicializarTablaOtros(llenarDatosTabla);
                 inicializarTablaValor_16(llenarDatosTabla);
                 inicializarTablaValor_Cero(llenarDatosTabla);
@@ -1728,8 +1764,44 @@ public class jfGlobal extends javax.swing.JFrame {
             "IVA", "Total", "Fecha del Deposito", "Cuenta de Banco", "Numero de Documento", "Total Cobrado", "Cruce Edo. Cuenta", "Cuenta Coi", "Numero Poliza",
             "Tipo Poliza", "MontoMov"};
 
-        llenarDatosTabla = ListaDatosXml;
+        List<XmlDatos> xmlFiltro = ListaDatosXml;
+        for (int i = 0; i < xmlFiltro.size(); i++) {
+            if (xmlFiltro.get(i).getDebe_haber() == 0) {
+                XmlDatos separadorXml = new XmlDatos();
+                separadorXml.setFolioInterno(xmlFiltro.get(i).getFolioInterno());
+                separadorXml.setFolioFiscal(xmlFiltro.get(i).getFolioFiscal());
+                separadorXml.setProveedor(xmlFiltro.get(i).getProveedor());
+                separadorXml.setRfc(xmlFiltro.get(i).getRfc());
+                separadorXml.setConceptoXml(xmlFiltro.get(i).getConceptoXml());
+                separadorXml.setBaseCero(xmlFiltro.get(i).getBaseCero());
+                separadorXml.setBase16(xmlFiltro.get(i).getBase16());
+                separadorXml.setRetencionCuatro(xmlFiltro.get(i).getRetencionCuatro());
+                separadorXml.setRetencionDiez(xmlFiltro.get(i).getRetencionDiez());
+                separadorXml.setRetencion1016(xmlFiltro.get(i).getRetencion1016());
+                separadorXml.setCuotaCompensatoria(xmlFiltro.get(i).getCuotaCompensatoria());
+                separadorXml.setIva(xmlFiltro.get(i).getIva());
+                separadorXml.setTotal(xmlFiltro.get(i).getTotal());
+                separadorXml.setCuenta(xmlFiltro.get(i).getCuenta());
+                separadorXml.setFechaPago(xmlFiltro.get(i).getFechaPago());
+                separadorXml.setFechaFactura(xmlFiltro.get(i).getFechaFactura());
+                separadorXml.setFormaPago(xmlFiltro.get(i).getFormaPago());
+                separadorXml.setTipoPoliza(xmlFiltro.get(i).getTipoPoliza());
+                separadorXml.setNumeroPoliza(xmlFiltro.get(i).getNumeroPoliza());
+                separadorXml.setRelacion(xmlFiltro.get(i).getRelacion());
+                separadorXml.setIdDoctoDig(xmlFiltro.get(i).getIdDoctoDig());
+                separadorXml.setNombreArchivoXml(xmlFiltro.get(i).getNombreArchivoXml());
+                separadorXml.setCuentaCoi(xmlFiltro.get(i).getCuentaCoi());
+                separadorXml.setMontoMov(xmlFiltro.get(i).getMontoMov());
+                separadorXml.setDato0(xmlFiltro.get(i).getDato0());
+                separadorXml.setDato16(xmlFiltro.get(i).getDato16());
+                separadorXml.setConXml(xmlFiltro.get(i).getConXml());
+                separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
+                llenarDatosTabla.add(separadorXml);
+            }
+        }
+
         Object[][] myData = new Object[llenarDatosTabla.size()][21];
+        //Antes de aqui
         //Datos para los totales
         base_0 = 0;
         base_16 = 0;
@@ -1744,14 +1816,13 @@ public class jfGlobal extends javax.swing.JFrame {
         String fechaPago = "";
 
         double do_text1, do_text2, do_text3, do_text4, do_text5, do_text6, do_text7, do_text8;
-
+        //has aqui
         //Solicitud datos BD
         if (!llenarDatosTabla.isEmpty()) {
             //llenando la tabla de la info
+
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
-                if (llenarDatosTabla.get(i).getDebe_haber() != 0) {
-                    continue;
-                }
+
                 String string = llenarDatosTabla.get(i).getFechaFactura();
                 if (!"".equals(string)) {
                     String[] parts = string.split("T");
@@ -2666,7 +2737,7 @@ public class jfGlobal extends javax.swing.JFrame {
     ################FINALIZA###################
     Funciones: AUXILIAR IVA ACRED bateria 14:43 15:03 (con musica)
      */
-    //INICIALIZAR DENTRO DE 100% ACRED PARA TOMAR LA MISMA LISTA DE VALORES
+    //B10
     private void inicializarTablaValor_Cero(List<XmlDatos> listaDatosXml) {
         lbSinRegistros_0.setVisible(false);
         tableAct0.removeAll();
@@ -2675,70 +2746,88 @@ public class jfGlobal extends javax.swing.JFrame {
         double do_text1, do_text8;
         String dateFormat = "";
         String fechaPago = "";
-        List<XmlDatos> llenarDatosTabla = new ArrayList<>();
+
         String[] titulos = {"Num.Factura", "Fecha Factura", "UUID", "Cliente", "RFC", "Concepto", "Base 0%", "Total Cobrado", "Documento de Cobro", "Fecha de cobro",
             "Cuenta De Banco", "Forma de Cobro", "Cruce Bancario"};
+        List<XmlDatos> llenarDatosTabla = new ArrayList<>();
+        List<XmlDatos> xmlFiltro = listaDatosXml;
+        for (int i = 0; i < xmlFiltro.size(); i++) {
+            if (xmlFiltro.get(i).getDato0() == 1 && ("1".equals(xmlFiltro.get(i).getConXml()))) {
+                XmlDatos separadorXml = new XmlDatos();
+                separadorXml.setFolioInterno(xmlFiltro.get(i).getFolioInterno());
+                separadorXml.setFolioFiscal(xmlFiltro.get(i).getFolioFiscal());
+                separadorXml.setProveedor(xmlFiltro.get(i).getProveedor());
+                separadorXml.setRfc(xmlFiltro.get(i).getRfc());
+                separadorXml.setConceptoXml(xmlFiltro.get(i).getConceptoXml());
+                separadorXml.setBaseCero(xmlFiltro.get(i).getBaseCero());
+                separadorXml.setTotal(xmlFiltro.get(i).getTotal());
+                separadorXml.setCuenta(xmlFiltro.get(i).getCuenta());
+                separadorXml.setFechaPago(xmlFiltro.get(i).getFechaPago());
+                separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
+                separadorXml.setFechaFactura(xmlFiltro.get(i).getFechaFactura());
+                separadorXml.setFormaPago(xmlFiltro.get(i).getFormaPago());
+                separadorXml.setConXml(xmlFiltro.get(i).getConXml());
+                llenarDatosTabla.add(separadorXml);
 
-        llenarDatosTabla = listaDatosXml;
+            }
+        }
+
         Object[][] myData = new Object[llenarDatosTabla.size()][13];
         //Solicitud datos BD
 
         if (!llenarDatosTabla.isEmpty()) {
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
                 //Pasarse directo a base 16
-                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (llenarDatosTabla.get(i).getDato0() == 1)) {
+                String string = llenarDatosTabla.get(i).getFechaFactura();
+                if (!"".equals(string)) {
+                    String[] parts = string.split("T");
+                    String part1 = parts[0];
 
-                    String string = llenarDatosTabla.get(i).getFechaFactura();
-                    if (!"".equals(string)) {
-                        String[] parts = string.split("T");
-                        String part1 = parts[0];
-
-                        //No se estan cargando todos los datos
-                        try {
-                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                            dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
-                        } catch (ParseException ex) {
-                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                    //No se estan cargando todos los datos
                     try {
-                        //la fecha puede tener un problema
-                        if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
-                            Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
-                            fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
-                        }
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                        dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                     } catch (ParseException ex) {
                         Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
-
+                    }
+                }
+                try {
+                    //la fecha puede tener un problema
+                    if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
+                        Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
+                        fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
                     }
 
-                    myData[i][0] = llenarDatosTabla.get(i).getNumeroFactura();
-                    myData[i][1] = dateFormat;
-                    myData[i][2] = llenarDatosTabla.get(i).getFolioFiscal();
-                    //Verificar info
-                    myData[i][3] = llenarDatosTabla.get(i).getProveedor();
-                    myData[i][4] = llenarDatosTabla.get(i).getRfc();
-                    myData[i][5] = llenarDatosTabla.get(i).getConceptoXml();
-                    //Arriba ok
-                    myData[i][6] = llenarDatosTabla.get(i).getBaseCero();
-                    myData[i][7] = llenarDatosTabla.get(i).getTotal();
-                    myData[i][8] = llenarDatosTabla.get(i).getNumeroFactura();
-                    myData[i][9] = fechaPago;
-                    myData[i][10] = llenarDatosTabla.get(i).getCuenta();
-                    myData[i][11] = llenarDatosTabla.get(i).getFormaPago();
-                    myData[i][12] = "";
-
-                    try {
-                        do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
-
-                    } catch (NullPointerException e) {
-                        do_text1 = 0;
-                    }
-                    base_0 += do_text1;
+                } catch (ParseException ex) {
+                    Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
 
                 }
+
+                myData[i][0] = llenarDatosTabla.get(i).getNumeroFactura();
+                myData[i][1] = dateFormat;
+                myData[i][2] = llenarDatosTabla.get(i).getFolioFiscal();
+                //Verificar info
+                myData[i][3] = llenarDatosTabla.get(i).getProveedor();
+                myData[i][4] = llenarDatosTabla.get(i).getRfc();
+                myData[i][5] = llenarDatosTabla.get(i).getConceptoXml();
+                //Arriba ok
+                myData[i][6] = llenarDatosTabla.get(i).getBaseCero();
+                myData[i][7] = llenarDatosTabla.get(i).getTotal();
+                myData[i][8] = llenarDatosTabla.get(i).getNumeroFactura();
+                myData[i][9] = fechaPago;
+                myData[i][10] = llenarDatosTabla.get(i).getCuenta();
+                myData[i][11] = llenarDatosTabla.get(i).getFormaPago();
+                myData[i][12] = "";
+
+                try {
+                    do_text1 = (llenarDatosTabla.get(i).getBaseCero().equals("") || llenarDatosTabla.get(i).getBaseCero().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
+
+                } catch (NullPointerException e) {
+                    do_text1 = 0;
+                }
+                base_0 += do_text1;
+
                 //FIN IF
             }
 
@@ -2838,6 +2927,7 @@ public class jfGlobal extends javax.swing.JFrame {
         }
     }
 
+    //B16
     private void inicializarTablaValor_16(List<XmlDatos> listaDatosXml) {
         lbSinRegistros_0.setVisible(false);
         tableAct0.removeAll();
@@ -2854,111 +2944,132 @@ public class jfGlobal extends javax.swing.JFrame {
             "Iva causado", "Total", "Total Cobrado", "Documento de Cobro", "Fecha de cobro",
             "Cuenta De Banco", "Forma de Cobro", "Cruce Bancario"};
 
-        List<XmlDatos> llenarDatosTabla = listaDatosXml;
+        List<XmlDatos> llenarDatosTabla = new ArrayList<>();
+        List<XmlDatos> xmlFiltro = listaDatosXml;
+        for (int i = 0; i < xmlFiltro.size(); i++) {
+            if (xmlFiltro.get(i).getDato16() == 1 && ("1".equals(xmlFiltro.get(i).getConXml()))) {
+                XmlDatos separadorXml = new XmlDatos();
+                separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
+                separadorXml.setFechaFactura(xmlFiltro.get(i).getFechaFactura());
+                separadorXml.setFolioInterno(xmlFiltro.get(i).getFolioInterno());
+                separadorXml.setFolioFiscal(xmlFiltro.get(i).getFolioFiscal());
+                separadorXml.setProveedor(xmlFiltro.get(i).getProveedor());
+                separadorXml.setRfc(xmlFiltro.get(i).getRfc());
+                separadorXml.setConceptoXml(xmlFiltro.get(i).getConceptoXml());
+                separadorXml.setBase16(xmlFiltro.get(i).getBase16());
+                separadorXml.setIva(xmlFiltro.get(i).getIva());
+                separadorXml.setTotal(xmlFiltro.get(i).getTotal());
+                separadorXml.setFechaPago(xmlFiltro.get(i).getFechaPago());
+                separadorXml.setCuenta(xmlFiltro.get(i).getCuenta());
+                separadorXml.setFormaPago(xmlFiltro.get(i).getFormaPago());
+                separadorXml.setConXml(xmlFiltro.get(i).getConXml());
+                llenarDatosTabla.add(separadorXml);
+
+            }
+        }
         Object[][] myData = new Object[llenarDatosTabla.size()][15];
         //Solicitud datos BD
 
         if (!llenarDatosTabla.isEmpty()) {
             for (int i = 0; i < llenarDatosTabla.size(); i++) {
                 //Pasarse directo a base 16
-                if (("1".equals(llenarDatosTabla.get(i).getConXml())) && (llenarDatosTabla.get(i).getDato16() == 1)) {
 
-                    String string = llenarDatosTabla.get(i).getFechaFactura();
-                    if (!"".equals(string)) {
-                        String[] parts = string.split("T");
-                        String part1 = parts[0];
+                String string = llenarDatosTabla.get(i).getFechaFactura();
+                if (!"".equals(string)) {
+                    String[] parts = string.split("T");
+                    String part1 = parts[0];
 
-                        //No se estan cargando todos los datos
-                        try {
-                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
-                            dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
-
-                        } catch (ParseException ex) {
-                            Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                    //No se estan cargando todos los datos
                     try {
-                        //la fecha puede tener un problema
-                        if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
-                            Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
-                            fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
-                        }
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(part1);
+                        dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(date);
 
                     } catch (ParseException ex) {
                         Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
-
-                    }
-
-                    /*
-                "Cruce Bancario"
-                     */
-                    double totalCobrado = 0;
-                    double base16 = 0;
-                    double ivaC = 0;
-                    if ((!"".equals(llenarDatosTabla.get(i).getBase16()))
-                            && ((!"".equals(llenarDatosTabla.get(i).getIva())))) {
-                        base16 = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
-                        ivaC = Double.parseDouble(llenarDatosTabla.get(i).getBaseCero());
-                        totalCobrado = base16 + ivaC;
-                    }
-
-                    //"Num.Factura",
-                    myData[i][0] = llenarDatosTabla.get(i).getNumeroFactura();
-                    // "Fecha Factura"
-                    myData[i][1] = dateFormat;
-                    // "UUID",
-                    myData[i][2] = llenarDatosTabla.get(i).getFolioFiscal();
-                    // "Cliente",
-                    myData[i][3] = llenarDatosTabla.get(i).getProveedor();
-                    // "RFC",
-                    myData[i][4] = llenarDatosTabla.get(i).getRfc();
-                    //"Concepto", 
-                    myData[i][5] = llenarDatosTabla.get(i).getConceptoXml();
-                    //"Base 16%",
-                    myData[i][6] = llenarDatosTabla.get(i).getBase16();
-                    //Iva Causado
-                    myData[i][7] = llenarDatosTabla.get(i).getIva();
-                    //Total
-                    myData[i][8] = llenarDatosTabla.get(i).getTotal();
-                    //Total cobrado
-                    myData[i][9] = String.valueOf(totalCobrado);
-                    //Documento de cobro
-                    myData[i][10] = llenarDatosTabla.get(i).getNumeroFactura();
-                    //Fecha de cobro
-                    myData[i][11] = fechaPago;
-                    //Cuenta de banco
-                    myData[i][12] = llenarDatosTabla.get(i).getCuenta();
-                    //Forma de cobro
-                    myData[i][13] = llenarDatosTabla.get(i).getFormaPago();
-                    myData[i][14] = "";
-
-                    if (i != 0) {
-                        try {
-                            do_text1 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
-
-                        } catch (NullPointerException e) {
-                            do_text1 = 0;
-                        }
-                        base_16 += do_text1;
-
-                        try {
-                            txtIva = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
-
-                        } catch (NullPointerException e) {
-                            txtIva = 0;
-                        }
-                        totalIva += txtIva;
-
-                        try {
-                            do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
-                        } catch (NullPointerException e) {
-                            do_text8 = 0;
-                        }
-                        total_devIva += do_text8;
-
-                        totalGlobal += base_16 + totalIva + total_devIva;
                     }
                 }
+                try {
+                    //la fecha puede tener un problema
+                    if (!"".equals(llenarDatosTabla.get(i).getFechaPago()) && !llenarDatosTabla.get(i).getFechaPago().isEmpty()) {
+                        Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(llenarDatosTabla.get(i).getFechaPago());
+                        fechaPago = new SimpleDateFormat("dd-MM-yyyy").format(date2);
+                    }
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(IvaAcredController.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+
+                /*
+                "Cruce Bancario"
+                 */
+                double totalCobrado = 0;
+                double base16 = 0;
+                double ivaC = 0;
+                if ((!"".equals(llenarDatosTabla.get(i).getBase16()))
+                        && ((!"".equals(llenarDatosTabla.get(i).getIva())))) {
+                    base16 = Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+                    ivaC = Double.parseDouble(llenarDatosTabla.get(i).getIva());
+                    totalCobrado = base16 + ivaC;
+                }
+
+                //"Num.Factura",
+                myData[i][0] = llenarDatosTabla.get(i).getNumeroFactura();
+                // "Fecha Factura"
+                myData[i][1] = dateFormat;
+                // "UUID",
+                myData[i][2] = llenarDatosTabla.get(i).getFolioFiscal();
+                // "Cliente",
+                myData[i][3] = llenarDatosTabla.get(i).getProveedor();
+                // "RFC",
+                myData[i][4] = llenarDatosTabla.get(i).getRfc();
+                //"Concepto", 
+                myData[i][5] = llenarDatosTabla.get(i).getConceptoXml();
+                //"Base 16%",
+                myData[i][6] = llenarDatosTabla.get(i).getBase16();
+                //Iva Causado
+                myData[i][7] = llenarDatosTabla.get(i).getIva();
+                //Total
+                myData[i][8] = llenarDatosTabla.get(i).getTotal();
+                //Total cobrado
+                myData[i][9] = String.valueOf(totalCobrado);
+                //Documento de cobro
+                myData[i][10] = llenarDatosTabla.get(i).getNumeroFactura();
+                //Fecha de cobro
+                myData[i][11] = fechaPago;
+                //Cuenta de banco
+                myData[i][12] = llenarDatosTabla.get(i).getCuenta();
+                //Forma de cobro
+                myData[i][13] = llenarDatosTabla.get(i).getFormaPago();
+                myData[i][14] = "";
+
+                if (i != 0) {
+                    try {
+                        do_text1 = (llenarDatosTabla.get(i).getBase16().equals("") || llenarDatosTabla.get(i).getBase16().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getBase16());
+
+                    } catch (NullPointerException e) {
+                        do_text1 = 0;
+                    }
+                    base_16 += do_text1;
+
+                    try {
+                        txtIva = (llenarDatosTabla.get(i).getIva().equals("") || llenarDatosTabla.get(i).getIva().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getIva());
+
+                    } catch (NullPointerException e) {
+                        txtIva = 0;
+                    }
+                    totalIva += txtIva;
+
+                    try {
+                        do_text8 = (llenarDatosTabla.get(i).getTotal().equals("") || llenarDatosTabla.get(i).getTotal().isEmpty()) ? 0 : Double.parseDouble(llenarDatosTabla.get(i).getTotal());
+                    } catch (NullPointerException e) {
+                        do_text8 = 0;
+                    }
+                    total_devIva += do_text8;
+
+                    totalGlobal += base_16 + totalIva + total_devIva;
+                }
+
                 //FIN IF
             }
 
@@ -3102,6 +3213,14 @@ public class jfGlobal extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Funcion que procesa los registros de tipo D y prepara una lista los envia
+     * a insertar. Retorna un boleano con el resultado
+     *
+     * @param tablaProcesar
+     * @param noEmpresa
+     * @return boolean
+     */
     private boolean procesarDevolucionOtros(JTable tablaProcesar, String noEmpresa) {
 
         List<PolizaProcesada> listaDatosProcesar = new ArrayList<>();
@@ -3219,8 +3338,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
                 String b = (String) tablaBorrar.getValueAt(i, j);
                 if (b != null) {
-                    System.out.println("b: " + b);
-                    System.out.println("celda con datos");
+
                     filaVacia = true;
                 }
                 try {

@@ -37,6 +37,7 @@ public class GeneradorExcel {
     private int numFilasTabla, numColumnasTabla, empezarLlenadoDesdeFila, ultimaFilaRegistros;
     private Workbook book;
     private JFileChooser seleccionar;
+    private String nombreEmpresa, direccion, rfc, otros;
 
     /**
      * Función que genera un archivo excel apartir de los datos recibidos por
@@ -48,12 +49,25 @@ public class GeneradorExcel {
      * @param periodo
      * @param anio
      * @param exitoExport
+     * @param empresa
      * @return boolean
      */
-    public boolean generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, boolean exitoExport) {
+    public boolean generarExcelCienIvaAcred(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, boolean exitoExport, String empresa) {
         seleccionar = new JFileChooser();
         boolean exito1, exito2, exito3 = false;
         exito1 = exitoExport;
+        int valorEmpresa=Integer.parseInt(empresa);
+        if(valorEmpresa==1){
+            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc="";
+            
+        }else if(valorEmpresa==2){
+            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc="R.F.C    AIC171129UAA";
+        }
+        
         File archivo;
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
@@ -116,7 +130,7 @@ public class GeneradorExcel {
             Cell celdaTitulo = filaTitulo.createCell(2);
             celdaTitulo.setCellStyle(tituloEstilo);
             //Titulo de la cabecera en Hoja de trabajo
-            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+            celdaTitulo.setCellValue(nombreEmpresa);
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
@@ -126,14 +140,14 @@ public class GeneradorExcel {
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
-            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            celdaSubTitulo.setCellValue(rfc);
             hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
-            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            celdaSubTituloDos.setCellValue(direccion);
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
 
             sbt3.setFont(fuenteSubtituloDos);
@@ -310,10 +324,22 @@ public class GeneradorExcel {
      * @param tituloPestaniaHoja
      * @param periodo
      * @param anio
+     * @param Empresa
      */
-    public void generarSoloExcelCienIva(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+    public void generarSoloExcelCienIva(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String Empresa) {
         seleccionar = new JFileChooser();
         File archivo;
+          int valorEmpresa=Integer.parseInt(Empresa);
+        if(valorEmpresa==1){
+            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc="";
+            
+        }else if(valorEmpresa==2){
+            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc="R.F.C    AIC171129UAA";
+        }
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
@@ -375,7 +401,7 @@ public class GeneradorExcel {
             Cell celdaTitulo = filaTitulo.createCell(2);
             celdaTitulo.setCellStyle(tituloEstilo);
             //Titulo de la cabecera en Hoja de trabajo
-            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+            celdaTitulo.setCellValue(nombreEmpresa);
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
@@ -385,14 +411,14 @@ public class GeneradorExcel {
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
-            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            celdaSubTitulo.setCellValue(rfc);
             hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
-            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            celdaSubTituloDos.setCellValue(direccion);
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
 
             sbt3.setFont(fuenteSubtituloDos);
@@ -555,9 +581,30 @@ public class GeneradorExcel {
         }
     }
 
-    public boolean generarSoloExcelOtros(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+    /**
+     *
+     * @param tablaCienPorciento
+     * @param tablaTotalCien
+     * @param tituloPestaniaHoja
+     * @param periodo
+     * @param anio
+     * @param empresa
+     * @return
+     */
+    public boolean generarSoloExcelOtros(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String empresa) {
         seleccionar = new JFileChooser();
         File archivo;
+          int valorEmpresa=Integer.parseInt(empresa);
+        if(valorEmpresa==1){
+            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc="";
+            
+        }else if(valorEmpresa==2){
+            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc="R.F.C    AIC171129UAA";
+        }
         boolean exito1 = false, exito2, exito3 = false;
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
@@ -620,7 +667,8 @@ public class GeneradorExcel {
             Cell celdaTitulo = filaTitulo.createCell(2);
             celdaTitulo.setCellStyle(tituloEstilo);
             //Titulo de la cabecera en Hoja de trabajo
-            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+
+            celdaTitulo.setCellValue(nombreEmpresa);
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
@@ -630,14 +678,15 @@ public class GeneradorExcel {
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
-            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            celdaSubTitulo.setCellValue(rfc);
             hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
-            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            //Privada 12 Oriente No. 107
+            celdaSubTituloDos.setCellValue(direccion);
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
 
             sbt3.setFont(fuenteSubtituloDos);
@@ -651,7 +700,7 @@ public class GeneradorExcel {
             Row fs4 = hoja.createRow(6);
             Cell cs4 = fs4.createCell(1);
             cs4.setCellStyle(sbt4);
-            cs4.setCellValue("IVA ACREDITABLE: " + periodo.toUpperCase() + " " + anio);
+            cs4.setCellValue(periodo.toUpperCase() + " " + anio);
             hoja.addMergedRegion(new CellRangeAddress(6, 6, 1, 4));
 
             String[] cabecera = new String[]{"", "Tipo Deposito", "RFC", "Nombre cliente o Tercero", "Concepto", "Factura", "Fecha de Factura", "UUID", "Base 0%", "Base 16%",
@@ -687,7 +736,7 @@ public class GeneradorExcel {
 
             //INICIA PARTE DATOS
             numFilasTabla = tablaCienPorciento.getRowCount();
-            numColumnasTabla = (tablaCienPorciento.getColumnCount());
+            numColumnasTabla = (tablaCienPorciento.getColumnCount()) - 4;
             //No.filas de cabecera+inicio de datos+1
             ultimaFilaRegistros = (tablaCienPorciento.getRowCount()) + 10;
             empezarLlenadoDesdeFila = 8;
@@ -789,7 +838,7 @@ public class GeneradorExcel {
                 hoja.autoSizeColumn(i);
             }
 
-              try {
+            try {
                 book.write(new FileOutputStream(archivo + ".xlsx"));
                 exito2 = true;
                 exito3 = (exito1 && exito2);
@@ -797,7 +846,7 @@ public class GeneradorExcel {
             } catch (IOException ex) {
                 Logger.getLogger(GeneradorExcel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
         return exito3;
     }
@@ -811,8 +860,9 @@ public class GeneradorExcel {
      * @param tituloPestaniaHoja
      * @param periodo
      * @param anio
+     * @param empresa
      */
-    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, JTable table_AuxIvaAcredTotal, String tituloPestaniaHoja, String periodo, String anio) {
+    public void generarExcelAuxiliarIvaAcred(JTable tableAuxIvaAcred1, JTable table_AuxIvaAcredTotal, String tituloPestaniaHoja, String periodo, String anio, String empresa) {
 
         seleccionar = new JFileChooser();
         File archivo;
@@ -1398,9 +1448,20 @@ public class GeneradorExcel {
         }
     }
 
-    public void generarSoloExcelActCero(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+    public void generarSoloExcelActCero(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String numEmpresa) {
         seleccionar = new JFileChooser();
         File archivo;
+          int valorEmpresa=Integer.parseInt(numEmpresa);
+        if(valorEmpresa==1){
+            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc="";
+            
+        }else if(valorEmpresa==2){
+            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc="R.F.C    AIC171129UAA";
+        }
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
@@ -1462,7 +1523,7 @@ public class GeneradorExcel {
             Cell celdaTitulo = filaTitulo.createCell(2);
             celdaTitulo.setCellStyle(tituloEstilo);
             //Titulo de la cabecera en Hoja de trabajo
-            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+            celdaTitulo.setCellValue(nombreEmpresa);
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
@@ -1472,14 +1533,14 @@ public class GeneradorExcel {
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
-            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            celdaSubTitulo.setCellValue(rfc);
             hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
-            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            celdaSubTituloDos.setCellValue(direccion);
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
 
             sbt3.setFont(fuenteSubtituloDos);
@@ -1636,9 +1697,20 @@ public class GeneradorExcel {
         }
     }
 
-    public void generarSoloExcelAct16(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio) {
+    public void generarSoloExcelAct16(JTable tablaCienPorciento, JTable tablaTotalCien, String tituloPestaniaHoja, String periodo, String anio, String numEmpresa) {
         seleccionar = new JFileChooser();
         File archivo;
+          int valorEmpresa=Integer.parseInt(numEmpresa);
+        if(valorEmpresa==1){
+            nombreEmpresa="ASOCIACIÓN DE SORGEROS DE TEHUACAN TIERRA DE DIOSES, S.A. DE C.V.";
+            direccion="PRIVADA 12 ORIENTE NO. 107, FRANCISCO SARABIA, TEHUACAN, PUEBLA";
+            rfc="";
+            
+        }else if(valorEmpresa==2){
+            nombreEmpresa="AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.";
+            direccion="CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970";
+            rfc="R.F.C    AIC171129UAA";
+        }
         if (seleccionar.showDialog(null, "Exportador Excel") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
 
@@ -1700,7 +1772,7 @@ public class GeneradorExcel {
             Cell celdaTitulo = filaTitulo.createCell(2);
             celdaTitulo.setCellStyle(tituloEstilo);
             //Titulo de la cabecera en Hoja de trabajo
-            celdaTitulo.setCellValue("AGROECOLOGIA INTENSIVA PARA EL CAMPO S.A. DE C.V.");
+            celdaTitulo.setCellValue(nombreEmpresa);
 
             //(int firstRow, int lastRow, int firstCol, int lastCol)
             //alcance del conbinado de celdas
@@ -1710,14 +1782,14 @@ public class GeneradorExcel {
             Row filaSubtitulo = hoja.createRow(2);
             Cell celdaSubTitulo = filaSubtitulo.createCell(2);
             celdaSubTitulo.setCellStyle(subTitulos);
-            celdaSubTitulo.setCellValue("R.F.C    AIC171129UAA");
+            celdaSubTitulo.setCellValue(rfc);
             hoja.addMergedRegion(new CellRangeAddress(2, 2, 2, 10));
 
             subTitulosDos.setFont(fuenteSubtituloDos);
             Row filaSubtituloDos = hoja.createRow(3);
             Cell celdaSubTituloDos = filaSubtituloDos.createCell(2);
             celdaSubTituloDos.setCellStyle(subTitulosDos);
-            celdaSubTituloDos.setCellValue("CARRETERA MEXICO OAXACA KM 97, JANTETELCO, JANTETELCO MORELOS, C.P. 62970");
+            celdaSubTituloDos.setCellValue(direccion);
             hoja.addMergedRegion(new CellRangeAddress(3, 3, 2, 10));
 
             sbt3.setFont(fuenteSubtituloDos);
@@ -1843,7 +1915,6 @@ public class GeneradorExcel {
 //            Cell st_6 = stx.createCell(12);
 //            st_6.setCellStyle(txtT2);
 //            st_6.setCellValue("Total Cuota Compensatoria");
-
             Cell st_7 = stx.createCell(8);
             st_7.setCellStyle(txtT2);
             st_7.setCellValue("Total IVA");
@@ -1851,8 +1922,8 @@ public class GeneradorExcel {
             Cell st_8 = stx.createCell(9);
             st_8.setCellStyle(txtT2);
             st_8.setCellValue("Total");
-            
-              Cell st_9 = stx.createCell(10);
+
+            Cell st_9 = stx.createCell(10);
             st_9.setCellStyle(txtT2);
             st_9.setCellValue("Total Cobrado");
 
