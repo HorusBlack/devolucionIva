@@ -10,7 +10,15 @@ package Models;
  * @author horusblack
  */
 public class PolizaProcesada {
-    private String numeroPoliza, tipoPoliza,montoMov,dh,periodo,ejercicio, numeroCuenta;
+    private String numeroPoliza, tipoPoliza,montoMov,dh,periodo,ejercicio, numeroCuenta, empresa;
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
 
     public String getNumeroPoliza() {
         return numeroPoliza;

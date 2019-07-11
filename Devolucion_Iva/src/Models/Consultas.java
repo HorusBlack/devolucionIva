@@ -28,6 +28,7 @@ public class Consultas {
     private ResultSet subResultset;
     private String query, subQuery;
     private PolizaDatos polizaDatos;
+    private PolizaProcesada polizaProcesada;
     private AuxIvaAcred auxIvaAcred;
     private RetencionIvaMes retencionIvaMes;
     private RetencionIvaPagadaMes retencionIvaPagadaMes;
@@ -39,9 +40,9 @@ public class Consultas {
      *
      * @param periodo int
      * @param ejercicio int
-     * @param numeroCuenta
-     * @param numeroEmpresa
-     * @param dataBase
+     * @param numeroCuenta String
+     * @param numeroEmpresa int
+     * @param dataBase String
      * @return List PolizaDatos
      */
     public List<PolizaDatos> polizasPeriodoEjercicio_Agroecologia(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
@@ -103,11 +104,13 @@ public class Consultas {
                                 polizaDatos.setConXml(2);
                                 polizaDatos.setNumCuentaCoi(numeroCuenta);
                                 polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
+                                polizaDatos.setEmpresa(String.valueOf(numeroEmpresa));
                                 if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ", ""))) {
                                     polizaDatos.setDebe_haber(1);
                                 } else {
                                     polizaDatos.setDebe_haber(0);
                                 }
+
                                 polizaDatosList.add(polizaDatos);
 
                             } while (subResultset.next());
@@ -154,11 +157,11 @@ public class Consultas {
      * Función que consulta las polizas de un ejercicio y periodo espefico en la
      * base de datos de Adsticsa
      *
-     * @param periodo
-     * @param ejercicio
-     * @param numeroCuentas
-     * @param numeroEmpresa
-     * @param dataBase
+     * @param periodo int
+     * @param ejercicio int
+     * @param numeroCuentas String[]
+     * @param numeroEmpresa int
+     * @param dataBase String
      * @return
      */
     public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas,
@@ -232,6 +235,7 @@ public class Consultas {
                                     } else {
                                         polizaDatos.setDebe_haber(0);
                                     }
+                                    polizaDatos.setEmpresa(String.valueOf(numeroEmpresa));
                                     polizaDatosList.add(polizaDatos);
                                 } while (subResultset.next());
                             }
@@ -270,6 +274,132 @@ public class Consultas {
             }
         }
         return polizaDatosList;
+    }
+
+    /**
+     * Funcion que obtiene dos listas de datos. Compara los valores y deja
+     * filtrar los diferentes
+     *
+     * @param listaPolizaDat PolizaDatos
+     * @param listaPolizasProcesadas PolizaProcesada
+     * @param periodo int
+     * @param ejercicio int
+     * @return List listaPolizaDat
+     */
+    public List<PolizaDatos> listaPolizasFiltradas(List<PolizaDatos> listaPolizaDat, List<PolizaProcesada> listaPolizasProcesadas, int periodo, int ejercicio) {
+        List<PolizaDatos> listaPolizasFiltradas = new ArrayList<>();
+
+//        String a = "a";
+//        String b = "a";
+//        String s = "d";
+//        String d = "d";
+//        int x = 1;
+//        int y = 1;
+//        if (!(a.equals(b)) || !(a.equals(b)) || !(s.equals(d)) && (x != y)) {
+//            System.out.println("No es el mismo objeto");
+//        } else {
+//            System.out.println("Es el mismo objeto");
+//        }
+        //OR, con remplace
+        //Existen polizas para filtrar
+        if (!listaPolizasProcesadas.isEmpty()) {
+            if (!listaPolizaDat.isEmpty()) {
+
+                for (int i = 0; i < listaPolizaDat.size(); i++) {
+                    String debe_haber = (listaPolizaDat.get(i).getDebe_haber() == 1) ? "H" : "D";
+                    for (int j = 0; j < listaPolizasProcesadas.size(); j++) {
+
+//                        if (!(listaPolizaDat.get(i).getNumeroPoliza().replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", "")))) {
+//                            System.out.println("OK");
+//                        } else {
+//                            System.out.println("NO");
+//                        }
+//                        System.out.println("pd num poli: " + listaPolizaDat.get(i).getNumeroPoliza());
+//                        System.out.println("pp num poli: " + listaPolizasProcesadas.get(j).getNumeroPoliza());
+//                        
+//                        if (!(listaPolizaDat.get(i).getNumeroPoliza().replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", "")))) {
+//                            System.out.println("OK");
+//                        } else {
+//                            System.out.println("NO");
+//                        }
+//                        System.out.println("pd num poli: " + listaPolizaDat.get(i).getNumeroPoliza());
+//                        System.out.println("pp num poli: " + listaPolizasProcesadas.get(j).getNumeroPoliza());
+                        //si no existe en los registrados
+                        //SI JALA ASI
+//                        System.out.println("\n numero polizas");
+//                        int pd=Integer.parseInt(listaPolizaDat.get(i).getNumeroPoliza().replace(" ", ""));
+//                        int pp=Integer.parseInt(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", ""));
+//                        
+//                        System.out.println("pd num poli:" + pd);
+//                        System.out.println("pp num poli:" + pp);
+//                        if(pp!=pd){
+//                            System.out.println("OK");
+//                        }else{
+//                            System.out.println("NO");
+//                        }
+                        //Tambien jala
+//                        if (!(listaPolizaDat.get(i).getTipoPoliza().replace(" ", "").equals(listaPolizasProcesadas.get(j).getTipoPoliza().replace(" ", "")))) {
+//                            System.out.println("OK");
+//                        } else {
+//                            System.out.println("NO");
+//                        }
+//                        System.out.println("pd tipo poli: " + listaPolizaDat.get(i).getTipoPoliza());
+//                        System.out.println("pp tipo poli: " + listaPolizasProcesadas.get(j).getTipoPoliza());
+//                        
+//                        System.out.println("pd tipo poli: " + listaPolizaDat.get(i).getTipoPoliza());
+//                        System.out.println("pp tipo poli: " + listaPolizasProcesadas.get(j).getTipoPoliza());
+//
+//                        System.out.println("pd monto mov: " + listaPolizaDat.get(i).getMontoMov());
+//                        System.out.println("pp monto mov: " + listaPolizasProcesadas.get(j).getMontoMov());
+//                        
+//                        //CUENTA esta mal representada
+//                        System.out.println("pd num cuenta: " + listaPolizaDat.get(i).getNumCuentaCoi());
+//                        System.out.println("pp num cuenta: " + listaPolizasProcesadas.get(j).getNumeroCuenta());
+//
+//                        System.out.println("pd dh: " + debe_haber);
+//                        System.out.println("pp dh: " + listaPolizasProcesadas.get(j).getDh());
+//
+//                        System.out.println("pd ejercicio: " + ejercicio);
+//                        System.out.println("pp ejercicio: " + listaPolizasProcesadas.get(j).getEjercicio());
+                        try {
+                            //PURO NULL POINTER
+                            //SEGUIR CHECANDO POR UE NO PASA. 
+                            if ((!(listaPolizaDat.get(i).getNumeroPoliza()).replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", "")))
+                                    || (!(listaPolizaDat.get(i).getTipoPoliza().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getTipoPoliza().replace(" ", "")))
+                                    || (Double.parseDouble(listaPolizaDat.get(i).getMontoMov().replace(" ", "")) != Double.parseDouble(listaPolizasProcesadas.get(j).getMontoMov().replace(" ", "")))
+                                    || (!(listaPolizaDat.get(i).getEmpresa().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getEmpresa().replace(" ", "")))
+                                    || (!(listaPolizaDat.get(i).getNumCuentaCoi().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getNumeroCuenta().replace(" ", "")))
+                                    || (!(debe_haber).equals(listaPolizasProcesadas.get(j).getDh().replace(" ", "")))
+                                    || (!(String.valueOf(periodo).replace(" ", "")).equals(listaPolizasProcesadas.get(j).getPeriodo().replace(" ", "")))
+                                    || (!(String.valueOf(ejercicio).replace(" ", "")).equals(listaPolizasProcesadas.get(j).getEjercicio().replace(" ", "")))) {
+                                polizaDatos = new PolizaDatos();
+                                polizaDatos.setIdDoctodig(listaPolizaDat.get(i).getIdDoctodig());
+                                polizaDatos.setRutaXml(listaPolizaDat.get(i).getRutaXml());
+                                polizaDatos.setNombreXml(listaPolizaDat.get(i).getNombreXml());
+                                polizaDatos.setTipoPoliza(listaPolizaDat.get(i).getTipoPoliza());
+                                polizaDatos.setNumeroPoliza(listaPolizaDat.get(i).getNumeroPoliza());
+                                polizaDatos.setEmpresa(listaPolizaDat.get(i).getEmpresa());
+                                polizaDatos.setFechaPago(listaPolizaDat.get(i).getFechaPago());
+                                polizaDatos.setCuenta(listaPolizaDat.get(i).getCuenta());
+                                polizaDatos.setNumCuentaCoi(listaPolizaDat.get(i).getNumCuentaCoi());
+                                polizaDatos.setConXml(listaPolizaDat.get(i).getConXml());
+                                polizaDatos.setMontoMov(listaPolizaDat.get(i).getMontoMov());
+                                polizaDatos.setDebe_haber(listaPolizaDat.get(i).getDebe_haber());
+                                listaPolizasFiltradas.add(polizaDatos);
+                                System.out.println("Valor Diferente ");
+                            }
+                        } catch (NullPointerException e) {
+                            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+                        }
+
+                    }
+                }
+            }
+        } else {
+            listaPolizasFiltradas = listaPolizaDat;
+        }
+
+        return listaPolizasFiltradas;
     }
 
     /**
@@ -472,7 +602,7 @@ public class Consultas {
      * Metodo que consulta todos los conceptos Relación de actividades de la
      * Base de datos
      *
-     * @param dataBase
+     * @param dataBase String
      * @return
      */
     public List<String> consultarConceptosRelacion(String dataBase) {
@@ -504,8 +634,8 @@ public class Consultas {
     /**
      * Funcion qu consulta y obtiene la relacion con actividad de la BD
      *
-     * @param dataBase
-     * @param RFC
+     * @param dataBase String
+     * @param RFC String
      * @return String
      */
     public String consultarRelacionActividad(String dataBase, String RFC) {
@@ -534,15 +664,15 @@ public class Consultas {
     /**
      * Función para obtener el nombre de la cuenta
      *
-     * @param dataBase
-     * @param coiDb
-     * @param auxDb
-     * @param ctaDb
-     * @param noCuenta
-     * @param periodo
-     * @param ejercicio
-     * @param tipoPoli
-     * @param numPoliza
+     * @param dataBase String
+     * @param coiDb String
+     * @param auxDb String
+     * @param ctaDb String
+     * @param noCuenta String
+     * @param periodo String
+     * @param ejercicio String
+     * @param tipoPoli String
+     * @param numPoliza String
      * @return
      */
     private String consultaNombreCuenta(String dataBase, String coiDb, String auxDb, String ctaDb,
@@ -577,13 +707,13 @@ public class Consultas {
      * Funcion que consulta un no. de poliza existente segun una tabla, periodo
      * y anio
      *
-     * @param db
-     * @param coiDb
-     * @param tableCuenta
-     * @param tableSaldos
-     * @param tableAuxiliar
-     * @param numPeriodo
-     * @param numCuenta
+     * @param db String
+     * @param coiDb String
+     * @param tableCuenta String
+     * @param tableSaldos String
+     * @param tableAuxiliar String
+     * @param numPeriodo String
+     * @param numCuenta String
      * @return
      */
     private List<PolizaDatos> consultarPolizasUnicas(String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta) {
@@ -617,6 +747,45 @@ public class Consultas {
     }
 
     /**
+     * Funcion que consulta y retorna una lista de todas las polizas procesadas
+     * disponibles en la BD
+     *
+     * @param db String
+     * @return List PolizaProcesada
+     */
+    public List<PolizaProcesada> listaPolizasProcesadas(String db) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+
+        List<PolizaProcesada> lpp = new ArrayList<>();
+        try {
+            conexion = connection.Entrar(db);
+            query = "SELECT * FROM [dbo].[PARTIDAS_PROCESADAS]";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+
+            while (resultSet.next()) {
+                polizaProcesada = new PolizaProcesada();
+                polizaProcesada.setNumeroPoliza(resultSet.getString("NUM_POLIZ"));
+                polizaProcesada.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                polizaProcesada.setMontoMov(resultSet.getString("MONTO_MOV"));
+                polizaProcesada.setDh(resultSet.getString("DEBE_HABER"));
+                polizaProcesada.setEmpresa(resultSet.getString("EMPRESA"));
+                polizaProcesada.setPeriodo(resultSet.getString("PERIODO"));
+                polizaProcesada.setEjercicio(resultSet.getString("EJERCICIO"));
+                polizaProcesada.setNumeroCuenta(resultSet.getString("CUENTA"));
+                lpp.add(polizaProcesada);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return lpp;
+    }
+
+    /**
      * Funcion que retorna el ultimo registro de los rfc relacionados a las
      * actividades
      *
@@ -646,16 +815,17 @@ public class Consultas {
         return ultimoID;
 
     }
-    
+
     /*
     *Generar 2 listas una con todas las partidas procesadas y otra con las polizas disponibles (con o sin xml)
+    
     *Despues generar una nueva lista <PolizaDatos>, la cual se llanara UNICAMENTE con los registros que pasen de una comparacion
     entre todos los campos de existentes en PolizasProcesadas y Las PolizasDisponibles
+    
     *Pasar solo los registros que que sean DIFERENTES
-    *Crear Modelo para PolizasProcesadas
-    */
     
-    
+    *Crear Modelo para PolizasProcesadas --
+     */
     /**
      * Funcion que retorna una lista de RelacionActividadess
      *

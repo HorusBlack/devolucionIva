@@ -484,32 +484,65 @@ public class IvaAcredController {
      * Funcion que obtiene un Periodo [int] y un ejercicio [int] y solicitar los
      * datos a la base.
      *
-     * @param periodo
-     * @param ejercicio
-     * @param numEmpresa
+     * @param periodo int
+     * @param ejercicio int
+     * @param numEmpresa int
+     * @param tipoSolicitud boolean
      * @return List PolizaDatos
      */
-    public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio, int numEmpresa) {
+    public List<PolizaDatos> solicitudPolizaDatos(int periodo, int ejercicio, int numEmpresa, boolean tipoSolicitud) {
         //CHECAR EL PROCESO POR SECCIONES[PRIMERO BASE DE DATOS]
         consultas = new Consultas();
         polizaDat = new ArrayList<>();
         periodo += 1;
         String base_empresa = "";
         String cuentaBanco = "";
-        if (numEmpresa == 0) {
-            base_empresa = COI_ADSTICSA;
-            String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
-            if (periodo > 0 && ejercicio >= 2017) {
-                polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
-                        (numEmpresa + 1), base_empresa);
+        base_empresa = COI_ADSTICSA;
+        String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
+        //Todas
+        if (!tipoSolicitud) {
+            switch (numEmpresa) {
+                case 0:
+                    if (periodo > 0 && ejercicio >= 2017) {
+                        polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
+                                (numEmpresa + 1), base_empresa);
+                    }
+                    break;
+                case 1:
+                    base_empresa = COI_AGRO;
+                    cuentaBanco = CUENTA_BANCOMER_AGRO;
+                    if (periodo > 0 && ejercicio >= 2017) {
+                        //LLenar con la información de la base de datos
+                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
+                    }
+                    break;
+                default:
+                    break;
             }
-        } else if (numEmpresa == 1) {
-            base_empresa = COI_AGRO;
-            cuentaBanco = CUENTA_BANCOMER_AGRO;
-            if (periodo > 0 && ejercicio >= 2017) {
-                //LLenar con la información de la base de datos
-                polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
+        } else {
+            switch (numEmpresa) {
+                case 0:
+                    if (periodo > 0 && ejercicio >= 2017) {
+                        List<PolizaDatos> listPolizaGeneral = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
+                                (numEmpresa + 1), base_empresa);
+                        List<PolizaProcesada> listPolizaProcesadaGeneral = consultas.listaPolizasProcesadas("DOCUMENTOS_COI");
+                        polizaDat = consultas.listaPolizasFiltradas(listPolizaGeneral, listPolizaProcesadaGeneral, periodo, ejercicio);
+                    }
+                    break;
+                case 1:
+                    base_empresa = COI_AGRO;
+                    cuentaBanco = CUENTA_BANCOMER_AGRO;
+                    if (periodo > 0 && ejercicio >= 2017) {
+                        //LLenar con la información de la base de datos
+                        List<PolizaDatos> listPolizaGeneral = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
+                        List<PolizaProcesada> listPolizaProcesadaGeneral = consultas.listaPolizasProcesadas("DOCUMENTOS_COI");
+                        polizaDat = consultas.listaPolizasFiltradas(listPolizaGeneral, listPolizaProcesadaGeneral, periodo, ejercicio);
+                    }
+                    break;
+                default:
+                    break;
             }
+
         }
         //Intentar mientras solo con agro, despues con adstisa (lo de las cuentas)
         //A partir de que mes y año
@@ -578,7 +611,7 @@ public class IvaAcredController {
         boolean exito = false;
         consultas = new Consultas();
         if (!datosPolizaProcesada.isEmpty()) {
-                exito = consultas.insertarPolizasProcesadas(datosPolizaProcesada, ne);
+            exito = consultas.insertarPolizasProcesadas(datosPolizaProcesada, ne);
         }
         return exito;
     }

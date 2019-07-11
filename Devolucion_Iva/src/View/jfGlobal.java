@@ -1119,6 +1119,8 @@ public class jfGlobal extends javax.swing.JFrame {
         //XML DATOS
         numEmpresa = combo_Empresa.getSelectedIndex();
         //0 y 1
+        boolean tipoSolicitudPolizas = chbox_sinProcesar.isSelected();
+        
         int intNumMes = calendarMes.getMonth();
         int intNumYear = calendarAnio.getYear();
         String[] numeroMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
@@ -1130,9 +1132,9 @@ public class jfGlobal extends javax.swing.JFrame {
         periodo = nombreDelMes[intNumMes];
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
-        //Inicializar Tabla 100 Iva Acred
+        //Inicializar Tabla 100 Iva Acred    
         JOptionPane.showMessageDialog(null, "El proceso puede tardar unos momentos. \n Por favor espere...");
-        inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa);
+        inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa, tipoSolicitudPolizas);
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, totalAuxCred);
@@ -1141,6 +1143,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Inicializar Tabla RetencionIvaMesPagadas
         //inicializarTablaRetencionIvaMesPagadas(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         JOptionPane.showMessageDialog(null, "Proceso terminado");
+
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
@@ -1395,7 +1398,7 @@ public class jfGlobal extends javax.swing.JFrame {
      * @param anio
      * @param numEmpresa
      */
-    private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa) {
+    private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa, boolean tipoSolicitud) {
         ivaAcred = new IvaAcredController();
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
@@ -1407,7 +1410,7 @@ public class jfGlobal extends javax.swing.JFrame {
         empresaConstante = numEmpresa + 1;
 
         //retornando una lista de poliza de datos
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa);
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa, tipoSolicitud);
 
         if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
