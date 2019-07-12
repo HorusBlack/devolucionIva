@@ -501,15 +501,13 @@ public class IvaAcredController {
         String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
         //Todas
         if (tipoSolicitud) {
+            //SIn procesar
             switch (numEmpresa) {
                 case 0:
                     System.out.println("sin procesar asct");
                     if (periodo > 0 && ejercicio >= 2017) {
-                        List<PolizaDatos> listPolizaGeneral = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
-                                (numEmpresa + 1), base_empresa);
-                        List<PolizaProcesada> listPolizaProcesadaGeneral = consultas.listaPolizasProcesadas("DOCUMENTOS_COI");
-                        polizaDat = consultas.listaPolizasFiltradas(listPolizaGeneral, listPolizaProcesadaGeneral, periodo, ejercicio);
-                         System.out.println("tamaño poliza 0: "+polizaDat.size());
+                        polizaDat= consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
+                                (numEmpresa + 1), base_empresa, tipoSolicitud);
                     }
                     break;
                 case 1:
@@ -518,10 +516,7 @@ public class IvaAcredController {
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2017) {
                         //LLenar con la información de la base de datos
-                        List<PolizaDatos> listPolizaGeneral = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
-                        List<PolizaProcesada> listPolizaProcesadaGeneral = consultas.listaPolizasProcesadas("DOCUMENTOS_COI");
-                        polizaDat = consultas.listaPolizasFiltradas(listPolizaGeneral, listPolizaProcesadaGeneral, periodo, ejercicio);
-                            System.out.println("tamaño poliza 2: "+polizaDat.size());
+                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, tipoSolicitud);
                     }
                     break;
                 default:
@@ -529,14 +524,14 @@ public class IvaAcredController {
             }
 
         } else {
+            //Todas
             switch (numEmpresa) {
                 case 0:
                     System.out.println("todas asct");
                     if (periodo > 0 && ejercicio >= 2017) {
                         polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
-                                (numEmpresa + 1), base_empresa);
+                                (numEmpresa + 1), base_empresa, false);
                     }
-                     System.out.println("tamaño poliza 3: "+polizaDat.size());
                     break;
                 case 1:
                     System.out.println("todas agro");
@@ -544,8 +539,7 @@ public class IvaAcredController {
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2017) {
                         //LLenar con la información de la base de datos
-                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
-                         System.out.println("tamaño poliza 4: "+polizaDat.size());
+                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, false);
                     }
                     break;
                 default:

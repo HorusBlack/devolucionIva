@@ -1120,7 +1120,6 @@ public class jfGlobal extends javax.swing.JFrame {
         numEmpresa = combo_Empresa.getSelectedIndex();
         //0 y 1
         boolean tipoSolicitudPolizas = chbox_sinProcesar.isSelected();
-        System.out.println("1: "+tipoSolicitudPolizas);
         int intNumMes = calendarMes.getMonth();
         int intNumYear = calendarAnio.getYear();
         String[] numeroMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
@@ -1410,10 +1409,10 @@ public class jfGlobal extends javax.swing.JFrame {
         empresaConstante = numEmpresa + 1;
 
         //retornando una lista de poliza de datos
-        System.out.println("2: "+tipoSolicitud);
+        System.out.println("2: " + tipoSolicitud);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa, tipoSolicitud);
-        System.out.println("Tamaño lista poliza Datos: "+listPolizaDatos.size());
-        if (listPolizaDatos.isEmpty()) {
+        System.out.println("Tamaño lista poliza Datos: " + listPolizaDatos.size());
+        if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
             String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
                 "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",
@@ -1759,7 +1758,10 @@ public class jfGlobal extends javax.swing.JFrame {
                 inicializarTablaValor_Cero(llenarDatosTabla);
 
             } else {
-                JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
+                JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML por \nAlguna de las siguientes"
+                        + "razones: \n *No hay polizas sin procesar para este periodo.\n"
+                        + "*Sus permisos de acceso o la ruta de  los ficheros XML \na caducado. \n (Intente seleccionando"
+                        + " \"Buscar todos\"  de ser necesario).");
             }
         } else {
             JOptionPane.showMessageDialog(null, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
@@ -2093,7 +2095,10 @@ public class jfGlobal extends javax.swing.JFrame {
             inicializarTablaTotalOtros(base_0, base_16, totalIva, total_devIva, totalC);
             //borrarFilasNoSeleccionadas(tablaOtrosDepositos);
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML. \n Verifique sus permisos de acceso o la ruta de \n  los ficheros XML.");
+            JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML por \nAlguna de las siguientes"
+                        + "razones: \n *No hay polizas sin procesar para este periodo.\n"
+                        + "*Sus permisos de acceso o la ruta de  los ficheros XML \na caducado. \n (Intente seleccionando"
+                        + " \"Buscar todos\"  de ser necesario).");
         }
     }
 

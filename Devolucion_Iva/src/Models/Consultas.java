@@ -46,7 +46,7 @@ public class Consultas {
      * @return List PolizaDatos
      */
     public List<PolizaDatos> polizasPeriodoEjercicio_Agroecologia(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
-            String dataBase) {
+            String dataBase, boolean tipoSolicitud) {
         connection = new ConexionDB();
 
         //String[] parts = string.split("T");
@@ -65,7 +65,12 @@ public class Consultas {
         }
         String clave = "";
         //Lista de polizas
-        List<PolizaDatos> lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+        List<PolizaDatos> lpd = new ArrayList<>();
+        if (tipoSolicitud) {
+            lpd = this.consultarPolizasUnicasSinProcesar(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+        } else {
+            lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+        }
         //String numCuent
         String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
@@ -165,7 +170,7 @@ public class Consultas {
      * @return
      */
     public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas,
-            int numeroEmpresa, String dataBase) {
+            int numeroEmpresa, String dataBase, boolean tipoSolicitud) {
 
         connection = new ConexionDB();
         //String[] parts = string.split("T");
@@ -189,7 +194,15 @@ public class Consultas {
         //Consulto las cuentas
         for (int i = 0; i < numeroCuentas.length; i++) {
             System.out.println("Cuenta: " + numeroCuentas[i]);
-            List<PolizaDatos> lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuentas[i]);
+            List<PolizaDatos> lpd = new ArrayList<>();
+            if (tipoSolicitud) {
+                lpd = this.consultarPolizasUnicasSinProcesar(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuentas[i]);
+                System.out.println("Entrando: polizas procesadas");
+            } else {
+                System.out.println("Entrando: todas las polizas");
+                lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuentas[i]);
+            }
+
             //String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta
             try {
                 conexion = connection.Entrar(dataBase);
@@ -324,8 +337,8 @@ public class Consultas {
                                 diferente--;
                             }
                             if (diferente > 0) {
-                                
-                              PolizaDatos  polizaDat = new PolizaDatos();
+
+                                PolizaDatos polizaDat = new PolizaDatos();
                                 polizaDat.setIdDoctodig(listaPolizaDat.get(i).getIdDoctodig());
                                 polizaDat.setRutaXml(listaPolizaDat.get(i).getRutaXml());
                                 polizaDat.setNombreXml(listaPolizaDat.get(i).getNombreXml());
@@ -565,9 +578,9 @@ public class Consultas {
         List<String> listaRelacion = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
-            query = "SELECT [ID]\n"
-                    + " ,[CLAVE_CONCEPTO]\n"
-                    + " ,[DESCRIPCION]\n"
+            query = "SELECT [ID]n"
+                    + " ,[CLAVE_CONCEPTO]n"
+                    + " ,[DESCRIPCION]n"
                     + " FROM [" + dataBase + "].[dbo].[CONCEPTOS_RELACION]";
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
@@ -680,6 +693,45 @@ public class Consultas {
             query = "SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A "
                     + " JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA "
                     + " AND PERIODO IN (" + numPeriodo + "))  WHERE A.NUM_CTA >= '" + numCuenta + "' AND A.NUM_CTA <= '" + numCuenta + "' AND C.MONTOMOV!=0";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+
+            while (resultSet.next()) {
+                polizaDatos = new PolizaDatos();
+                polizaDatos.setNumeroPoliza(resultSet.getString("NUM_POLIZ"));
+                polizaDatos.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                lpd.add(polizaDatos);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return lpd;
+    }
+
+    /**
+     *
+     * @param db String
+     * @param coiDb String
+     * @param tableCuenta String
+     * @param tableSaldos String
+     * @param tableAuxiliar String
+     * @param numPeriodo String
+     * @param numCuenta String
+     * @return List PolizaDatos
+     */
+    private List<PolizaDatos> consultarPolizasUnicasSinProcesar(String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        List<PolizaDatos> lpd = new ArrayList<>();
+
+        try {
+            conexion = connection.Entrar(db);
+            query = "SELECT (CASE WHEN C.NUM_POLIZ IS NULL THEN 'N/D' ELSE C.NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A  JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA  AND PERIODO IN (" + numPeriodo + ")) LEFT JOIN [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS] P ON C.NUM_POLIZ = P.NUM_POLIZ AND C.TIPO_POLI = P.TIPO_POLI AND C.MONTOMOV = P.MONTO_MOV WHERE A.NUM_CTA >= '" + numCuenta + "' AND A.NUM_CTA <= '" + numCuenta + "' AND C.MONTOMOV!=0 AND (P.NUM_POLIZ IS NULL AND P.TIPO_POLI IS NULL AND P.MONTO_MOV IS NULL)";
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
 
