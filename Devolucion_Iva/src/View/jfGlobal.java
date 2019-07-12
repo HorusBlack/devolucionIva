@@ -120,7 +120,6 @@ public class jfGlobal extends javax.swing.JFrame {
         panel_CabecerAuxIva = new javax.swing.JPanel();
         lbT1 = new javax.swing.JLabel();
         lbT_mesAuxIvaAcred = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         panel_dataIvaAcred = new javax.swing.JPanel();
         panel_TablaIvaAcred = new javax.swing.JPanel();
         SpIva1 = new javax.swing.JScrollPane();
@@ -268,7 +267,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_FiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(combo_Empresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calendarAnio, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                    .addComponent(calendarAnio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(calendarMes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_FiltroLayout.createSequentialGroup()
@@ -522,9 +521,6 @@ public class jfGlobal extends javax.swing.JFrame {
 
         lbT_mesAuxIvaAcred.setFont(new java.awt.Font("Source Code Pro Medium", 1, 12)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Source Code Pro Medium", 1, 12)); // NOI18N
-        jLabel1.setText("CUENTA 1151-001-000-000");
-
         javax.swing.GroupLayout panel_CabecerAuxIvaLayout = new javax.swing.GroupLayout(panel_CabecerAuxIva);
         panel_CabecerAuxIva.setLayout(panel_CabecerAuxIvaLayout);
         panel_CabecerAuxIvaLayout.setHorizontalGroup(
@@ -533,9 +529,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panel_CabecerAuxIvaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbT1)
-                    .addComponent(lbT_mesAuxIvaAcred)
-                    .addComponent(jLabel1))
-                .addContainerGap(544, Short.MAX_VALUE))
+                    .addComponent(lbT_mesAuxIvaAcred))
+                .addContainerGap(655, Short.MAX_VALUE))
         );
         panel_CabecerAuxIvaLayout.setVerticalGroup(
             panel_CabecerAuxIvaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -544,8 +539,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addComponent(lbT1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbT_mesAuxIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         panel_dataIvaAcred.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -2718,6 +2712,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
 
             }
+            
             lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
         }
     }
@@ -3657,7 +3652,6 @@ public class jfGlobal extends javax.swing.JFrame {
     private javax.swing.JCheckBox chbox_excelOtros;
     private javax.swing.JCheckBox chbox_sinProcesar;
     private javax.swing.JComboBox<String> combo_Empresa;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -920,15 +920,6 @@ public class Consultas {
                         + " ,[EJERCICIO], [CUENTA] ,[PROCESADO]) VALUES (? ,? ,? ,? ,? ,? ,? ,?,?)";
 
                 ps = conexion.prepareStatement(queryPrepare);
-                /*
-                  polizaProcesada.setTipoPoliza(tablaCienIvaAcred.getValueAt(i, 18).toString());
-                polizaProcesada.setNumeroPoliza(tablaCienIvaAcred.getValueAt(i, 19).toString());
-                polizaProcesada.setMontoMov(tablaCienIvaAcred.getValueAt(i, 25).toString());
-                polizaProcesada.setDh("H");
-                polizaProcesada.setPeriodo(periodoConstante);
-                polizaProcesada.setEjercicio(anioConstante);
-                 */
-                //El periodo sale en 0 
                 ps.setString(1, datosPolizaProcesada.get(i).getNumeroPoliza());
                 ps.setString(2, datosPolizaProcesada.get(i).getTipoPoliza());
                 ps.setString(3, datosPolizaProcesada.get(i).getMontoMov());
@@ -940,6 +931,34 @@ public class Consultas {
                 ps.setInt(9, 1);
                 ps.executeUpdate();
             }
+            //POSIBLE ERROR EN PROGRESO
+            String queryDuplicados = "SELECT DISTINCT A.NUM_POLIZ, A.TIPO_POLI,A.MONTO_MOV,A.DEBE_HABER,A.EMPRESA,A.PERIODO,A.EJERCICIO,A.CUENTA, A.PROCESADO INTO  [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS]\n"
+                    + "      FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS] A\n"
+                    + " GROUP BY A.NUM_POLIZ, A.TIPO_POLI,A.MONTO_MOV,A.DEBE_HABER,A.EMPRESA,A.PERIODO,A.EJERCICIO,A.CUENTA, A.PROCESADO \n"
+                    + " HAVING COUNT(*) > 1";
+            ps = conexion.prepareStatement(queryDuplicados);
+            ps.executeUpdate();
+
+            String queryEliminarDuplicado = " DELETE [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS] WHERE NUM_POLIZ IN (SELECT pp.NUM_POLIZ\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND TIPO_POLI IN(SELECT pp.TIPO_POLI\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND MONTO_MOV IN (SELECT pp.MONTO_MOV\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND DEBE_HABER IN (SELECT pp.DEBE_HABER\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND EMPRESA IN (SELECT pp.EMPRESA\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND PERIODO IN (SELECT pp.PERIODO\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND EJERCICIO IN (SELECT pp.EJERCICIO\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp) AND CUENTA IN (SELECT pp.CUENTA\n"
+                    + "             FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS] pp)";
+
+            ps = conexion.prepareStatement(queryEliminarDuplicado);
+            ps.executeUpdate();
+
+            String queryRetornandoUnicos = " INSERT [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS] SELECT * FROM [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS]";
+            ps = conexion.prepareStatement(queryRetornandoUnicos);
+            ps.executeUpdate();
+
+            String queryEliminarTablaTemporal = "DROP TABLE  [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS_DUPLICADAS]";
+            ps = conexion.prepareStatement(queryEliminarTablaTemporal);
+            ps.executeUpdate();
             resultInsert = true;
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
