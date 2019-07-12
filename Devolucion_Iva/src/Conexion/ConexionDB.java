@@ -30,7 +30,6 @@ public class ConexionDB {
         } catch (SQLException | ClassNotFoundException e) {
             cn = null;
             JOptionPane.showMessageDialog(null, "No se pudo conectar con el servidor\n intentelo nuevamente por favor");
-            System.out.println("Error conexion: " + e);
         }
         return cn;
     }
@@ -39,7 +38,6 @@ public class ConexionDB {
         try {
             conex.close();
         } catch (SQLException e) {
-
             System.out.println("Error conexion: " + e);
         }
     }

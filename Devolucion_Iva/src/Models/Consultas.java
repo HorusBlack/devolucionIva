@@ -192,22 +192,17 @@ public class Consultas {
         ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
         Connection conexion = null;
         //Consulto las cuentas
-        for (int i = 0; i < numeroCuentas.length; i++) {
-            System.out.println("Cuenta: " + numeroCuentas[i]);
+        for (String numeroCuenta : numeroCuentas) {
             List<PolizaDatos> lpd = new ArrayList<>();
             if (tipoSolicitud) {
-                lpd = this.consultarPolizasUnicasSinProcesar(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuentas[i]);
-                System.out.println("Entrando: polizas procesadas");
+                lpd = this.consultarPolizasUnicasSinProcesar(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
             } else {
-                System.out.println("Entrando: todas las polizas");
-                lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuentas[i]);
+                lpd = this.consultarPolizasUnicas(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
             }
-
             //String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta
             try {
                 conexion = connection.Entrar(dataBase);
                 if (!lpd.isEmpty()) {
-
                     for (int x = 0; x < lpd.size(); x++) {
                         query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',"
                                 + "CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', aux.MONTOMOV, aux.DEBE_HABER "
@@ -232,16 +227,13 @@ public class Consultas {
                             subResultset = stmt.executeQuery(subQuery);
                             if (subResultset.next()) {
                                 do {
-
                                     polizaDatos = new PolizaDatos();
                                     polizaDatos.setTipoPoliza(subResultset.getString("TIPO_POLI"));
                                     polizaDatos.setNumeroPoliza(subResultset.getString("NUM_POLIZ"));
                                     polizaDatos.setFechaPago(subResultset.getString("FECHA POLIZA"));
-                                    polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
-                                            subFijoCuenta, numeroCuentas[i], String.valueOf(periodo), String.valueOf(ejercicio),
-                                            subResultset.getString("TIPO_POLI"), subResultset.getString("NUM_POLIZ")));
+                                    polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar, subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio), subResultset.getString("TIPO_POLI"), subResultset.getString("NUM_POLIZ")));
                                     polizaDatos.setConXml(2);
-                                    polizaDatos.setNumCuentaCoi(numeroCuentas[i]);
+                                    polizaDatos.setNumCuentaCoi(numeroCuenta);
                                     polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
                                     if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ", ""))) {
                                         polizaDatos.setDebe_haber(1);
@@ -254,7 +246,6 @@ public class Consultas {
                             }
                         } else {
                             do {
-
                                 polizaDatos = new PolizaDatos();
                                 polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
                                 polizaDatos.setRutaXml(resultSet.getString("RUTA"));
@@ -263,10 +254,8 @@ public class Consultas {
                                 polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
                                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
                                 polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
-                                polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar,
-                                        subFijoCuenta, numeroCuentas[i], String.valueOf(periodo), String.valueOf(ejercicio),
-                                        resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
-                                polizaDatos.setNumCuentaCoi(numeroCuentas[i]);
+                                polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar, subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio), resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
+                                polizaDatos.setNumCuentaCoi(numeroCuenta);
                                 polizaDatos.setConXml(1);
                                 polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
                                 if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ", ""))) {
@@ -279,8 +268,7 @@ public class Consultas {
                         }
                     }
                 }
-
-            } catch (SQLException | ClassNotFoundException ex) {
+            }catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 ConexionDB.Salir(conexion);
@@ -361,7 +349,6 @@ public class Consultas {
                 }
             }
         } else {
-            System.out.println("Entrando a polizas filtradas else");
             listaPolizasFiltradas = listaPolizaDat;
         }
 

@@ -504,14 +504,12 @@ public class IvaAcredController {
             //SIn procesar
             switch (numEmpresa) {
                 case 0:
-                    System.out.println("sin procesar asct");
                     if (periodo > 0 && ejercicio >= 2017) {
                         polizaDat= consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa, tipoSolicitud);
                     }
                     break;
                 case 1:
-                    System.out.println("sin procesar agro");
                     base_empresa = COI_AGRO;
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2017) {
@@ -527,14 +525,12 @@ public class IvaAcredController {
             //Todas
             switch (numEmpresa) {
                 case 0:
-                    System.out.println("todas asct");
                     if (periodo > 0 && ejercicio >= 2017) {
                         polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa, false);
                     }
                     break;
                 case 1:
-                    System.out.println("todas agro");
                     base_empresa = COI_AGRO;
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2017) {

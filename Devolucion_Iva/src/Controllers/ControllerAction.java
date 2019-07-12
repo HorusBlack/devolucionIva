@@ -11,9 +11,6 @@ import Models.RetencionIvaMes;
 import Models.RetencionIvaPagadaMes;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -126,8 +123,7 @@ public class ControllerAction {
      * @return boolean
      */
     public boolean actualizarRfcAsociado(String clave, int idRfcAsociado) {
-        System.out.println("clave: "+clave);
-        System.out.println("rfc: "+idRfcAsociado);
+     
         boolean exito;
         consultas = new Consultas();
         exito = consultas.actualizarRelacionActividad(clave, idRfcAsociado);
