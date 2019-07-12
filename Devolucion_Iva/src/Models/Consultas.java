@@ -289,104 +289,56 @@ public class Consultas {
     public List<PolizaDatos> listaPolizasFiltradas(List<PolizaDatos> listaPolizaDat, List<PolizaProcesada> listaPolizasProcesadas, int periodo, int ejercicio) {
         List<PolizaDatos> listaPolizasFiltradas = new ArrayList<>();
 
-//        String a = "a";
-//        String b = "a";
-//        String s = "d";
-//        String d = "d";
-//        int x = 1;
-//        int y = 1;
-//        if (!(a.equals(b)) || !(a.equals(b)) || !(s.equals(d)) && (x != y)) {
-//            System.out.println("No es el mismo objeto");
-//        } else {
-//            System.out.println("Es el mismo objeto");
-//        }
-        //OR, con remplace
-        //Existen polizas para filtrar
         if (!listaPolizasProcesadas.isEmpty()) {
             if (!listaPolizaDat.isEmpty()) {
 
                 for (int i = 0; i < listaPolizaDat.size(); i++) {
+                    int diferente = 8;
                     String debe_haber = (listaPolizaDat.get(i).getDebe_haber() == 1) ? "H" : "D";
                     for (int j = 0; j < listaPolizasProcesadas.size(); j++) {
 
-//                        if (!(listaPolizaDat.get(i).getNumeroPoliza().replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", "")))) {
-//                            System.out.println("OK");
-//                        } else {
-//                            System.out.println("NO");
-//                        }
-//                        System.out.println("pd num poli: " + listaPolizaDat.get(i).getNumeroPoliza());
-//                        System.out.println("pp num poli: " + listaPolizasProcesadas.get(j).getNumeroPoliza());
-//                        
-//                        if (!(listaPolizaDat.get(i).getNumeroPoliza().replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", "")))) {
-//                            System.out.println("OK");
-//                        } else {
-//                            System.out.println("NO");
-//                        }
-//                        System.out.println("pd num poli: " + listaPolizaDat.get(i).getNumeroPoliza());
-//                        System.out.println("pp num poli: " + listaPolizasProcesadas.get(j).getNumeroPoliza());
-                        //si no existe en los registrados
-                        //SI JALA ASI
-//                        System.out.println("\n numero polizas");
-//                        int pd=Integer.parseInt(listaPolizaDat.get(i).getNumeroPoliza().replace(" ", ""));
-//                        int pp=Integer.parseInt(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", ""));
-//                        
-//                        System.out.println("pd num poli:" + pd);
-//                        System.out.println("pp num poli:" + pp);
-//                        if(pp!=pd){
-//                            System.out.println("OK");
-//                        }else{
-//                            System.out.println("NO");
-//                        }
-                        //Tambien jala
-//                        if (!(listaPolizaDat.get(i).getTipoPoliza().replace(" ", "").equals(listaPolizasProcesadas.get(j).getTipoPoliza().replace(" ", "")))) {
-//                            System.out.println("OK");
-//                        } else {
-//                            System.out.println("NO");
-//                        }
-//                        System.out.println("pd tipo poli: " + listaPolizaDat.get(i).getTipoPoliza());
-//                        System.out.println("pp tipo poli: " + listaPolizasProcesadas.get(j).getTipoPoliza());
-//                        
-//                        System.out.println("pd tipo poli: " + listaPolizaDat.get(i).getTipoPoliza());
-//                        System.out.println("pp tipo poli: " + listaPolizasProcesadas.get(j).getTipoPoliza());
-//
-//                        System.out.println("pd monto mov: " + listaPolizaDat.get(i).getMontoMov());
-//                        System.out.println("pp monto mov: " + listaPolizasProcesadas.get(j).getMontoMov());
-//                        
-//                        //CUENTA esta mal representada
-//                        System.out.println("pd num cuenta: " + listaPolizaDat.get(i).getNumCuentaCoi());
-//                        System.out.println("pp num cuenta: " + listaPolizasProcesadas.get(j).getNumeroCuenta());
-//
-//                        System.out.println("pd dh: " + debe_haber);
-//                        System.out.println("pp dh: " + listaPolizasProcesadas.get(j).getDh());
-//
-//                        System.out.println("pd ejercicio: " + ejercicio);
-//                        System.out.println("pp ejercicio: " + listaPolizasProcesadas.get(j).getEjercicio());
                         try {
-                            //PURO NULL POINTER
-                            //SEGUIR CHECANDO POR UE NO PASA. 
-                            if ((!(listaPolizaDat.get(i).getNumeroPoliza()).replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", "")))
-                                    || (!(listaPolizaDat.get(i).getTipoPoliza().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getTipoPoliza().replace(" ", "")))
-                                    || (Double.parseDouble(listaPolizaDat.get(i).getMontoMov().replace(" ", "")) != Double.parseDouble(listaPolizasProcesadas.get(j).getMontoMov().replace(" ", "")))
-                                    || (!(listaPolizaDat.get(i).getEmpresa().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getEmpresa().replace(" ", "")))
-                                    || (!(listaPolizaDat.get(i).getNumCuentaCoi().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getNumeroCuenta().replace(" ", "")))
-                                    || (!(debe_haber).equals(listaPolizasProcesadas.get(j).getDh().replace(" ", "")))
-                                    || (!(String.valueOf(periodo).replace(" ", "")).equals(listaPolizasProcesadas.get(j).getPeriodo().replace(" ", "")))
-                                    || (!(String.valueOf(ejercicio).replace(" ", "")).equals(listaPolizasProcesadas.get(j).getEjercicio().replace(" ", "")))) {
-                                polizaDatos = new PolizaDatos();
-                                polizaDatos.setIdDoctodig(listaPolizaDat.get(i).getIdDoctodig());
-                                polizaDatos.setRutaXml(listaPolizaDat.get(i).getRutaXml());
-                                polizaDatos.setNombreXml(listaPolizaDat.get(i).getNombreXml());
-                                polizaDatos.setTipoPoliza(listaPolizaDat.get(i).getTipoPoliza());
-                                polizaDatos.setNumeroPoliza(listaPolizaDat.get(i).getNumeroPoliza());
-                                polizaDatos.setEmpresa(listaPolizaDat.get(i).getEmpresa());
-                                polizaDatos.setFechaPago(listaPolizaDat.get(i).getFechaPago());
-                                polizaDatos.setCuenta(listaPolizaDat.get(i).getCuenta());
-                                polizaDatos.setNumCuentaCoi(listaPolizaDat.get(i).getNumCuentaCoi());
-                                polizaDatos.setConXml(listaPolizaDat.get(i).getConXml());
-                                polizaDatos.setMontoMov(listaPolizaDat.get(i).getMontoMov());
-                                polizaDatos.setDebe_haber(listaPolizaDat.get(i).getDebe_haber());
-                                listaPolizasFiltradas.add(polizaDatos);
-                                System.out.println("Valor Diferente ");
+
+                            if ((listaPolizaDat.get(i).getNumeroPoliza()).replace(" ", "").equals(listaPolizasProcesadas.get(j).getNumeroPoliza().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if ((listaPolizaDat.get(i).getTipoPoliza().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getTipoPoliza().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if (Double.parseDouble(listaPolizaDat.get(i).getMontoMov().replace(" ", "")) != Double.parseDouble(listaPolizasProcesadas.get(j).getMontoMov().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if ((listaPolizaDat.get(i).getEmpresa().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getEmpresa().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if ((listaPolizaDat.get(i).getNumCuentaCoi().replace(" ", "")).equals(listaPolizasProcesadas.get(j).getNumeroCuenta().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if ((debe_haber).equals(listaPolizasProcesadas.get(j).getDh().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if ((String.valueOf(periodo).replace(" ", "")).equals(listaPolizasProcesadas.get(j).getPeriodo().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if ((String.valueOf(ejercicio).replace(" ", "")).equals(listaPolizasProcesadas.get(j).getEjercicio().replace(" ", ""))) {
+                                diferente--;
+                            }
+                            if (diferente > 0) {
+                                
+                              PolizaDatos  polizaDat = new PolizaDatos();
+                                polizaDat.setIdDoctodig(listaPolizaDat.get(i).getIdDoctodig());
+                                polizaDat.setRutaXml(listaPolizaDat.get(i).getRutaXml());
+                                polizaDat.setNombreXml(listaPolizaDat.get(i).getNombreXml());
+                                polizaDat.setTipoPoliza(listaPolizaDat.get(i).getTipoPoliza());
+                                polizaDat.setNumeroPoliza(listaPolizaDat.get(i).getNumeroPoliza());
+                                polizaDat.setEmpresa(listaPolizaDat.get(i).getEmpresa());
+                                polizaDat.setFechaPago(listaPolizaDat.get(i).getFechaPago());
+                                polizaDat.setCuenta(listaPolizaDat.get(i).getCuenta());
+                                polizaDat.setNumCuentaCoi(listaPolizaDat.get(i).getNumCuentaCoi());
+                                polizaDat.setConXml(listaPolizaDat.get(i).getConXml());
+                                polizaDat.setMontoMov(listaPolizaDat.get(i).getMontoMov());
+                                polizaDat.setDebe_haber(listaPolizaDat.get(i).getDebe_haber());
+                                listaPolizasFiltradas.add(polizaDat);
                             }
                         } catch (NullPointerException e) {
                             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
@@ -396,6 +348,7 @@ public class Consultas {
                 }
             }
         } else {
+            System.out.println("Entrando a polizas filtradas else");
             listaPolizasFiltradas = listaPolizaDat;
         }
 

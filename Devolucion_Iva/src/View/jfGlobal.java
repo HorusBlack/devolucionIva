@@ -1120,7 +1120,7 @@ public class jfGlobal extends javax.swing.JFrame {
         numEmpresa = combo_Empresa.getSelectedIndex();
         //0 y 1
         boolean tipoSolicitudPolizas = chbox_sinProcesar.isSelected();
-        
+        System.out.println("1: "+tipoSolicitudPolizas);
         int intNumMes = calendarMes.getMonth();
         int intNumYear = calendarAnio.getYear();
         String[] numeroMes = {"01 Enero", "02 Febrero", "03 Marzo", "04 Abril", "05 Mayo", "06 Junio", "07 Julio", "08 Agosto", "09 Septiembre", "10 Octubre",
@@ -1410,9 +1410,10 @@ public class jfGlobal extends javax.swing.JFrame {
         empresaConstante = numEmpresa + 1;
 
         //retornando una lista de poliza de datos
+        System.out.println("2: "+tipoSolicitud);
         listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa, tipoSolicitud);
-
-        if (!listPolizaDatos.isEmpty()) {
+        System.out.println("Tamaño lista poliza Datos: "+listPolizaDatos.size());
+        if (listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
             String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
                 "Base 16%", "Retencion 4%", "Retencion 10%", "Retencion 10.67%", "Cuota Compensatoria", "IVA", "Total", "Fecha de Pago",

@@ -500,36 +500,20 @@ public class IvaAcredController {
         base_empresa = COI_ADSTICSA;
         String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
         //Todas
-        if (!tipoSolicitud) {
+        if (tipoSolicitud) {
             switch (numEmpresa) {
                 case 0:
-                    if (periodo > 0 && ejercicio >= 2017) {
-                        polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
-                                (numEmpresa + 1), base_empresa);
-                    }
-                    break;
-                case 1:
-                    base_empresa = COI_AGRO;
-                    cuentaBanco = CUENTA_BANCOMER_AGRO;
-                    if (periodo > 0 && ejercicio >= 2017) {
-                        //LLenar con la información de la base de datos
-                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            switch (numEmpresa) {
-                case 0:
+                    System.out.println("sin procesar asct");
                     if (periodo > 0 && ejercicio >= 2017) {
                         List<PolizaDatos> listPolizaGeneral = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa);
                         List<PolizaProcesada> listPolizaProcesadaGeneral = consultas.listaPolizasProcesadas("DOCUMENTOS_COI");
                         polizaDat = consultas.listaPolizasFiltradas(listPolizaGeneral, listPolizaProcesadaGeneral, periodo, ejercicio);
+                         System.out.println("tamaño poliza 0: "+polizaDat.size());
                     }
                     break;
                 case 1:
+                    System.out.println("sin procesar agro");
                     base_empresa = COI_AGRO;
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2017) {
@@ -537,6 +521,31 @@ public class IvaAcredController {
                         List<PolizaDatos> listPolizaGeneral = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
                         List<PolizaProcesada> listPolizaProcesadaGeneral = consultas.listaPolizasProcesadas("DOCUMENTOS_COI");
                         polizaDat = consultas.listaPolizasFiltradas(listPolizaGeneral, listPolizaProcesadaGeneral, periodo, ejercicio);
+                            System.out.println("tamaño poliza 2: "+polizaDat.size());
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        } else {
+            switch (numEmpresa) {
+                case 0:
+                    System.out.println("todas asct");
+                    if (periodo > 0 && ejercicio >= 2017) {
+                        polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
+                                (numEmpresa + 1), base_empresa);
+                    }
+                     System.out.println("tamaño poliza 3: "+polizaDat.size());
+                    break;
+                case 1:
+                    System.out.println("todas agro");
+                    base_empresa = COI_AGRO;
+                    cuentaBanco = CUENTA_BANCOMER_AGRO;
+                    if (periodo > 0 && ejercicio >= 2017) {
+                        //LLenar con la información de la base de datos
+                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa);
+                         System.out.println("tamaño poliza 4: "+polizaDat.size());
                     }
                     break;
                 default:
