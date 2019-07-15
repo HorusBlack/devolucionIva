@@ -712,11 +712,11 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 465, Short.MAX_VALUE)
+            .addGap(0, 576, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel8Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(act1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+                    .addComponent(act1, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -766,12 +766,12 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ScrollTotalIva3)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ScrollTotalIva3))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -779,12 +779,12 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addGap(7, 7, 7)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ScrollTotalIva3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addGap(45, 45, 45))
         );
 
         javax.swing.GroupLayout panel_AT_16Layout = new javax.swing.GroupLayout(panel_AT_16);
@@ -835,11 +835,11 @@ public class jfGlobal extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 547, Short.MAX_VALUE)
+            .addGap(0, 573, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(act0, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+                    .addComponent(act0, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -900,7 +900,7 @@ public class jfGlobal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ScrollTotalIva2)))
                 .addContainerGap())
         );
@@ -913,11 +913,11 @@ public class jfGlobal extends javax.swing.JFrame {
                     .addComponent(lbSinRegistros_0))
                 .addGap(7, 7, 7)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ScrollTotalIva2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(62, 62, 62))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ScrollTotalIva2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48))
         );
 
         javax.swing.GroupLayout panel_AT_CeroLayout = new javax.swing.GroupLayout(panel_AT_Cero);
@@ -1005,10 +1005,9 @@ public class jfGlobal extends javax.swing.JFrame {
                         .addComponent(lb_101, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                         .addGap(591, 591, 591))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfo1Layout.createSequentialGroup()
-                        .addGap(127, 127, 127)
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ScrollTotalIva1, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+                        .addComponent(ScrollTotalIva1)
                         .addContainerGap())))
         );
         panelInfo1Layout.setVerticalGroup(
@@ -1019,7 +1018,7 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(SpIva2, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(panelInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(ScrollTotalIva1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(70, 70, 70))
@@ -1255,7 +1254,7 @@ public class jfGlobal extends javax.swing.JFrame {
                                 "(AÑO: )", resultadoExportacion, String.valueOf(empresaConstante));
                     }
                     if (resultadoFinal) {
-                        JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+                        JOptionPane.showMessageDialog(this, "Exportación Exitosa");
                     }
                 }
 
@@ -1292,7 +1291,7 @@ public class jfGlobal extends javax.swing.JFrame {
 
                         boolean resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
                         if (resultadoFinal) {
-                            JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+                            JOptionPane.showMessageDialog(this, "Exportación Exitosa");
                         }
                     }
 
@@ -1301,7 +1300,7 @@ public class jfGlobal extends javax.swing.JFrame {
             } else {
                 boolean resultadoFinal = generadorExcel.generarSoloExcelOtros(tablaOtrosDepositos, tablaTotalOtros, "OTROS DEPOSITOS", periodo, anioConstante, String.valueOf(empresaConstante));
                 if (resultadoFinal) {
-                    JOptionPane.showMessageDialog(this, "Proceso completado con exito");
+                    JOptionPane.showMessageDialog(this, "Exportación Exitosa");
                 }
             }
 
