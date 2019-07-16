@@ -70,6 +70,7 @@ public class IvaAcredController {
 
         /*
         IMPORTANTE: PARA QUE EL SISTEMA FUNCIONE DE MANERA REMOTA, SE DEBE TENER GUARDARA LA CONTRASEÑA Y USUARIO DEL HOST DONDE SE QUIERE ACCEDER
+        Resetear todas las tablas si que estan vacias para no confundir
          */
         consultas = new Consultas();
         String descripcionRelacion = "";
@@ -77,6 +78,10 @@ public class IvaAcredController {
         for (int p = 0; p < listFicherosPolizaBase.size(); p++) {
             switch (listFicherosPolizaBase.get(p).getConXml()) {
                 case 1:
+                    //Dos periodos diferentes jalan el mismo xml
+                    /*
+                    junio 2016 adsticsa
+                    */
                     String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
 
                     if (!URL.isEmpty() || !URL.equals("")) {
@@ -504,7 +509,7 @@ public class IvaAcredController {
             //SIn procesar
             switch (numEmpresa) {
                 case 0:
-                    if (periodo > 0 && ejercicio >= 2017) {
+                    if (periodo > 0 && ejercicio >= 2016) {
                         polizaDat= consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa, tipoSolicitud);
                     }
@@ -512,7 +517,7 @@ public class IvaAcredController {
                 case 1:
                     base_empresa = COI_AGRO;
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
-                    if (periodo > 0 && ejercicio >= 2017) {
+                    if (periodo > 0 && ejercicio >= 2016) {
                         //LLenar con la información de la base de datos
                         polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, tipoSolicitud);
                     }
@@ -525,7 +530,7 @@ public class IvaAcredController {
             //Todas
             switch (numEmpresa) {
                 case 0:
-                    if (periodo > 0 && ejercicio >= 2017) {
+                    if (periodo > 0 && ejercicio >= 2016) {
                         polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa, false);
                     }
@@ -533,7 +538,7 @@ public class IvaAcredController {
                 case 1:
                     base_empresa = COI_AGRO;
                     cuentaBanco = CUENTA_BANCOMER_AGRO;
-                    if (periodo > 0 && ejercicio >= 2017) {
+                    if (periodo > 0 && ejercicio >= 2016) {
                         //LLenar con la información de la base de datos
                         polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, false);
                     }

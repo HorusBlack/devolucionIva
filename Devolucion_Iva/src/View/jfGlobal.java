@@ -1098,6 +1098,10 @@ public class jfGlobal extends javax.swing.JFrame {
         periodo = nombreDelMes[intNumMes];
         numAnio = intNumYear;
         tablaCienIvaAcred.removeAll();
+        tabla_ivaAuxAcred.removeAll();
+        tableAct0.removeAll();
+        tableAct16.removeAll();
+        tablaOtrosDepositos.removeAll();
         //Inicializar Tabla 100 Iva Acred
         chbox_ExportarProcesar.setEnabled(false);
         chbox_excel.setEnabled(false);
@@ -2671,11 +2675,9 @@ public class jfGlobal extends javax.swing.JFrame {
                     default:
                         break;
                 }
-
             }
-
-            lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
         }
+        lbT_mesAuxIvaAcred.setText("IVA ACREDITABLE: " + numMes.toUpperCase() + " " + anio);
     }
 
     /**
