@@ -1097,11 +1097,7 @@ public class jfGlobal extends javax.swing.JFrame {
         String urlMes = numeroMes[intNumMes];
         periodo = nombreDelMes[intNumMes];
         numAnio = intNumYear;
-        tablaCienIvaAcred.removeAll();
-        tabla_ivaAuxAcred.removeAll();
-        tableAct0.removeAll();
-        tableAct16.removeAll();
-        tablaOtrosDepositos.removeAll();
+        reiniciarTablas();
         //Inicializar Tabla 100 Iva Acred
         chbox_ExportarProcesar.setEnabled(false);
         chbox_excel.setEnabled(false);
@@ -1359,6 +1355,7 @@ public class jfGlobal extends javax.swing.JFrame {
      * @param numEmpresa
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa, boolean tipoSolicitud) {
+         reiniciarTablas();
         ivaAcred = new IvaAcredController();
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
@@ -1723,7 +1720,9 @@ public class jfGlobal extends javax.swing.JFrame {
                         + " \"Buscar todos\"  de ser necesario).");
             }
         } else {
+          
             JOptionPane.showMessageDialog(null, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
+          
         }
     }
 
@@ -3301,6 +3300,15 @@ public class jfGlobal extends javax.swing.JFrame {
 
             }
         }
+    }
+
+    private void reiniciarTablas() {
+        System.out.println("Te vi y no me importo");
+        tablaCienIvaAcred.removeAll();
+        tabla_ivaAuxAcred.removeAll();
+        tableAct0.removeAll();
+        tableAct16.removeAll();
+        tablaOtrosDepositos.removeAll();
     }
 
     public void borrarFilasVacias_2(JTable tablaBorrar) {

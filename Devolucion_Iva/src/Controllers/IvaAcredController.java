@@ -83,6 +83,7 @@ public class IvaAcredController {
                     junio 2016 adsticsa
                     */
                     String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
+                    System.out.println("Archivo consultado: "+URL);
 
                     if (!URL.isEmpty() || !URL.equals("")) {
                         try {
