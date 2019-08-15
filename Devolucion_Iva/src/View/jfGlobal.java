@@ -2603,6 +2603,9 @@ public class jfGlobal extends javax.swing.JFrame {
      * @param numEmpresa
      */
     private void inicializarAuxIvaAcred(String numMes, int mes, int anio, int numEmpresa) {
+        /*
+        CHECAR LOS DEMAS CAMPOS DEL TOTAL DE AUXILIAR PARA VERIFICAR DE DONDE TOMAN TUS VALORES
+        */
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"Tipo Póliza", "Número Póliza", "Fecha", "Concepto", "Debe", "Haber"};
@@ -2612,7 +2615,7 @@ public class jfGlobal extends javax.swing.JFrame {
         //Clase que obtiene los datos xml
         AuxIvaAcredController auxController = new AuxIvaAcredController();
         DecimalFormat formateador = new DecimalFormat("####.##");
-        listAuxIvaAcreds = auxController.solicitudAuxIvaAcred(mes, anio, numEmpresa);
+        listAuxIvaAcreds = auxController.new_solicitudAuxIvaAcred(mes, anio, numEmpresa);
         if (!listAuxIvaAcreds.isEmpty()) {
             for (int i = 0; i < listAuxIvaAcreds.size(); i++) {
                 String stringDate = listAuxIvaAcreds.get(i).getFecha();

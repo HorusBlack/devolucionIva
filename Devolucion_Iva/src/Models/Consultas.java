@@ -365,7 +365,7 @@ public class Consultas {
      * @param dataBase
      * @return List AuxIvaAcred
      */
-    public List<AuxIvaAcred> auxIvaAcredConsulta(int periodo, int ejercicio, String noCuenta, String dataBase) {
+    public List<AuxIvaAcred> new_auxIvaAcredConsulta(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
         String subFijoTabla = String.valueOf(ejercicio);
@@ -379,27 +379,7 @@ public class Consultas {
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
-            if (ejercicio > 2018) {
-                //CAMBIAR TOP
-                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
-                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
-                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
-                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
-                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL) FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
-                        + " MONTOMOV AS MONTO, ORDEN  "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
-            } else {
-                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
-                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
-                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN '0' ELSE NUM_POLIZ END) NUM_POLIZ,"
-                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
-                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
-            }
+            query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + noCuenta + "'   AND  A.NUM_CTA <= '" + noCuenta + "' ORDER BY 1,4,11,12,13,14,18";
 
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
@@ -410,8 +390,13 @@ public class Consultas {
                 auxIvaAcred.setNoPoliza(resultSet.getString("NUM_POLIZ"));
                 auxIvaAcred.setFecha(resultSet.getString("FECHA_POL"));
                 auxIvaAcred.setConcepto(resultSet.getString("CONCEP_PO"));
-                auxIvaAcred.setDebe(resultSet.getDouble("MONTO"));
-                auxIvaAcred.setHaber(0);
+                if("D".equals(resultSet.getString("DEBE_HABER"))){
+                    auxIvaAcred.setDebe(resultSet.getDouble("MONTO"));
+                    auxIvaAcred.setHaber(0);
+                }else{
+                    auxIvaAcred.setHaber(resultSet.getDouble("MONTO"));
+                    auxIvaAcred.setDebe(0);
+                }
                 datosAuxiliarIva.add(auxIvaAcred);
                 //Como se genera el valor haber, o que columna es
                 //existen polizas Dr, en Eg. ¿Es normal?
@@ -426,7 +411,8 @@ public class Consultas {
         return datosAuxiliarIva;
     }
 
-    public List<AuxIvaAcred> auxIvaAcredAsctisa(int periodo, int ejercicio, String[] noCuentas, String dataBase) {
+ 
+    public List<AuxIvaAcred> new_auxIvaAcredAsctisa(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
         String subFijoTabla = String.valueOf(ejercicio);
@@ -438,51 +424,34 @@ public class Consultas {
         String query;
 
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
-        for (String noCuenta : noCuentas) {
-            try {
-                conexion = connection.Entrar(dataBase);
-                if (ejercicio > 2018) {
-                    //CAMBIAR TOP
-                    query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
-                            + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
-                            + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
-                            + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
-                            + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL) FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
-                            + " MONTOMOV AS MONTO, ORDEN  "
-                            + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                            + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                            + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
-                } else {
-                    query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                            + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
-                            + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
-                            + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN '0' ELSE NUM_POLIZ END) NUM_POLIZ,"
-                            + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
-                            + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
-                            + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                            + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
-                }
-                stmt = conexion.createStatement();
-                resultSet = stmt.executeQuery(query);
-                while (resultSet.next()) {
-                    //tipo poliza, numero poliza, fecha, concepto, debe, haber
-                    auxIvaAcred = new AuxIvaAcred();
-                    auxIvaAcred.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                    auxIvaAcred.setNoPoliza(resultSet.getString("NUM_POLIZ"));
-                    auxIvaAcred.setFecha(resultSet.getString("FECHA_POL"));
-                    auxIvaAcred.setConcepto(resultSet.getString("CONCEP_PO"));
+        try {
+            conexion = connection.Entrar(dataBase);
+            query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + noCuenta + "'   AND  A.NUM_CTA <= '" + noCuenta + "' ORDER BY 1,4,11,12,13,14,18";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                //tipo poliza, numero poliza, fecha, concepto, debe, haber
+                //SEPARAR SEGUN SI ES DEBE O HABER
+                auxIvaAcred = new AuxIvaAcred();
+                auxIvaAcred.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                auxIvaAcred.setNoPoliza(resultSet.getString("NUM_POLIZ"));
+                auxIvaAcred.setFecha(resultSet.getString("FECHA_POL"));
+                auxIvaAcred.setConcepto(resultSet.getString("CONCEP_PO"));
+                if("D".equals(resultSet.getString("DEBE_HABER"))){
                     auxIvaAcred.setDebe(resultSet.getDouble("MONTO"));
                     auxIvaAcred.setHaber(0);
-                    datosAuxiliarIva.add(auxIvaAcred);
-                    //Como se genera el valor haber, o que columna es
-                    //existen polizas Dr, en Eg. ¿Es normal?
-                    //(219902.42−208522−11380.7)+0.28
+                }else{
+                    auxIvaAcred.setHaber(resultSet.getDouble("MONTO"));
+                    auxIvaAcred.setDebe(0);
                 }
-            }catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                ConexionDB.Salir(conexion);
+                
+                
+                datosAuxiliarIva.add(auxIvaAcred);
             }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
         }
         return datosAuxiliarIva;
     }
