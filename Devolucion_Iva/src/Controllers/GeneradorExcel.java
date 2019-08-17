@@ -1087,7 +1087,7 @@ public class GeneradorExcel {
 
             //FORMATO Y DATOS PARA DE TOTALES
             CellStyle txtT1 = book.createCellStyle();
-            txtT1.setAlignment(HorizontalAlignment.CENTER);
+            txtT1.setAlignment(HorizontalAlignment.LEFT);
 
             Font fontTotal = (Font) book.createFont();
             fontTotal.setFontName("Arial");
@@ -1097,7 +1097,7 @@ public class GeneradorExcel {
             txtT1.setFont(fontTotal);
 
             CellStyle txtT2 = book.createCellStyle();
-            txtT2.setAlignment(HorizontalAlignment.CENTER);
+            txtT2.setAlignment(HorizontalAlignment.LEFT);
 
             Font fontValTotal = book.createFont();
             fontValTotal.setFontName("Arial");
@@ -1109,76 +1109,21 @@ public class GeneradorExcel {
             Row filaTotal_1 = hoja.createRow(ultimaFilaRegistros);
             Cell ct_1 = filaTotal_1.createCell(3);
             ct_1.setCellStyle(txtT1);
-            ct_1.setCellValue("TOTAL AL 100% DE IVA ACREDITABLE");
-
+            ct_1.setCellValue("TOTAL CARGOS DEL PERIODO");
+            
             Cell ctVal_1 = filaTotal_1.createCell(4);
             ctVal_1.setCellStyle(txtT2);
-            ctVal_1.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(0, 2)));
-
-            Row filaTotal_2 = hoja.createRow((ultimaFilaRegistros) + 1);
+            ctVal_1.setCellValue("$"+String.valueOf(table_AuxIvaAcredTotal.getValueAt(0, 2)));
+            
+              Row filaTotal_2 = hoja.createRow((ultimaFilaRegistros) + 1);
             Cell ct_2 = filaTotal_2.createCell(3);
             ct_2.setCellStyle(txtT1);
-            ct_2.setCellValue("IVA RETENIDO EN DICIEMBRE Y ENTERADO EN " + periodo.toUpperCase() + " " + anio);
+            ct_2.setCellValue("TOTAL DE ABONOS DEL PERIODO");
 
             Cell ctVal_2 = filaTotal_2.createCell(4);
             ctVal_2.setCellStyle(txtT2);
-            ctVal_2.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(1, 2)));
-
-            Cell ct_2_1 = filaTotal_2.createCell(2);
-            ct_2_1.setCellStyle(txtT1);
-            ct_2_1.setCellValue("MAS");
-
-            Row filaTotal_3 = hoja.createRow((ultimaFilaRegistros) + 2);
-            Cell ct_3 = filaTotal_3.createCell(3);
-            ct_3.setCellStyle(txtT1);
-            ct_3.setCellValue("IVA RETENIDO POR CLIENTES EN EL PERIODO");
-
-            Cell ctVal_3 = filaTotal_3.createCell(4);
-            ctVal_3.setCellStyle(txtT2);
-            ctVal_3.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(2, 2)));
-
-            Row filaTotal_4_1 = hoja.createRow((ultimaFilaRegistros) + 3);
-            Cell ct_4_1 = filaTotal_4_1.createCell(2);
-            ct_4_1.setCellStyle(txtT1);
-            ct_4_1.setCellValue("IGUAL");
-
-            Row filaTotal_4 = hoja.createRow((ultimaFilaRegistros) + 4);
-            Cell ct_4 = filaTotal_4.createCell(3);
-            ct_4.setCellStyle(txtT1);
-            ct_4.setCellValue("TOTAL DE IVA ACREDITABLE DEL PERIODO");
-
-            Cell ctVal_4 = filaTotal_4.createCell(4);
-            ctVal_4.setCellStyle(txtT2);
-            ctVal_4.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(4, 2)));
-
-            Row filaTotal_5_1 = hoja.createRow((ultimaFilaRegistros) + 5);
-            Cell ct_5_1 = filaTotal_5_1.createCell(2);
-            ct_5_1.setCellStyle(txtT1);
-            ct_5_1.setCellValue("MENOS");
-
-            Row filaTotal_5 = hoja.createRow((ultimaFilaRegistros) + 6);
-            Cell ct_5 = filaTotal_5.createCell(3);
-            ct_5.setCellStyle(txtT1);
-            ct_5.setCellValue("IVA CAUSADO Y COBRADO A CLIENTES EN EL PERIODO");
-
-            Cell ctVal_5 = filaTotal_5.createCell(4);
-            ctVal_5.setCellStyle(txtT2);
-            ctVal_5.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(6, 2)));
-
-            Row filaTotal_6 = hoja.createRow((ultimaFilaRegistros) + 7);
-            Cell ct_6 = filaTotal_6.createCell(2);
-            ct_6.setCellStyle(txtT1);
-            ct_6.setCellValue("IGUAL");
-
-            Row filaTotal_7 = hoja.createRow((ultimaFilaRegistros) + 8);
-            Cell ct_7 = filaTotal_7.createCell(3);
-            ct_7.setCellStyle(txtT1);
-            ct_7.setCellValue("SALDO A FAVOR DEL PERIODO SUJETO A DEVOLUCIÓN");
-
-            Cell ctVal_7 = filaTotal_7.createCell(4);
-            ctVal_7.setCellStyle(txtT2);
-            ctVal_7.setCellValue(String.valueOf(table_AuxIvaAcredTotal.getValueAt(8, 2)));
-
+            ctVal_2.setCellValue("$"+String.valueOf(table_AuxIvaAcredTotal.getValueAt(1, 2)));
+            
             for (int i = 0; i < 6; i++) {
                 hoja.autoSizeColumn(i);
             }

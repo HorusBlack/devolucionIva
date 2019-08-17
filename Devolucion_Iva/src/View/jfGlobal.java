@@ -9,12 +9,9 @@ import Controllers.IvaAcredController;
 import Models.PolizaDatos;
 import Models.AuxIvaAcred;
 import Controllers.AuxIvaAcredController;
-import Controllers.ControllerAction;
 import Controllers.GeneradorExcel;
 import Models.PolizaProcesada;
-import Models.RetencionIvaMes;
 import Models.XmlDatos;
-import Models.RetencionIvaPagadaMes;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -51,7 +48,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private String periodoConstante, anioConstante;
     private int numAnio, numEmpresa, empresaConstante, numEmpresaConstante;
     private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva,
-            total_devIva, totalAuxCred;
+            total_devIva, total_abono,total_cargo;
 //    private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
     private GeneradorExcel generadorExcel;
@@ -628,12 +625,10 @@ public class jfGlobal extends javax.swing.JFrame {
             panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_resultIvaAcredLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_resultIvaAcredLayout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 168, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(panel_resultIvaAcredLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panel_dataIvaAcredLayout = new javax.swing.GroupLayout(panel_dataIvaAcred);
@@ -674,8 +669,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(panel_CabecerAuxIva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panel_dataIvaAcred, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panel_dataIvaAcred, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(194, Short.MAX_VALUE))
         );
 
         tp_Secciones.addTab("AUXILIAR IVA ACREDITABLE", panel_Aux_IA);
@@ -1105,7 +1100,7 @@ public class jfGlobal extends javax.swing.JFrame {
         inicializarTablaCienIvaAcred(urlMes, periodo, intNumMes, intNumYear, numEmpresa, tipoSolicitudPolizas);
         //Inicializar Tabla Auxiliar Iva Acred
         inicializarAuxIvaAcred(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
-        inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, totalAuxCred);
+        inicializarTablaTotalAuxAcred(nombreDelMes[intNumMes], intNumYear, total_cargo, total_abono);
         //Inicializar Tabla RetencionIvaMes
         //inicializarTablaRetencionIvaMes(nombreDelMes[intNumMes], intNumMes, intNumYear, numEmpresa);
         //Inicializar Tabla RetencionIvaMesPagadas
@@ -1113,7 +1108,6 @@ public class jfGlobal extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Proceso terminado");
         chbox_ExportarProcesar.setEnabled(true);
         chbox_excel.setEnabled(true);
-
     }//GEN-LAST:event_btnProcesarIvaActionPerformed
 
     private void btnXmlCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXmlCargarActionPerformed
@@ -1355,7 +1349,7 @@ public class jfGlobal extends javax.swing.JFrame {
      * @param numEmpresa
      */
     private void inicializarTablaCienIvaAcred(String numMes, String nombreMes, int mes, int anio, int numEmpresa, boolean tipoSolicitud) {
-         reiniciarTablas();
+        reiniciarTablas();
         ivaAcred = new IvaAcredController();
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         listPolizaDatos = new ArrayList<>();
@@ -1720,9 +1714,9 @@ public class jfGlobal extends javax.swing.JFrame {
                         + " \"Buscar todos\"  de ser necesario).");
             }
         } else {
-          
+
             JOptionPane.showMessageDialog(null, "No se encontraron registros para procesar en el periodo " + nombreMes + " " + anio);
-          
+
         }
     }
 
@@ -2605,11 +2599,12 @@ public class jfGlobal extends javax.swing.JFrame {
     private void inicializarAuxIvaAcred(String numMes, int mes, int anio, int numEmpresa) {
         /*
         CHECAR LOS DEMAS CAMPOS DEL TOTAL DE AUXILIAR PARA VERIFICAR DE DONDE TOMAN TUS VALORES
-        */
+         */
         tablaIva = new DefaultTableModel();
         //Titulos para la tabla
         String[] titulos = {"Tipo Póliza", "Número Póliza", "Fecha", "Concepto", "Debe", "Haber"};
-        totalAuxCred = 0;
+        total_abono = 0;
+        total_cargo = 0;
         //Ingresando titulos
         tablaIva.setColumnIdentifiers(titulos);
         //Clase que obtiene los datos xml
@@ -2630,9 +2625,10 @@ public class jfGlobal extends javax.swing.JFrame {
                     }
                 }
 
-                tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate, listAuxIvaAcreds.get(i).getConcepto(),
-                    formateador.format(listAuxIvaAcreds.get(i).getDebe()), formateador.format(listAuxIvaAcreds.get(i).getHaber())});
-                totalAuxCred += listAuxIvaAcreds.get(i).getDebe();
+                tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate, 
+                    listAuxIvaAcreds.get(i).getConcepto(), formateador.format(listAuxIvaAcreds.get(i).getDebe()), formateador.format(listAuxIvaAcreds.get(i).getHaber())});
+                total_cargo += listAuxIvaAcreds.get(i).getDebe();
+                total_abono +=listAuxIvaAcreds.get(i).getHaber();
 
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
@@ -2689,13 +2685,16 @@ public class jfGlobal extends javax.swing.JFrame {
      * @param anio
      * @param total_cien
      */
-    private void inicializarTablaTotalAuxAcred(String mes, int anio, double total_cien) {
+    private void inicializarTablaTotalAuxAcred(String mes, int anio, double total_cargos, double total_abonos) {
         tablaIva = new DefaultTableModel();
         String[] titulos = {"", "Descripción", "Totales"};
         tablaIva.setColumnIdentifiers(titulos);
         String complementoCadena = "IVA RETENIDO EN DICIEMBRE Y ENTERADO EN " + mes.toUpperCase() + " " + anio;
         DecimalFormat formateador = new DecimalFormat("####.##");
-        tablaIva.addRow(new Object[]{"", "TOTAL AL 100% DE IVA ACREDITABLE", formateador.format(total_cien)});
+        //total debe - total haber
+        tablaIva.addRow(new Object[]{"", "TOTAL DE CARGOS DEL PERIODO", formateador.format(total_cargos)});
+        tablaIva.addRow(new Object[]{"", "TOTAL DE ABONOS DEL PERIODO", formateador.format(total_abonos)});
+        /*
         tablaIva.addRow(new Object[]{"MAS", complementoCadena, formateador.format(0)});
         tablaIva.addRow(new Object[]{"", "IVA RETENIDO POR CLIENTES EN EL PERIODO", formateador.format(0)});
         tablaIva.addRow(new Object[]{"IGUAL", "", ""});
@@ -2704,6 +2703,7 @@ public class jfGlobal extends javax.swing.JFrame {
         tablaIva.addRow(new Object[]{"", "IVA CAUSADO Y COBRADO A CLIENTES EN EL PERIODO", formateador.format(0)});
         tablaIva.addRow(new Object[]{"IGUAL", "", ""});
         tablaIva.addRow(new Object[]{"", "SALDO A FAVOR DEL PERIODO SUJETO A DEVOLUCION", formateador.format(0)});
+         */
         table_totalAuxIvaAcred.setModel(tablaIva);
 
     }
