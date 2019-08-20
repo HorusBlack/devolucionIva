@@ -43,6 +43,7 @@ public class Consultas {
      * @param numeroCuenta String
      * @param numeroEmpresa int
      * @param dataBase String
+     * @param tipoSolicitud
      * @return List PolizaDatos
      */
     public List<PolizaDatos> polizasPeriodoEjercicio_Agroecologia(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
@@ -144,9 +145,121 @@ public class Consultas {
                             polizaDatosList.add(polizaDatos);
                         } while (resultSet.next());
                     }
-//                    while (resultSet.next()) {
-//                       
-//                    }
+
+                }
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return polizaDatosList;
+    }
+
+    public List<PolizaDatos> polizasPeriodoEjercicio_Agroecologia_v2(int periodo, int ejercicio, String numeroCuenta, int numeroEmpresa,
+            
+            String dataBase, boolean tipoSolicitud) {
+        connection = new ConexionDB();
+
+        //String[] parts = string.split("T");
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String subFijoPeriodo = "";
+        String subFijoCuenta = "CUENTAS" + v1 + v2;
+        String subFijoAuxiliar = "AUXILIAR" + v1 + v2;
+        String subFijoSaldos = "SALDOS" + v1 + v2;
+        String subBaseCoi = "COI80Empre" + numeroEmpresa;
+        if (periodo < 10) {
+            subFijoPeriodo = "0" + periodo;
+        } else {
+            subFijoPeriodo = String.valueOf(periodo);
+        }
+        String clave = "";
+        //Lista de polizas
+        List<PolizaDatos> lpd = new ArrayList<>();
+        if (tipoSolicitud) {
+            //OK
+            lpd = this.consultarPolizasUnicasSinProcesar_v2(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+        } else {
+            //OK
+            lpd = this.consultarPolizasUnicas_v2(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+        }
+        //String numCuent
+        String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
+        ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
+        Connection conexion = null;
+        //" + tableSaldos + "
+        try {
+            conexion = connection.Entrar(dataBase);
+            if (!lpd.isEmpty()) {
+                for (int x = 0; x < lpd.size(); x++) {
+                    query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
+                            + " aux.MONTOMOV, aux.DEBE_HABER, reg.EMPRESA FROM [DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel ON"
+                            + " d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg ON rel.ID_REGISTRO = reg.ID_REGISTRO "
+                            + " INNER JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
+                            + " WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA= " + numeroEmpresa + " AND "
+                            + "aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " "
+                            + "AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') AND aux.NUM_CTA LIKE '%" + numeroCuenta + "%' "
+                            + "AND reg.CVEENTIDAD1=" + lpd.get(x).getNumeroPoliza() + " AND reg.CVEENTIDAD2='" + lpd.get(x).getTipoPoliza() + "'";
+                    stmt = conexion.createStatement();
+                    resultSet = stmt.executeQuery(query);
+                    if (resultSet.next() == false) {
+                        subQuery = "SELECT aux.NUM_CTA,aux.FECHA_POL, aux.TIPO_POLI,aux.NUM_POLIZ ,CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA',"
+                                + "aux.MONTOMOV ,aux.DEBE_HABER "
+                                + "FROM [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
+                                + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov()
+                                + " AND aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND aux.NUM_CTA LIKE '%" + numeroCuenta + "%' AND "
+                                + "aux.TIPO_POLI='" + lpd.get(x).getTipoPoliza() + "'";
+                        stmt = conexion.createStatement();
+                        subResultset = stmt.executeQuery(subQuery);
+                        if (subResultset.next()) {
+                            do {
+                                polizaDatos = new PolizaDatos();
+                                polizaDatos.setTipoPoliza(subResultset.getString("TIPO_POLI"));
+                                polizaDatos.setNumeroPoliza(subResultset.getString("NUM_POLIZ"));
+                                polizaDatos.setFechaPago(subResultset.getString("FECHA POLIZA"));
+                                polizaDatos.setCuenta(consultaNombreCuenta_v2(dataBase, subBaseCoi, subFijoAuxiliar,
+                                        subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio),
+                                        subResultset.getString("TIPO_POLI"), subResultset.getString("NUM_POLIZ")));
+                                polizaDatos.setConXml(2);
+                                polizaDatos.setNumCuentaCoi(numeroCuenta);
+                                polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
+                                polizaDatos.setEmpresa(String.valueOf(numeroEmpresa));
+                                if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ", ""))) {
+                                    polizaDatos.setDebe_haber(1);
+                                } else {
+                                    polizaDatos.setDebe_haber(0);
+                                }
+
+                                polizaDatosList.add(polizaDatos);
+
+                            } while (subResultset.next());
+                        }
+                    } else {
+                        do {
+                            polizaDatos = new PolizaDatos();
+                            polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
+                            polizaDatos.setRutaXml(resultSet.getString("RUTA"));
+                            polizaDatos.setNombreXml(resultSet.getString("ARCHIVO"));
+                            polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
+                            polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
+                            polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                            polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
+                            polizaDatos.setCuenta(consultaNombreCuenta_v2(dataBase, subBaseCoi, subFijoAuxiliar,
+                                    subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio),
+                                    resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
+                            polizaDatos.setConXml(1);
+                            polizaDatos.setNumCuentaCoi(numeroCuenta);
+                            polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                            if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ", ""))) {
+                                polizaDatos.setDebe_haber(1);
+                            } else {
+                                polizaDatos.setDebe_haber(0);
+                            }
+                            polizaDatosList.add(polizaDatos);
+                        } while (resultSet.next());
+                    }
 
                 }
             }
@@ -167,6 +280,7 @@ public class Consultas {
      * @param numeroCuentas String[]
      * @param numeroEmpresa int
      * @param dataBase String
+     * @param tipoSolicitud
      * @return
      */
     public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa(int periodo, int ejercicio, String[] numeroCuentas,
@@ -255,6 +369,125 @@ public class Consultas {
                                 polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
                                 polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
                                 polizaDatos.setCuenta(consultaNombreCuenta(dataBase, subBaseCoi, subFijoAuxiliar, subFijoCuenta, numeroCuenta, String.valueOf(periodo), String.valueOf(ejercicio), resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
+                                polizaDatos.setNumCuentaCoi(numeroCuenta);
+                                polizaDatos.setConXml(1);
+                                polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                                if ("H".equals(resultSet.getString("DEBE_HABER").replace(" ", ""))) {
+                                    polizaDatos.setDebe_haber(1);
+                                } else {
+                                    polizaDatos.setDebe_haber(0);
+                                }
+                                polizaDatosList.add(polizaDatos);
+                            } while (resultSet.next());
+                        }
+                    }
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                ConexionDB.Salir(conexion);
+            }
+        }
+        return polizaDatosList;
+    }
+
+    public List<PolizaDatos> polizasPeriodoEjercicio_Adsticsa_v2(int periodo, int ejercicio, String[] numeroCuentas,
+            int numeroEmpresa, String dataBase, boolean tipoSolicitud) {
+
+        connection = new ConexionDB();
+        //String[] parts = string.split("T");
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String subFijoPeriodo = "";
+        String subFijoCuenta = "CUENTAS" + v1 + v2;
+        String subFijoAuxiliar = "AUXILIAR" + v1 + v2;
+        String subFijoSaldos = "SALDOS" + v1 + v2;
+        String subBaseCoi = "COI80Empre" + numeroEmpresa;
+        System.out.println("EN BASE: " + subBaseCoi);
+        if (periodo < 10) {
+            subFijoPeriodo = "0" + periodo;
+        } else {
+            subFijoPeriodo = String.valueOf(periodo);
+        }
+        String periodoAnio = subFijoPeriodo + String.valueOf(v1) + String.valueOf(v2);
+        //OK
+        ArrayList<PolizaDatos> polizaDatosList = new ArrayList<>();
+        Connection conexion = null;
+        //Consulto las cuentas
+        for (String numeroCuenta : numeroCuentas) {
+            List<PolizaDatos> lpd = new ArrayList<>();
+            if (tipoSolicitud) {
+                //EDITAR ESTO IGUAL
+                lpd = this.consultarPolizasUnicasSinProcesar_v2(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+            } else {
+                lpd = this.consultarPolizasUnicas_v2(dataBase, subBaseCoi, subFijoCuenta, subFijoSaldos, subFijoAuxiliar, String.valueOf(periodo), numeroCuenta);
+            }
+            //String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta
+            try {
+                conexion = connection.Entrar(dataBase);
+                if (!lpd.isEmpty()) {
+                    for (int x = 0; x < lpd.size(); x++) {
+                        //ACTUALIZAR CONSULTA AQUI: OK
+                        query = "SELECT d.ID_DOCTODIG, d.RUTA, d.ARCHIVO, reg.CVEENTIDAD1 as 'CLAVE_POLISA', reg.CVEENTIDAD2 'TIPO',"
+                                + "CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', aux.MONTOMOV, aux.DEBE_HABER "
+                                + ",reg.EMPRESA FROM "
+                                + "[DOCUMENTOS_COI].[dbo].[DOCTOSDIG] d INNER JOIN [DOCUMENTOS_COI].[dbo].[RELACION] rel "
+                                + "ON d.ID_DOCTODIG = rel.ID_DOCTODIG INNER JOIN [DOCUMENTOS_COI].[dbo].[REGISTROS] reg "
+                                + "ON rel.ID_REGISTRO = reg.ID_REGISTRO INNER JOIN [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
+                                + "ON reg.CVEENTIDAD1 = aux.NUM_POLIZ AND reg.CVEENTIDAD2 = aux.TIPO_POLI "
+                                + " WHERE reg.TIPOENTIDAD = 16 AND reg.CVEENTIDAD3 = '" + periodoAnio + "' AND reg.EMPRESA= " + numeroEmpresa + ""
+                                + " AND aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " "
+                                + "AND (d.ARCHIVO LIKE '%xml' OR d.ARCHIVO LIKE'%XML') AND aux.NUM_CTA LIKE '%" + numeroCuenta + "%' "
+                                + "AND reg.CVEENTIDAD1=" + lpd.get(x).getNumeroPoliza() + " AND reg.CVEENTIDAD2='" + lpd.get(x).getTipoPoliza() + "'";
+                        //erro sql aqui
+                        stmt = conexion.createStatement();
+                        resultSet = stmt.executeQuery(query);
+                        //No me devuelve nada por que no estan asociados
+                        if (resultSet.next() == false) {
+                            //ACTUALIZAR CONSULTA AQUI:OK
+                            subQuery = "SELECT aux.NUM_CTA,aux.FECHA_POL, aux.TIPO_POLI,aux.NUM_POLIZ ,CONVERT(date,aux.FECHA_POL) 'FECHA POLIZA', aux.MONTOMOV, "
+                                    + "aux.DEBE_HABER "
+                                    + "FROM [" + subBaseCoi + "].[dbo].[" + subFijoAuxiliar + "] aux "
+                                    + "WHERE aux.PERIODO = " + periodo + " AND aux.EJERCICIO = " + ejercicio + " AND aux.MONTOMOV=" + lpd.get(x).getMontoMov() + " AND "
+                                    + "aux.NUM_POLIZ=" + lpd.get(x).getNumeroPoliza() + " AND "
+                                    + "aux.TIPO_POLI='" + lpd.get(x).getTipoPoliza() + "' AND NUM_CTA LIKE '%" + numeroCuenta + "%' ";
+                            stmt = conexion.createStatement();
+                            subResultset = stmt.executeQuery(subQuery);
+                            if (subResultset.next()) {
+                                do {
+                                    polizaDatos = new PolizaDatos();
+                                    polizaDatos.setTipoPoliza(subResultset.getString("TIPO_POLI"));
+                                    polizaDatos.setNumeroPoliza(subResultset.getString("NUM_POLIZ"));
+                                    polizaDatos.setFechaPago(subResultset.getString("FECHA POLIZA"));
+                                    //AQUI IGUAL:OK
+                                    polizaDatos.setCuenta(consultaNombreCuenta_v2(dataBase, subBaseCoi, subFijoAuxiliar, subFijoCuenta, numeroCuenta, String.valueOf(periodo),
+                                            String.valueOf(ejercicio), subResultset.getString("TIPO_POLI"), subResultset.getString("NUM_POLIZ")));
+                                    polizaDatos.setConXml(2);
+                                    polizaDatos.setNumCuentaCoi(numeroCuenta);
+                                    polizaDatos.setMontoMov(subResultset.getString("MONTOMOV"));
+                                    if ("H".equals(subResultset.getString("DEBE_HABER").replace(" ", ""))) {
+                                        polizaDatos.setDebe_haber(1);
+                                    } else {
+                                        polizaDatos.setDebe_haber(0);
+                                    }
+                                    polizaDatos.setEmpresa(String.valueOf(numeroEmpresa));
+                                    polizaDatosList.add(polizaDatos);
+                                } while (subResultset.next());
+                            }
+                        } else {
+                            do {
+                                polizaDatos = new PolizaDatos();
+                                polizaDatos.setIdDoctodig(resultSet.getString("ID_DOCTODIG"));
+                                polizaDatos.setRutaXml(resultSet.getString("RUTA"));
+                                polizaDatos.setNombreXml(resultSet.getString("ARCHIVO"));
+                                polizaDatos.setTipoPoliza(resultSet.getString("TIPO"));
+                                polizaDatos.setNumeroPoliza(resultSet.getString("CLAVE_POLISA"));
+                                polizaDatos.setEmpresa(resultSet.getString("EMPRESA"));
+                                polizaDatos.setFechaPago(resultSet.getString("FECHA POLIZA"));
+                                //AQUI IGUAL:OK
+                                polizaDatos.setCuenta(consultaNombreCuenta_v2(dataBase, subBaseCoi, subFijoAuxiliar, subFijoCuenta, numeroCuenta, String.valueOf(periodo),
+                                        String.valueOf(ejercicio), resultSet.getString("TIPO"), resultSet.getString("CLAVE_POLISA")));
                                 polizaDatos.setNumCuentaCoi(numeroCuenta);
                                 polizaDatos.setConXml(1);
                                 polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
@@ -379,7 +612,7 @@ public class Consultas {
         List<AuxIvaAcred> datosAuxiliarIva = new ArrayList<>();
         try {
             conexion = connection.Entrar(dataBase);
-            query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA >= '" + noCuenta + "'   AND  A.NUM_CTA <= '" + noCuenta + "' ORDER BY 1,4,11,12,13,14,18";
+            query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL, FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER, MONTOMOV AS MONTO, ORDEN  FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  WHERE A.NUM_CTA = '" + noCuenta + "'   AND  A.NUM_CTA <= '" + noCuenta + "' ORDER BY 1,4,11,12,13,14,18";
 
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
@@ -390,10 +623,10 @@ public class Consultas {
                 auxIvaAcred.setNoPoliza(resultSet.getString("NUM_POLIZ"));
                 auxIvaAcred.setFecha(resultSet.getString("FECHA_POL"));
                 auxIvaAcred.setConcepto(resultSet.getString("CONCEP_PO"));
-                if("D".equals(resultSet.getString("DEBE_HABER"))){
+                if ("D".equals(resultSet.getString("DEBE_HABER"))) {
                     auxIvaAcred.setDebe(resultSet.getDouble("MONTO"));
                     auxIvaAcred.setHaber(0);
-                }else{
+                } else {
                     auxIvaAcred.setHaber(resultSet.getDouble("MONTO"));
                     auxIvaAcred.setDebe(0);
                 }
@@ -411,7 +644,6 @@ public class Consultas {
         return datosAuxiliarIva;
     }
 
- 
     public List<AuxIvaAcred> new_auxIvaAcredAsctisa(int periodo, int ejercicio, String noCuenta, String dataBase) {
         connection = new ConexionDB();
         Connection conexion = null;
@@ -437,15 +669,14 @@ public class Consultas {
                 auxIvaAcred.setNoPoliza(resultSet.getString("NUM_POLIZ"));
                 auxIvaAcred.setFecha(resultSet.getString("FECHA_POL"));
                 auxIvaAcred.setConcepto(resultSet.getString("CONCEP_PO"));
-                if("D".equals(resultSet.getString("DEBE_HABER"))){
+                if ("D".equals(resultSet.getString("DEBE_HABER"))) {
                     auxIvaAcred.setDebe(resultSet.getDouble("MONTO"));
                     auxIvaAcred.setHaber(0);
-                }else{
+                } else {
                     auxIvaAcred.setHaber(resultSet.getDouble("MONTO"));
                     auxIvaAcred.setDebe(0);
                 }
-                
-                
+
                 datosAuxiliarIva.add(auxIvaAcred);
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -454,132 +685,6 @@ public class Consultas {
             ConexionDB.Salir(conexion);
         }
         return datosAuxiliarIva;
-    }
-
-    /*
-    PENDIENTE VER SI SE PUEDE HACER TODO EN UNA SOLA FUNCION
-     */
-    public List<RetencionIvaMes> retencionIvaMesConsulta(int periodo, int ejercicio, String noCuenta, String dataBase) {
-        connection = new ConexionDB();
-        Connection conexion = null;
-        String subFijoTabla = String.valueOf(ejercicio);
-        char v1 = subFijoTabla.charAt(2);
-        char v2 = subFijoTabla.charAt(3);
-        String tableAux = "AUXILIAR" + v1 + v2;
-        String tableCuentas = "CUENTAS" + v1 + v2;
-        String tableSaldos = "SALDOS" + v1 + v2;
-        String query;
-
-        List<RetencionIvaMes> listRetencion = new ArrayList<>();
-        try {
-            conexion = connection.Entrar(dataBase);
-            if (ejercicio > 2018) {
-                //CAMBIAR TOP
-                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
-                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
-                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
-                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
-                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
-                        + " MONTOMOV AS MONTO, ORDEN  "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
-            } else {
-                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
-                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
-                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ,"
-                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
-                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
-            }
-
-            stmt = conexion.createStatement();
-            resultSet = stmt.executeQuery(query);
-            try {
-                while (resultSet.next()) {
-                    //tipo poliza, numero poliza, fecha, concepto, debe, haber
-                    retencionIvaMes = new RetencionIvaMes();
-                    retencionIvaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                    //Algunos no tienen segunda parte
-                    if (resultSet.getString("TIPO_POLI").length() > 2) {
-                        retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
-                    } else {
-                        retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI"));
-                    }
-                    retencionIvaMes.setFecha(resultSet.getString("FECHA_POL"));
-                    retencionIvaMes.setConcepto(resultSet.getString("CONCEP_PO"));
-                    retencionIvaMes.setConceptosBase(resultSet.getString("NOMBRE"));
-                    listRetencion.add(retencionIvaMes);
-                }
-            } catch (NullPointerException e) {
-                Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
-            }
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-
-        } finally {
-            ConexionDB.Salir(conexion);
-        }
-        return listRetencion;
-    }
-
-    public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta, String dataBase) {
-        connection = new ConexionDB();
-        Connection conexion = null;
-        String subFijoTabla = String.valueOf(ejercicio);
-        char v1 = subFijoTabla.charAt(2);
-        char v2 = subFijoTabla.charAt(3);
-        String tableAux = "AUXILIAR" + v1 + v2;
-        String tableCuentas = "CUENTAS" + v1 + v2;
-        String tableSaldos = "SALDOS" + v1 + v2;
-        String query;
-
-        List<RetencionIvaPagadaMes> listRetencionPagada = new ArrayList<>();
-        try {
-            conexion = connection.Entrar(dataBase);
-            if (ejercicio > 2018) {
-                //CAMBIAR TOP
-                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
-                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
-                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
-                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
-                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
-                        + " MONTOMOV AS MONTO, ORDEN  "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
-                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
-            } else {
-                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
-                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
-                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
-                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ,"
-                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
-                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
-                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
-                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
-            }
-
-            stmt = conexion.createStatement();
-            resultSet = stmt.executeQuery(query);
-            while (resultSet.next()) {
-                //tipo poliza, numero poliza, fecha, concepto, debe, haber
-                retencionIvaPagadaMes = new RetencionIvaPagadaMes();
-                retencionIvaPagadaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
-                retencionIvaPagadaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
-                retencionIvaPagadaMes.setFecha(resultSet.getString("FECHA_POL"));
-                retencionIvaPagadaMes.setConcepto(resultSet.getString("CONCEP_PO"));
-                retencionIvaPagadaMes.setConceptosBase(resultSet.getString("NOMBRE"));
-                listRetencionPagada.add(retencionIvaPagadaMes);
-            }
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConexionDB.Salir(conexion);
-        }
-        return listRetencionPagada;
     }
 
     /**
@@ -645,20 +750,6 @@ public class Consultas {
         return relacion;
     }
 
-    /**
-     * Función para obtener el nombre de la cuenta
-     *
-     * @param dataBase String
-     * @param coiDb String
-     * @param auxDb String
-     * @param ctaDb String
-     * @param noCuenta String
-     * @param periodo String
-     * @param ejercicio String
-     * @param tipoPoli String
-     * @param numPoliza String
-     * @return
-     */
     private String consultaNombreCuenta(String dataBase, String coiDb, String auxDb, String ctaDb,
             String noCuenta, String periodo, String ejercicio, String tipoPoli, String numPoliza) {
         ConexionDB connection2 = new ConexionDB();
@@ -673,6 +764,49 @@ public class Consultas {
                     + " AND AUX.[EJERCICIO]=" + ejercicio + " AND AUX.[TIPO_POLI]='" + tipoPoli + "' "
                     + " AND AUX.NUM_POLIZ =" + numPoliza + " "
                     + " GROUP BY AUX.[NUM_CTA], CTA.[NOMBRE]";
+            Statement stmt2 = conexion2.createStatement();
+            ResultSet resultSet2 = stmt2.executeQuery(subQuery);
+            while (resultSet2.next()) {
+                nombreConexion = resultSet2.getString("NOMBRE");
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion2);
+        }
+        return nombreConexion;
+    }
+
+    /**
+     * Función para obtener el nombre de la cuenta
+     *
+     * @param dataBase String
+     * @param coiDb String
+     * @param auxDb String
+     * @param ctaDb String
+     * @param noCuenta String
+     * @param periodo String
+     * @param ejercicio String
+     * @param tipoPoli String
+     * @param numPoliza String
+     * @return
+     */
+    private String consultaNombreCuenta_v2(String dataBase, String coiDb, String auxDb, String ctaDb,
+            String noCuenta, String periodo, String ejercicio, String tipoPoli, String numPoliza) {
+        ConexionDB connection2 = new ConexionDB();
+        Connection conexion2 = null;
+        String nombreConexion = "";
+        try {
+            conexion2 = connection2.Entrar(dataBase);
+            subQuery = "SELECT AUX.[NUM_CTA] ,CTA.[NOMBRE]"
+                    + " FROM [" + coiDb + "].[dbo].[" + auxDb + "] AUX"
+                    + " INNER JOIN [" + coiDb + "].[dbo].[" + ctaDb + "] CTA ON AUX.[NUM_CTA]=CTA.[NUM_CTA]"
+                    + " WHERE AUX.[NUM_CTA] LIKE '%" + noCuenta + "%' AND AUX.[PERIODO]=" + periodo + " "
+                    + " AND AUX.[EJERCICIO]=" + ejercicio + " AND AUX.[TIPO_POLI]='" + tipoPoli + "' "
+                    + " AND AUX.NUM_POLIZ =" + numPoliza + " "
+                    + " GROUP BY AUX.[NUM_CTA], CTA.[NOMBRE]";
+
             Statement stmt2 = conexion2.createStatement();
             ResultSet resultSet2 = stmt2.executeQuery(subQuery);
             while (resultSet2.next()) {
@@ -730,6 +864,36 @@ public class Consultas {
         return lpd;
     }
 
+    private List<PolizaDatos> consultarPolizasUnicas_v2(String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        List<PolizaDatos> lpd = new ArrayList<>();
+
+        try {
+            conexion = connection.Entrar(db);
+            query = "SELECT (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A "
+                    + " JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA "
+                    + " AND PERIODO IN (" + numPeriodo + "))  WHERE A.NUM_CTA LIKE '%" + numCuenta + "%' AND C.MONTOMOV!=0";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+
+            while (resultSet.next()) {
+                polizaDatos = new PolizaDatos();
+                polizaDatos.setNumeroPoliza(resultSet.getString("NUM_POLIZ"));
+                polizaDatos.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                lpd.add(polizaDatos);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return lpd;
+    }
+
     /**
      *
      * @param db String
@@ -750,6 +914,34 @@ public class Consultas {
         try {
             conexion = connection.Entrar(db);
             query = "SELECT (CASE WHEN C.NUM_POLIZ IS NULL THEN 'N/D' ELSE C.NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A  JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA  AND PERIODO IN (" + numPeriodo + ")) LEFT JOIN [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS] P ON C.NUM_POLIZ = P.NUM_POLIZ AND C.TIPO_POLI = P.TIPO_POLI AND C.MONTOMOV = P.MONTO_MOV WHERE A.NUM_CTA >= '" + numCuenta + "' AND A.NUM_CTA <= '" + numCuenta + "' AND C.MONTOMOV!=0 AND (P.NUM_POLIZ IS NULL AND P.TIPO_POLI IS NULL AND P.MONTO_MOV IS NULL)";
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+
+            while (resultSet.next()) {
+                polizaDatos = new PolizaDatos();
+                polizaDatos.setNumeroPoliza(resultSet.getString("NUM_POLIZ"));
+                polizaDatos.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                polizaDatos.setMontoMov(resultSet.getString("MONTOMOV"));
+                lpd.add(polizaDatos);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return lpd;
+    }
+
+    private List<PolizaDatos> consultarPolizasUnicasSinProcesar_v2(String db, String coiDb, String tableCuenta, String tableSaldos, String tableAuxiliar, String numPeriodo, String numCuenta) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String relacion = "";
+        List<PolizaDatos> lpd = new ArrayList<>();
+
+        try {
+            conexion = connection.Entrar(db);
+            query = "SELECT (CASE WHEN C.NUM_POLIZ IS NULL THEN 'N/D' ELSE C.NUM_POLIZ END) NUM_POLIZ, C.TIPO_POLI,C.MONTOMOV FROM ([" + coiDb + "].[dbo].[" + tableCuenta + "] A  JOIN [" + coiDb + "].[dbo].[" + tableSaldos + "] B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN [" + coiDb + "].[dbo].[" + tableAuxiliar + "] C ON (A.NUM_CTA=C.NUM_CTA  AND PERIODO IN (" + numPeriodo + ")) LEFT JOIN [DOCUMENTOS_COI].[dbo].[PARTIDAS_PROCESADAS] P ON C.NUM_POLIZ = P.NUM_POLIZ AND C.TIPO_POLI = P.TIPO_POLI AND C.MONTOMOV = P.MONTO_MOV WHERE C.MONTOMOV!=0 AND (P.NUM_POLIZ IS NULL AND P.TIPO_POLI IS NULL AND P.MONTO_MOV IS NULL) AND C.NUM_CTA LIKE '%" + numCuenta + "%' ";
             stmt = conexion.createStatement();
             resultSet = stmt.executeQuery(query);
 
@@ -893,7 +1085,6 @@ public class Consultas {
         connection = new ConexionDB();
         Connection conexion = null;
         String baseCoi = "COI80Empre1";
-        String ultimoID = "";
 
         try {
             conexion = connection.Entrar(baseCoi);
@@ -1136,6 +1327,133 @@ public class Consultas {
             ConexionDB.Salir(conexion);
         }
         return exito1 && exito2;
+    }
+
+    //PENDIENTES DE USAR
+    /*
+    PENDIENTE VER SI SE PUEDE HACER TODO EN UNA SOLA FUNCION
+     */
+    public List<RetencionIvaMes> retencionIvaMesConsulta(int periodo, int ejercicio, String noCuenta, String dataBase) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String tableAux = "AUXILIAR" + v1 + v2;
+        String tableCuentas = "CUENTAS" + v1 + v2;
+        String tableSaldos = "SALDOS" + v1 + v2;
+        String query;
+
+        List<RetencionIvaMes> listRetencion = new ArrayList<>();
+        try {
+            conexion = connection.Entrar(dataBase);
+            if (ejercicio > 2018) {
+                //CAMBIAR TOP
+                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
+                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
+                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
+                        + " MONTOMOV AS MONTO, ORDEN  "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
+                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+            } else {
+                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
+                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
+                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ,"
+                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
+                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
+            }
+
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+            try {
+                while (resultSet.next()) {
+                    //tipo poliza, numero poliza, fecha, concepto, debe, haber
+                    retencionIvaMes = new RetencionIvaMes();
+                    retencionIvaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                    //Algunos no tienen segunda parte
+                    if (resultSet.getString("TIPO_POLI").length() > 2) {
+                        retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
+                    } else {
+                        retencionIvaMes.setPolCombinada(resultSet.getString("TIPO_POLI"));
+                    }
+                    retencionIvaMes.setFecha(resultSet.getString("FECHA_POL"));
+                    retencionIvaMes.setConcepto(resultSet.getString("CONCEP_PO"));
+                    retencionIvaMes.setConceptosBase(resultSet.getString("NOMBRE"));
+                    listRetencion.add(retencionIvaMes);
+                }
+            } catch (NullPointerException e) {
+                Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return listRetencion;
+    }
+
+    public List<RetencionIvaPagadaMes> retencionesIvaMesPagada(int periodo, int ejercicio, String noCuenta, String dataBase) {
+        connection = new ConexionDB();
+        Connection conexion = null;
+        String subFijoTabla = String.valueOf(ejercicio);
+        char v1 = subFijoTabla.charAt(2);
+        char v2 = subFijoTabla.charAt(3);
+        String tableAux = "AUXILIAR" + v1 + v2;
+        String tableCuentas = "CUENTAS" + v1 + v2;
+        String tableSaldos = "SALDOS" + v1 + v2;
+        String query;
+
+        List<RetencionIvaPagadaMes> listRetencionPagada = new ArrayList<>();
+        try {
+            conexion = connection.Entrar(dataBase);
+            if (ejercicio > 2018) {
+                //CAMBIAR TOP
+                query = "SELECT  A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03) - (ABONO01+ABONO02+ABONO03))*(1 - 2*NATURALEZA) AS SALINI,"
+                        + " CARGO04 AS CARGO, ABONO04 AS ABONO,"
+                        + "INICIAL + ((CARGO01+CARGO02+CARGO03+CARGO04) - (ABONO01+ABONO02+ABONO03+ABONO04))*(1 - 2*NATURALEZA) "
+                        + "AS SALDO , NATURALEZA,BANDMULTI, NIVEL, CONVERT(date,FECHA_POL)FECHA_POL, TIPO_POLI, NUM_POLIZ, CONCEP_PO, DEBE_HABER,"
+                        + " MONTOMOV AS MONTO, ORDEN  "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA   )  "
+                        + "LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >=" + noCuenta + "   AND  A.NUM_CTA <=" + noCuenta + " ORDER BY NUM_CTA";
+            } else {
+                query = "SELECT A.NUM_CTA, NOMBRE, TIPO,B.EJERCICIO,INICIAL AS SALINI, CARGO01 AS CARGO, ABONO01 AS ABONO,"
+                        + "INICIAL + ((CARGO01) - (ABONO01))*(1 - 2*NATURALEZA) AS SALDO , NATURALEZA,BANDMULTI, NIVEL,"
+                        + "CONVERT(date,(CASE WHEN FECHA_POL IS NULL THEN '' ELSE FECHA_POL END)) FECHA_POL,"
+                        + " (CASE WHEN TIPO_POLI IS NULL THEN 'N/D' ELSE TIPO_POLI END) TIPO_POLI, (CASE WHEN NUM_POLIZ IS NULL THEN 'N/D' ELSE NUM_POLIZ END) NUM_POLIZ,"
+                        + "(CASE WHEN CONCEP_PO IS NULL THEN 'N/D' ELSE CONCEP_PO END) CONCEP_PO,(CASE WHEN DEBE_HABER IS NULL THEN 'N/D' ELSE DEBE_HABER END) DEBE_HABER,"
+                        + "(CASE WHEN MONTOMOV IS NULL THEN '0' ELSE MONTOMOV END) MONTO,(CASE WHEN ORDEN IS NULL THEN '0' ELSE ORDEN END) ORDEN "
+                        + "FROM (" + tableCuentas + " A JOIN " + tableSaldos + " B ON A.NUM_CTA = B.NUM_CTA)  LEFT JOIN " + tableAux + " C ON (A.NUM_CTA=C.NUM_CTA AND PERIODO IN (" + periodo + "))  "
+                        + "WHERE A.NUM_CTA >= " + noCuenta + "   AND  A.NUM_CTA <= " + noCuenta + " ORDER BY NUM_CTA";
+            }
+
+            stmt = conexion.createStatement();
+            resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                //tipo poliza, numero poliza, fecha, concepto, debe, haber
+                retencionIvaPagadaMes = new RetencionIvaPagadaMes();
+                retencionIvaPagadaMes.setTipoPoliza(resultSet.getString("TIPO_POLI"));
+                retencionIvaPagadaMes.setPolCombinada(resultSet.getString("TIPO_POLI") + "-" + resultSet.getString("NUM_POLIZ").trim());
+                retencionIvaPagadaMes.setFecha(resultSet.getString("FECHA_POL"));
+                retencionIvaPagadaMes.setConcepto(resultSet.getString("CONCEP_PO"));
+                retencionIvaPagadaMes.setConceptosBase(resultSet.getString("NOMBRE"));
+                listRetencionPagada.add(retencionIvaPagadaMes);
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ConexionDB.Salir(conexion);
+        }
+        return listRetencionPagada;
     }
 
     //String clave, int idRfcAsociado

@@ -29,8 +29,8 @@ import org.xml.sax.SAXException;
 public class IvaAcredController {
 
     private Consultas consultas;
-    private Tag raizXml, et_Concepto;
-    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo, cfdi_folioSerie;
+    private Tag raizXml;
+    private Tag cfdi_Impuestos, cfdi_Complemento, cfdi_Concepto_h, cfdi_ConceptoImpuestos, cfdi_Retenciones, cfdi_retencion_h, tfd_TimbreFiscalDigital, cfdi_Emisor, cfdi_traslados, cfdi_traslado_hijo;
     private String fechaFactura, folioFiscal, folioInterno, total, base16, rfc, proveedor, formaPago, iva,
             retencionCuatro, retencionDiez, retencion1016, cuotaC, folioSerie;
     private double baseCeroSuma = 0;
@@ -45,9 +45,18 @@ public class IvaAcredController {
     private final String BANORTE_ADS_0212 = "111500700100000000003";
     private final String BANORTE2_ADS_7202 = "111500700200000000003";
     private final String CUENTA_BANCOMER_AGRO = "111500700100000000003";
+    //CTAS ASTIDSA
+    private final String CTA_BANCOMER_ADS_2678 = "1115002001000";
+    private final String CTA_SANTANDER_ADS_2399 = "1115003001000";
+    private final String CTA_SANTANDER2_ADS_6082 = "1115003002000";
+    private final String CTA_BANORTE_ADS_0212 = "1115007001000";
+    private final String CTA_BANORTE2_ADS_7202 = "1115007002000";
+    private final String CTA_SANTANDER3_ADS_5170 = "2035003001000";
+    //CTA AGRO
+    private final String CTA_CUENTA_BANCOMER_AGRO_7444 = "1115007001000";
+
     private final List<XmlDatos> datosXml = new ArrayList<>();
     private List<PolizaDatos> polizaDat = new ArrayList<>();
-    private PolizaProcesada polizaProcesada;
     private List<Tag> cfdi_Comprobante;
 
     /**
@@ -81,9 +90,9 @@ public class IvaAcredController {
                     //Dos periodos diferentes jalan el mismo xml
                     /*
                     junio 2016 adsticsa
-                    */
+                     */
                     String URL = "\\\\25.62.86.238\\dacaspel\\Documentos digitales\\" + listFicherosPolizaBase.get(p).getRutaXml() + listFicherosPolizaBase.get(p).getNombreXml();
-                    System.out.println("Archivo consultado: "+URL);
+                    System.out.println("Archivo consultado: " + URL);
 
                     if (!URL.isEmpty() || !URL.equals("")) {
                         try {
@@ -503,21 +512,22 @@ public class IvaAcredController {
         periodo += 1;
         String base_empresa = "";
         String cuentaBanco = "";
-        base_empresa = COI_ADSTICSA;
+
         String[] cuentasBanco = {BANCOMER_ADS_2678, SANTANDER2_ADS_6082, SANTANDER3_ADS_5170, SANTANDER_ADS_2399, BANORTE2_ADS_7202, BANORTE_ADS_0212};
+        cuentaBanco = CUENTA_BANCOMER_AGRO;
         //Todas
         if (tipoSolicitud) {
             //SIn procesar
             switch (numEmpresa) {
                 case 0:
+                    base_empresa = COI_ADSTICSA;
                     if (periodo > 0 && ejercicio >= 2016) {
-                        polizaDat= consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
+                        polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa, tipoSolicitud);
                     }
                     break;
                 case 1:
                     base_empresa = COI_AGRO;
-                    cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2016) {
                         //LLenar con la información de la base de datos
                         polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, tipoSolicitud);
@@ -531,6 +541,7 @@ public class IvaAcredController {
             //Todas
             switch (numEmpresa) {
                 case 0:
+                    base_empresa = COI_ADSTICSA;
                     if (periodo > 0 && ejercicio >= 2016) {
                         polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa(periodo, ejercicio, cuentasBanco,
                                 (numEmpresa + 1), base_empresa, false);
@@ -538,10 +549,69 @@ public class IvaAcredController {
                     break;
                 case 1:
                     base_empresa = COI_AGRO;
-                    cuentaBanco = CUENTA_BANCOMER_AGRO;
                     if (periodo > 0 && ejercicio >= 2016) {
                         //LLenar con la información de la base de datos
                         polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, false);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        //Intentar mientras solo con agro, despues con adstisa (lo de las cuentas)
+        //A partir de que mes y año
+
+        return polizaDat;
+    }
+
+    public List<PolizaDatos> solicitudPolizaDatos_v2(int periodo, int ejercicio, int numEmpresa, boolean tipoSolicitud) {
+        //CHECAR EL PROCESO POR SECCIONES[PRIMERO BASE DE DATOS]
+        consultas = new Consultas();
+        polizaDat = new ArrayList<>();
+        periodo += 1;
+        String base_empresa = "";
+        String cuentaBanco = "";
+
+        String[] cuentasBanco = {CTA_BANCOMER_ADS_2678, CTA_SANTANDER2_ADS_6082, CTA_SANTANDER3_ADS_5170, CTA_SANTANDER_ADS_2399, CTA_BANORTE2_ADS_7202, CTA_BANORTE_ADS_0212};
+        cuentaBanco = CTA_CUENTA_BANCOMER_AGRO_7444;
+        //Todas
+        if (tipoSolicitud) {
+            //SIn procesar
+            switch (numEmpresa) {
+                case 0:
+                    base_empresa = COI_ADSTICSA;
+                    if (periodo > 0 && ejercicio >= 2016) {
+                        polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa_v2(periodo, ejercicio, cuentasBanco,
+                                (numEmpresa + 1), base_empresa, tipoSolicitud);
+                    }
+                    break;
+                case 1:
+                    base_empresa = COI_AGRO;
+                    if (periodo > 0 && ejercicio >= 2016) {
+                        //LLenar con la información de la base de datos
+                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia_v2(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, tipoSolicitud);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        } else {
+            //Todas
+            switch (numEmpresa) {
+                case 0:
+                    base_empresa = COI_ADSTICSA;
+                    if (periodo > 0 && ejercicio >= 2016) {
+                        polizaDat = consultas.polizasPeriodoEjercicio_Adsticsa_v2(periodo, ejercicio, cuentasBanco,
+                                (numEmpresa + 1), base_empresa, false);
+                    }
+                    break;
+                case 1:
+                    base_empresa = COI_AGRO;
+                    if (periodo > 0 && ejercicio >= 2016) {
+                        //LLenar con la información de la base de datos
+                        polizaDat = consultas.polizasPeriodoEjercicio_Agroecologia_v2(periodo, ejercicio, cuentaBanco, (numEmpresa + 1), base_empresa, false);
                     }
                     break;
                 default:

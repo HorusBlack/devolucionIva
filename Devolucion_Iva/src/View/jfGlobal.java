@@ -48,7 +48,7 @@ public class jfGlobal extends javax.swing.JFrame {
     private String periodoConstante, anioConstante;
     private int numAnio, numEmpresa, empresaConstante, numEmpresaConstante;
     private double base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva,
-            total_devIva, total_abono,total_cargo;
+            total_devIva, total_abono, total_cargo;
 //    private ControllerAction controllerAction;
     private IvaAcredController ivaAcred;
     private GeneradorExcel generadorExcel;
@@ -1360,8 +1360,8 @@ public class jfGlobal extends javax.swing.JFrame {
         anioConstante = String.valueOf(anio);
         empresaConstante = numEmpresa + 1;
 
-        //retornando una lista de poliza de datos
-        listPolizaDatos = ivaAcred.solicitudPolizaDatos(mes, anio, numEmpresa, tipoSolicitud);
+        //OBTENIENDO TODOS LOS DATOS DE LA BD
+        listPolizaDatos = ivaAcred.solicitudPolizaDatos_v2(mes, anio, numEmpresa, tipoSolicitud);
         if (!listPolizaDatos.isEmpty()) {
             //Titulos para la tabla
             String[] titulos = {"Selección", "Fecha de Factura", "Folio Factura", "Folio UUID", "Proveedor", "RFC", "Concepto", "Base 0%",
@@ -1370,10 +1370,8 @@ public class jfGlobal extends javax.swing.JFrame {
                 "Id Doc", "Archivo", "Cuenta Coi", "MontoMov"};
             //Clase que obtiene los datos xml
             //correguir sintaxis de ruta, la conexion sql es estable
-            String URL_Lx = "/home/horusblack/Documentos/Macktronica/Dac Simulacion/" + anio + "/" + numMes;
-//llenarDatosTabla
-            //Lista de objetos xmlDatos 
 
+            //AQUI SEPARAMOS LA INFO DEBE-HABER
             List<XmlDatos> xmlFiltro = ivaAcred.listDatosXmlCienAcred_List(listPolizaDatos, bd);
             for (int i = 0; i < xmlFiltro.size(); i++) {
                 if (xmlFiltro.get(i).getDebe_haber() == 1) {
@@ -1406,6 +1404,7 @@ public class jfGlobal extends javax.swing.JFrame {
                     separadorXml.setDato16(xmlFiltro.get(i).getDato16());
                     separadorXml.setConXml(xmlFiltro.get(i).getConXml());
                     separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
+                    //AQUI ESTA VOLVIENDO A MANDAR LO QUE ESTA EN 1
                     llenarDatosTabla.add(separadorXml);
                 }
             }
@@ -1702,10 +1701,10 @@ public class jfGlobal extends javax.swing.JFrame {
                 }
                 lb_100.setText("100% FACTURAS DE IVA ACREDITABLE: " + nombreMes.toUpperCase() + " " + anio);
                 inicializarTablaTotalIva(base_0, base_16, retencion_4, retencion_10, retencion_1067, cuotaCompensatoria, totalIva, total_devIva);
-
-                inicializarTablaOtros(llenarDatosTabla);
-                inicializarTablaValor_16(llenarDatosTabla);
-                inicializarTablaValor_Cero(llenarDatosTabla);
+                //AQUI SEPARAR PUROS DEBE
+                inicializarTablaOtros(xmlFiltro);
+                inicializarTablaValor_16(xmlFiltro);
+                inicializarTablaValor_Cero(xmlFiltro);
 
             } else {
                 JOptionPane.showMessageDialog(null, "No se pudieron procesar los ficheros XML por \nAlguna de las siguientes"
@@ -1730,7 +1729,11 @@ public class jfGlobal extends javax.swing.JFrame {
 
         List<XmlDatos> xmlFiltro = ListaDatosXml;
         for (int i = 0; i < xmlFiltro.size(); i++) {
-            if (xmlFiltro.get(i).getDebe_haber() == 0) {
+            int tipoDebe=xmlFiltro.get(i).getDebe_haber();
+            //QUE en otro lo este mandando ya filtrado
+            if (tipoDebe == 0) {
+                //EL FILTRO FUNCIONA
+                System.out.println("solo debe: " + xmlFiltro.get(i).getDebe_haber());
                 XmlDatos separadorXml = new XmlDatos();
                 separadorXml.setFolioInterno(xmlFiltro.get(i).getFolioInterno());
                 separadorXml.setFolioFiscal(xmlFiltro.get(i).getFolioFiscal());
@@ -1761,7 +1764,10 @@ public class jfGlobal extends javax.swing.JFrame {
                 separadorXml.setConXml(xmlFiltro.get(i).getConXml());
                 separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
                 llenarDatosTabla.add(separadorXml);
+            }else{
+                System.out.println("solo haber: " + xmlFiltro.get(i).getDebe_haber());
             }
+            
         }
 
         Object[][] myData = new Object[llenarDatosTabla.size()][21];
@@ -2625,10 +2631,10 @@ public class jfGlobal extends javax.swing.JFrame {
                     }
                 }
 
-                tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate, 
+                tablaIva.addRow(new Object[]{listAuxIvaAcreds.get(i).getTipoPoliza(), listAuxIvaAcreds.get(i).getNoPoliza(), newDate,
                     listAuxIvaAcreds.get(i).getConcepto(), formateador.format(listAuxIvaAcreds.get(i).getDebe()), formateador.format(listAuxIvaAcreds.get(i).getHaber())});
                 total_cargo += listAuxIvaAcreds.get(i).getDebe();
-                total_abono +=listAuxIvaAcreds.get(i).getHaber();
+                total_abono += listAuxIvaAcreds.get(i).getHaber();
 
             }
             TableRowSorter<TableModel> ordenTabla = new TableRowSorter<>(tablaIva);
@@ -2727,7 +2733,7 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         List<XmlDatos> xmlFiltro = listaDatosXml;
         for (int i = 0; i < xmlFiltro.size(); i++) {
-            if (xmlFiltro.get(i).getDato0() == 1 && ("1".equals(xmlFiltro.get(i).getConXml()))) {
+            if (xmlFiltro.get(i).getDato0() == 1 && ("1".equals(xmlFiltro.get(i).getConXml())) && xmlFiltro.get(i).getDebe_haber() == 0) {
                 XmlDatos separadorXml = new XmlDatos();
                 separadorXml.setFolioInterno(xmlFiltro.get(i).getFolioInterno());
                 separadorXml.setFolioFiscal(xmlFiltro.get(i).getFolioFiscal());
@@ -2922,7 +2928,7 @@ public class jfGlobal extends javax.swing.JFrame {
         List<XmlDatos> llenarDatosTabla = new ArrayList<>();
         List<XmlDatos> xmlFiltro = listaDatosXml;
         for (int i = 0; i < xmlFiltro.size(); i++) {
-            if (xmlFiltro.get(i).getDato16() == 1 && ("1".equals(xmlFiltro.get(i).getConXml()))) {
+            if (xmlFiltro.get(i).getDato16() == 1 && ("1".equals(xmlFiltro.get(i).getConXml())) && (xmlFiltro.get(i).getDebe_haber() == 0)) {
                 XmlDatos separadorXml = new XmlDatos();
                 separadorXml.setNumeroFactura(xmlFiltro.get(i).getNumeroFactura());
                 separadorXml.setFechaFactura(xmlFiltro.get(i).getFechaFactura());
